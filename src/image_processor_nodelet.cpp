@@ -20,6 +20,7 @@ void ImageProcessorNodelet::onInit()
     return;
 }
 
+// 将ImageProcessorNodelet类注册为ROS的插件
 PLUGINLIB_EXPORT_CLASS(msckf_vio::ImageProcessorNodelet, nodelet::Nodelet);
 
 } // end namespace msckf_vio

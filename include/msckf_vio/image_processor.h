@@ -32,7 +32,6 @@ namespace msckf_vio
 class ImageProcessor
 {
 public:
-    // Constructor
     ImageProcessor(ros::NodeHandle &n);
     // Disable copy and assign constructors.
     ImageProcessor(const ImageProcessor &) = delete;
