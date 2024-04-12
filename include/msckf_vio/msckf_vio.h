@@ -176,7 +176,7 @@ private:
     // transfer delay between IMU and Image messages.
     std::vector<sensor_msgs::Imu> imu_msg_buffer;
 
-    // Indicate if the gravity vector is set.
+    // Indicate if the gravity vector is set， 即是否做了IMU的初始化
     bool is_gravity_set;
 
     // Indicate if the received image is the first one. The

@@ -16,10 +16,11 @@
 
 namespace msckf_vio
 {
-/*
-    * @brief CAMState Stored camera state in order to
-    *    form measurement model.
-    */
+
+/**
+ * @brief 储存相机状态，包括相机id, 时间，姿态Rcw，位置twc，零空间姿态，零空间位置，和两个相机间的外参
+ * @note 位置是相机坐标系在世界坐标系下的位置；姿态是世界坐标系到相机坐标系的旋转
+*/
 struct CAMState
 {
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW

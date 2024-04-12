@@ -220,7 +220,6 @@ bool MsckfVio::initialize()
         return false;
     ROS_INFO("Finish loading ROS parameters...");
 
-    // Initialize state server
     // imu观测的协方差
     state_server.continuous_noise_cov =
         Matrix<double, 12, 12>::Zero();
@@ -233,9 +232,8 @@ bool MsckfVio::initialize()
     state_server.continuous_noise_cov.block<3, 3>(9, 9) =
         Matrix3d::Identity() * IMUState::acc_bias_noise;
 
-    // 卡方检验表
-    // Initialize the chi squared test table with confidence
-    // level 0.95.
+    // 卡方检验表，计算自由度从1到99的卡方分布的95％置信水平的分位数
+    // Initialize the chi squared test table with confidence level 0.95.
     for (int i = 1; i < 100; ++i)
     {
         boost::math::chi_squared chi_squared_dist(i);
@@ -251,9 +249,12 @@ bool MsckfVio::initialize()
     return true;
 }
 
+/**
+ * @brief 接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推
+ * @note 前200个imu数据需要静止不动进行初始化，如果移动会导致轨迹飘
+ */
 void MsckfVio::imuCallback(const sensor_msgs::ImuConstPtr &msg)
 {
-
     // IMU msgs are pushed backed into a buffer instead of
     // being processed immediately. The IMU msgs are processed
     // when the next image is available, in which way, we can
@@ -264,7 +265,6 @@ void MsckfVio::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     // 2. 用200个imu数据做静止初始化，不够则不做
     if (!is_gravity_set)
     {
-
         if (imu_msg_buffer.size() < 200)
             return;
         // if (imu_msg_buffer.size() < 10) return;
@@ -279,15 +279,15 @@ void MsckfVio::imuCallback(const sensor_msgs::ImuConstPtr &msg)
 
 /**
  * @brief imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计
+ * @note 为什么要做IMU初始化？因为初始时刻IMU的摆放和机器人的位置是未知的，可能在斜坡上，可能不水平，或者IMU竖直安装，
+ *       但是使用IMU积分时是需要减去重力的，因此需要知道重力方向，另外陀螺仪的偏置也是未知的，因此需要初始化
  */
 void MsckfVio::initializeGravityAndBias()
 {
-
     // Initialize gravity and gyro bias.
-    // 1. 角速度与加速度的和
+    // 1. 求角速度与加速度的和
     Vector3d sum_angular_vel = Vector3d::Zero();
     Vector3d sum_linear_acc = Vector3d::Zero();
-
     for (const auto &imu_msg : imu_msg_buffer)
     {
         Vector3d angular_vel = Vector3d::Zero();
@@ -307,17 +307,21 @@ void MsckfVio::initializeGravityAndBias()
     // IMUState::gravity =
     //   -sum_linear_acc / imu_msg_buffer.size();
     //  This is the gravity in the IMU frame.
-    // 3. 计算重力，忽略加速度计的偏置，剩下的就只有重力了
+    // 3. 计算重力，忽略加速度计的偏置，剩下的就只有重力了，a_measure = R(a_truth - g) + ba + na
+    // 因为假设静止，a_truth = 0, 认为噪声抵消，同时ba为小量，因此a_measure = R(-g)
     Vector3d gravity_imu =
         sum_linear_acc / imu_msg_buffer.size();
+    std::cout << "gravity_imu: " << gravity_imu.transpose() << std::endl;
 
     // Initialize the initial orientation, so that the estimation
     // is consistent with the inertial frame.
-    // 重力本来的方向
+    // 重力的模长就是重力的大小
     double gravity_norm = gravity_imu.norm();
+    // 重力本来的方向
     IMUState::gravity = Vector3d(0.0, 0.0, -gravity_norm);
+    std::cout << "gravity: " << IMUState::gravity.transpose() << std::endl;
 
-    // 求出当前imu状态的重力方向与实际重力方向的旋转 tosee 查看谁到谁的
+    // 求出当前imu状态的重力方向与实际重力方向的旋转 R‘， 为什么加负号？因为测量值是R(-g)，而真实值是g
     Quaterniond q0_i_w = Quaterniond::FromTwoVectors(
         gravity_imu, -IMUState::gravity);
     // 得出姿态
@@ -400,19 +404,21 @@ bool MsckfVio::resetCallback(
 
 /**
  * @brief 后端主要函数，处理新来的数据
+ * @param msg 新来的数据, 包括时间戳、点id、和左右目去畸变后归一化坐标
  */
 void MsckfVio::featureCallback(const CameraMeasurementConstPtr &msg)
 {
-
-    // Return if the gravity vector has not been set.
     // 1. 必须经过imu初始化
     if (!is_gravity_set)
+    {
+        ROS_WARN_THROTTLE(1, "Wait for the IMU initialization!");
         return;
+    }
 
     // Start the system if the first image is received.
     // The frame where the first image is received will be
     // the origin.
-    // 开始递推状态的第一个时刻为初始化后的第一帧特征
+    // 开始递推状态的第一个时刻为 初始化后的第一帧特征
     if (is_first_img)
     {
         is_first_img = false;
@@ -594,7 +600,6 @@ void MsckfVio::batchImuProcessing(const double &time_bound)
         tf::vectorMsgToEigen(imu_msg.angular_velocity, m_gyro);
         tf::vectorMsgToEigen(imu_msg.linear_acceleration, m_acc);
 
-        // Execute process model.
         // 递推位姿，核心函数
         processModel(imu_time, m_gyro, m_acc);
         ++used_imu_msg_cntr;
@@ -605,7 +610,6 @@ void MsckfVio::batchImuProcessing(const double &time_bound)
     state_server.imu_state.id = IMUState::next_id++;
 
     // 删掉已经用过
-    // Remove all used IMU msgs.
     imu_msg_buffer.erase(
         imu_msg_buffer.begin(),
         imu_msg_buffer.begin() + used_imu_msg_cntr);
@@ -622,8 +626,6 @@ void MsckfVio::batchImuProcessing(const double &time_bound)
 void MsckfVio::processModel(
     const double &time, const Vector3d &m_gyro, const Vector3d &m_acc)
 {
-
-    // Remove the bias from the measured gyro and acceleration
     // 以引用的方式取出
     IMUState &imu_state = state_server.imu_state;
 
@@ -662,7 +664,6 @@ void MsckfVio::processModel(
     F.block<3, 3>(0, 0) = -skewSymmetric(gyro);
     F.block<3, 3>(0, 3) = -Matrix3d::Identity();
 
-
     F.block<3, 3>(6, 0) =
         -quaternionToRotation(imu_state.orientation).transpose() * skewSymmetric(acc);
     F.block<3, 3>(6, 9) = -quaternionToRotation(imu_state.orientation).transpose();
@@ -682,12 +683,11 @@ void MsckfVio::processModel(
 
     // 3. 计算转移矩阵Phi矩阵
     // 论文Indirect Kalman Filter for 3D Attitude Estimation 中 公式164
-    // 其实就是泰勒展开
+    // 其实就是三阶的泰勒展开
     Matrix<double, 21, 21> Phi =
         Matrix<double, 21, 21>::Identity() + Fdt +
         0.5 * Fdt_square + (1.0 / 6.0) * Fdt_cube;
 
-    // Propogate the state using 4th order Runge-Kutta
     // 4. 四阶龙格库塔积分预测状态
     predictNewState(dtime, gyro, acc);
 
@@ -763,7 +763,7 @@ void MsckfVio::processModel(
 }
 
 /**
- * @brief 来一个新的imu数据做积分，应用四阶龙哥库塔法
+ * @brief 四阶龙格库塔对IMU状态递推
  * @param  dt 相对上一个数据的间隔时间
  * @param  gyro 角速度减去偏置后的
  * @param  acc 加速度减去偏置后的
@@ -788,7 +788,7 @@ void MsckfVio::predictNewState(
 
     // Some pre-calculation
     // dq_dt表示积分n到n+1
-    // dq_dt2表示积分n到n+0.5 算龙哥库塔用的
+    // dq_dt2表示积分n到n+0.5 算龙格库塔用的
     Vector4d dq_dt, dq_dt2;
     if (gyro_norm > 1e-5)
     {
@@ -1626,7 +1626,7 @@ void MsckfVio::findRedundantCamStates(
     // 1. 找到倒数第四个相机状态，作为关键状态
     auto key_cam_state_iter = state_server.cam_states.end();
     for (int i = 0; i < 4; ++i)
-        --key_cam_state_iter;
+        --key_cam_state_iter;\
 
     // 倒数第三个相机状态
     auto cam_state_iter = key_cam_state_iter;

@@ -11,6 +11,7 @@ namespace msckf_vio
 {
 void MsckfVioNodelet::onInit()
 {
+    setlocale(LC_ALL, "");
     msckf_vio_ptr.reset(new MsckfVio(getPrivateNodeHandle()));
     if (!msckf_vio_ptr->initialize())
     {

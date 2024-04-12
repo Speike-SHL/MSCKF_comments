@@ -11,6 +11,7 @@ namespace msckf_vio
 {
 void ImageProcessorNodelet::onInit()
 {
+    setlocale(LC_ALL, "");
     img_processor_ptr.reset(new ImageProcessor(getPrivateNodeHandle()));
     if (!img_processor_ptr->initialize())
     {
