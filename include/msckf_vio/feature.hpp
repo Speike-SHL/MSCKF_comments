@@ -409,7 +409,7 @@ namespace msckf_vio
             if (position(2) <= 0)
             {
                 is_valid_solution = false;
-                std::cout << "失败" << endl;
+                std::cout << "失败" << std::endl;
                 break;
             }
         }
