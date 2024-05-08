@@ -141,12 +141,6 @@ private:
      */
     bool createRosIO();
 
-    /**
-     * @brief stereoCallback
-     *    Callback function for the stereo images.
-     * @param cam0_img left image.
-     * @param cam1_img right image.
-     */
     void stereoCallback(
         const sensor_msgs::ImageConstPtr &cam0_img,
         const sensor_msgs::ImageConstPtr &cam1_img);
@@ -158,18 +152,8 @@ private:
      */
     void imuCallback(const sensor_msgs::ImuConstPtr &msg);
 
-    /**
-     * @initializeFirstFrame
-     *    Initialize the image processing sequence, which is
-     *    bascially detect new features on the first set of
-     *    stereo images.
-     */
     void initializeFirstFrame();
 
-    /**
-     * @brief trackFeatures
-     *    Tracker features on the newly received stereo images.
-     */
     void trackFeatures();
 
     /**

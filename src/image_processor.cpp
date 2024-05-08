@@ -25,12 +25,12 @@ using namespace Eigen;
 namespace msckf_vio
 {
     /**
-     * @brief 构造函数
+     * @brief ImageProcessor构造函数
      * @param[in] n ros节点句柄
-     * @see ImageProcessor::initialize()
+     * @param 列表初始化 is_first_img = true, 设置第一帧图像标志位
      */
     ImageProcessor::ImageProcessor(ros::NodeHandle &n)
-        : nh(n), is_first_img(true), // img_transport(n),
+        : nh(n), is_first_img(true),
           stereo_sub(10), prev_features_ptr(new GridFeatures()),
           curr_features_ptr(new GridFeatures())
     {
@@ -198,29 +198,26 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 消息的接收与发布
+     * @brief 创建前端ROS节点的发布和订阅话题
      */
     bool ImageProcessor::createRosIO()
     {
-        // 1. 发布
-        // 发布名为feature的消息，缓存长度为3
+        /// 1. "features"话题，缓存长度为3，用于向后端发布特征点（header,点id,左右目归一化坐标）
         feature_pub = nh.advertise<CameraMeasurement>("features", 3);
-        // 发布名为tracking_info的消息，缓存长度为1, 没有地方接收
+        /// 2. "tracking_info"话题，缓存长度为1，用于发布跟踪信息，没有地方接收
         tracking_info_pub = nh.advertise<TrackingInfo>("tracking_info", 1);
-
-        // 发布名为debug_stereo_image的消息，缓存长度为1
+        /// 3. "debug_stereo_image"话题，缓存长度为1，用于发布绘制的双目图像
         image_transport::ImageTransport it(nh);
         debug_stereo_pub = it.advertise("debug_stereo_image", 1);
 
-        // 2. 订阅
-        // 左右图像
+        /// 4. "cam0_image"话题，缓存长度为10，用于订阅左目图像
         cam0_img_sub.subscribe(nh, "cam0_image", 10);
+        /// 5. "cam1_image"话题，缓存长度为10，用于订阅右目图像
         cam1_img_sub.subscribe(nh, "cam1_image", 10);
-        // 将双目的两帧图像消息结合起来，ros自带
+        /// 6. ROS软件同步订阅双目图像消息，缓存长度为10，回调函数为ImageProcessor::stereoCallback
         stereo_sub.connectInput(cam0_img_sub, cam1_img_sub);
-        // callback
         stereo_sub.registerCallback(&ImageProcessor::stereoCallback, this);
-        // imu的接收函数
+        /// 7. "imu"话题，缓存长度为50，用于订阅IMU消息
         imu_sub = nh.subscribe("imu", 50, &ImageProcessor::imuCallback, this);
 
         return true;
@@ -232,15 +229,15 @@ namespace msckf_vio
      */
     bool ImageProcessor::initialize()
     {
-        // 1. 读参数
+        /// 1. 加载参数 @see ImageProcessor::loadParameters()
         if (!loadParameters())
             return false;
         ROS_INFO("Finish loading ROS parameters...");
 
-        // 2. 特征提取初始化，opencv fast角点
+        /// 2. 构造OpenCV的FAST特征提取器
         detector_ptr = FastFeatureDetector::create(processor_config.fast_threshold);
 
-        // 3. 声明消息的接收与发送
+        /// 3. 构造ROS IO进行消息的订阅和发布 @see ImageProcessor::createRosIO() 
         if (!createRosIO())
             return false;
         ROS_INFO("Finish creating ROS IO...");
@@ -249,26 +246,22 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 处理双目图像，前端主题流程
+     * @brief 双目图像回调, 处理双目图像，前端主要流程函数
      * @param  cam0_img 左图消息
      * @param  cam1_img 右图消息
-     * @see ImageProcessor::createRosIO()
      */
     void ImageProcessor::stereoCallback(const sensor_msgs::ImageConstPtr &cam0_img, const sensor_msgs::ImageConstPtr &cam1_img)
     {
 
-        // cout << "==================================" << endl;
-
-        // Get the current image.
-        // 1. 将ros的image消息转换为opencv中的cv::Mat（在cami_curr_img_ptr的成员image中存储），其中cv::Mat为mono8格式
+        // 将ros的image消息转换为opencv中的cv::Mat（在cami_curr_img_ptr的成员image中存储），其中cv::Mat为mono8格式
         cam0_curr_img_ptr = cv_bridge::toCvShare(cam0_img, sensor_msgs::image_encodings::MONO8);
         cam1_curr_img_ptr = cv_bridge::toCvShare(cam1_img, sensor_msgs::image_encodings::MONO8);
 
-        // Build the image pyramids once since they're used at multiple places
-        // 2. 创建尺度金字塔，其实就是把输入图片根据输入的层数给他弄成多张大小不同的图片
+        /// 1. 创建图像金字塔， @see ImageProcessor::createImagePyramids()
         createImagePyramids();
 
-        // Detect features in the first frame.
+        /// 2. 检测是否是第一帧图像, 如果是第一帧图像，初始化第一帧特征点并绘制发布双目图像
+        /// @see ImageProcessor::initializeFirstFrame(), ImageProcessor::drawFeaturesStereo()
         if (is_first_img)
         {
             // ros::Time start_time = ros::Time::now();
@@ -292,30 +285,29 @@ namespace msckf_vio
         }
         else
         {
-            // Track the feature in the previous image.
+            /// 3. 如果不是第一帧图像，进行下述操作
+            ///   -# 跟踪特征点 @see ImageProcessor::trackFeatures()
+            ///   -# 在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征 @see ImageProcessor::addNewFeatures()
+            ///   -# 剔除每个格多余的点 @see ImageProcessor::pruneGridFeatures()
+            ///   -# 当有其他节点订阅了debug_stereo_image消息时，将双目图像拼接起来并画出特征点位置，作为消息发送出去
+            ///      @see ImageProcessor::drawFeaturesStereo()
+
             // ros::Time start_time = ros::Time::now();
-            // 4.1 第二帧开始就跟踪了，此时只是跟踪上一帧而已，并没有衍生出新的点
             trackFeatures();
             // ROS_INFO("Tracking time: %f",
             //     (ros::Time::now()-start_time).toSec());
 
-            // Add new features into the current image.
             // start_time = ros::Time::now();
-            // 4.2 在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征
             addNewFeatures();
             // ROS_INFO("Addition time: %f",
             //     (ros::Time::now()-start_time).toSec());
 
-            // Add new features into the current image.
             // start_time = ros::Time::now();
-            // 4.3 剔除每个格多余的点
             pruneGridFeatures();
             // ROS_INFO("Prune grid features: %f",
             //     (ros::Time::now()-start_time).toSec());
 
-            // Draw results.
             // start_time = ros::Time::now();
-            // 4.4 当有其他节点订阅了debug_stereo_image消息时，将双目图像拼接起来并画出特征点位置，作为消息发送出去
             drawFeaturesStereo();
             // ROS_INFO("Draw features: %f",
             //     (ros::Time::now()-start_time).toSec());
@@ -326,9 +318,8 @@ namespace msckf_vio
         // ROS_INFO("Statistics: %f",
         //     (ros::Time::now()-start_time).toSec());
 
-        // Publish features in the current image.
+        /// 5. 发布图片特征点跟踪的结果到后端 @see ImageProcessor::publish()
         // ros::Time start_time = ros::Time::now();
-        // 5. 发布图片特征点跟踪的结果到后端
         publish();
         // ROS_INFO("Publishing: %f",
         //     (ros::Time::now()-start_time).toSec());
@@ -352,7 +343,7 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 向imu_msg_buffer添加imu消息
+     * @brief 接受IMU数据并向imu_msg_buffer添加imu消息
      * @param msg imu消息
      */
     void ImageProcessor::imuCallback(const sensor_msgs::ImuConstPtr &msg)
@@ -549,11 +540,12 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 1. 上一帧左目特征点 --(光流跟踪)-> 当前帧左目特征点
-     *        2. 当前帧左目特征点 --(双目匹配)-> 当前帧右目特征点
-     *        3. 当前帧左目特征点 & 前一帧左目特征点 --(RANSAC去除外点)
-     *        4. 当前帧右目特征点 & 前一帧右目特征点 --(RANSAC去除外点)
-     *        5. 保存当前帧左右目特征点到curr_features_ptr
+     * @brief 跟踪特征点
+     * @details 1. 上一帧左目特征点 --(光流跟踪)-> 当前帧左目特征点
+     * 2. 当前帧左目特征点 --(双目匹配)-> 当前帧右目特征点
+     * 3. 当前帧左目特征点 & 前一帧左目特征点 --(RANSAC去除外点)
+     * 4. 当前帧右目特征点 & 前一帧右目特征点 --(RANSAC去除外点)
+     * 5. 保存当前帧左右目特征点到curr_features_ptr
      */
     void ImageProcessor::trackFeatures()
     {
@@ -842,6 +834,10 @@ namespace msckf_vio
 
     /**
      * @brief 在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征
+     * @details 1. 在左目图像上提取新的Fast特征点
+     * 2. 将新提取的特征点按照网格分组, 保留响应值高的特征点
+     * 3. 将新提取的特征点与右目图像上的特征点进行匹配(同initializeFirstFrame)
+     * 4. 将特征点进行网格分组存入curr_features_ptr
      */
     void ImageProcessor::addNewFeatures()
     {
@@ -998,7 +994,8 @@ namespace msckf_vio
     /**
      * @brief 剔除每个格多余的点
      * @note  为什么addNewFeatures中明明每个格子都是按照最小需要的点数添加的，这里格子内的点还会超出最大值？
-     *        因为trackFeatures中, 某个格子内的点可能移动到了另一个格子，所以超出了格子内点的最大值
+     *        因为trackFeatures中只按照每个格子最少的点补齐了， 但某个格子内的点可能移动到了另一个格子，
+     * 所以超出了格子内点的最大值
      */
     void ImageProcessor::pruneGridFeatures()
     {
