@@ -1,0 +1,51 @@
+.TH "/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/math_utils.hpp" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/math_utils.hpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <cmath>\fP
+.br
+\fC#include <Eigen/Dense>\fP
+.br
+
+.SS "命名空间"
+
+.in +1c
+.ti -1c
+.RI " \fBmsckf_vio\fP"
+.br
+.in -1c
+.SS "函数"
+
+.in +1c
+.ti -1c
+.RI "Eigen::Matrix3d \fBmsckf_vio::skewSymmetric\fP (const Eigen::Vector3d &w)"
+.br
+.RI "反对称矩阵 "
+.ti -1c
+.RI "void \fBmsckf_vio::quaternionNormalize\fP (Eigen::Vector4d &q)"
+.br
+.RI "标准化四元数 "
+.ti -1c
+.RI "Eigen::Vector4d \fBmsckf_vio::quaternionMultiplication\fP (const Eigen::Vector4d &q1, const Eigen::Vector4d &q2)"
+.br
+.RI "Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法 "
+.ti -1c
+.RI "Eigen::Vector4d \fBmsckf_vio::smallAngleQuaternion\fP (const Eigen::Vector3d &dtheta)"
+.br
+.RI "李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion\&. "
+.ti -1c
+.RI "Eigen::Matrix3d \fBmsckf_vio::quaternionToRotation\fP (const Eigen::Vector4d &q)"
+.br
+.RI "四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix "
+.ti -1c
+.RI "Eigen::Vector4d \fBmsckf_vio::rotationToQuaternion\fP (const Eigen::Matrix3d &R)"
+.br
+.RI "旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion\&. "
+.in -1c
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.

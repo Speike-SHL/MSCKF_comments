@@ -1,0 +1,45 @@
+\hypertarget{feature_8hpp}{}\doxysection{/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/include/msckf\+\_\+vio/feature.hpp 文件参考}
+\label{feature_8hpp}\index{/home/speike/VSLAM/MSCKF\_vio\_ws/src/MSCKF\_comments/include/msckf\_vio/feature.hpp@{/home/speike/VSLAM/MSCKF\_vio\_ws/src/MSCKF\_comments/include/msckf\_vio/feature.hpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Dense$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Geometry$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Std\+Vector$>$}\newline
+{\ttfamily \#include \char`\"{}math\+\_\+utils.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}imu\+\_\+state.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}cam\+\_\+state.\+h\char`\"{}}\newline
+feature.\+hpp 的引用(Include)关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{feature_8hpp__incl}
+\end{center}
+\end{figure}
+此图展示该文件直接或间接的被哪些文件引用了\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{feature_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{类}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmsckf__vio_1_1_feature}{msckf\+\_\+vio\+::\+Feature}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{structmsckf__vio_1_1_feature}{Feature}} Salient part of an image. Please refer to the Appendix of \char`\"{}\+A Multi-\/\+State Constraint Kalman
+   Filter for Vision-\/aided Inertial Navigation\char`\"{} for how the 3d position of a feature is initialized. 一个特征可以理解为一个三维点，由多帧观测到 \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config}{msckf\+\_\+vio\+::\+Feature\+::\+Optimization\+Config}}
+\begin{DoxyCompactList}\small\item\em 优化求解特征点世界系下三维坐标的配置 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{命名空间}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemsckf__vio}{msckf\+\_\+vio}}
+\end{DoxyCompactItemize}
+\doxysubsection*{类型定义}
+\begin{DoxyCompactItemize}
+\item 
+typedef Feature\+::\+Feature\+I\+D\+Type \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{msckf\+\_\+vio\+::\+Feature\+I\+D\+Type}}
+\item 
+typedef std\+::map$<$ Feature\+I\+D\+Type, Feature, std\+::less$<$ int $>$, Eigen\+::aligned\+\_\+allocator$<$ std\+::pair$<$ const Feature\+I\+D\+Type, Feature $>$ $>$ $>$ \mbox{\hyperlink{namespacemsckf__vio_a3669e349a8845867230c069f72b0aebd}{msckf\+\_\+vio\+::\+Map\+Server}}
+\begin{DoxyCompactList}\small\item\em 键为特征点id(long long int)，值为特征点(feature), 升序排序，内存分配器为\+Eigen\+::aligned\+\_\+allocator \end{DoxyCompactList}\end{DoxyCompactItemize}

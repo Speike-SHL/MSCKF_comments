@@ -1,0 +1,78 @@
+\hypertarget{structmsckf__vio_1_1_msckf_vio_1_1_state_server}{}\doxysection{msckf\+\_\+vio\+::Msckf\+Vio\+::State\+Server结构体 参考}
+\label{structmsckf__vio_1_1_msckf_vio_1_1_state_server}\index{msckf\_vio::MsckfVio::StateServer@{msckf\_vio::MsckfVio::StateServer}}
+
+
+管理\+S-\/\+M\+S\+C\+K\+F中的所有状态，包括\+I\+M\+U相关的状态和多个相机的状态  
+
+
+
+
+msckf\+\_\+vio\+::Msckf\+Vio\+::State\+Server 的协作图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{structmsckf__vio_1_1_msckf_vio_1_1_state_server__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public 属性}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state}{I\+M\+U\+State}} \mbox{\hyperlink{structmsckf__vio_1_1_msckf_vio_1_1_state_server_a140701cc498b7b20170211855068289d}{imu\+\_\+state}}
+\begin{DoxyCompactList}\small\item\em 状态量中\+I\+M\+U相关的状态 \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}{Cam\+State\+Server}} \mbox{\hyperlink{structmsckf__vio_1_1_msckf_vio_1_1_state_server_a5bf329dee246596d1548044ac3e9e174}{cam\+\_\+states}}
+\begin{DoxyCompactList}\small\item\em 状态量中相机相关的状态，是一个map容器，key为相机帧id, 值为\+C\+A\+M\+State \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix\+Xd \mbox{\hyperlink{structmsckf__vio_1_1_msckf_vio_1_1_state_server_abf81d654de5d28115dcd48d0b562b566}{state\+\_\+cov}}
+\begin{DoxyCompactList}\small\item\em 所有状态的误差协方差矩阵P \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix$<$ double, 12, 12 $>$ \mbox{\hyperlink{structmsckf__vio_1_1_msckf_vio_1_1_state_server_a1d1fda019cc5fb89da243401587c27d8}{continuous\+\_\+noise\+\_\+cov}}
+\begin{DoxyCompactList}\small\item\em 噪声协方差矩阵 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{详细描述}
+管理\+S-\/\+M\+S\+C\+K\+F中的所有状态，包括\+I\+M\+U相关的状态和多个相机的状态 
+
+\doxysubsection{类成员变量说明}
+\mbox{\Hypertarget{structmsckf__vio_1_1_msckf_vio_1_1_state_server_a5bf329dee246596d1548044ac3e9e174}\label{structmsckf__vio_1_1_msckf_vio_1_1_state_server_a5bf329dee246596d1548044ac3e9e174}} 
+\index{msckf\_vio::MsckfVio::StateServer@{msckf\_vio::MsckfVio::StateServer}!cam\_states@{cam\_states}}
+\index{cam\_states@{cam\_states}!msckf\_vio::MsckfVio::StateServer@{msckf\_vio::MsckfVio::StateServer}}
+\doxysubsubsection{\texorpdfstring{cam\_states}{cam\_states}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}{Cam\+State\+Server}} msckf\+\_\+vio\+::\+Msckf\+Vio\+::\+State\+Server\+::cam\+\_\+states}
+
+
+
+状态量中相机相关的状态，是一个map容器，key为相机帧id, 值为\+C\+A\+M\+State 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_msckf_vio_1_1_state_server_a1d1fda019cc5fb89da243401587c27d8}\label{structmsckf__vio_1_1_msckf_vio_1_1_state_server_a1d1fda019cc5fb89da243401587c27d8}} 
+\index{msckf\_vio::MsckfVio::StateServer@{msckf\_vio::MsckfVio::StateServer}!continuous\_noise\_cov@{continuous\_noise\_cov}}
+\index{continuous\_noise\_cov@{continuous\_noise\_cov}!msckf\_vio::MsckfVio::StateServer@{msckf\_vio::MsckfVio::StateServer}}
+\doxysubsubsection{\texorpdfstring{continuous\_noise\_cov}{continuous\_noise\_cov}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix$<$double, 12, 12$>$ msckf\+\_\+vio\+::\+Msckf\+Vio\+::\+State\+Server\+::continuous\+\_\+noise\+\_\+cov}
+
+
+
+噪声协方差矩阵 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_msckf_vio_1_1_state_server_a140701cc498b7b20170211855068289d}\label{structmsckf__vio_1_1_msckf_vio_1_1_state_server_a140701cc498b7b20170211855068289d}} 
+\index{msckf\_vio::MsckfVio::StateServer@{msckf\_vio::MsckfVio::StateServer}!imu\_state@{imu\_state}}
+\index{imu\_state@{imu\_state}!msckf\_vio::MsckfVio::StateServer@{msckf\_vio::MsckfVio::StateServer}}
+\doxysubsubsection{\texorpdfstring{imu\_state}{imu\_state}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state}{I\+M\+U\+State}} msckf\+\_\+vio\+::\+Msckf\+Vio\+::\+State\+Server\+::imu\+\_\+state}
+
+
+
+状态量中\+I\+M\+U相关的状态 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_msckf_vio_1_1_state_server_abf81d654de5d28115dcd48d0b562b566}\label{structmsckf__vio_1_1_msckf_vio_1_1_state_server_abf81d654de5d28115dcd48d0b562b566}} 
+\index{msckf\_vio::MsckfVio::StateServer@{msckf\_vio::MsckfVio::StateServer}!state\_cov@{state\_cov}}
+\index{state\_cov@{state\_cov}!msckf\_vio::MsckfVio::StateServer@{msckf\_vio::MsckfVio::StateServer}}
+\doxysubsubsection{\texorpdfstring{state\_cov}{state\_cov}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd msckf\+\_\+vio\+::\+Msckf\+Vio\+::\+State\+Server\+::state\+\_\+cov}
+
+
+
+所有状态的误差协方差矩阵P 
+
+
+
+该结构体的文档由以下文件生成\+:\begin{DoxyCompactItemize}
+\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/include/msckf\+\_\+vio/\mbox{\hyperlink{msckf__vio_8h}{msckf\+\_\+vio.\+h}}\end{DoxyCompactItemize}

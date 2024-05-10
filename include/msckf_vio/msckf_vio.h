@@ -41,7 +41,6 @@ class MsckfVio
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-    // Constructor
     MsckfVio(ros::NodeHandle &pnh);
     // Disable copy and assign constructor
     MsckfVio(const MsckfVio &) = delete;
@@ -50,35 +49,27 @@ public:
     // Destructor
     ~MsckfVio() {}
 
-    /*
-     * @brief initialize Initialize the VIO.
-     */
     bool initialize();
 
-    /*
-     * @brief reset Resets the VIO to initial status.
-     */
     void reset();
 
     typedef boost::shared_ptr<MsckfVio> Ptr;
     typedef boost::shared_ptr<const MsckfVio> ConstPtr;
 
 private:
-    /*
-     * @brief StateServer Store one IMU states and several
-     *    camera states for constructing measurement
-     *    model.
+
+    /**
+     * @brief 管理S-MSCKF中的所有状态，包括IMU相关的状态和多个相机的状态
      */
     struct StateServer
     {
+        /// 状态量中IMU相关的状态
         IMUState imu_state;
-        // 别看他长，其实就是一个map类
-        // key是 StateIDType 由 long long int typedef而来，把它当作int看就行
-        // value是CAMState
+        /// 状态量中相机相关的状态，是一个map容器，key为相机帧id, 值为CAMState
         CamStateServer cam_states;
-
-        // State covariance matrix
+        /// 所有状态的误差协方差矩阵P
         Eigen::MatrixXd state_cov;
+        /// 噪声协方差矩阵
         Eigen::Matrix<double, 12, 12> continuous_noise_cov;
     };
 
@@ -162,25 +153,21 @@ private:
     // Chi squared test table.
     static std::map<int, double> chi_squared_test_table;
 
-    // State vector
+    /// 包含S-MSKCF中的IMU状态和所有相机状态
     StateServer state_server;
     // Maximum number of camera states
     int max_cam_state_size;
 
-    // Features used
-    // 理解为一种特征管理，本质是一个map，key为特征点id，value为特征类
+    /// 包含所有的特征点的map容器，key为特征点id，值为Feature类,
     MapServer map_server;
 
-    // IMU data buffer
-    // This is buffer is used to handle the unsynchronization or
-    // transfer delay between IMU and Image messages.
+    /// 储存进入的IMU的消息，有时间同步的作用
     std::vector<sensor_msgs::Imu> imu_msg_buffer;
 
-    // Indicate if the gravity vector is set， 即是否做了IMU的初始化
+    /// Indicate if the gravity vector is set， 即是否做了IMU的初始化
     bool is_gravity_set;
 
-    // Indicate if the received image is the first one. The
-    // system will start after receiving the first image.
+    /// 判断是否是第一帧图像，后端在接收到第一帧图像后才开始工作
     bool is_first_img;
 
     // The position uncertainty threshold is used to determine

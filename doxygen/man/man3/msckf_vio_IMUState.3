@@ -1,0 +1,140 @@
+.TH "msckf_vio::IMUState" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+msckf_vio::IMUState
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <imu_state\&.h>\fP
+.SS "Public 成员函数"
+
+.in +1c
+.ti -1c
+.RI "\fBIMUState\fP ()"
+.br
+.ti -1c
+.RI "\fBIMUState\fP (const \fBStateIDType\fP &new_id)"
+.br
+.in -1c
+.SS "Public 属性"
+
+.in +1c
+.ti -1c
+.RI "EIGEN_MAKE_ALIGNED_OPERATOR_NEW typedef long long int \fBStateIDType\fP"
+.br
+.ti -1c
+.RI "\fBStateIDType\fP \fBid\fP"
+.br
+.ti -1c
+.RI "double \fBtime\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector4d \fBorientation\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBposition\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBvelocity\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBgyro_bias\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBacc_bias\fP"
+.br
+.ti -1c
+.RI "Eigen::Matrix3d \fBR_imu_cam0\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBt_cam0_imu\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector4d \fBorientation_null\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBposition_null\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBvelocity_null\fP"
+.br
+.in -1c
+.SS "静态 Public 属性"
+
+.in +1c
+.ti -1c
+.RI "static \fBStateIDType\fP \fBnext_id\fP = 0"
+.br
+.ti -1c
+.RI "static double \fBgyro_noise\fP = 0\&.001"
+.br
+.ti -1c
+.RI "static double \fBacc_noise\fP = 0\&.01"
+.br
+.ti -1c
+.RI "static double \fBgyro_bias_noise\fP = 0\&.001"
+.br
+.ti -1c
+.RI "static double \fBacc_bias_noise\fP = 0\&.01"
+.br
+.ti -1c
+.RI "static Eigen::Vector3d \fBgravity\fP = Vector3d(0, 0, \-\fBGRAVITY_ACCELERATION\fP)"
+.br
+.ti -1c
+.RI "static Eigen::Isometry3d \fBT_imu_body\fP = Isometry3d::Identity()"
+.br
+.in -1c
+.SH "构造及析构函数说明"
+.PP 
+.SS "msckf_vio::IMUState::IMUState ()\fC [inline]\fP"
+
+.SS "msckf_vio::IMUState::IMUState (const \fBStateIDType\fP & new_id)\fC [inline]\fP"
+
+.SH "类成员变量说明"
+.PP 
+.SS "Eigen::Vector3d msckf_vio::IMUState::acc_bias"
+
+.SS "double msckf_vio::IMUState::acc_bias_noise = 0\&.01\fC [static]\fP"
+
+.SS "double msckf_vio::IMUState::acc_noise = 0\&.01\fC [static]\fP"
+
+.SS "Vector3d msckf_vio::IMUState::gravity = Vector3d(0, 0, \-\fBGRAVITY_ACCELERATION\fP)\fC [static]\fP"
+
+.SS "Eigen::Vector3d msckf_vio::IMUState::gyro_bias"
+
+.SS "double msckf_vio::IMUState::gyro_bias_noise = 0\&.001\fC [static]\fP"
+
+.SS "double msckf_vio::IMUState::gyro_noise = 0\&.001\fC [static]\fP"
+
+.SS "\fBStateIDType\fP msckf_vio::IMUState::id"
+
+.SS "\fBStateIDType\fP msckf_vio::IMUState::next_id = 0\fC [static]\fP"
+
+.SS "Eigen::Vector4d msckf_vio::IMUState::orientation"
+
+.SS "Eigen::Vector4d msckf_vio::IMUState::orientation_null"
+
+.SS "Eigen::Vector3d msckf_vio::IMUState::position"
+
+.SS "Eigen::Vector3d msckf_vio::IMUState::position_null"
+
+.SS "Eigen::Matrix3d msckf_vio::IMUState::R_imu_cam0"
+
+.SS "EIGEN_MAKE_ALIGNED_OPERATOR_NEW typedef long long int msckf_vio::IMUState::StateIDType"
+
+.SS "Eigen::Vector3d msckf_vio::IMUState::t_cam0_imu"
+
+.SS "Isometry3d msckf_vio::IMUState::T_imu_body = Isometry3d::Identity()\fC [static]\fP"
+
+.SS "double msckf_vio::IMUState::time"
+
+.SS "Eigen::Vector3d msckf_vio::IMUState::velocity"
+
+.SS "Eigen::Vector3d msckf_vio::IMUState::velocity_null"
+
+
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.

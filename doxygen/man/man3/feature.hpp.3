@@ -1,0 +1,60 @@
+.TH "/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/feature.hpp" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/feature.hpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <iostream>\fP
+.br
+\fC#include <map>\fP
+.br
+\fC#include <vector>\fP
+.br
+\fC#include <Eigen/Dense>\fP
+.br
+\fC#include <Eigen/Geometry>\fP
+.br
+\fC#include <Eigen/StdVector>\fP
+.br
+\fC#include 'math_utils\&.hpp'\fP
+.br
+\fC#include 'imu_state\&.h'\fP
+.br
+\fC#include 'cam_state\&.h'\fP
+.br
+
+.SS "类"
+
+.in +1c
+.ti -1c
+.RI "struct \fBmsckf_vio::Feature\fP"
+.br
+.RI "\fBFeature\fP Salient part of an image\&. Please refer to the Appendix of 'A Multi-State Constraint Kalman
+   Filter for Vision-aided Inertial Navigation' for how the 3d position of a feature is initialized\&. 一个特征可以理解为一个三维点，由多帧观测到 "
+.ti -1c
+.RI "struct \fBmsckf_vio::Feature::OptimizationConfig\fP"
+.br
+.RI "3D点位置的优化参数 "
+.in -1c
+.SS "命名空间"
+
+.in +1c
+.ti -1c
+.RI " \fBmsckf_vio\fP"
+.br
+.in -1c
+.SS "类型定义"
+
+.in +1c
+.ti -1c
+.RI "typedef Feature::FeatureIDType \fBmsckf_vio::FeatureIDType\fP"
+.br
+.ti -1c
+.RI "typedef std::map< FeatureIDType, Feature, std::less< int >, Eigen::aligned_allocator< std::pair< const FeatureIDType, Feature > > > \fBmsckf_vio::MapServer\fP"
+.br
+.in -1c
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.

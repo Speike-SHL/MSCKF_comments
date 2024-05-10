@@ -1,0 +1,4 @@
+<map id="msckf_vio::Feature" name="msckf_vio::Feature">
+<area shape="rect" id="node1" title="Feature Salient part of an image. Please refer to the Appendix of &quot;A Multi&#45;State Constraint Kalman &#160;&#160;..." alt="" coords="9,109,143,136"/>
+<area shape="rect" id="node2" href="$structmsckf__vio_1_1_feature_1_1_optimization_config.html" title="优化求解特征点世界系下三维坐标的配置" alt="" coords="5,5,147,47"/>
+</map>

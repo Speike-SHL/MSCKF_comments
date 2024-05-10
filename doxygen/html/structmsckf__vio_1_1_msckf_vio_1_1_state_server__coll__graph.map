@@ -1,0 +1,4 @@
+<map id="msckf_vio::MsckfVio::StateServer" name="msckf_vio::MsckfVio::StateServer">
+<area shape="rect" id="node1" title="管理S&#45;MSCKF中的所有状态，包括IMU相关的状态和多个相机的状态" alt="" coords="6,95,151,136"/>
+<area shape="rect" id="node2" href="$structmsckf__vio_1_1_i_m_u_state.html" title="S&#45;MSCKF中IMU状态相关" alt="" coords="5,5,152,32"/>
+</map>

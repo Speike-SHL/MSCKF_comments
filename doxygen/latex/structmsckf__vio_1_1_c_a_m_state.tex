@@ -1,0 +1,113 @@
+\hypertarget{structmsckf__vio_1_1_c_a_m_state}{}\doxysection{msckf\+\_\+vio\+::C\+A\+M\+State结构体 参考}
+\label{structmsckf__vio_1_1_c_a_m_state}\index{msckf\_vio::CAMState@{msckf\_vio::CAMState}}
+
+
+储存相机状态，包括相机id, 时间，姿态\+Rcw，位置twc，零空间姿态，零空间位置，和两个相机间的外参  
+
+
+
+
+{\ttfamily \#include $<$cam\+\_\+state.\+h$>$}
+
+\doxysubsection*{Public 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state_ac0975c1312ac462b04368e01dc269468}{C\+A\+M\+State}} ()
+\item 
+\mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state_a07ed6be494251fc7a6bd0a934f615bac}{C\+A\+M\+State}} (const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} \&new\+\_\+id)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public 属性}
+\begin{DoxyCompactItemize}
+\item 
+E\+I\+G\+E\+N\+\_\+\+M\+A\+K\+E\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+\+O\+P\+E\+R\+A\+T\+O\+R\+\_\+\+N\+EW \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state_a9d6b1b83eb02f215162758d93067202a}{id}}
+\item 
+double \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state_a7e97e081d95a6a0365757f289df43934}{time}}
+\item 
+Eigen\+::\+Vector4d \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state_a5a1b5ab281eb475055af7afd263a2400}{orientation}}
+\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state_a7fec0b98ecc4bdc57eb318e9df35eba4}{position}}
+\item 
+Eigen\+::\+Vector4d \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state_ae4f5d3c46fa924fe38131e423abbc053}{orientation\+\_\+null}}
+\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state_a6bbe7431cd90c2436460b0474e229f94}{position\+\_\+null}}
+\end{DoxyCompactItemize}
+\doxysubsection*{静态 Public 属性}
+\begin{DoxyCompactItemize}
+\item 
+static Eigen\+::\+Isometry3d \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state_a0348d023e8167fbb4c30e87e15b50a3b}{T\+\_\+cam0\+\_\+cam1}} = Isometry3d\+::\+Identity()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{详细描述}
+储存相机状态，包括相机id, 时间，姿态\+Rcw，位置twc，零空间姿态，零空间位置，和两个相机间的外参 
+
+\begin{DoxyNote}{注解}
+位置是相机坐标系在世界坐标系下的位置；姿态是世界坐标系到相机坐标系的旋转 
+\end{DoxyNote}
+
+
+\doxysubsection{构造及析构函数说明}
+\mbox{\Hypertarget{structmsckf__vio_1_1_c_a_m_state_ac0975c1312ac462b04368e01dc269468}\label{structmsckf__vio_1_1_c_a_m_state_ac0975c1312ac462b04368e01dc269468}} 
+\index{msckf\_vio::CAMState@{msckf\_vio::CAMState}!CAMState@{CAMState}}
+\index{CAMState@{CAMState}!msckf\_vio::CAMState@{msckf\_vio::CAMState}}
+\doxysubsubsection{\texorpdfstring{CAMState()}{CAMState()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+C\+A\+M\+State\+::\+C\+A\+M\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_c_a_m_state_a07ed6be494251fc7a6bd0a934f615bac}\label{structmsckf__vio_1_1_c_a_m_state_a07ed6be494251fc7a6bd0a934f615bac}} 
+\index{msckf\_vio::CAMState@{msckf\_vio::CAMState}!CAMState@{CAMState}}
+\index{CAMState@{CAMState}!msckf\_vio::CAMState@{msckf\_vio::CAMState}}
+\doxysubsubsection{\texorpdfstring{CAMState()}{CAMState()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+C\+A\+M\+State\+::\+C\+A\+M\+State (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} \&}]{new\+\_\+id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{类成员变量说明}
+\mbox{\Hypertarget{structmsckf__vio_1_1_c_a_m_state_a9d6b1b83eb02f215162758d93067202a}\label{structmsckf__vio_1_1_c_a_m_state_a9d6b1b83eb02f215162758d93067202a}} 
+\index{msckf\_vio::CAMState@{msckf\_vio::CAMState}!id@{id}}
+\index{id@{id}!msckf\_vio::CAMState@{msckf\_vio::CAMState}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily E\+I\+G\+E\+N\+\_\+\+M\+A\+K\+E\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+\+O\+P\+E\+R\+A\+T\+O\+R\+\_\+\+N\+EW \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} msckf\+\_\+vio\+::\+C\+A\+M\+State\+::id}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_c_a_m_state_a5a1b5ab281eb475055af7afd263a2400}\label{structmsckf__vio_1_1_c_a_m_state_a5a1b5ab281eb475055af7afd263a2400}} 
+\index{msckf\_vio::CAMState@{msckf\_vio::CAMState}!orientation@{orientation}}
+\index{orientation@{orientation}!msckf\_vio::CAMState@{msckf\_vio::CAMState}}
+\doxysubsubsection{\texorpdfstring{orientation}{orientation}}
+{\footnotesize\ttfamily Eigen\+::\+Vector4d msckf\+\_\+vio\+::\+C\+A\+M\+State\+::orientation}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_c_a_m_state_ae4f5d3c46fa924fe38131e423abbc053}\label{structmsckf__vio_1_1_c_a_m_state_ae4f5d3c46fa924fe38131e423abbc053}} 
+\index{msckf\_vio::CAMState@{msckf\_vio::CAMState}!orientation\_null@{orientation\_null}}
+\index{orientation\_null@{orientation\_null}!msckf\_vio::CAMState@{msckf\_vio::CAMState}}
+\doxysubsubsection{\texorpdfstring{orientation\_null}{orientation\_null}}
+{\footnotesize\ttfamily Eigen\+::\+Vector4d msckf\+\_\+vio\+::\+C\+A\+M\+State\+::orientation\+\_\+null}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_c_a_m_state_a7fec0b98ecc4bdc57eb318e9df35eba4}\label{structmsckf__vio_1_1_c_a_m_state_a7fec0b98ecc4bdc57eb318e9df35eba4}} 
+\index{msckf\_vio::CAMState@{msckf\_vio::CAMState}!position@{position}}
+\index{position@{position}!msckf\_vio::CAMState@{msckf\_vio::CAMState}}
+\doxysubsubsection{\texorpdfstring{position}{position}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d msckf\+\_\+vio\+::\+C\+A\+M\+State\+::position}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_c_a_m_state_a6bbe7431cd90c2436460b0474e229f94}\label{structmsckf__vio_1_1_c_a_m_state_a6bbe7431cd90c2436460b0474e229f94}} 
+\index{msckf\_vio::CAMState@{msckf\_vio::CAMState}!position\_null@{position\_null}}
+\index{position\_null@{position\_null}!msckf\_vio::CAMState@{msckf\_vio::CAMState}}
+\doxysubsubsection{\texorpdfstring{position\_null}{position\_null}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d msckf\+\_\+vio\+::\+C\+A\+M\+State\+::position\+\_\+null}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_c_a_m_state_a0348d023e8167fbb4c30e87e15b50a3b}\label{structmsckf__vio_1_1_c_a_m_state_a0348d023e8167fbb4c30e87e15b50a3b}} 
+\index{msckf\_vio::CAMState@{msckf\_vio::CAMState}!T\_cam0\_cam1@{T\_cam0\_cam1}}
+\index{T\_cam0\_cam1@{T\_cam0\_cam1}!msckf\_vio::CAMState@{msckf\_vio::CAMState}}
+\doxysubsubsection{\texorpdfstring{T\_cam0\_cam1}{T\_cam0\_cam1}}
+{\footnotesize\ttfamily Isometry3d C\+A\+M\+State\+::\+T\+\_\+cam0\+\_\+cam1 = Isometry3d\+::\+Identity()\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_c_a_m_state_a7e97e081d95a6a0365757f289df43934}\label{structmsckf__vio_1_1_c_a_m_state_a7e97e081d95a6a0365757f289df43934}} 
+\index{msckf\_vio::CAMState@{msckf\_vio::CAMState}!time@{time}}
+\index{time@{time}!msckf\_vio::CAMState@{msckf\_vio::CAMState}}
+\doxysubsubsection{\texorpdfstring{time}{time}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+C\+A\+M\+State\+::time}
+
+
+
+该结构体的文档由以下文件生成\+:\begin{DoxyCompactItemize}
+\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/include/msckf\+\_\+vio/\mbox{\hyperlink{cam__state_8h}{cam\+\_\+state.\+h}}\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/src/\mbox{\hyperlink{msckf__vio_8cpp}{msckf\+\_\+vio.\+cpp}}\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/test/\mbox{\hyperlink{feature__initialization__test_8cpp}{feature\+\_\+initialization\+\_\+test.\+cpp}}\end{DoxyCompactItemize}

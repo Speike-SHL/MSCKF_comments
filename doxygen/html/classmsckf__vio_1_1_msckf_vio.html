@@ -1,0 +1,2438 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>S-MSCKF注释: msckf_vio::MsckfVio类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">S-MSCKF注释
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('classmsckf__vio_1_1_msckf_vio.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">类</a> &#124;
+<a href="#pub-types">Public 类型</a> &#124;
+<a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="#pri-methods">Private 成员函数</a> &#124;
+<a href="#pri-attribs">Private 属性</a> &#124;
+<a href="#pri-static-attribs">静态 Private 属性</a> &#124;
+<a href="classmsckf__vio_1_1_msckf_vio-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">msckf_vio::MsckfVio类 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="msckf__vio_8h_source.html">msckf_vio.h</a>&gt;</code></p>
+<div class="dynheader">
+msckf_vio::MsckfVio 的协作图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio__coll__graph.png" border="0" usemap="#msckf__vio_1_1_msckf_vio_coll__map" alt="Collaboration graph"/></div>
+<map name="msckf__vio_1_1_msckf_vio_coll__map" id="msckf__vio_1_1_msckf_vio_coll__map">
+<area shape="rect" title=" " alt="" coords="6,199,151,225"/>
+<area shape="rect" href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html" title="管理S&#45;MSCKF中的所有状态，包括IMU相关的状态和多个相机的状态" alt="" coords="6,95,151,136"/>
+<area shape="rect" href="structmsckf__vio_1_1_i_m_u_state.html" title="S&#45;MSCKF中IMU状态相关" alt="" coords="5,5,152,32"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">图例</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html">StateServer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">管理S-MSCKF中的所有状态，包括IMU相关的状态和多个相机的状态  <a href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public 类型</h2></td></tr>
+<tr class="memitem:a84125095bce81c6de3be0558405f69fb"><td class="memItemLeft" align="right" valign="top">typedef boost::shared_ptr&lt; <a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a84125095bce81c6de3be0558405f69fb">Ptr</a></td></tr>
+<tr class="separator:a84125095bce81c6de3be0558405f69fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ff8cec4cc043591912921f1ff0cf79f"><td class="memItemLeft" align="right" valign="top">typedef boost::shared_ptr&lt; const <a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a4ff8cec4cc043591912921f1ff0cf79f">ConstPtr</a></td></tr>
+<tr class="separator:a4ff8cec4cc043591912921f1ff0cf79f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:a6e1d5e62116c85665bc7442b7e1487ae"><td class="memItemLeft" align="right" valign="top">EIGEN_MAKE_ALIGNED_OPERATOR_NEW&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a6e1d5e62116c85665bc7442b7e1487ae">MsckfVio</a> (ros::NodeHandle &amp;pnh)</td></tr>
+<tr class="memdesc:a6e1d5e62116c85665bc7442b7e1487ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">MsckfVio构造函数  <a href="classmsckf__vio_1_1_msckf_vio.html#a6e1d5e62116c85665bc7442b7e1487ae">更多...</a><br /></td></tr>
+<tr class="separator:a6e1d5e62116c85665bc7442b7e1487ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf5d1cf816a9a50302fe71d8a4768a34"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#adf5d1cf816a9a50302fe71d8a4768a34">MsckfVio</a> (const <a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a> &amp;)=delete</td></tr>
+<tr class="separator:adf5d1cf816a9a50302fe71d8a4768a34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2129eb894834138ba6159f531b2d8b81"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a2129eb894834138ba6159f531b2d8b81">operator=</a> (const <a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a> &amp;)=delete</td></tr>
+<tr class="separator:a2129eb894834138ba6159f531b2d8b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52e396a79e36a1ff675eece579286fb0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a52e396a79e36a1ff675eece579286fb0">~MsckfVio</a> ()</td></tr>
+<tr class="separator:a52e396a79e36a1ff675eece579286fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3087eaaf3635b9c26a7aea079fc985d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9">initialize</a> ()</td></tr>
+<tr class="separator:a3087eaaf3635b9c26a7aea079fc985d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26fb3bfbf78d3f340b20ca021437d8b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a26fb3bfbf78d3f340b20ca021437d8b9">reset</a> ()</td></tr>
+<tr class="separator:a26fb3bfbf78d3f340b20ca021437d8b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private 成员函数</h2></td></tr>
+<tr class="memitem:a1e49f09dc62af5f1461fe59fa15dd48d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a1e49f09dc62af5f1461fe59fa15dd48d">loadParameters</a> ()</td></tr>
+<tr class="memdesc:a1e49f09dc62af5f1461fe59fa15dd48d"><td class="mdescLeft">&#160;</td><td class="mdescRight">导入各种参数，包括阈值、传感器误差标准差等  <a href="classmsckf__vio_1_1_msckf_vio.html#a1e49f09dc62af5f1461fe59fa15dd48d">更多...</a><br /></td></tr>
+<tr class="separator:a1e49f09dc62af5f1461fe59fa15dd48d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8a40018e7997bf6dd13808d6a9f6e80"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80">createRosIO</a> ()</td></tr>
+<tr class="separator:ac8a40018e7997bf6dd13808d6a9f6e80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f00e4d8e8146b89239fbd192500da97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a5f00e4d8e8146b89239fbd192500da97">imuCallback</a> (const sensor_msgs::ImuConstPtr &amp;msg)</td></tr>
+<tr class="memdesc:a5f00e4d8e8146b89239fbd192500da97"><td class="mdescLeft">&#160;</td><td class="mdescRight">接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推  <a href="classmsckf__vio_1_1_msckf_vio.html#a5f00e4d8e8146b89239fbd192500da97">更多...</a><br /></td></tr>
+<tr class="separator:a5f00e4d8e8146b89239fbd192500da97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac864e3250127c860dc0301c24938cf56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56">featureCallback</a> (const CameraMeasurementConstPtr &amp;msg)</td></tr>
+<tr class="memdesc:ac864e3250127c860dc0301c24938cf56"><td class="mdescLeft">&#160;</td><td class="mdescRight">后端主要函数，处理新来的数据  <a href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56">更多...</a><br /></td></tr>
+<tr class="separator:ac864e3250127c860dc0301c24938cf56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fb43d4dfe65743ab04f72d496efbdd0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a9fb43d4dfe65743ab04f72d496efbdd0">publish</a> (const ros::Time &amp;time)</td></tr>
+<tr class="separator:a9fb43d4dfe65743ab04f72d496efbdd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61d86bf067424803bc2ad162a5c2a237"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a61d86bf067424803bc2ad162a5c2a237">initializeGravityAndBias</a> ()</td></tr>
+<tr class="memdesc:a61d86bf067424803bc2ad162a5c2a237"><td class="mdescLeft">&#160;</td><td class="mdescRight">imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计  <a href="classmsckf__vio_1_1_msckf_vio.html#a61d86bf067424803bc2ad162a5c2a237">更多...</a><br /></td></tr>
+<tr class="separator:a61d86bf067424803bc2ad162a5c2a237"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d441e2dc9b58aeed19a33f4bb9c5aa0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0">resetCallback</a> (std_srvs::Trigger::Request &amp;req, std_srvs::Trigger::Response &amp;res)</td></tr>
+<tr class="memdesc:a4d441e2dc9b58aeed19a33f4bb9c5aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">重置  <a href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0">更多...</a><br /></td></tr>
+<tr class="separator:a4d441e2dc9b58aeed19a33f4bb9c5aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ababad8190cbf26d5778e54f108ae1f7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b">batchImuProcessing</a> (const double &amp;time_bound)</td></tr>
+<tr class="memdesc:ababad8190cbf26d5778e54f108ae1f7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">imu积分，批量处理imu数据  <a href="classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b">更多...</a><br /></td></tr>
+<tr class="separator:ababad8190cbf26d5778e54f108ae1f7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae49d9e1a90ffa5df61a8aa94b0bb1013"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013">processModel</a> (const double &amp;time, const Eigen::Vector3d &amp;m_gyro, const Eigen::Vector3d &amp;m_acc)</td></tr>
+<tr class="memdesc:ae49d9e1a90ffa5df61a8aa94b0bb1013"><td class="mdescLeft">&#160;</td><td class="mdescRight">对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估  <a href="classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013">更多...</a><br /></td></tr>
+<tr class="separator:ae49d9e1a90ffa5df61a8aa94b0bb1013"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d31e150c1817362cd5dfa0f112c1a62"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62">predictNewState</a> (const double &amp;dt, const Eigen::Vector3d &amp;gyro, const Eigen::Vector3d &amp;acc)</td></tr>
+<tr class="memdesc:a1d31e150c1817362cd5dfa0f112c1a62"><td class="mdescLeft">&#160;</td><td class="mdescRight">四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》  <a href="classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62">更多...</a><br /></td></tr>
+<tr class="separator:a1d31e150c1817362cd5dfa0f112c1a62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b19358fe83d8a377b795674044b566e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a8b19358fe83d8a377b795674044b566e">stateAugmentation</a> (const double &amp;time)</td></tr>
+<tr class="memdesc:a8b19358fe83d8a377b795674044b566e"><td class="mdescLeft">&#160;</td><td class="mdescRight">状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P  <a href="classmsckf__vio_1_1_msckf_vio.html#a8b19358fe83d8a377b795674044b566e">更多...</a><br /></td></tr>
+<tr class="separator:a8b19358fe83d8a377b795674044b566e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbf83eee8f45afffaac75481eb870765"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#abbf83eee8f45afffaac75481eb870765">addFeatureObservations</a> (const CameraMeasurementConstPtr &amp;msg)</td></tr>
+<tr class="memdesc:abbf83eee8f45afffaac75481eb870765"><td class="mdescLeft">&#160;</td><td class="mdescRight">向map_server中添加新的特征，和旧特征在新相机帧上的观测  <a href="classmsckf__vio_1_1_msckf_vio.html#abbf83eee8f45afffaac75481eb870765">更多...</a><br /></td></tr>
+<tr class="separator:abbf83eee8f45afffaac75481eb870765"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe782d625472e6c9f0c21329ba7cea8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e">measurementJacobian</a> (const <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> &amp;cam_state_id, const <a class="el" href="namespacemsckf__vio.html#a2953d19549f64dd919d06e3f075738aa">FeatureIDType</a> &amp;feature_id, Eigen::Matrix&lt; double, 4, 6 &gt; &amp;H_x, Eigen::Matrix&lt; double, 4, 3 &gt; &amp;H_f, Eigen::Vector4d &amp;r)</td></tr>
+<tr class="memdesc:abe782d625472e6c9f0c21329ba7cea8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">计算一个路标点的雅可比  <a href="classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e">更多...</a><br /></td></tr>
+<tr class="separator:abe782d625472e6c9f0c21329ba7cea8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57deb3897a72e4ffbdade0f57eba3f96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96">featureJacobian</a> (const <a class="el" href="namespacemsckf__vio.html#a2953d19549f64dd919d06e3f075738aa">FeatureIDType</a> &amp;feature_id, const std::vector&lt; <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> &gt; &amp;cam_state_ids, Eigen::MatrixXd &amp;H_x, Eigen::VectorXd &amp;r)</td></tr>
+<tr class="memdesc:a57deb3897a72e4ffbdade0f57eba3f96"><td class="mdescLeft">&#160;</td><td class="mdescRight">计算一个路标点的雅可比  <a href="classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96">更多...</a><br /></td></tr>
+<tr class="separator:a57deb3897a72e4ffbdade0f57eba3f96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3d955ec59e25f9345835eeb220cec05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05">measurementUpdate</a> (const Eigen::MatrixXd &amp;H, const Eigen::VectorXd &amp;r)</td></tr>
+<tr class="memdesc:af3d955ec59e25f9345835eeb220cec05"><td class="mdescLeft">&#160;</td><td class="mdescRight">更新  <a href="classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05">更多...</a><br /></td></tr>
+<tr class="separator:af3d955ec59e25f9345835eeb220cec05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b5bfa4f80f602d39aecc1bb6627a1c1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1">gatingTest</a> (const Eigen::MatrixXd &amp;H, const Eigen::VectorXd &amp;r, const int &amp;dof)</td></tr>
+<tr class="separator:a4b5bfa4f80f602d39aecc1bb6627a1c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada4eaddd00dfcc715128fec67b232baa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa">removeLostFeatures</a> ()</td></tr>
+<tr class="memdesc:ada4eaddd00dfcc715128fec67b232baa"><td class="mdescLeft">&#160;</td><td class="mdescRight">使用不再跟踪上的点来更新  <a href="classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa">更多...</a><br /></td></tr>
+<tr class="separator:ada4eaddd00dfcc715128fec67b232baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b1c1f8d726d98a15ed4774a2089ddfc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc">findRedundantCamStates</a> (std::vector&lt; <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> &gt; &amp;rm_cam_state_ids)</td></tr>
+<tr class="memdesc:a1b1c1f8d726d98a15ed4774a2089ddfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">找出该删的相机状态的id  <a href="classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc">更多...</a><br /></td></tr>
+<tr class="separator:a1b1c1f8d726d98a15ed4774a2089ddfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2140c83e2fb3b81ffd5338b0864854d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d">pruneCamStateBuffer</a> ()</td></tr>
+<tr class="memdesc:aa2140c83e2fb3b81ffd5338b0864854d"><td class="mdescLeft">&#160;</td><td class="mdescRight">当cam状态数达到最大值时，挑出若干cam状态待删除  <a href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d">更多...</a><br /></td></tr>
+<tr class="separator:aa2140c83e2fb3b81ffd5338b0864854d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d50f41474d62068258aea6fad747b9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a2d50f41474d62068258aea6fad747b9b">onlineReset</a> ()</td></tr>
+<tr class="separator:a2d50f41474d62068258aea6fad747b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57555099ff0ccea1d26691df0ceceec5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a57555099ff0ccea1d26691df0ceceec5">mocapOdomCallback</a> (const nav_msgs::OdometryConstPtr &amp;msg)</td></tr>
+<tr class="memdesc:a57555099ff0ccea1d26691df0ceceec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">没用，暂时不看  <a href="classmsckf__vio_1_1_msckf_vio.html#a57555099ff0ccea1d26691df0ceceec5">更多...</a><br /></td></tr>
+<tr class="separator:a57555099ff0ccea1d26691df0ceceec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private 属性</h2></td></tr>
+<tr class="memitem:a4d65ce6743d94f2120564bd92fefc2cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html">StateServer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a4d65ce6743d94f2120564bd92fefc2cb">state_server</a></td></tr>
+<tr class="memdesc:a4d65ce6743d94f2120564bd92fefc2cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">包含S-MSKCF中的IMU状态和所有相机状态  <a href="classmsckf__vio_1_1_msckf_vio.html#a4d65ce6743d94f2120564bd92fefc2cb">更多...</a><br /></td></tr>
+<tr class="separator:a4d65ce6743d94f2120564bd92fefc2cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9136355c28ea76cf27b7bf0e5ae58653"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a9136355c28ea76cf27b7bf0e5ae58653">max_cam_state_size</a></td></tr>
+<tr class="separator:a9136355c28ea76cf27b7bf0e5ae58653"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea133d27a69b160be298da96e1aae343"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemsckf__vio.html#a3669e349a8845867230c069f72b0aebd">MapServer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#aea133d27a69b160be298da96e1aae343">map_server</a></td></tr>
+<tr class="memdesc:aea133d27a69b160be298da96e1aae343"><td class="mdescLeft">&#160;</td><td class="mdescRight">包含所有的特征点的map容器，key为特征点id，值为Feature类,  <a href="classmsckf__vio_1_1_msckf_vio.html#aea133d27a69b160be298da96e1aae343">更多...</a><br /></td></tr>
+<tr class="separator:aea133d27a69b160be298da96e1aae343"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad635032fae4940247c18975d4abf7758"><td class="memItemLeft" align="right" valign="top">std::vector&lt; sensor_msgs::Imu &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ad635032fae4940247c18975d4abf7758">imu_msg_buffer</a></td></tr>
+<tr class="memdesc:ad635032fae4940247c18975d4abf7758"><td class="mdescLeft">&#160;</td><td class="mdescRight">储存进入的IMU的消息，有时间同步的作用  <a href="classmsckf__vio_1_1_msckf_vio.html#ad635032fae4940247c18975d4abf7758">更多...</a><br /></td></tr>
+<tr class="separator:ad635032fae4940247c18975d4abf7758"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad90d0d8dd61524e5b7463ca075cec845"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ad90d0d8dd61524e5b7463ca075cec845">is_gravity_set</a></td></tr>
+<tr class="memdesc:ad90d0d8dd61524e5b7463ca075cec845"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicate if the gravity vector is set， 即是否做了IMU的初始化  <a href="classmsckf__vio_1_1_msckf_vio.html#ad90d0d8dd61524e5b7463ca075cec845">更多...</a><br /></td></tr>
+<tr class="separator:ad90d0d8dd61524e5b7463ca075cec845"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afacac4dec98c2bab46de34fb10efec21"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#afacac4dec98c2bab46de34fb10efec21">is_first_img</a></td></tr>
+<tr class="memdesc:afacac4dec98c2bab46de34fb10efec21"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断是否是第一帧图像，后端在接收到第一帧图像后才开始工作  <a href="classmsckf__vio_1_1_msckf_vio.html#afacac4dec98c2bab46de34fb10efec21">更多...</a><br /></td></tr>
+<tr class="separator:afacac4dec98c2bab46de34fb10efec21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81daf053429e04d1bb8df1e64a175faa"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a81daf053429e04d1bb8df1e64a175faa">position_std_threshold</a></td></tr>
+<tr class="separator:a81daf053429e04d1bb8df1e64a175faa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54d31202fa15c449008cc6b0a01757b6"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a54d31202fa15c449008cc6b0a01757b6">tracking_rate</a></td></tr>
+<tr class="separator:a54d31202fa15c449008cc6b0a01757b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3252b15da149502bd2917d54e026e1fb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a3252b15da149502bd2917d54e026e1fb">translation_threshold</a></td></tr>
+<tr class="separator:a3252b15da149502bd2917d54e026e1fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0d63490324b6cf7bf25f0235722f3e8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ac0d63490324b6cf7bf25f0235722f3e8">rotation_threshold</a></td></tr>
+<tr class="separator:ac0d63490324b6cf7bf25f0235722f3e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50314a0603313740200bb1a6ae681d5c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a50314a0603313740200bb1a6ae681d5c">tracking_rate_threshold</a></td></tr>
+<tr class="separator:a50314a0603313740200bb1a6ae681d5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06d92037f176362788d41a5e69656f81"><td class="memItemLeft" align="right" valign="top">ros::NodeHandle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a06d92037f176362788d41a5e69656f81">nh</a></td></tr>
+<tr class="separator:a06d92037f176362788d41a5e69656f81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10a8b25ec1f46387ab4dd818bd086ad6"><td class="memItemLeft" align="right" valign="top">ros::Subscriber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a10a8b25ec1f46387ab4dd818bd086ad6">imu_sub</a></td></tr>
+<tr class="separator:a10a8b25ec1f46387ab4dd818bd086ad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af46c5ea59e203b1ede51a2076a22542d"><td class="memItemLeft" align="right" valign="top">ros::Subscriber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#af46c5ea59e203b1ede51a2076a22542d">feature_sub</a></td></tr>
+<tr class="separator:af46c5ea59e203b1ede51a2076a22542d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a364f1c3c98bb76e294ab3e11dce2aa51"><td class="memItemLeft" align="right" valign="top">ros::Publisher&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a364f1c3c98bb76e294ab3e11dce2aa51">odom_pub</a></td></tr>
+<tr class="separator:a364f1c3c98bb76e294ab3e11dce2aa51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32c72fd37f4c93c9c06d0d452786879c"><td class="memItemLeft" align="right" valign="top">ros::Publisher&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a32c72fd37f4c93c9c06d0d452786879c">feature_pub</a></td></tr>
+<tr class="separator:a32c72fd37f4c93c9c06d0d452786879c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad36d1caef41b43be14b9f8b38df4aedd"><td class="memItemLeft" align="right" valign="top">tf::TransformBroadcaster&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ad36d1caef41b43be14b9f8b38df4aedd">tf_pub</a></td></tr>
+<tr class="separator:ad36d1caef41b43be14b9f8b38df4aedd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c2a7f22996453e2ad6a4b902a31a405"><td class="memItemLeft" align="right" valign="top">ros::ServiceServer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a3c2a7f22996453e2ad6a4b902a31a405">reset_srv</a></td></tr>
+<tr class="separator:a3c2a7f22996453e2ad6a4b902a31a405"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac9d36b0745819997b1b24c29d639b74"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#aac9d36b0745819997b1b24c29d639b74">fixed_frame_id</a></td></tr>
+<tr class="separator:aac9d36b0745819997b1b24c29d639b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fdf37e894b8ed8e2769d4197dcd5779"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a9fdf37e894b8ed8e2769d4197dcd5779">child_frame_id</a></td></tr>
+<tr class="separator:a9fdf37e894b8ed8e2769d4197dcd5779"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaba2f4881dd89350ad1420fa747cced1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#aaba2f4881dd89350ad1420fa747cced1">publish_tf</a></td></tr>
+<tr class="separator:aaba2f4881dd89350ad1420fa747cced1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b8c206699cde61bcfc4d74a702d450f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a0b8c206699cde61bcfc4d74a702d450f">frame_rate</a></td></tr>
+<tr class="separator:a0b8c206699cde61bcfc4d74a702d450f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c8b76de3b67702dc21cb658b5722b12"><td class="memItemLeft" align="right" valign="top">ros::Subscriber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a9c8b76de3b67702dc21cb658b5722b12">mocap_odom_sub</a></td></tr>
+<tr class="separator:a9c8b76de3b67702dc21cb658b5722b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03bcfe3789df9ebb966b730ce17ca369"><td class="memItemLeft" align="right" valign="top">ros::Publisher&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a03bcfe3789df9ebb966b730ce17ca369">mocap_odom_pub</a></td></tr>
+<tr class="separator:a03bcfe3789df9ebb966b730ce17ca369"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a104f53b87ec9dc080c0f97f326dfa1e1"><td class="memItemLeft" align="right" valign="top">geometry_msgs::TransformStamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a104f53b87ec9dc080c0f97f326dfa1e1">raw_mocap_odom_msg</a></td></tr>
+<tr class="separator:a104f53b87ec9dc080c0f97f326dfa1e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c9ff3b4cb1e5bfa19c6262f7d6921e8"><td class="memItemLeft" align="right" valign="top">Eigen::Isometry3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a8c9ff3b4cb1e5bfa19c6262f7d6921e8">mocap_initial_frame</a></td></tr>
+<tr class="separator:a8c9ff3b4cb1e5bfa19c6262f7d6921e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+静态 Private 属性</h2></td></tr>
+<tr class="memitem:a567e4532763f55a7d261ddfd14834462"><td class="memItemLeft" align="right" valign="top">static std::map&lt; int, double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a567e4532763f55a7d261ddfd14834462">chi_squared_test_table</a></td></tr>
+<tr class="separator:a567e4532763f55a7d261ddfd14834462"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">成员类型定义说明</h2>
+<a id="a4ff8cec4cc043591912921f1ff0cf79f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ff8cec4cc043591912921f1ff0cf79f">&#9670;&nbsp;</a></span>ConstPtr</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef boost::shared_ptr&lt;const <a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a>&gt; <a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a4ff8cec4cc043591912921f1ff0cf79f">msckf_vio::MsckfVio::ConstPtr</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a84125095bce81c6de3be0558405f69fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84125095bce81c6de3be0558405f69fb">&#9670;&nbsp;</a></span>Ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef boost::shared_ptr&lt;<a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a>&gt; <a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a84125095bce81c6de3be0558405f69fb">msckf_vio::MsckfVio::Ptr</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">构造及析构函数说明</h2>
+<a id="a6e1d5e62116c85665bc7442b7e1487ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e1d5e62116c85665bc7442b7e1487ae">&#9670;&nbsp;</a></span>MsckfVio() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::MsckfVio::MsckfVio </td>
+          <td>(</td>
+          <td class="paramtype">ros::NodeHandle &amp;&#160;</td>
+          <td class="paramname"><em>pnh</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>MsckfVio构造函数 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pnh</td><td>Ros节点句柄 </td></tr>
+    <tr><td class="paramname">is_gravity_set</td><td>False 设置未初始化重力 </td></tr>
+    <tr><td class="paramname">is_first_img</td><td>True 设置是第一帧图像 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adf5d1cf816a9a50302fe71d8a4768a34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf5d1cf816a9a50302fe71d8a4768a34">&#9670;&nbsp;</a></span>MsckfVio() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::MsckfVio::MsckfVio </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a52e396a79e36a1ff675eece579286fb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52e396a79e36a1ff675eece579286fb0">&#9670;&nbsp;</a></span>~MsckfVio()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::MsckfVio::~MsckfVio </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">成员函数说明</h2>
+<a id="abbf83eee8f45afffaac75481eb870765"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbf83eee8f45afffaac75481eb870765">&#9670;&nbsp;</a></span>addFeatureObservations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::addFeatureObservations </td>
+          <td>(</td>
+          <td class="paramtype">const CameraMeasurementConstPtr &amp;&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>向map_server中添加新的特征，和旧特征在新相机帧上的观测 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td>前端发来的当前帧的所有特征以及对应的归一化坐标 </td></tr>
+  </table>
+  </dd>
+</dl>
+<ol type="1">
+<li>取出当前imu状态的id作为当前相机帧的id</li>
+<li>获取当前地图内特征点的数量</li>
+<li>若此次前端传来的特征点在地图中没有，那么就添加新的特征点 否则就更新旧特征点的观测</li>
+<li>计算跟踪率。当前帧前端进来的所有点中，有多少是已经在地图中的</li>
+</ol>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_abbf83eee8f45afffaac75481eb870765_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_abbf83eee8f45afffaac75481eb870765_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_abbf83eee8f45afffaac75481eb870765_icgraph" id="classmsckf__vio_1_1_msckf_vio_abbf83eee8f45afffaac75481eb870765_icgraph">
+<area shape="rect" title="向map_server中添加新的特征，和旧特征在新相机帧上的观测" alt="" coords="779,5,951,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ababad8190cbf26d5778e54f108ae1f7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ababad8190cbf26d5778e54f108ae1f7b">&#9670;&nbsp;</a></span>batchImuProcessing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::batchImuProcessing </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>time_bound</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>imu积分，批量处理imu数据 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time_bound</td><td>从state_server.imu_state.time上次处理到这个时间 </td></tr>
+  </table>
+  </dd>
+</dl>
+<ol type="1">
+<li>遍历imu_msg_buffer中的所有imu数据，找到state_server.imu_state.time到 当前前端特征时间之间的imu数据，然后进行状态递推 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估">MsckfVio::processModel(const double &amp;time, const Eigen::Vector3d &amp;m_gyro, const Eigen::Vector3d &amp;m_acc)</a></dd></dl>
+</li>
+<li>更新IMU状态的id state_server.imu_state.id, 相机状态id也根据这个赋值</li>
+<li>从imu_msg_buffer中删除已经使用过的数据</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b_cgraph" id="classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b_cgraph">
+<area shape="rect" title="imu积分，批量处理imu数据" alt="" coords="5,99,155,141"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="203,99,348,141"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="396,41,541,82"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="589,107,803,133"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="851,107,1035,133"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="591,5,801,32"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b_icgraph" id="classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b_icgraph">
+<area shape="rect" title="imu积分，批量处理imu数据" alt="" coords="779,5,928,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac8a40018e7997bf6dd13808d6a9f6e80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8a40018e7997bf6dd13808d6a9f6e80">&#9670;&nbsp;</a></span>createRosIO()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::MsckfVio::createRosIO </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<ol type="1">
+<li>发布 "odom", 后端计算出的位姿</li>
+<li>发布 "feature_point_cloud", 后端计算出的世界系下的点云</li>
+<li>服务，重置后端</li>
+<li>接收 "imu", 接收IMU数据。<dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a5f00e4d8e8146b89239fbd192500da97" title="接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推">MsckfVio::imuCallback(const sensor_msgs::ImuConstPtr &amp;msg)</a></dd></dl>
+</li>
+<li>接收 "features", 前端特征点数据。 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据">MsckfVio::featureCallback(const CameraMeasurementConstPtr &amp;msg)</a></dd></dl>
+</li>
+<li>接收 "mocap_odom"，真值数据，未用到</li>
+<li>发布 "gt_odom"，发布由mocap_odom 算出的真实位姿，未用到</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80_cgraph" id="classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80_cgraph">
+<area shape="rect" title=" " alt="" coords="5,343,151,384"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="401,372,547,413"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a5f00e4d8e8146b89239fbd192500da97" title="接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推" alt="" coords="401,255,547,296"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a57555099ff0ccea1d26691df0ceceec5" title="没用，暂时不看" alt="" coords="199,431,353,472"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="203,313,349,355"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abbf83eee8f45afffaac75481eb870765" title="向map_server中添加新的特征，和旧特征在新相机帧上的观测" alt="" coords="595,637,767,679"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b" title="imu积分，批量处理imu数据" alt="" coords="606,237,755,279"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a2d50f41474d62068258aea6fad747b9b" title=" " alt="" coords="608,572,753,613"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="603,404,759,445"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a9fb43d4dfe65743ab04f72d496efbdd0" title=" " alt="" coords="1071,528,1217,569"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用不再跟踪上的点来更新" alt="" coords="606,339,755,380"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a8b19358fe83d8a377b795674044b566e" title="状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P" alt="" coords="826,117,971,159"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="826,201,971,243"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="1071,193,1217,235"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="1305,335,1519,362"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="1567,201,1751,227"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="1307,142,1517,169"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="826,404,971,445"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id" alt="" coords="1054,463,1234,504"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1" title=" " alt="" coords="826,273,971,315"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="823,339,974,380"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="1063,593,1225,635"/>
+<area shape="rect" href="namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="1031,142,1257,169"/>
+<area shape="rect" href="namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="1035,411,1253,438"/>
+<area shape="rect" href="namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="1039,41,1249,67"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a61d86bf067424803bc2ad162a5c2a237" title="imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计" alt="" coords="815,43,983,84"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80_icgraph" id="classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80_icgraph">
+<area shape="rect" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac864e3250127c860dc0301c24938cf56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac864e3250127c860dc0301c24938cf56">&#9670;&nbsp;</a></span>featureCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::featureCallback </td>
+          <td>(</td>
+          <td class="paramtype">const CameraMeasurementConstPtr &amp;&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>后端主要函数，处理新来的数据 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td>新来的数据, 包括时间戳、点id、和左右目去畸变后归一化坐标 </td></tr>
+  </table>
+  </dd>
+</dl>
+<ol type="1">
+<li>必须经过imu(重力)初始化才能继续进行</li>
+<li>接收到第一帧图像后，记录时间，后端开始工作</li>
+<li>批量IMU积分，取出上次IMU积分时间到当前特征接收时间中的IMU数据进行积分 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b" title="imu积分，批量处理imu数据">MsckfVio::batchImuProcessing(const double &amp;time_bound)</a></dd></dl>
+</li>
+<li>状态增广，包括名义状态增广和误差协方差矩阵P的增广，主要是增广新的相机状态 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a8b19358fe83d8a377b795674044b566e" title="状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P">MsckfVio::stateAugmentation(const double &amp;time)</a></dd></dl>
+</li>
+<li>向map_server中添加新的特征，和旧特征在新相机帧上的观测</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56_cgraph" id="classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56_cgraph">
+<area shape="rect" title="后端主要函数，处理新来的数据" alt="" coords="5,291,151,333"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abbf83eee8f45afffaac75481eb870765" title="向map_server中添加新的特征，和旧特征在新相机帧上的观测" alt="" coords="199,109,371,150"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b" title="imu积分，批量处理imu数据" alt="" coords="210,291,359,333"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a2d50f41474d62068258aea6fad747b9b" title=" " alt="" coords="212,226,357,267"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="207,474,363,515"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a9fb43d4dfe65743ab04f72d496efbdd0" title=" " alt="" coords="687,358,833,399"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用不再跟踪上的点来更新" alt="" coords="210,409,359,450"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a8b19358fe83d8a377b795674044b566e" title="状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P" alt="" coords="436,131,581,173"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="436,226,581,267"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="687,190,833,231"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="921,336,1135,363"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="1183,197,1367,224"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="923,139,1133,165"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="436,474,581,515"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id" alt="" coords="419,605,599,646"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1" title=" " alt="" coords="436,539,581,581"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="433,409,584,450"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="679,526,841,567"/>
+<area shape="rect" href="namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="647,139,873,165"/>
+<area shape="rect" href="namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="651,475,869,501"/>
+<area shape="rect" href="namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="655,37,865,64"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56_icgraph" id="classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56_icgraph">
+<area shape="rect" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a57deb3897a72e4ffbdade0f57eba3f96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57deb3897a72e4ffbdade0f57eba3f96">&#9670;&nbsp;</a></span>featureJacobian()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::featureJacobian </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemsckf__vio.html#a2953d19549f64dd919d06e3f075738aa">FeatureIDType</a> &amp;&#160;</td>
+          <td class="paramname"><em>feature_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cam_state_ids</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::MatrixXd &amp;&#160;</td>
+          <td class="paramname"><em>H_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::VectorXd &amp;&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>计算一个路标点的雅可比 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">feature_id</td><td>路标点id </td></tr>
+    <tr><td class="paramname">cam_state_ids</td><td>这个点对应的所有的相机状态id </td></tr>
+    <tr><td class="paramname">H_x</td><td>雅可比 </td></tr>
+    <tr><td class="paramname">r</td><td>误差 </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96_cgraph" id="classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96_cgraph">
+<area shape="rect" title="计算一个路标点的雅可比" alt="" coords="5,23,151,65"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="199,23,360,65"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="408,5,621,32"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="669,31,853,57"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96_icgraph" id="classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96_icgraph">
+<area shape="rect" title="计算一个路标点的雅可比" alt="" coords="983,39,1128,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="779,5,935,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用不再跟踪上的点来更新" alt="" coords="782,71,931,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,39,731,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,39,344,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,68,537,109"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,39,151,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a1b1c1f8d726d98a15ed4774a2089ddfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b1c1f8d726d98a15ed4774a2089ddfc">&#9670;&nbsp;</a></span>findRedundantCamStates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::findRedundantCamStates </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rm_cam_state_ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>找出该删的相机状态的id </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rm_cam_state_ids</td><td>要删除的相机状态id </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc_cgraph" id="classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc_cgraph">
+<area shape="rect" title="找出该删的相机状态的id" alt="" coords="5,5,185,47"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="233,13,447,39"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="495,13,679,39"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc_icgraph" id="classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc_icgraph">
+<area shape="rect" title="找出该删的相机状态的id" alt="" coords="983,5,1163,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="779,5,935,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4b5bfa4f80f602d39aecc1bb6627a1c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b5bfa4f80f602d39aecc1bb6627a1c1">&#9670;&nbsp;</a></span>gatingTest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::MsckfVio::gatingTest </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::MatrixXd &amp;&#160;</td>
+          <td class="paramname"><em>H</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::VectorXd &amp;&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>dof</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a4b5bfa4f80f602d39aecc1bb6627a1c1_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a4b5bfa4f80f602d39aecc1bb6627a1c1_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a4b5bfa4f80f602d39aecc1bb6627a1c1_icgraph" id="classmsckf__vio_1_1_msckf_vio_a4b5bfa4f80f602d39aecc1bb6627a1c1_icgraph">
+<area shape="rect" title=" " alt="" coords="983,39,1128,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="779,5,935,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用不再跟踪上的点来更新" alt="" coords="782,71,931,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,39,731,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,39,344,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,68,537,109"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,39,151,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5f00e4d8e8146b89239fbd192500da97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f00e4d8e8146b89239fbd192500da97">&#9670;&nbsp;</a></span>imuCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::imuCallback </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::ImuConstPtr &amp;&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推 </p>
+<dl class="section note"><dt>注解</dt><dd>前200个imu数据需要静止不动进行初始化，如果移动会导致轨迹飘 </dd></dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97_cgraph" id="classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97_cgraph">
+<area shape="rect" title="接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推" alt="" coords="5,5,151,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a61d86bf067424803bc2ad162a5c2a237" title="imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计" alt="" coords="199,5,367,47"/>
+<area shape="rect" href="namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="415,13,625,39"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="673,13,883,39"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97_icgraph" id="classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97_icgraph">
+<area shape="rect" title="接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a3087eaaf3635b9c26a7aea079fc985d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3087eaaf3635b9c26a7aea079fc985d9">&#9670;&nbsp;</a></span>initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::MsckfVio::initialize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<ol type="1">
+<li>加载参数 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a1e49f09dc62af5f1461fe59fa15dd48d" title="导入各种参数，包括阈值、传感器误差标准差等">MsckfVio::loadParameters()</a></dd></dl>
+</li>
+<li>设置imu观测的协方差</li>
+<li>创建后端话题的接受与发布 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80">MsckfVio::createRosIO()</a></dd></dl>
+</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a3087eaaf3635b9c26a7aea079fc985d9_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a3087eaaf3635b9c26a7aea079fc985d9_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a3087eaaf3635b9c26a7aea079fc985d9_cgraph" id="classmsckf__vio_1_1_msckf_vio_a3087eaaf3635b9c26a7aea079fc985d9_cgraph">
+<area shape="rect" title=" " alt="" coords="5,287,151,328"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,228,344,269"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1e49f09dc62af5f1461fe59fa15dd48d" title="导入各种参数，包括阈值、传感器误差标准差等" alt="" coords="199,319,344,360"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="675,260,821,301"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a5f00e4d8e8146b89239fbd192500da97" title="接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推" alt="" coords="675,169,821,211"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a57555099ff0ccea1d26691df0ceceec5" title="没用，暂时不看" alt="" coords="414,111,569,152"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="419,228,564,269"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abbf83eee8f45afffaac75481eb870765" title="向map_server中添加新的特征，和旧特征在新相机帧上的观测" alt="" coords="908,195,1080,236"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b" title="imu积分，批量处理imu数据" alt="" coords="919,493,1069,535"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a2d50f41474d62068258aea6fad747b9b" title=" " alt="" coords="921,129,1067,171"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="916,325,1072,367"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a9fb43d4dfe65743ab04f72d496efbdd0" title=" " alt="" coords="1387,449,1533,491"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用不再跟踪上的点来更新" alt="" coords="919,260,1069,301"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a8b19358fe83d8a377b795674044b566e" title="状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P" alt="" coords="1142,71,1287,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="1142,537,1287,579"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="1387,567,1533,608"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="1621,391,1835,418"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="1883,391,2067,418"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="1623,231,1833,258"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="1142,195,1287,236"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id" alt="" coords="1370,384,1550,425"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1" title=" " alt="" coords="1142,260,1287,301"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="1139,325,1290,367"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="1379,165,1541,207"/>
+<area shape="rect" href="namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="1347,231,1573,258"/>
+<area shape="rect" href="namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="1351,282,1569,309"/>
+<area shape="rect" href="namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="1355,13,1565,39"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a61d86bf067424803bc2ad162a5c2a237" title="imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计" alt="" coords="1131,5,1299,47"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ab569b9d756d73df67da2c472542045db" title=" " alt="" coords="392,439,591,480"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ac16cbeba8bb665bede495cc456d902a3" title=" " alt="" coords="639,566,857,593"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ae619c5abf71af2a8303507a1b17a0c46" title=" " alt="" coords="907,559,1081,600"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ab389d17a6a6f7f70fdef55514e269192" title=" " alt="" coords="905,624,1083,665"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a61d86bf067424803bc2ad162a5c2a237"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61d86bf067424803bc2ad162a5c2a237">&#9670;&nbsp;</a></span>initializeGravityAndBias()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::initializeGravityAndBias </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计 </p>
+<dl class="section note"><dt>注解</dt><dd>为什么要做IMU初始化？因为初始时刻IMU的摆放和机器人的位置是未知的，可能在斜坡上，可能不水平，或者IMU竖直安装， 但是使用IMU积分时是需要减去重力的，因此需要知道重力方向，另外陀螺仪的偏置也是未知的，因此需要初始化 </dd></dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237_cgraph" id="classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237_cgraph">
+<area shape="rect" title="imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计" alt="" coords="5,5,173,47"/>
+<area shape="rect" href="namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="221,13,432,39"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="480,13,689,39"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237_icgraph" id="classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237_icgraph">
+<area shape="rect" title="imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计" alt="" coords="779,5,947,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a5f00e4d8e8146b89239fbd192500da97" title="接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a1e49f09dc62af5f1461fe59fa15dd48d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e49f09dc62af5f1461fe59fa15dd48d">&#9670;&nbsp;</a></span>loadParameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::MsckfVio::loadParameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>导入各种参数，包括阈值、传感器误差标准差等 </p>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d_cgraph" id="classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d_cgraph">
+<area shape="rect" title="导入各种参数，包括阈值、传感器误差标准差等" alt="" coords="5,39,151,80"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ab569b9d756d73df67da2c472542045db" title=" " alt="" coords="199,39,397,80"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ac16cbeba8bb665bede495cc456d902a3" title=" " alt="" coords="445,46,664,73"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ae619c5abf71af2a8303507a1b17a0c46" title=" " alt="" coords="714,5,887,47"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ab389d17a6a6f7f70fdef55514e269192" title=" " alt="" coords="712,71,889,112"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d_icgraph" id="classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d_icgraph">
+<area shape="rect" title="导入各种参数，包括阈值、传感器误差标准差等" alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="abe782d625472e6c9f0c21329ba7cea8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe782d625472e6c9f0c21329ba7cea8e">&#9670;&nbsp;</a></span>measurementJacobian()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::measurementJacobian </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> &amp;&#160;</td>
+          <td class="paramname"><em>cam_state_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacemsckf__vio.html#a2953d19549f64dd919d06e3f075738aa">FeatureIDType</a> &amp;&#160;</td>
+          <td class="paramname"><em>feature_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Matrix&lt; double, 4, 6 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>H_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Matrix&lt; double, 4, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>H_f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Vector4d &amp;&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>计算一个路标点的雅可比 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cam_state_id</td><td>有效的相机状态id </td></tr>
+    <tr><td class="paramname">feature_id</td><td>路标点id </td></tr>
+    <tr><td class="paramname">H_x</td><td>误差相对于位姿的雅可比 </td></tr>
+    <tr><td class="paramname">H_f</td><td>误差相对于三维点的雅可比 </td></tr>
+    <tr><td class="paramname">r</td><td>误差 </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e_cgraph" id="classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e_cgraph">
+<area shape="rect" title="计算一个路标点的雅可比" alt="" coords="5,23,167,65"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="215,5,428,32"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="476,31,660,57"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e_icgraph" id="classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e_icgraph">
+<area shape="rect" title="计算一个路标点的雅可比" alt="" coords="1176,39,1337,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="983,39,1128,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="779,5,935,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用不再跟踪上的点来更新" alt="" coords="782,71,931,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,39,731,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,39,344,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,68,537,109"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,39,151,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="af3d955ec59e25f9345835eeb220cec05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3d955ec59e25f9345835eeb220cec05">&#9670;&nbsp;</a></span>measurementUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::measurementUpdate </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::MatrixXd &amp;&#160;</td>
+          <td class="paramname"><em>H</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::VectorXd &amp;&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>更新 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">H</td><td>雅可比 </td></tr>
+    <tr><td class="paramname">r</td><td>误差 </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05_cgraph" id="classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05_cgraph">
+<area shape="rect" title="更新" alt="" coords="5,49,156,90"/>
+<area shape="rect" href="namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="204,5,431,32"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="211,56,424,83"/>
+<area shape="rect" href="namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="209,107,426,133"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="479,5,688,32"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="491,56,675,83"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05_icgraph" id="classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05_icgraph">
+<area shape="rect" title="更新" alt="" coords="983,39,1133,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="779,5,935,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用不再跟踪上的点来更新" alt="" coords="782,71,931,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,39,731,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,39,344,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,68,537,109"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,39,151,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a57555099ff0ccea1d26691df0ceceec5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57555099ff0ccea1d26691df0ceceec5">&#9670;&nbsp;</a></span>mocapOdomCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::mocapOdomCallback </td>
+          <td>(</td>
+          <td class="paramtype">const nav_msgs::OdometryConstPtr &amp;&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>没用，暂时不看 </p>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a57555099ff0ccea1d26691df0ceceec5_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a57555099ff0ccea1d26691df0ceceec5_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a57555099ff0ccea1d26691df0ceceec5_icgraph" id="classmsckf__vio_1_1_msckf_vio_a57555099ff0ccea1d26691df0ceceec5_icgraph">
+<area shape="rect" title="没用，暂时不看" alt="" coords="392,5,547,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a2d50f41474d62068258aea6fad747b9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d50f41474d62068258aea6fad747b9b">&#9670;&nbsp;</a></span>onlineReset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::onlineReset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a2d50f41474d62068258aea6fad747b9b_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a2d50f41474d62068258aea6fad747b9b_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a2d50f41474d62068258aea6fad747b9b_icgraph" id="classmsckf__vio_1_1_msckf_vio_a2d50f41474d62068258aea6fad747b9b_icgraph">
+<area shape="rect" title=" " alt="" coords="779,5,924,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a2129eb894834138ba6159f531b2d8b81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2129eb894834138ba6159f531b2d8b81">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a> msckf_vio::MsckfVio::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1d31e150c1817362cd5dfa0f112c1a62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d31e150c1817362cd5dfa0f112c1a62">&#9670;&nbsp;</a></span>predictNewState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::predictNewState </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>dt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Vector3d &amp;&#160;</td>
+          <td class="paramname"><em>gyro</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Vector3d &amp;&#160;</td>
+          <td class="paramname"><em>acc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dt</td><td>相对上一个数据的间隔时间 </td></tr>
+    <tr><td class="paramname">gyro</td><td>角速度减去偏置后的 </td></tr>
+    <tr><td class="paramname">acc</td><td>加速度减去偏置后的 </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62_cgraph" id="classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62_cgraph">
+<area shape="rect" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="5,49,151,90"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="201,5,410,32"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="199,56,412,83"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="460,81,644,108"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62_icgraph" id="classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62_icgraph">
+<area shape="rect" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="1169,5,1315,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="976,5,1121,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b" title="imu积分，批量处理imu数据" alt="" coords="779,5,928,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae49d9e1a90ffa5df61a8aa94b0bb1013"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae49d9e1a90ffa5df61a8aa94b0bb1013">&#9670;&nbsp;</a></span>processModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::processModel </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>time</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Vector3d &amp;&#160;</td>
+          <td class="paramname"><em>m_gyro</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Vector3d &amp;&#160;</td>
+          <td class="paramname"><em>m_acc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>IMU数据的时间戳 </td></tr>
+    <tr><td class="paramname">m_gyro</td><td>角速度 </td></tr>
+    <tr><td class="paramname">m_acc</td><td>加速度 </td></tr>
+  </table>
+  </dd>
+</dl>
+<ol type="1">
+<li>引用的方式取出imu状态</li>
+<li>角速度和加速度减去偏置，计算dt</li>
+<li>计算F阵和G阵，见笔记pdf中《IMU误差状态方程总结》</li>
+</ol>
+<ol type="1">
+<li>计算转移矩阵Phi矩阵，使用三阶近似，当dt&lt;0.01s时，这个近似是足够准确的 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》</li>
+<li>四阶龙格库塔积分预测名义状态，旋转，速度，位置 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》">MsckfVio::predictNewState(const double &amp;dt, const Eigen::Vector3d &amp;gyro, const Eigen::Vector3d &amp;acc)</a></dd></dl>
+</li>
+<li>可观性约束OC，通过修改Phi阵，保证零空间秩为4。 见论文《Observability-constrained Vision-aided Inertial Navigation》中公式20~23</li>
+<li>使用OC后的Phi阵计算过程噪声协方差矩阵Q, 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》</li>
+<li>预测系统误差状态协方差矩阵P，如果有相机状态量，那么也更新imu状态量与相机状态量交叉的部分 见笔记pdf中《预测系统状态协方差矩阵P》</li>
+<li>强制对称，因为协方差矩阵就是对称的</li>
+<li>更新imu旋转，位置和速度的零空间，其实就是记录此次状态预估后的状态，用于下一次对Phi进行OC</li>
+<li>更新imu状态的时间state_server.imu_state.time</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013_cgraph" id="classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013_cgraph">
+<area shape="rect" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="5,99,151,141"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="199,41,344,82"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="392,107,605,133"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="653,107,837,133"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="394,5,603,32"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013_icgraph" id="classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013_icgraph">
+<area shape="rect" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="976,5,1121,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b" title="imu积分，批量处理imu数据" alt="" coords="779,5,928,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa2140c83e2fb3b81ffd5338b0864854d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2140c83e2fb3b81ffd5338b0864854d">&#9670;&nbsp;</a></span>pruneCamStateBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::pruneCamStateBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>当cam状态数达到最大值时，挑出若干cam状态待删除 </p>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d_cgraph" id="classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d_cgraph">
+<area shape="rect" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="5,93,161,135"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="212,5,357,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id" alt="" coords="431,71,611,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1" title=" " alt="" coords="212,123,357,164"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="209,188,360,229"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="441,5,602,47"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="683,74,896,101"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="944,46,1128,73"/>
+<area shape="rect" href="namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="408,193,635,219"/>
+<area shape="rect" href="namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="413,243,630,270"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="685,193,894,219"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d_icgraph" id="classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d_icgraph">
+<area shape="rect" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="779,5,935,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a9fb43d4dfe65743ab04f72d496efbdd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fb43d4dfe65743ab04f72d496efbdd0">&#9670;&nbsp;</a></span>publish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::publish </td>
+          <td>(</td>
+          <td class="paramtype">const ros::Time &amp;&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_cgraph" id="classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,151,47"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="199,13,412,39"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="460,13,644,39"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_icgraph" id="classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_icgraph">
+<area shape="rect" title=" " alt="" coords="779,5,924,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ada4eaddd00dfcc715128fec67b232baa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada4eaddd00dfcc715128fec67b232baa">&#9670;&nbsp;</a></span>removeLostFeatures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::removeLostFeatures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>使用不再跟踪上的点来更新 </p>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa_cgraph" id="classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa_cgraph">
+<area shape="rect" title="使用不再跟踪上的点来更新" alt="" coords="5,71,155,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="205,5,351,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1" title=" " alt="" coords="205,71,351,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="203,136,353,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="434,8,595,49"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="676,66,889,93"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="937,41,1121,67"/>
+<area shape="rect" href="namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="401,141,628,167"/>
+<area shape="rect" href="namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="406,191,623,218"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="678,141,887,167"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa_icgraph" id="classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa_icgraph">
+<area shape="rect" title="使用不再跟踪上的点来更新" alt="" coords="779,5,928,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a26fb3bfbf78d3f340b20ca021437d8b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26fb3bfbf78d3f340b20ca021437d8b9">&#9670;&nbsp;</a></span>reset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::reset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4d441e2dc9b58aeed19a33f4bb9c5aa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d441e2dc9b58aeed19a33f4bb9c5aa0">&#9670;&nbsp;</a></span>resetCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::MsckfVio::resetCallback </td>
+          <td>(</td>
+          <td class="paramtype">std_srvs::Trigger::Request &amp;&#160;</td>
+          <td class="paramname"><em>req</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std_srvs::Trigger::Response &amp;&#160;</td>
+          <td class="paramname"><em>res</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>重置 </p>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0_cgraph" id="classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0_cgraph">
+<area shape="rect" title="重置" alt="" coords="5,376,151,418"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="199,284,344,326"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a5f00e4d8e8146b89239fbd192500da97" title="接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推" alt="" coords="199,408,344,450"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abbf83eee8f45afffaac75481eb870765" title="向map_server中添加新的特征，和旧特征在新相机帧上的观测" alt="" coords="392,186,564,227"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b" title="imu积分，批量处理imu数据" alt="" coords="403,35,553,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a2d50f41474d62068258aea6fad747b9b" title=" " alt="" coords="405,316,551,358"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="400,382,556,423"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a9fb43d4dfe65743ab04f72d496efbdd0" title=" " alt="" coords="851,127,997,168"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用不再跟踪上的点来更新" alt="" coords="403,251,553,292"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a8b19358fe83d8a377b795674044b566e" title="状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P" alt="" coords="615,496,760,538"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="615,32,760,74"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="851,62,997,103"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="1085,193,1299,220"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="1347,193,1531,220"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="1087,294,1297,321"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="615,374,760,415"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id" alt="" coords="834,346,1014,387"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1" title=" " alt="" coords="615,308,760,350"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="612,243,763,284"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="843,463,1005,504"/>
+<area shape="rect" href="namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="811,294,1037,321"/>
+<area shape="rect" href="namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="815,244,1033,270"/>
+<area shape="rect" href="namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="819,580,1029,606"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a61d86bf067424803bc2ad162a5c2a237" title="imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计" alt="" coords="394,548,562,590"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0_icgraph" id="classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0_icgraph">
+<area shape="rect" title="重置" alt="" coords="392,5,537,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a8b19358fe83d8a377b795674044b566e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b19358fe83d8a377b795674044b566e">&#9670;&nbsp;</a></span>stateAugmentation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::MsckfVio::stateAugmentation </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>图片的时间戳 </td></tr>
+  </table>
+  </dd>
+</dl>
+<ol type="1">
+<li>根据现在的IMU状态以及IMU和左目相机的外参，预估出当前相机的名义状态 见笔记pdf中《名义状态扩增》</li>
+<li>注册新的相机状态到状态库state_server中, 包括id(使用此时的imu状态id作为该帧相机的id), 时间戳，位姿 QUERY 以及用于OC的零空间(第一次相机帧估计的数据)</li>
+<li>计算用于增广协方差矩阵P的雅可比矩阵J，见笔记pdf中《求雅可比矩阵 J_I》</li>
+<li>增广误差协方差矩阵P，见笔记pdf中《误差协方差矩阵增广》</li>
+<li>进行强制对称</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e_cgraph" id="classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e_cgraph">
+<area shape="rect" title="状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P" alt="" coords="5,49,151,90"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="199,5,412,32"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="473,31,657,57"/>
+<area shape="rect" href="namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="200,107,411,133"/>
+<area shape="rect" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="460,107,669,133"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e_icgraph" id="classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e_icgraph">
+<area shape="rect" title="状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P" alt="" coords="779,5,924,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">类成员变量说明</h2>
+<a id="a567e4532763f55a7d261ddfd14834462"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a567e4532763f55a7d261ddfd14834462">&#9670;&nbsp;</a></span>chi_squared_test_table</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">map&lt; int, double &gt; msckf_vio::MsckfVio::chi_squared_test_table</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9fdf37e894b8ed8e2769d4197dcd5779"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fdf37e894b8ed8e2769d4197dcd5779">&#9670;&nbsp;</a></span>child_frame_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string msckf_vio::MsckfVio::child_frame_id</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a32c72fd37f4c93c9c06d0d452786879c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32c72fd37f4c93c9c06d0d452786879c">&#9670;&nbsp;</a></span>feature_pub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::Publisher msckf_vio::MsckfVio::feature_pub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af46c5ea59e203b1ede51a2076a22542d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af46c5ea59e203b1ede51a2076a22542d">&#9670;&nbsp;</a></span>feature_sub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::Subscriber msckf_vio::MsckfVio::feature_sub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aac9d36b0745819997b1b24c29d639b74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac9d36b0745819997b1b24c29d639b74">&#9670;&nbsp;</a></span>fixed_frame_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string msckf_vio::MsckfVio::fixed_frame_id</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0b8c206699cde61bcfc4d74a702d450f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b8c206699cde61bcfc4d74a702d450f">&#9670;&nbsp;</a></span>frame_rate</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::MsckfVio::frame_rate</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad635032fae4940247c18975d4abf7758"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad635032fae4940247c18975d4abf7758">&#9670;&nbsp;</a></span>imu_msg_buffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;sensor_msgs::Imu&gt; msckf_vio::MsckfVio::imu_msg_buffer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>储存进入的IMU的消息，有时间同步的作用 </p>
+
+</div>
+</div>
+<a id="a10a8b25ec1f46387ab4dd818bd086ad6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10a8b25ec1f46387ab4dd818bd086ad6">&#9670;&nbsp;</a></span>imu_sub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::Subscriber msckf_vio::MsckfVio::imu_sub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afacac4dec98c2bab46de34fb10efec21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afacac4dec98c2bab46de34fb10efec21">&#9670;&nbsp;</a></span>is_first_img</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::MsckfVio::is_first_img</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>判断是否是第一帧图像，后端在接收到第一帧图像后才开始工作 </p>
+
+</div>
+</div>
+<a id="ad90d0d8dd61524e5b7463ca075cec845"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad90d0d8dd61524e5b7463ca075cec845">&#9670;&nbsp;</a></span>is_gravity_set</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::MsckfVio::is_gravity_set</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Indicate if the gravity vector is set， 即是否做了IMU的初始化 </p>
+
+</div>
+</div>
+<a id="aea133d27a69b160be298da96e1aae343"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea133d27a69b160be298da96e1aae343">&#9670;&nbsp;</a></span>map_server</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemsckf__vio.html#a3669e349a8845867230c069f72b0aebd">MapServer</a> msckf_vio::MsckfVio::map_server</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>包含所有的特征点的map容器，key为特征点id，值为Feature类, </p>
+
+</div>
+</div>
+<a id="a9136355c28ea76cf27b7bf0e5ae58653"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9136355c28ea76cf27b7bf0e5ae58653">&#9670;&nbsp;</a></span>max_cam_state_size</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int msckf_vio::MsckfVio::max_cam_state_size</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8c9ff3b4cb1e5bfa19c6262f7d6921e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c9ff3b4cb1e5bfa19c6262f7d6921e8">&#9670;&nbsp;</a></span>mocap_initial_frame</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Isometry3d msckf_vio::MsckfVio::mocap_initial_frame</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a03bcfe3789df9ebb966b730ce17ca369"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03bcfe3789df9ebb966b730ce17ca369">&#9670;&nbsp;</a></span>mocap_odom_pub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::Publisher msckf_vio::MsckfVio::mocap_odom_pub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9c8b76de3b67702dc21cb658b5722b12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c8b76de3b67702dc21cb658b5722b12">&#9670;&nbsp;</a></span>mocap_odom_sub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::Subscriber msckf_vio::MsckfVio::mocap_odom_sub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a06d92037f176362788d41a5e69656f81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06d92037f176362788d41a5e69656f81">&#9670;&nbsp;</a></span>nh</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::NodeHandle msckf_vio::MsckfVio::nh</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a364f1c3c98bb76e294ab3e11dce2aa51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a364f1c3c98bb76e294ab3e11dce2aa51">&#9670;&nbsp;</a></span>odom_pub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::Publisher msckf_vio::MsckfVio::odom_pub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a81daf053429e04d1bb8df1e64a175faa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81daf053429e04d1bb8df1e64a175faa">&#9670;&nbsp;</a></span>position_std_threshold</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::MsckfVio::position_std_threshold</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaba2f4881dd89350ad1420fa747cced1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaba2f4881dd89350ad1420fa747cced1">&#9670;&nbsp;</a></span>publish_tf</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::MsckfVio::publish_tf</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a104f53b87ec9dc080c0f97f326dfa1e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a104f53b87ec9dc080c0f97f326dfa1e1">&#9670;&nbsp;</a></span>raw_mocap_odom_msg</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::TransformStamped msckf_vio::MsckfVio::raw_mocap_odom_msg</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3c2a7f22996453e2ad6a4b902a31a405"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c2a7f22996453e2ad6a4b902a31a405">&#9670;&nbsp;</a></span>reset_srv</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::ServiceServer msckf_vio::MsckfVio::reset_srv</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac0d63490324b6cf7bf25f0235722f3e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0d63490324b6cf7bf25f0235722f3e8">&#9670;&nbsp;</a></span>rotation_threshold</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::MsckfVio::rotation_threshold</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4d65ce6743d94f2120564bd92fefc2cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d65ce6743d94f2120564bd92fefc2cb">&#9670;&nbsp;</a></span>state_server</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html">StateServer</a> msckf_vio::MsckfVio::state_server</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>包含S-MSKCF中的IMU状态和所有相机状态 </p>
+
+</div>
+</div>
+<a id="ad36d1caef41b43be14b9f8b38df4aedd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad36d1caef41b43be14b9f8b38df4aedd">&#9670;&nbsp;</a></span>tf_pub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">tf::TransformBroadcaster msckf_vio::MsckfVio::tf_pub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a54d31202fa15c449008cc6b0a01757b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54d31202fa15c449008cc6b0a01757b6">&#9670;&nbsp;</a></span>tracking_rate</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::MsckfVio::tracking_rate</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a50314a0603313740200bb1a6ae681d5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50314a0603313740200bb1a6ae681d5c">&#9670;&nbsp;</a></span>tracking_rate_threshold</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::MsckfVio::tracking_rate_threshold</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3252b15da149502bd2917d54e026e1fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3252b15da149502bd2917d54e026e1fb">&#9670;&nbsp;</a></span>translation_threshold</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::MsckfVio::translation_threshold</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/<a class="el" href="msckf__vio_8h_source.html">msckf_vio.h</a></li>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/src/<a class="el" href="msckf__vio_8cpp.html">msckf_vio.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespacemsckf__vio.html">msckf_vio</a></li><li class="navelem"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

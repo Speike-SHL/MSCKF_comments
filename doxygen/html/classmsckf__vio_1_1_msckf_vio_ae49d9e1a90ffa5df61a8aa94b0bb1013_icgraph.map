@@ -1,0 +1,8 @@
+<map id="msckf_vio::MsckfVio::processModel" name="msckf_vio::MsckfVio::processModel">
+<area shape="rect" id="node1" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="976,5,1121,47"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b" title="imu积分，批量处理imu数据" alt="" coords="779,5,928,47"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,5,731,47"/>
+<area shape="rect" id="node4" href="$classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,5,344,47"/>
+<area shape="rect" id="node6" href="$classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,35,537,76"/>
+<area shape="rect" id="node5" href="$classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,5,151,47"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="msckf_vio::ImageProcessor::featureCompareByLifetime" name="msckf_vio::ImageProcessor::featureCompareByLifetime">
+<area shape="rect" id="node1" title="featureCompareByLifetime Compare two features based on the lifetime." alt="" coords="939,5,1124,47"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_image_processor.html#a1f1fdf6356310612e8c30170af93abb9" title="pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of..." alt="" coords="705,5,891,47"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" id="node4" href="$classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" id="node5" href="$classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>

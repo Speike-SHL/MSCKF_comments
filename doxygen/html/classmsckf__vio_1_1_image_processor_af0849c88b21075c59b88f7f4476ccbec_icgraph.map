@@ -1,0 +1,10 @@
+<map id="msckf_vio::ImageProcessor::distortPoints" name="msckf_vio::ImageProcessor::distortPoints">
+<area shape="rect" id="node1" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="1172,71,1357,112"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="939,71,1124,112"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="705,5,891,47"/>
+<area shape="rect" id="node7" href="$classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d" title=" " alt="" coords="705,71,891,112"/>
+<area shape="rect" id="node8" href="$classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="705,136,891,177"/>
+<area shape="rect" id="node4" href="$classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,71,657,112"/>
+<area shape="rect" id="node5" href="$classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,71,424,112"/>
+<area shape="rect" id="node6" href="$classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,71,191,112"/>
+</map>

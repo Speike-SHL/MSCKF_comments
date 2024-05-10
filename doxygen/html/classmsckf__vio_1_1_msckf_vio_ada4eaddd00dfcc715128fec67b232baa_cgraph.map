@@ -1,0 +1,12 @@
+<map id="msckf_vio::MsckfVio::removeLostFeatures" name="msckf_vio::MsckfVio::removeLostFeatures">
+<area shape="rect" id="node1" title="使用不再跟踪上的点来更新" alt="" coords="5,71,155,112"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="205,5,351,47"/>
+<area shape="rect" id="node6" href="$classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1" title=" " alt="" coords="205,71,351,112"/>
+<area shape="rect" id="node7" href="$classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="203,136,353,177"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="434,8,595,49"/>
+<area shape="rect" id="node4" href="$namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="676,66,889,93"/>
+<area shape="rect" id="node5" href="$namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="937,41,1121,67"/>
+<area shape="rect" id="node8" href="$namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="401,141,628,167"/>
+<area shape="rect" id="node10" href="$namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="406,191,623,218"/>
+<area shape="rect" id="node9" href="$namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="678,141,887,167"/>
+</map>

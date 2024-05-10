@@ -1,0 +1,2940 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>S-MSCKF注释: msckf_vio::ImageProcessor类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">S-MSCKF注释
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('classmsckf__vio_1_1_image_processor.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">类</a> &#124;
+<a href="#pub-types">Public 类型</a> &#124;
+<a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="#pri-types">Private 类型</a> &#124;
+<a href="#pri-methods">Private 成员函数</a> &#124;
+<a href="#pri-static-methods">静态 Private 成员函数</a> &#124;
+<a href="#pri-attribs">Private 属性</a> &#124;
+<a href="classmsckf__vio_1_1_image_processor-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">msckf_vio::ImageProcessor类 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="classmsckf__vio_1_1_image_processor.html" title="ImageProcessor Detects and tracks features in image sequences.">ImageProcessor</a> Detects and tracks features in image sequences.  
+ <a href="classmsckf__vio_1_1_image_processor.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="image__processor_8h_source.html">image_processor.h</a>&gt;</code></p>
+<div class="dynheader">
+msckf_vio::ImageProcessor 的协作图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor__coll__graph.png" border="0" usemap="#msckf__vio_1_1_image_processor_coll__map" alt="Collaboration graph"/></div>
+<map name="msckf__vio_1_1_image_processor_coll__map" id="msckf__vio_1_1_image_processor_coll__map">
+<area shape="rect" title="ImageProcessor Detects and tracks features in image sequences." alt="" coords="5,109,191,136"/>
+<area shape="rect" href="structmsckf__vio_1_1_image_processor_1_1_processor_config.html" title="ProcessorConfig Configuration parameters for feature detection and tracking." alt="" coords="5,5,191,47"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">图例</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html" title="FeatureMetaData Contains necessary information of a feature for easy access.">FeatureMetaData</a> Contains necessary information of a feature for easy access.  <a href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_image_processor_1_1_processor_config.html">ProcessorConfig</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structmsckf__vio_1_1_image_processor_1_1_processor_config.html" title="ProcessorConfig Configuration parameters for feature detection and tracking.">ProcessorConfig</a> Configuration parameters for feature detection and tracking.  <a href="structmsckf__vio_1_1_image_processor_1_1_processor_config.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public 类型</h2></td></tr>
+<tr class="memitem:a255b1672881b598f1201d7b9a4e1e732"><td class="memItemLeft" align="right" valign="top">typedef boost::shared_ptr&lt; <a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a255b1672881b598f1201d7b9a4e1e732">Ptr</a></td></tr>
+<tr class="separator:a255b1672881b598f1201d7b9a4e1e732"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affbea3f8d7884d93fb28863aeb0f0e1d"><td class="memItemLeft" align="right" valign="top">typedef boost::shared_ptr&lt; const <a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#affbea3f8d7884d93fb28863aeb0f0e1d">ConstPtr</a></td></tr>
+<tr class="separator:affbea3f8d7884d93fb28863aeb0f0e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:a6b2ca38c502b2e1952bb9169b4ad79d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a6b2ca38c502b2e1952bb9169b4ad79d0">ImageProcessor</a> (ros::NodeHandle &amp;n)</td></tr>
+<tr class="memdesc:a6b2ca38c502b2e1952bb9169b4ad79d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">ImageProcessor构造函数  <a href="classmsckf__vio_1_1_image_processor.html#a6b2ca38c502b2e1952bb9169b4ad79d0">更多...</a><br /></td></tr>
+<tr class="separator:a6b2ca38c502b2e1952bb9169b4ad79d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a878febebb98010165c4b1851cd3b2e65"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a878febebb98010165c4b1851cd3b2e65">ImageProcessor</a> (const <a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a> &amp;)=delete</td></tr>
+<tr class="separator:a878febebb98010165c4b1851cd3b2e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa788c54f3e8dae755703320ec37617c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#aa788c54f3e8dae755703320ec37617c3">operator=</a> (const <a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a> &amp;)=delete</td></tr>
+<tr class="separator:aa788c54f3e8dae755703320ec37617c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe8006c74c50bd2c13aee734c7f0a135"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#abe8006c74c50bd2c13aee734c7f0a135">~ImageProcessor</a> ()</td></tr>
+<tr class="separator:abe8006c74c50bd2c13aee734c7f0a135"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0072210e89ef5ed8cbd8f0a87e92c6b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3">initialize</a> ()</td></tr>
+<tr class="memdesc:a0072210e89ef5ed8cbd8f0a87e92c6b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">初始化  <a href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3">更多...</a><br /></td></tr>
+<tr class="separator:a0072210e89ef5ed8cbd8f0a87e92c6b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private 类型</h2></td></tr>
+<tr class="memitem:aa2605b780ef504e0a82483cec58546bf"><td class="memItemLeft" align="right" valign="top">typedef unsigned long long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#aa2605b780ef504e0a82483cec58546bf">FeatureIDType</a></td></tr>
+<tr class="memdesc:aa2605b780ef504e0a82483cec58546bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">FeatureIDType An alias for unsigned long long int.  <a href="classmsckf__vio_1_1_image_processor.html#aa2605b780ef504e0a82483cec58546bf">更多...</a><br /></td></tr>
+<tr class="separator:aa2605b780ef504e0a82483cec58546bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05c9d3715a9ba9cdbdc5d3ea1a7772d2"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; int, std::vector&lt; <a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a05c9d3715a9ba9cdbdc5d3ea1a7772d2">GridFeatures</a></td></tr>
+<tr class="memdesc:a05c9d3715a9ba9cdbdc5d3ea1a7772d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">GridFeatures Organize features based on the grid they belong to. Note that the key is encoded by the grid index.  <a href="classmsckf__vio_1_1_image_processor.html#a05c9d3715a9ba9cdbdc5d3ea1a7772d2">更多...</a><br /></td></tr>
+<tr class="separator:a05c9d3715a9ba9cdbdc5d3ea1a7772d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private 成员函数</h2></td></tr>
+<tr class="memitem:a36744d8b9de8f8f63f75b54e0f6dbb3c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a36744d8b9de8f8f63f75b54e0f6dbb3c">loadParameters</a> ()</td></tr>
+<tr class="memdesc:a36744d8b9de8f8f63f75b54e0f6dbb3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">loadParameters Load parameters from the parameter server.  <a href="classmsckf__vio_1_1_image_processor.html#a36744d8b9de8f8f63f75b54e0f6dbb3c">更多...</a><br /></td></tr>
+<tr class="separator:a36744d8b9de8f8f63f75b54e0f6dbb3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65a05e39e7f0608205c3d374e0895154"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154">createRosIO</a> ()</td></tr>
+<tr class="memdesc:a65a05e39e7f0608205c3d374e0895154"><td class="mdescLeft">&#160;</td><td class="mdescRight">createRosIO Create ros publisher and subscirbers.  <a href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154">更多...</a><br /></td></tr>
+<tr class="separator:a65a05e39e7f0608205c3d374e0895154"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40010455f5bf8585edc488bb12f4507b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b">stereoCallback</a> (const sensor_msgs::ImageConstPtr &amp;cam0_img, const sensor_msgs::ImageConstPtr &amp;cam1_img)</td></tr>
+<tr class="memdesc:a40010455f5bf8585edc488bb12f4507b"><td class="mdescLeft">&#160;</td><td class="mdescRight">双目图像回调, 处理双目图像，前端主要流程函数  <a href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b">更多...</a><br /></td></tr>
+<tr class="separator:a40010455f5bf8585edc488bb12f4507b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4944cd8b2d83b9bab4b17cfb5a06c168"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a4944cd8b2d83b9bab4b17cfb5a06c168">imuCallback</a> (const sensor_msgs::ImuConstPtr &amp;msg)</td></tr>
+<tr class="memdesc:a4944cd8b2d83b9bab4b17cfb5a06c168"><td class="mdescLeft">&#160;</td><td class="mdescRight">imuCallback Callback function for the imu message.  <a href="classmsckf__vio_1_1_image_processor.html#a4944cd8b2d83b9bab4b17cfb5a06c168">更多...</a><br /></td></tr>
+<tr class="separator:a4944cd8b2d83b9bab4b17cfb5a06c168"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03457ad5d0564d18cf6a78c66d46af7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d">initializeFirstFrame</a> ()</td></tr>
+<tr class="separator:a03457ad5d0564d18cf6a78c66d46af7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22fc59074490862e724fdcd3fae56312"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312">trackFeatures</a> ()</td></tr>
+<tr class="memdesc:a22fc59074490862e724fdcd3fae56312"><td class="mdescLeft">&#160;</td><td class="mdescRight">跟踪特征点  <a href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312">更多...</a><br /></td></tr>
+<tr class="separator:a22fc59074490862e724fdcd3fae56312"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a516fc0c03915ab2b242b52ac89c0ff77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77">addNewFeatures</a> ()</td></tr>
+<tr class="memdesc:a516fc0c03915ab2b242b52ac89c0ff77"><td class="mdescLeft">&#160;</td><td class="mdescRight">在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征  <a href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77">更多...</a><br /></td></tr>
+<tr class="separator:a516fc0c03915ab2b242b52ac89c0ff77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f1fdf6356310612e8c30170af93abb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a1f1fdf6356310612e8c30170af93abb9">pruneGridFeatures</a> ()</td></tr>
+<tr class="memdesc:a1f1fdf6356310612e8c30170af93abb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of that grid, which ensures the number of features within each grid is bounded.  <a href="classmsckf__vio_1_1_image_processor.html#a1f1fdf6356310612e8c30170af93abb9">更多...</a><br /></td></tr>
+<tr class="separator:a1f1fdf6356310612e8c30170af93abb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6257bea2b1464362bdab85d62907741d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a6257bea2b1464362bdab85d62907741d">publish</a> ()</td></tr>
+<tr class="memdesc:a6257bea2b1464362bdab85d62907741d"><td class="mdescLeft">&#160;</td><td class="mdescRight">publish Publish the features on the current image including both the tracked and newly detected ones.  <a href="classmsckf__vio_1_1_image_processor.html#a6257bea2b1464362bdab85d62907741d">更多...</a><br /></td></tr>
+<tr class="separator:a6257bea2b1464362bdab85d62907741d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c8a4ae47310c39da02cb5692a94945a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a0c8a4ae47310c39da02cb5692a94945a">drawFeaturesMono</a> ()</td></tr>
+<tr class="memdesc:a0c8a4ae47310c39da02cb5692a94945a"><td class="mdescLeft">&#160;</td><td class="mdescRight">drawFeaturesMono Draw tracked and newly detected features on the left image only.  <a href="classmsckf__vio_1_1_image_processor.html#a0c8a4ae47310c39da02cb5692a94945a">更多...</a><br /></td></tr>
+<tr class="separator:a0c8a4ae47310c39da02cb5692a94945a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7016d93a91c704d63e1dc99f0fb7dfd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a7016d93a91c704d63e1dc99f0fb7dfd7">drawFeaturesStereo</a> ()</td></tr>
+<tr class="memdesc:a7016d93a91c704d63e1dc99f0fb7dfd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">drawFeaturesStereo Draw tracked and newly detected features on the stereo images.  <a href="classmsckf__vio_1_1_image_processor.html#a7016d93a91c704d63e1dc99f0fb7dfd7">更多...</a><br /></td></tr>
+<tr class="separator:a7016d93a91c704d63e1dc99f0fb7dfd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a987c40bc7344d935d661d11311f79946"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a987c40bc7344d935d661d11311f79946">createImagePyramids</a> ()</td></tr>
+<tr class="memdesc:a987c40bc7344d935d661d11311f79946"><td class="mdescLeft">&#160;</td><td class="mdescRight">createImagePyramids Create image pyramids used for klt tracking.  <a href="classmsckf__vio_1_1_image_processor.html#a987c40bc7344d935d661d11311f79946">更多...</a><br /></td></tr>
+<tr class="separator:a987c40bc7344d935d661d11311f79946"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42ccae5b36afd048f31787445a6f73b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a42ccae5b36afd048f31787445a6f73b5">integrateImuData</a> (cv::Matx33f &amp;cam0_R_p_c, cv::Matx33f &amp;cam1_R_p_c)</td></tr>
+<tr class="memdesc:a42ccae5b36afd048f31787445a6f73b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">integrateImuData Integrates the IMU gyro readings between the two consecutive images, which is used for both tracking prediction and 2-point RANSAC.  <a href="classmsckf__vio_1_1_image_processor.html#a42ccae5b36afd048f31787445a6f73b5">更多...</a><br /></td></tr>
+<tr class="separator:a42ccae5b36afd048f31787445a6f73b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f0daa82bdf82854f82dbf25ef813e05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a2f0daa82bdf82854f82dbf25ef813e05">predictFeatureTracking</a> (const std::vector&lt; cv::Point2f &gt; &amp;input_pts, const cv::Matx33f &amp;R_p_c, const cv::Vec4d &amp;intrinsics, std::vector&lt; cv::Point2f &gt; &amp;compenstated_pts)</td></tr>
+<tr class="memdesc:a2f0daa82bdf82854f82dbf25ef813e05"><td class="mdescLeft">&#160;</td><td class="mdescRight">predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tracking would be more robust and fast.  <a href="classmsckf__vio_1_1_image_processor.html#a2f0daa82bdf82854f82dbf25ef813e05">更多...</a><br /></td></tr>
+<tr class="separator:a2f0daa82bdf82854f82dbf25ef813e05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a036748f869deba538e5726b2997c9bc2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2">twoPointRansac</a> (const std::vector&lt; cv::Point2f &gt; &amp;pts1, const std::vector&lt; cv::Point2f &gt; &amp;pts2, const cv::Matx33f &amp;R_p_c, const cv::Vec4d &amp;intrinsics, const std::string &amp;distortion_model, const cv::Vec4d &amp;distortion_coeffs, const double &amp;inlier_error, const double &amp;success_probability, std::vector&lt; int &gt; &amp;inlier_markers)</td></tr>
+<tr class="memdesc:a036748f869deba538e5726b2997c9bc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set.  <a href="classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2">更多...</a><br /></td></tr>
+<tr class="separator:a036748f869deba538e5726b2997c9bc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa848b52322df85519e627bf1b6399d24"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24">undistortPoints</a> (const std::vector&lt; cv::Point2f &gt; &amp;pts_in, const cv::Vec4d &amp;intrinsics, const std::string &amp;distortion_model, const cv::Vec4d &amp;distortion_coeffs, std::vector&lt; cv::Point2f &gt; &amp;pts_out, const cv::Matx33d &amp;rectification_matrix=cv::Matx33d::eye(), const cv::Vec4d &amp;new_intrinsics=cv::Vec4d(1, 1, 0, 0))</td></tr>
+<tr class="memdesc:aa848b52322df85519e627bf1b6399d24"><td class="mdescLeft">&#160;</td><td class="mdescRight">畸变图像中的pts_in点 -&gt; 通过旋转矩阵R转换 -&gt; 另一个图像坐标系中的无畸变归一化坐标 -&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个图像坐标系的无畸变归一化坐标)  <a href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24">更多...</a><br /></td></tr>
+<tr class="separator:aa848b52322df85519e627bf1b6399d24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6523b76ff7dec84af600f0725aded72"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#ab6523b76ff7dec84af600f0725aded72">rescalePoints</a> (std::vector&lt; cv::Point2f &gt; &amp;pts1, std::vector&lt; cv::Point2f &gt; &amp;pts2, float &amp;scaling_factor)</td></tr>
+<tr class="memdesc:ab6523b76ff7dec84af600f0725aded72"><td class="mdescLeft">&#160;</td><td class="mdescRight">估计系数，用于算像素单位与归一化平面单位的一个乘数  <a href="classmsckf__vio_1_1_image_processor.html#ab6523b76ff7dec84af600f0725aded72">更多...</a><br /></td></tr>
+<tr class="separator:ab6523b76ff7dec84af600f0725aded72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0849c88b21075c59b88f7f4476ccbec"><td class="memItemLeft" align="right" valign="top">std::vector&lt; cv::Point2f &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec">distortPoints</a> (const std::vector&lt; cv::Point2f &gt; &amp;pts_in, const cv::Vec4d &amp;intrinsics, const std::string &amp;distortion_model, const cv::Vec4d &amp;distortion_coeffs)</td></tr>
+<tr class="memdesc:af0849c88b21075c59b88f7f4476ccbec"><td class="mdescLeft">&#160;</td><td class="mdescRight">归一化平面上的坐标 -&gt; 带畸变图像的像素坐标  <a href="classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec">更多...</a><br /></td></tr>
+<tr class="separator:af0849c88b21075c59b88f7f4476ccbec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fdbdfb5403cb062cdb927828bd75f0c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c">stereoMatch</a> (const std::vector&lt; cv::Point2f &gt; &amp;cam0_points, std::vector&lt; cv::Point2f &gt; &amp;cam1_points, std::vector&lt; unsigned char &gt; &amp;inlier_markers)</td></tr>
+<tr class="memdesc:a8fdbdfb5403cb062cdb927828bd75f0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">stereoMatch Matches features with stereo image pairs.  <a href="classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c">更多...</a><br /></td></tr>
+<tr class="separator:a8fdbdfb5403cb062cdb927828bd75f0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ca4a3dd1f59a57544c4ffe12c8c2f4c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5ca4a3dd1f59a57544c4ffe12c8c2f4c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a5ca4a3dd1f59a57544c4ffe12c8c2f4c">removeUnmarkedElements</a> (const std::vector&lt; T &gt; &amp;raw_vec, const std::vector&lt; unsigned char &gt; &amp;markers, std::vector&lt; T &gt; &amp;refined_vec)</td></tr>
+<tr class="memdesc:a5ca4a3dd1f59a57544c4ffe12c8c2f4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">removeUnmarkedElements Remove the unmarked elements within a vector.  <a href="classmsckf__vio_1_1_image_processor.html#a5ca4a3dd1f59a57544c4ffe12c8c2f4c">更多...</a><br /></td></tr>
+<tr class="separator:a5ca4a3dd1f59a57544c4ffe12c8c2f4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95a9a67dadf9f4e1d3510b6fd8b3d140"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a95a9a67dadf9f4e1d3510b6fd8b3d140">updateFeatureLifetime</a> ()</td></tr>
+<tr class="memdesc:a95a9a67dadf9f4e1d3510b6fd8b3d140"><td class="mdescLeft">&#160;</td><td class="mdescRight">没用到，计算特征点的生命周期  <a href="classmsckf__vio_1_1_image_processor.html#a95a9a67dadf9f4e1d3510b6fd8b3d140">更多...</a><br /></td></tr>
+<tr class="separator:a95a9a67dadf9f4e1d3510b6fd8b3d140"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a960cfe2d0670e278e1f9de244edf8632"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a960cfe2d0670e278e1f9de244edf8632">featureLifetimeStatistics</a> ()</td></tr>
+<tr class="memdesc:a960cfe2d0670e278e1f9de244edf8632"><td class="mdescLeft">&#160;</td><td class="mdescRight">没用到，输出每个点的生命周期  <a href="classmsckf__vio_1_1_image_processor.html#a960cfe2d0670e278e1f9de244edf8632">更多...</a><br /></td></tr>
+<tr class="separator:a960cfe2d0670e278e1f9de244edf8632"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+静态 Private 成员函数</h2></td></tr>
+<tr class="memitem:a09d932297eb660c1d90c14c439555081"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a09d932297eb660c1d90c14c439555081">keyPointCompareByResponse</a> (const cv::KeyPoint &amp;pt1, const cv::KeyPoint &amp;pt2)</td></tr>
+<tr class="memdesc:a09d932297eb660c1d90c14c439555081"><td class="mdescLeft">&#160;</td><td class="mdescRight">keyPointCompareByResponse Compare two keypoints based on the response.  <a href="classmsckf__vio_1_1_image_processor.html#a09d932297eb660c1d90c14c439555081">更多...</a><br /></td></tr>
+<tr class="separator:a09d932297eb660c1d90c14c439555081"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a336c459b2928779ba65cf0e731c9d58f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a336c459b2928779ba65cf0e731c9d58f">featureCompareByResponse</a> (const <a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a> &amp;f1, const <a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a> &amp;f2)</td></tr>
+<tr class="memdesc:a336c459b2928779ba65cf0e731c9d58f"><td class="mdescLeft">&#160;</td><td class="mdescRight">featureCompareByResponse Compare two features based on the response.  <a href="classmsckf__vio_1_1_image_processor.html#a336c459b2928779ba65cf0e731c9d58f">更多...</a><br /></td></tr>
+<tr class="separator:a336c459b2928779ba65cf0e731c9d58f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ba15337f275bf17eaf6dccfeda37671"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a5ba15337f275bf17eaf6dccfeda37671">featureCompareByLifetime</a> (const <a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a> &amp;f1, const <a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a> &amp;f2)</td></tr>
+<tr class="memdesc:a5ba15337f275bf17eaf6dccfeda37671"><td class="mdescLeft">&#160;</td><td class="mdescRight">featureCompareByLifetime Compare two features based on the lifetime.  <a href="classmsckf__vio_1_1_image_processor.html#a5ba15337f275bf17eaf6dccfeda37671">更多...</a><br /></td></tr>
+<tr class="separator:a5ba15337f275bf17eaf6dccfeda37671"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private 属性</h2></td></tr>
+<tr class="memitem:a6cfd8b787e8783fe3426e4c975cafddc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a6cfd8b787e8783fe3426e4c975cafddc">is_first_img</a></td></tr>
+<tr class="separator:a6cfd8b787e8783fe3426e4c975cafddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6570e1a50dff2393c8f9a8ededc3c99f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmsckf__vio_1_1_image_processor.html#aa2605b780ef504e0a82483cec58546bf">FeatureIDType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a6570e1a50dff2393c8f9a8ededc3c99f">next_feature_id</a></td></tr>
+<tr class="separator:a6570e1a50dff2393c8f9a8ededc3c99f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b0dd384154acf14f2fd6015766672d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmsckf__vio_1_1_image_processor_1_1_processor_config.html">ProcessorConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a6b0dd384154acf14f2fd6015766672d8">processor_config</a></td></tr>
+<tr class="separator:a6b0dd384154acf14f2fd6015766672d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3a5eccb673851a2d155d83e62416238"><td class="memItemLeft" align="right" valign="top">cv::Ptr&lt; cv::Feature2D &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#ac3a5eccb673851a2d155d83e62416238">detector_ptr</a></td></tr>
+<tr class="separator:ac3a5eccb673851a2d155d83e62416238"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5aa40d57441d845fe33bef7f6ba23000"><td class="memItemLeft" align="right" valign="top">std::vector&lt; sensor_msgs::Imu &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a5aa40d57441d845fe33bef7f6ba23000">imu_msg_buffer</a></td></tr>
+<tr class="separator:a5aa40d57441d845fe33bef7f6ba23000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52d7c010ace8e9372e8d1814c4b303d4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a52d7c010ace8e9372e8d1814c4b303d4">cam0_distortion_model</a></td></tr>
+<tr class="separator:a52d7c010ace8e9372e8d1814c4b303d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc4e0d897a597447c8748dd9077fc6af"><td class="memItemLeft" align="right" valign="top">cv::Vec2i&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#abc4e0d897a597447c8748dd9077fc6af">cam0_resolution</a></td></tr>
+<tr class="separator:abc4e0d897a597447c8748dd9077fc6af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa43c69cabfc53cf0b617595f83851355"><td class="memItemLeft" align="right" valign="top">cv::Vec4d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#aa43c69cabfc53cf0b617595f83851355">cam0_intrinsics</a></td></tr>
+<tr class="separator:aa43c69cabfc53cf0b617595f83851355"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1be425e2949c02ca614c12ef43834508"><td class="memItemLeft" align="right" valign="top">cv::Vec4d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a1be425e2949c02ca614c12ef43834508">cam0_distortion_coeffs</a></td></tr>
+<tr class="separator:a1be425e2949c02ca614c12ef43834508"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0bd0a96253e5bab40bb5964c14adfef"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#ad0bd0a96253e5bab40bb5964c14adfef">cam1_distortion_model</a></td></tr>
+<tr class="separator:ad0bd0a96253e5bab40bb5964c14adfef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fbebc2d7b8f85fb9cb520a4841a7d99"><td class="memItemLeft" align="right" valign="top">cv::Vec2i&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a1fbebc2d7b8f85fb9cb520a4841a7d99">cam1_resolution</a></td></tr>
+<tr class="separator:a1fbebc2d7b8f85fb9cb520a4841a7d99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6258ff4e2700c4aa21d5ec4130f10fa"><td class="memItemLeft" align="right" valign="top">cv::Vec4d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#ad6258ff4e2700c4aa21d5ec4130f10fa">cam1_intrinsics</a></td></tr>
+<tr class="separator:ad6258ff4e2700c4aa21d5ec4130f10fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a806e8fde57a29f7c84098aa12dd54b85"><td class="memItemLeft" align="right" valign="top">cv::Vec4d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a806e8fde57a29f7c84098aa12dd54b85">cam1_distortion_coeffs</a></td></tr>
+<tr class="separator:a806e8fde57a29f7c84098aa12dd54b85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac31d47082573e40c32a3b1790858860d"><td class="memItemLeft" align="right" valign="top">cv::Matx33d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#ac31d47082573e40c32a3b1790858860d">R_cam0_imu</a></td></tr>
+<tr class="separator:ac31d47082573e40c32a3b1790858860d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53d90dc9aff2cf8df895f93521c3d82e"><td class="memItemLeft" align="right" valign="top">cv::Vec3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a53d90dc9aff2cf8df895f93521c3d82e">t_cam0_imu</a></td></tr>
+<tr class="separator:a53d90dc9aff2cf8df895f93521c3d82e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b033074b2808ab13ed9ca66c80d3868"><td class="memItemLeft" align="right" valign="top">cv::Matx33d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a9b033074b2808ab13ed9ca66c80d3868">R_cam1_imu</a></td></tr>
+<tr class="separator:a9b033074b2808ab13ed9ca66c80d3868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac50bb7afeb64b7324d0e452e7e9e556d"><td class="memItemLeft" align="right" valign="top">cv::Vec3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#ac50bb7afeb64b7324d0e452e7e9e556d">t_cam1_imu</a></td></tr>
+<tr class="separator:ac50bb7afeb64b7324d0e452e7e9e556d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa774e5ce8b1b44c7f78720f28af92ee6"><td class="memItemLeft" align="right" valign="top">cv_bridge::CvImageConstPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#aa774e5ce8b1b44c7f78720f28af92ee6">cam0_prev_img_ptr</a></td></tr>
+<tr class="separator:aa774e5ce8b1b44c7f78720f28af92ee6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad23ecc71a326b37fd921d8a372809e93"><td class="memItemLeft" align="right" valign="top">cv_bridge::CvImageConstPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#ad23ecc71a326b37fd921d8a372809e93">cam0_curr_img_ptr</a></td></tr>
+<tr class="separator:ad23ecc71a326b37fd921d8a372809e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acea2f7743759f05638148f3a26350025"><td class="memItemLeft" align="right" valign="top">cv_bridge::CvImageConstPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#acea2f7743759f05638148f3a26350025">cam1_curr_img_ptr</a></td></tr>
+<tr class="separator:acea2f7743759f05638148f3a26350025"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a577aa986cdab7bca1d3df41671a86920"><td class="memItemLeft" align="right" valign="top">std::vector&lt; cv::Mat &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a577aa986cdab7bca1d3df41671a86920">prev_cam0_pyramid_</a></td></tr>
+<tr class="separator:a577aa986cdab7bca1d3df41671a86920"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12699a086cbff99204a376ebfde0b4f2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; cv::Mat &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a12699a086cbff99204a376ebfde0b4f2">curr_cam0_pyramid_</a></td></tr>
+<tr class="separator:a12699a086cbff99204a376ebfde0b4f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf5e170a4bd5deb4a852cda090a62748"><td class="memItemLeft" align="right" valign="top">std::vector&lt; cv::Mat &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#abf5e170a4bd5deb4a852cda090a62748">curr_cam1_pyramid_</a></td></tr>
+<tr class="separator:abf5e170a4bd5deb4a852cda090a62748"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6112ece1e389fd2317c094e5452748ef"><td class="memItemLeft" align="right" valign="top">boost::shared_ptr&lt; <a class="el" href="classmsckf__vio_1_1_image_processor.html#a05c9d3715a9ba9cdbdc5d3ea1a7772d2">GridFeatures</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a6112ece1e389fd2317c094e5452748ef">prev_features_ptr</a></td></tr>
+<tr class="separator:a6112ece1e389fd2317c094e5452748ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac224a5b3142ad8e8c916a9a3ff4fcb09"><td class="memItemLeft" align="right" valign="top">boost::shared_ptr&lt; <a class="el" href="classmsckf__vio_1_1_image_processor.html#a05c9d3715a9ba9cdbdc5d3ea1a7772d2">GridFeatures</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#ac224a5b3142ad8e8c916a9a3ff4fcb09">curr_features_ptr</a></td></tr>
+<tr class="separator:ac224a5b3142ad8e8c916a9a3ff4fcb09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2739e60bfe8fca9f237b3e1ae6bae1d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a2739e60bfe8fca9f237b3e1ae6bae1d4">before_tracking</a></td></tr>
+<tr class="separator:a2739e60bfe8fca9f237b3e1ae6bae1d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a320bb49aada3921f1af53616b8a6ac88"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a320bb49aada3921f1af53616b8a6ac88">after_tracking</a></td></tr>
+<tr class="separator:a320bb49aada3921f1af53616b8a6ac88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a499a592c511d43d4e2d5acce1fbf3f47"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a499a592c511d43d4e2d5acce1fbf3f47">after_matching</a></td></tr>
+<tr class="separator:a499a592c511d43d4e2d5acce1fbf3f47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5c97ee86a54d2d4e799538af49bd0ab"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#ac5c97ee86a54d2d4e799538af49bd0ab">after_ransac</a></td></tr>
+<tr class="separator:ac5c97ee86a54d2d4e799538af49bd0ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05feacd11a17b6ce7da1e364b7bdbc77"><td class="memItemLeft" align="right" valign="top">ros::NodeHandle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a05feacd11a17b6ce7da1e364b7bdbc77">nh</a></td></tr>
+<tr class="separator:a05feacd11a17b6ce7da1e364b7bdbc77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae7ee16ed0e78db0774335ff970083e4"><td class="memItemLeft" align="right" valign="top">message_filters::Subscriber&lt; sensor_msgs::Image &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#aae7ee16ed0e78db0774335ff970083e4">cam0_img_sub</a></td></tr>
+<tr class="separator:aae7ee16ed0e78db0774335ff970083e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c838dd95b55bd58799eb5efa9a5280b"><td class="memItemLeft" align="right" valign="top">message_filters::Subscriber&lt; sensor_msgs::Image &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a4c838dd95b55bd58799eb5efa9a5280b">cam1_img_sub</a></td></tr>
+<tr class="separator:a4c838dd95b55bd58799eb5efa9a5280b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafac96c9c2511c7e419ea83604f5cba6"><td class="memItemLeft" align="right" valign="top">message_filters::TimeSynchronizer&lt; sensor_msgs::Image, sensor_msgs::Image &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#aafac96c9c2511c7e419ea83604f5cba6">stereo_sub</a></td></tr>
+<tr class="separator:aafac96c9c2511c7e419ea83604f5cba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe67b167d46075aa6b1d2586f97cdfa2"><td class="memItemLeft" align="right" valign="top">ros::Subscriber&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#abe67b167d46075aa6b1d2586f97cdfa2">imu_sub</a></td></tr>
+<tr class="separator:abe67b167d46075aa6b1d2586f97cdfa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cb13130b2d2de9b3aa5c6e28fea6b22"><td class="memItemLeft" align="right" valign="top">ros::Publisher&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a1cb13130b2d2de9b3aa5c6e28fea6b22">feature_pub</a></td></tr>
+<tr class="separator:a1cb13130b2d2de9b3aa5c6e28fea6b22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a219c5bd0007417b6dde712276e0724a2"><td class="memItemLeft" align="right" valign="top">ros::Publisher&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a219c5bd0007417b6dde712276e0724a2">tracking_info_pub</a></td></tr>
+<tr class="separator:a219c5bd0007417b6dde712276e0724a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6402ecf3551f253a70741606d4870fd8"><td class="memItemLeft" align="right" valign="top">image_transport::Publisher&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a6402ecf3551f253a70741606d4870fd8">debug_stereo_pub</a></td></tr>
+<tr class="separator:a6402ecf3551f253a70741606d4870fd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cae491847050b4996c339ecdf4bffdd"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classmsckf__vio_1_1_image_processor.html#aa2605b780ef504e0a82483cec58546bf">FeatureIDType</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor.html#a6cae491847050b4996c339ecdf4bffdd">feature_lifetime</a></td></tr>
+<tr class="separator:a6cae491847050b4996c339ecdf4bffdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p><a class="el" href="classmsckf__vio_1_1_image_processor.html" title="ImageProcessor Detects and tracks features in image sequences.">ImageProcessor</a> Detects and tracks features in image sequences. </p>
+</div><h2 class="groupheader">成员类型定义说明</h2>
+<a id="affbea3f8d7884d93fb28863aeb0f0e1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affbea3f8d7884d93fb28863aeb0f0e1d">&#9670;&nbsp;</a></span>ConstPtr</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef boost::shared_ptr&lt;const <a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a>&gt; <a class="el" href="classmsckf__vio_1_1_image_processor.html#affbea3f8d7884d93fb28863aeb0f0e1d">msckf_vio::ImageProcessor::ConstPtr</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa2605b780ef504e0a82483cec58546bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2605b780ef504e0a82483cec58546bf">&#9670;&nbsp;</a></span>FeatureIDType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef unsigned long long int <a class="el" href="classmsckf__vio_1_1_image_processor.html#aa2605b780ef504e0a82483cec58546bf">msckf_vio::ImageProcessor::FeatureIDType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>FeatureIDType An alias for unsigned long long int. </p>
+
+</div>
+</div>
+<a id="a05c9d3715a9ba9cdbdc5d3ea1a7772d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05c9d3715a9ba9cdbdc5d3ea1a7772d2">&#9670;&nbsp;</a></span>GridFeatures</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::map&lt;int, std::vector&lt;<a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a>&gt; &gt; <a class="el" href="classmsckf__vio_1_1_image_processor.html#a05c9d3715a9ba9cdbdc5d3ea1a7772d2">msckf_vio::ImageProcessor::GridFeatures</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GridFeatures Organize features based on the grid they belong to. Note that the key is encoded by the grid index. </p>
+
+</div>
+</div>
+<a id="a255b1672881b598f1201d7b9a4e1e732"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a255b1672881b598f1201d7b9a4e1e732">&#9670;&nbsp;</a></span>Ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef boost::shared_ptr&lt;<a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a>&gt; <a class="el" href="classmsckf__vio_1_1_image_processor.html#a255b1672881b598f1201d7b9a4e1e732">msckf_vio::ImageProcessor::Ptr</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">构造及析构函数说明</h2>
+<a id="a6b2ca38c502b2e1952bb9169b4ad79d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b2ca38c502b2e1952bb9169b4ad79d0">&#9670;&nbsp;</a></span>ImageProcessor() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::ImageProcessor::ImageProcessor </td>
+          <td>(</td>
+          <td class="paramtype">ros::NodeHandle &amp;&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ImageProcessor构造函数 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>ros节点句柄 </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">列表初始化</td><td>is_first_img = true, 设置第一帧图像标志位 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a878febebb98010165c4b1851cd3b2e65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a878febebb98010165c4b1851cd3b2e65">&#9670;&nbsp;</a></span>ImageProcessor() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::ImageProcessor::ImageProcessor </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe8006c74c50bd2c13aee734c7f0a135"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe8006c74c50bd2c13aee734c7f0a135">&#9670;&nbsp;</a></span>~ImageProcessor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::ImageProcessor::~ImageProcessor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">成员函数说明</h2>
+<a id="a516fc0c03915ab2b242b52ac89c0ff77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a516fc0c03915ab2b242b52ac89c0ff77">&#9670;&nbsp;</a></span>addNewFeatures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::addNewFeatures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征 </p>
+<p>@addNewFeatures Detect new features on the image to ensure that the features are uniformly distributed on the image.</p>
+<ol type="1">
+<li>在左目图像上提取新的Fast特征点</li>
+<li>将新提取的特征点按照网格分组, 保留响应值高的特征点</li>
+<li>将新提取的特征点与右目图像上的特征点进行匹配(同initializeFirstFrame)</li>
+<li>将特征点进行网格分组存入curr_features_ptr </li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a516fc0c03915ab2b242b52ac89c0ff77_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a516fc0c03915ab2b242b52ac89c0ff77_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a516fc0c03915ab2b242b52ac89c0ff77_cgraph" id="classmsckf__vio_1_1_image_processor_a516fc0c03915ab2b242b52ac89c0ff77_cgraph">
+<area shape="rect" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="5,71,191,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a336c459b2928779ba65cf0e731c9d58f" title="featureCompareByResponse Compare two features based on the response." alt="" coords="244,5,443,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a09d932297eb660c1d90c14c439555081" title="keyPointCompareByResponse Compare two keypoints based on the response." alt="" coords="239,71,448,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="251,136,436,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="496,103,681,144"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="496,168,681,209"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a516fc0c03915ab2b242b52ac89c0ff77_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a516fc0c03915ab2b242b52ac89c0ff77_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a516fc0c03915ab2b242b52ac89c0ff77_icgraph" id="classmsckf__vio_1_1_image_processor_a516fc0c03915ab2b242b52ac89c0ff77_icgraph">
+<area shape="rect" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a987c40bc7344d935d661d11311f79946"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a987c40bc7344d935d661d11311f79946">&#9670;&nbsp;</a></span>createImagePyramids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::createImagePyramids </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>createImagePyramids Create image pyramids used for klt tracking. </p>
+<p>左右目图像构建光流金字塔并保存在curr_cam0/1_pyramid_中，方便后续传递给calcOpticalFlowPyrLK进行光流跟踪</p>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数">ImageProcessor::stereoCallback</a> </dd></dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a987c40bc7344d935d661d11311f79946_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a987c40bc7344d935d661d11311f79946_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a987c40bc7344d935d661d11311f79946_icgraph" id="classmsckf__vio_1_1_image_processor_a987c40bc7344d935d661d11311f79946_icgraph">
+<area shape="rect" title="createImagePyramids Create image pyramids used for klt tracking." alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a65a05e39e7f0608205c3d374e0895154"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65a05e39e7f0608205c3d374e0895154">&#9670;&nbsp;</a></span>createRosIO()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::ImageProcessor::createRosIO </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>createRosIO Create ros publisher and subscirbers. </p>
+<p>创建前端ROS节点的发布和订阅话题 </p>
+<ol type="1">
+<li>"features"话题，缓存长度为3，用于向后端发布特征点（header,点id,左右目归一化坐标）</li>
+<li>"tracking_info"话题，缓存长度为1，用于发布跟踪信息，没有地方接收</li>
+<li>"debug_stereo_image"话题，缓存长度为1，用于发布绘制的双目图像</li>
+<li>"cam0_image"话题，缓存长度为10，用于订阅左目图像</li>
+<li>"cam1_image"话题，缓存长度为10，用于订阅右目图像</li>
+<li>ROS软件同步订阅双目图像消息，缓存长度为10，回调函数为ImageProcessor::stereoCallback</li>
+<li>"imu"话题，缓存长度为50，用于订阅IMU消息</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a65a05e39e7f0608205c3d374e0895154_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a65a05e39e7f0608205c3d374e0895154_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a65a05e39e7f0608205c3d374e0895154_cgraph" id="classmsckf__vio_1_1_image_processor_a65a05e39e7f0608205c3d374e0895154_cgraph">
+<area shape="rect" title="createRosIO Create ros publisher and subscirbers." alt="" coords="5,235,191,276"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a4944cd8b2d83b9bab4b17cfb5a06c168" title="imuCallback Callback function for the imu message." alt="" coords="239,201,424,243"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="239,267,424,308"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="472,71,657,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a987c40bc7344d935d661d11311f79946" title="createImagePyramids Create image pyramids used for klt tracking." alt="" coords="472,332,657,373"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a7016d93a91c704d63e1dc99f0fb7dfd7" title="drawFeaturesStereo Draw tracked and newly detected features on the stereo images." alt="" coords="472,397,657,439"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d" title=" " alt="" coords="472,136,657,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a1f1fdf6356310612e8c30170af93abb9" title="pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of..." alt="" coords="472,488,657,529"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a6257bea2b1464362bdab85d62907741d" title="publish Publish the features on the current image including both the tracked and newly detected ones." alt="" coords="472,201,657,243"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="472,267,657,308"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a336c459b2928779ba65cf0e731c9d58f" title="featureCompareByResponse Compare two features based on the response." alt="" coords="711,71,909,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a09d932297eb660c1d90c14c439555081" title="keyPointCompareByResponse Compare two keypoints based on the response." alt="" coords="705,5,915,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="717,136,903,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="963,133,1148,175"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="963,199,1148,240"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a5ba15337f275bf17eaf6dccfeda37671" title="featureCompareByLifetime Compare two features based on the lifetime." alt="" coords="717,515,903,556"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a42ccae5b36afd048f31787445a6f73b5" title="integrateImuData Integrates the IMU gyro readings between the two consecutive images,..." alt="" coords="717,253,903,295"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a2f0daa82bdf82854f82dbf25ef813e05" title="predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tra..." alt="" coords="717,319,903,360"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a5ca4a3dd1f59a57544c4ffe12c8c2f4c" title="removeUnmarkedElements Remove the unmarked elements within a vector." alt="" coords="716,384,904,425"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="717,449,903,491"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#ab6523b76ff7dec84af600f0725aded72" title="估计系数，用于算像素单位与归一化平面单位的一个乘数" alt="" coords="963,449,1148,491"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a65a05e39e7f0608205c3d374e0895154_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a65a05e39e7f0608205c3d374e0895154_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a65a05e39e7f0608205c3d374e0895154_icgraph" id="classmsckf__vio_1_1_image_processor_a65a05e39e7f0608205c3d374e0895154_icgraph">
+<area shape="rect" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="af0849c88b21075c59b88f7f4476ccbec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0849c88b21075c59b88f7f4476ccbec">&#9670;&nbsp;</a></span>distortPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; cv::Point2f &gt; msckf_vio::ImageProcessor::distortPoints </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pts_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Vec4d &amp;&#160;</td>
+          <td class="paramname"><em>intrinsics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>distortion_model</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Vec4d &amp;&#160;</td>
+          <td class="paramname"><em>distortion_coeffs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>归一化平面上的坐标 -&gt; 带畸变图像的像素坐标 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pts_in</td><td>归一化坐标的前两维 </td></tr>
+    <tr><td class="paramname">intrinsics</td><td>内参 </td></tr>
+    <tr><td class="paramname">distortion_model</td><td>畸变模型 </td></tr>
+    <tr><td class="paramname">distortion_coeffs</td><td>畸变系数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>像素坐标的点 </dd></dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_af0849c88b21075c59b88f7f4476ccbec_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_af0849c88b21075c59b88f7f4476ccbec_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_af0849c88b21075c59b88f7f4476ccbec_icgraph" id="classmsckf__vio_1_1_image_processor_af0849c88b21075c59b88f7f4476ccbec_icgraph">
+<area shape="rect" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="1172,71,1357,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="939,71,1124,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d" title=" " alt="" coords="705,71,891,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="705,136,891,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,71,657,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,71,424,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,71,191,112"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0c8a4ae47310c39da02cb5692a94945a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c8a4ae47310c39da02cb5692a94945a">&#9670;&nbsp;</a></span>drawFeaturesMono()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::drawFeaturesMono </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>drawFeaturesMono Draw tracked and newly detected features on the left image only. </p>
+<p>做图相关，且没有用到 </p>
+
+</div>
+</div>
+<a id="a7016d93a91c704d63e1dc99f0fb7dfd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7016d93a91c704d63e1dc99f0fb7dfd7">&#9670;&nbsp;</a></span>drawFeaturesStereo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::drawFeaturesStereo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>drawFeaturesStereo Draw tracked and newly detected features on the stereo images. </p>
+<p>当有其他节点订阅了debug_stereo_image话题时，将双目图像拼接起来并画出特征点位置，作为消息发送出去</p>
+<dl class="section note"><dt>注解</dt><dd>绿色: 跟踪成功的点 金色: 新添加的点 </dd></dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a7016d93a91c704d63e1dc99f0fb7dfd7_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a7016d93a91c704d63e1dc99f0fb7dfd7_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a7016d93a91c704d63e1dc99f0fb7dfd7_icgraph" id="classmsckf__vio_1_1_image_processor_a7016d93a91c704d63e1dc99f0fb7dfd7_icgraph">
+<area shape="rect" title="drawFeaturesStereo Draw tracked and newly detected features on the stereo images." alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5ba15337f275bf17eaf6dccfeda37671"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ba15337f275bf17eaf6dccfeda37671">&#9670;&nbsp;</a></span>featureCompareByLifetime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool msckf_vio::ImageProcessor::featureCompareByLifetime </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a> &amp;&#160;</td>
+          <td class="paramname"><em>f1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a> &amp;&#160;</td>
+          <td class="paramname"><em>f2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>featureCompareByLifetime Compare two features based on the lifetime. </p>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a5ba15337f275bf17eaf6dccfeda37671_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a5ba15337f275bf17eaf6dccfeda37671_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a5ba15337f275bf17eaf6dccfeda37671_icgraph" id="classmsckf__vio_1_1_image_processor_a5ba15337f275bf17eaf6dccfeda37671_icgraph">
+<area shape="rect" title="featureCompareByLifetime Compare two features based on the lifetime." alt="" coords="939,5,1124,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a1f1fdf6356310612e8c30170af93abb9" title="pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of..." alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a336c459b2928779ba65cf0e731c9d58f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a336c459b2928779ba65cf0e731c9d58f">&#9670;&nbsp;</a></span>featureCompareByResponse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool msckf_vio::ImageProcessor::featureCompareByResponse </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a> &amp;&#160;</td>
+          <td class="paramname"><em>f1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmsckf__vio_1_1_image_processor_1_1_feature_meta_data.html">FeatureMetaData</a> &amp;&#160;</td>
+          <td class="paramname"><em>f2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>featureCompareByResponse Compare two features based on the response. </p>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a336c459b2928779ba65cf0e731c9d58f_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a336c459b2928779ba65cf0e731c9d58f_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a336c459b2928779ba65cf0e731c9d58f_icgraph" id="classmsckf__vio_1_1_image_processor_a336c459b2928779ba65cf0e731c9d58f_icgraph">
+<area shape="rect" title="featureCompareByResponse Compare two features based on the response." alt="" coords="939,39,1137,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d" title=" " alt="" coords="705,71,891,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,39,657,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,39,424,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,39,191,80"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a960cfe2d0670e278e1f9de244edf8632"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a960cfe2d0670e278e1f9de244edf8632">&#9670;&nbsp;</a></span>featureLifetimeStatistics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::featureLifetimeStatistics </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>没用到，输出每个点的生命周期 </p>
+
+</div>
+</div>
+<a id="a4944cd8b2d83b9bab4b17cfb5a06c168"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4944cd8b2d83b9bab4b17cfb5a06c168">&#9670;&nbsp;</a></span>imuCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::imuCallback </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::ImuConstPtr &amp;&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>imuCallback Callback function for the imu message. </p>
+<p>接受IMU数据并向imu_msg_buffer添加imu消息</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td>IMU msg.</td></tr>
+    <tr><td class="paramname">msg</td><td>imu消息 </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a4944cd8b2d83b9bab4b17cfb5a06c168_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a4944cd8b2d83b9bab4b17cfb5a06c168_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a4944cd8b2d83b9bab4b17cfb5a06c168_icgraph" id="classmsckf__vio_1_1_image_processor_a4944cd8b2d83b9bab4b17cfb5a06c168_icgraph">
+<area shape="rect" title="imuCallback Callback function for the imu message." alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0072210e89ef5ed8cbd8f0a87e92c6b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0072210e89ef5ed8cbd8f0a87e92c6b3">&#9670;&nbsp;</a></span>initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::ImageProcessor::initialize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>初始化 </p>
+<dl class="section return"><dt>返回</dt><dd>成功或失败 </dd></dl>
+<ol type="1">
+<li>加载参数 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a36744d8b9de8f8f63f75b54e0f6dbb3c" title="loadParameters Load parameters from the parameter server.">ImageProcessor::loadParameters()</a></dd></dl>
+</li>
+<li>构造OpenCV的FAST特征提取器</li>
+<li>构造ROS IO进行消息的订阅和发布 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers.">ImageProcessor::createRosIO()</a></dd></dl>
+</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a0072210e89ef5ed8cbd8f0a87e92c6b3_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a0072210e89ef5ed8cbd8f0a87e92c6b3_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a0072210e89ef5ed8cbd8f0a87e92c6b3_cgraph" id="classmsckf__vio_1_1_image_processor_a0072210e89ef5ed8cbd8f0a87e92c6b3_cgraph">
+<area shape="rect" title="初始化" alt="" coords="5,503,191,544"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,444,424,485"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a36744d8b9de8f8f63f75b54e0f6dbb3c" title="loadParameters Load parameters from the parameter server." alt="" coords="239,535,424,576"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a4944cd8b2d83b9bab4b17cfb5a06c168" title="imuCallback Callback function for the imu message." alt="" coords="489,444,674,485"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="489,365,674,407"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="739,71,924,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a987c40bc7344d935d661d11311f79946" title="createImagePyramids Create image pyramids used for klt tracking." alt="" coords="739,332,924,373"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a7016d93a91c704d63e1dc99f0fb7dfd7" title="drawFeaturesStereo Draw tracked and newly detected features on the stereo images." alt="" coords="739,397,924,439"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d" title=" " alt="" coords="739,136,924,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a1f1fdf6356310612e8c30170af93abb9" title="pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of..." alt="" coords="739,515,924,556"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a6257bea2b1464362bdab85d62907741d" title="publish Publish the features on the current image including both the tracked and newly detected ones." alt="" coords="984,463,1169,504"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="739,267,924,308"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a336c459b2928779ba65cf0e731c9d58f" title="featureCompareByResponse Compare two features based on the response." alt="" coords="977,71,1176,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a09d932297eb660c1d90c14c439555081" title="keyPointCompareByResponse Compare two keypoints based on the response." alt="" coords="972,5,1181,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="984,136,1169,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="1229,136,1415,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="1229,365,1415,407"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a5ba15337f275bf17eaf6dccfeda37671" title="featureCompareByLifetime Compare two features based on the lifetime." alt="" coords="984,528,1169,569"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a42ccae5b36afd048f31787445a6f73b5" title="integrateImuData Integrates the IMU gyro readings between the two consecutive images,..." alt="" coords="984,201,1169,243"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a2f0daa82bdf82854f82dbf25ef813e05" title="predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tra..." alt="" coords="984,267,1169,308"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a5ca4a3dd1f59a57544c4ffe12c8c2f4c" title="removeUnmarkedElements Remove the unmarked elements within a vector." alt="" coords="983,332,1171,373"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="984,397,1169,439"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#ab6523b76ff7dec84af600f0725aded72" title="估计系数，用于算像素单位与归一化平面单位的一个乘数" alt="" coords="1229,431,1415,472"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ac16cbeba8bb665bede495cc456d902a3" title=" " alt="" coords="472,587,691,614"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ae619c5abf71af2a8303507a1b17a0c46" title=" " alt="" coords="745,645,918,687"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ab389d17a6a6f7f70fdef55514e269192" title=" " alt="" coords="743,580,920,621"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a03457ad5d0564d18cf6a78c66d46af7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03457ad5d0564d18cf6a78c66d46af7d">&#9670;&nbsp;</a></span>initializeFirstFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::initializeFirstFrame </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<ol type="1">
+<li>从cam0的图像中提取FAST特征</li>
+<li>利用cam0到cam1的外参, 将cam0中的特征点投影到cam1中, 作为光流法寻找cam1中匹配点的初始值</li>
+<li>利用LKT光流法在cam1的图像中寻找匹配的像素点</li>
+<li>利用双目外参构成的对极几何约束进行野点筛选。</li>
+<li>然后根据cam0中所有匹配特征点的位置将它们分配到不同的grid中</li>
+<li>按提取FAST特征时的response对每个grid中的特征进行排序</li>
+<li>最后将它们存储到相应的类成员变量中（每个grid特征数有限制）。 执行完后能在curr_features_ptr中找到第一帧图像中提取的左右目特征点 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数">ImageProcessor::stereoCallback</a> </dd></dl>
+</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a03457ad5d0564d18cf6a78c66d46af7d_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a03457ad5d0564d18cf6a78c66d46af7d_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a03457ad5d0564d18cf6a78c66d46af7d_cgraph" id="classmsckf__vio_1_1_image_processor_a03457ad5d0564d18cf6a78c66d46af7d_cgraph">
+<area shape="rect" title=" " alt="" coords="5,39,191,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a336c459b2928779ba65cf0e731c9d58f" title="featureCompareByResponse Compare two features based on the response." alt="" coords="239,5,437,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="245,71,431,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="485,37,671,79"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="485,103,671,144"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a03457ad5d0564d18cf6a78c66d46af7d_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a03457ad5d0564d18cf6a78c66d46af7d_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a03457ad5d0564d18cf6a78c66d46af7d_icgraph" id="classmsckf__vio_1_1_image_processor_a03457ad5d0564d18cf6a78c66d46af7d_icgraph">
+<area shape="rect" title=" " alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a42ccae5b36afd048f31787445a6f73b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42ccae5b36afd048f31787445a6f73b5">&#9670;&nbsp;</a></span>integrateImuData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::integrateImuData </td>
+          <td>(</td>
+          <td class="paramtype">cv::Matx33f &amp;&#160;</td>
+          <td class="paramname"><em>cam0_R_p_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cv::Matx33f &amp;&#160;</td>
+          <td class="paramname"><em>cam1_R_p_c</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>integrateImuData Integrates the IMU gyro readings between the two consecutive images, which is used for both tracking prediction and 2-point RANSAC. </p>
+<p>利用imu的角速度计算前后帧的旋转，左右相机分开计算</p>
+<dl class="section return"><dt>返回</dt><dd>cam0_R_p_c: a rotation matrix which takes a vector from previous cam0 frame to current cam0 frame. </dd>
+<dd>
+cam1_R_p_c: a rotation matrix which takes a vector from previous cam1 frame to current cam1 frame.</dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cam0_R_p_c</td><td>左相机prev帧到curr帧的旋转 </td></tr>
+    <tr><td class="paramname">cam1_R_p_c</td><td>右相机prev帧到curr帧的旋转 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点">ImageProcessor::trackFeatures()</a> </dd></dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a42ccae5b36afd048f31787445a6f73b5_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a42ccae5b36afd048f31787445a6f73b5_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a42ccae5b36afd048f31787445a6f73b5_icgraph" id="classmsckf__vio_1_1_image_processor_a42ccae5b36afd048f31787445a6f73b5_icgraph">
+<area shape="rect" title="integrateImuData Integrates the IMU gyro readings between the two consecutive images,..." alt="" coords="939,5,1124,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a09d932297eb660c1d90c14c439555081"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09d932297eb660c1d90c14c439555081">&#9670;&nbsp;</a></span>keyPointCompareByResponse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool msckf_vio::ImageProcessor::keyPointCompareByResponse </td>
+          <td>(</td>
+          <td class="paramtype">const cv::KeyPoint &amp;&#160;</td>
+          <td class="paramname"><em>pt1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::KeyPoint &amp;&#160;</td>
+          <td class="paramname"><em>pt2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>keyPointCompareByResponse Compare two keypoints based on the response. </p>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a09d932297eb660c1d90c14c439555081_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a09d932297eb660c1d90c14c439555081_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a09d932297eb660c1d90c14c439555081_icgraph" id="classmsckf__vio_1_1_image_processor_a09d932297eb660c1d90c14c439555081_icgraph">
+<area shape="rect" title="keyPointCompareByResponse Compare two keypoints based on the response." alt="" coords="939,5,1148,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a36744d8b9de8f8f63f75b54e0f6dbb3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36744d8b9de8f8f63f75b54e0f6dbb3c">&#9670;&nbsp;</a></span>loadParameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::ImageProcessor::loadParameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>loadParameters Load parameters from the parameter server. </p>
+<p>导入节点launch时提供的各种参数</p>
+<dl class="section return"><dt>返回</dt><dd>成功或失败 一直为true </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化">ImageProcessor::initialize()</a> </dd></dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a36744d8b9de8f8f63f75b54e0f6dbb3c_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a36744d8b9de8f8f63f75b54e0f6dbb3c_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a36744d8b9de8f8f63f75b54e0f6dbb3c_cgraph" id="classmsckf__vio_1_1_image_processor_a36744d8b9de8f8f63f75b54e0f6dbb3c_cgraph">
+<area shape="rect" title="loadParameters Load parameters from the parameter server." alt="" coords="5,39,191,80"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ac16cbeba8bb665bede495cc456d902a3" title=" " alt="" coords="239,46,457,73"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ae619c5abf71af2a8303507a1b17a0c46" title=" " alt="" coords="507,5,681,47"/>
+<area shape="rect" href="namespacemsckf__vio_1_1utils.html#ab389d17a6a6f7f70fdef55514e269192" title=" " alt="" coords="505,71,683,112"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a36744d8b9de8f8f63f75b54e0f6dbb3c_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a36744d8b9de8f8f63f75b54e0f6dbb3c_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a36744d8b9de8f8f63f75b54e0f6dbb3c_icgraph" id="classmsckf__vio_1_1_image_processor_a36744d8b9de8f8f63f75b54e0f6dbb3c_icgraph">
+<area shape="rect" title="loadParameters Load parameters from the parameter server." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa788c54f3e8dae755703320ec37617c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa788c54f3e8dae755703320ec37617c3">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a> msckf_vio::ImageProcessor::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2f0daa82bdf82854f82dbf25ef813e05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f0daa82bdf82854f82dbf25ef813e05">&#9670;&nbsp;</a></span>predictFeatureTracking()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::predictFeatureTracking </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>input_pts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Matx33f &amp;&#160;</td>
+          <td class="paramname"><em>R_p_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Vec4d &amp;&#160;</td>
+          <td class="paramname"><em>intrinsics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>compenstated_pts</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tracking would be more robust and fast. </p>
+<p>利用输入的前一帧特征点图像坐标、前一帧到当前帧的旋转矩阵以及相机内参，预测当前帧中的特征点图像坐标。 作用是给LKT光流一个initial guess。</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input_pts</td><td>features in the previous image to be tracked. </td></tr>
+    <tr><td class="paramname">R_p_c</td><td>a rotation matrix takes a vector in the previous camera frame to the current camera frame. </td></tr>
+    <tr><td class="paramname">intrinsics</td><td>intrinsic matrix of the camera. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>compensated_pts: predicted locations of the features in the current image based on the provided rotation.</dd></dl>
+<p>Note that the input and output points are of pixel coordinates.</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input_pts</td><td>上一帧的像素点 </td></tr>
+    <tr><td class="paramname">R_p_c</td><td>旋转，左相机的上一帧到当前帧 </td></tr>
+    <tr><td class="paramname">intrinsics</td><td>内参 </td></tr>
+    <tr><td class="paramname">compensated_pts</td><td>输出预测的点 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点">ImageProcessor::trackFeatures()</a> </dd></dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a2f0daa82bdf82854f82dbf25ef813e05_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a2f0daa82bdf82854f82dbf25ef813e05_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a2f0daa82bdf82854f82dbf25ef813e05_icgraph" id="classmsckf__vio_1_1_image_processor_a2f0daa82bdf82854f82dbf25ef813e05_icgraph">
+<area shape="rect" title="predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tra..." alt="" coords="939,5,1124,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a1f1fdf6356310612e8c30170af93abb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f1fdf6356310612e8c30170af93abb9">&#9670;&nbsp;</a></span>pruneGridFeatures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::pruneGridFeatures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of that grid, which ensures the number of features within each grid is bounded. </p>
+<p>剔除每个格多余的点</p>
+<dl class="section note"><dt>注解</dt><dd>为什么addNewFeatures中明明每个格子都是按照最小需要的点数添加的，这里格子内的点还会超出最大值？ 因为trackFeatures中只按照每个格子最少的点补齐了， 但某个格子内的点可能移动到了另一个格子， 所以超出了格子内点的最大值 </dd></dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a1f1fdf6356310612e8c30170af93abb9_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a1f1fdf6356310612e8c30170af93abb9_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a1f1fdf6356310612e8c30170af93abb9_cgraph" id="classmsckf__vio_1_1_image_processor_a1f1fdf6356310612e8c30170af93abb9_cgraph">
+<area shape="rect" title="pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of..." alt="" coords="5,5,191,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a5ba15337f275bf17eaf6dccfeda37671" title="featureCompareByLifetime Compare two features based on the lifetime." alt="" coords="239,5,424,47"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a1f1fdf6356310612e8c30170af93abb9_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a1f1fdf6356310612e8c30170af93abb9_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a1f1fdf6356310612e8c30170af93abb9_icgraph" id="classmsckf__vio_1_1_image_processor_a1f1fdf6356310612e8c30170af93abb9_icgraph">
+<area shape="rect" title="pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of..." alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a6257bea2b1464362bdab85d62907741d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6257bea2b1464362bdab85d62907741d">&#9670;&nbsp;</a></span>publish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::publish </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>publish Publish the features on the current image including both the tracked and newly detected ones. </p>
+<p>发送前端提取的特征点和id到后端 </p>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a6257bea2b1464362bdab85d62907741d_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a6257bea2b1464362bdab85d62907741d_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a6257bea2b1464362bdab85d62907741d_cgraph" id="classmsckf__vio_1_1_image_processor_a6257bea2b1464362bdab85d62907741d_cgraph">
+<area shape="rect" title="publish Publish the features on the current image including both the tracked and newly detected ones." alt="" coords="5,5,191,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="239,5,424,47"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a6257bea2b1464362bdab85d62907741d_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a6257bea2b1464362bdab85d62907741d_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a6257bea2b1464362bdab85d62907741d_icgraph" id="classmsckf__vio_1_1_image_processor_a6257bea2b1464362bdab85d62907741d_icgraph">
+<area shape="rect" title="publish Publish the features on the current image including both the tracked and newly detected ones." alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5ca4a3dd1f59a57544c4ffe12c8c2f4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ca4a3dd1f59a57544c4ffe12c8c2f4c">&#9670;&nbsp;</a></span>removeUnmarkedElements()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::removeUnmarkedElements </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>raw_vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; unsigned char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>markers</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>refined_vec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>removeUnmarkedElements Remove the unmarked elements within a vector. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">raw_vec</td><td>所有点 </td></tr>
+    <tr><td class="paramname">markers</td><td>0 外点, 1 内点 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>refined_vec: 没有外点</dd></dl>
+<p>Note that the order of the inliers in the raw_vec is perserved in the refined_vec. </p>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a5ca4a3dd1f59a57544c4ffe12c8c2f4c_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a5ca4a3dd1f59a57544c4ffe12c8c2f4c_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a5ca4a3dd1f59a57544c4ffe12c8c2f4c_icgraph" id="classmsckf__vio_1_1_image_processor_a5ca4a3dd1f59a57544c4ffe12c8c2f4c_icgraph">
+<area shape="rect" title="removeUnmarkedElements Remove the unmarked elements within a vector." alt="" coords="939,5,1127,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab6523b76ff7dec84af600f0725aded72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6523b76ff7dec84af600f0725aded72">&#9670;&nbsp;</a></span>rescalePoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::rescalePoints </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pts1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pts2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>scaling_factor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>估计系数，用于算像素单位与归一化平面单位的一个乘数 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pts1</td><td>非归一化坐标 </td></tr>
+    <tr><td class="paramname">pts2</td><td>归一化坐标 </td></tr>
+    <tr><td class="paramname">scaling_factor</td><td>尺度 </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_ab6523b76ff7dec84af600f0725aded72_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_ab6523b76ff7dec84af600f0725aded72_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_ab6523b76ff7dec84af600f0725aded72_icgraph" id="classmsckf__vio_1_1_image_processor_ab6523b76ff7dec84af600f0725aded72_icgraph">
+<area shape="rect" title="估计系数，用于算像素单位与归一化平面单位的一个乘数" alt="" coords="1172,5,1357,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="939,5,1124,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a40010455f5bf8585edc488bb12f4507b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40010455f5bf8585edc488bb12f4507b">&#9670;&nbsp;</a></span>stereoCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::stereoCallback </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::ImageConstPtr &amp;&#160;</td>
+          <td class="paramname"><em>cam0_img</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const sensor_msgs::ImageConstPtr &amp;&#160;</td>
+          <td class="paramname"><em>cam1_img</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>双目图像回调, 处理双目图像，前端主要流程函数 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cam0_img</td><td>左图消息 </td></tr>
+    <tr><td class="paramname">cam1_img</td><td>右图消息 </td></tr>
+  </table>
+  </dd>
+</dl>
+<ol type="1">
+<li>创建图像金字塔， <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a987c40bc7344d935d661d11311f79946" title="createImagePyramids Create image pyramids used for klt tracking.">ImageProcessor::createImagePyramids()</a></dd></dl>
+</li>
+<li>检测是否是第一帧图像, 如果是第一帧图像，初始化第一帧特征点并绘制发布双目图像 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d">ImageProcessor::initializeFirstFrame()</a>, <a class="el" href="classmsckf__vio_1_1_image_processor.html#a7016d93a91c704d63e1dc99f0fb7dfd7" title="drawFeaturesStereo Draw tracked and newly detected features on the stereo images.">ImageProcessor::drawFeaturesStereo()</a></dd></dl>
+</li>
+<li>如果不是第一帧图像，进行下述操作<ol type="a">
+<li>跟踪特征点 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点">ImageProcessor::trackFeatures()</a></dd></dl>
+</li>
+<li>在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征">ImageProcessor::addNewFeatures()</a></dd></dl>
+</li>
+<li>剔除每个格多余的点 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a1f1fdf6356310612e8c30170af93abb9" title="pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of...">ImageProcessor::pruneGridFeatures()</a></dd></dl>
+</li>
+<li>当有其他节点订阅了debug_stereo_image消息时，将双目图像拼接起来并画出特征点位置，作为消息发送出去 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a7016d93a91c704d63e1dc99f0fb7dfd7" title="drawFeaturesStereo Draw tracked and newly detected features on the stereo images.">ImageProcessor::drawFeaturesStereo()</a></dd></dl>
+</li>
+</ol>
+</li>
+<li>发布图片特征点跟踪的结果到后端 <dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a6257bea2b1464362bdab85d62907741d" title="publish Publish the features on the current image including both the tracked and newly detected ones.">ImageProcessor::publish()</a></dd></dl>
+</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a40010455f5bf8585edc488bb12f4507b_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a40010455f5bf8585edc488bb12f4507b_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a40010455f5bf8585edc488bb12f4507b_cgraph" id="classmsckf__vio_1_1_image_processor_a40010455f5bf8585edc488bb12f4507b_cgraph">
+<area shape="rect" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="5,267,191,308"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="239,71,424,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a987c40bc7344d935d661d11311f79946" title="createImagePyramids Create image pyramids used for klt tracking." alt="" coords="239,332,424,373"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a7016d93a91c704d63e1dc99f0fb7dfd7" title="drawFeaturesStereo Draw tracked and newly detected features on the stereo images." alt="" coords="239,397,424,439"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d" title=" " alt="" coords="239,136,424,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a1f1fdf6356310612e8c30170af93abb9" title="pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of..." alt="" coords="239,488,424,529"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a6257bea2b1464362bdab85d62907741d" title="publish Publish the features on the current image including both the tracked and newly detected ones." alt="" coords="239,201,424,243"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="239,267,424,308"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a336c459b2928779ba65cf0e731c9d58f" title="featureCompareByResponse Compare two features based on the response." alt="" coords="477,71,676,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a09d932297eb660c1d90c14c439555081" title="keyPointCompareByResponse Compare two keypoints based on the response." alt="" coords="472,5,681,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="484,136,669,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="729,133,915,175"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="729,199,915,240"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a5ba15337f275bf17eaf6dccfeda37671" title="featureCompareByLifetime Compare two features based on the lifetime." alt="" coords="484,515,669,556"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a42ccae5b36afd048f31787445a6f73b5" title="integrateImuData Integrates the IMU gyro readings between the two consecutive images,..." alt="" coords="484,253,669,295"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a2f0daa82bdf82854f82dbf25ef813e05" title="predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tra..." alt="" coords="484,319,669,360"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a5ca4a3dd1f59a57544c4ffe12c8c2f4c" title="removeUnmarkedElements Remove the unmarked elements within a vector." alt="" coords="483,384,671,425"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="484,449,669,491"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#ab6523b76ff7dec84af600f0725aded72" title="估计系数，用于算像素单位与归一化平面单位的一个乘数" alt="" coords="729,449,915,491"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a40010455f5bf8585edc488bb12f4507b_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a40010455f5bf8585edc488bb12f4507b_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a40010455f5bf8585edc488bb12f4507b_icgraph" id="classmsckf__vio_1_1_image_processor_a40010455f5bf8585edc488bb12f4507b_icgraph">
+<area shape="rect" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a8fdbdfb5403cb062cdb927828bd75f0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fdbdfb5403cb062cdb927828bd75f0c">&#9670;&nbsp;</a></span>stereoMatch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::stereoMatch </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cam0_points</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cam1_points</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; unsigned char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>inlier_markers</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>stereoMatch Matches features with stereo image pairs. </p>
+<p>在右相机cam1中找到与左相机cam0中特征点匹配的点</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cam0_points</td><td>points in the primary image. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>cam1_points: points in the secondary image. </dd>
+<dd>
+inlier_markers: 1 if the match is valid, 0 otherwise.</dd></dl>
+<ol type="1">
+<li>先利用双目的已知外参将左相机的点投影到右相机中，作为右相机中特征点的初值</li>
+<li>利用LKT光流法在右相机中找到和左相机中特征点匹配的点</li>
+<li>利用双目外参构成的对极几何约束进行野点筛选 <dl class="section note"><dt>注解</dt><dd>筛选的点是在inlier_markers中标记, 而不是将其在cam1_points中删除 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cam0_points</td><td>左图像的特征点，输入 </td></tr>
+    <tr><td class="paramname">cam1_points</td><td>与cam0_points匹配的点 </td></tr>
+    <tr><td class="paramname">inlier_markers</td><td>是否是内点 1是 0否 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征">ImageProcessor::addNewFeatures()</a> <a class="el" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点">ImageProcessor::trackFeatures()</a> <a class="el" href="classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d">ImageProcessor::initializeFirstFrame()</a> </dd></dl>
+</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a8fdbdfb5403cb062cdb927828bd75f0c_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a8fdbdfb5403cb062cdb927828bd75f0c_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a8fdbdfb5403cb062cdb927828bd75f0c_cgraph" id="classmsckf__vio_1_1_image_processor_a8fdbdfb5403cb062cdb927828bd75f0c_cgraph">
+<area shape="rect" title="stereoMatch Matches features with stereo image pairs." alt="" coords="5,39,191,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="239,71,424,112"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a8fdbdfb5403cb062cdb927828bd75f0c_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a8fdbdfb5403cb062cdb927828bd75f0c_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a8fdbdfb5403cb062cdb927828bd75f0c_icgraph" id="classmsckf__vio_1_1_image_processor_a8fdbdfb5403cb062cdb927828bd75f0c_icgraph">
+<area shape="rect" title="stereoMatch Matches features with stereo image pairs." alt="" coords="939,71,1124,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d" title=" " alt="" coords="705,71,891,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="705,136,891,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,71,657,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,71,424,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,71,191,112"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a22fc59074490862e724fdcd3fae56312"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22fc59074490862e724fdcd3fae56312">&#9670;&nbsp;</a></span>trackFeatures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::trackFeatures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>跟踪特征点 </p>
+<ol type="1">
+<li>上一帧左目特征点 &ndash;(光流跟踪)-&gt; 当前帧左目特征点</li>
+<li>当前帧左目特征点 &ndash;(双目匹配)-&gt; 当前帧右目特征点</li>
+<li>当前帧左目特征点 &amp; 前一帧左目特征点 &ndash;(RANSAC去除外点)</li>
+<li>当前帧右目特征点 &amp; 前一帧右目特征点 &ndash;(RANSAC去除外点)</li>
+<li>保存当前帧左右目特征点到curr_features_ptr </li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a22fc59074490862e724fdcd3fae56312_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a22fc59074490862e724fdcd3fae56312_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a22fc59074490862e724fdcd3fae56312_cgraph" id="classmsckf__vio_1_1_image_processor_a22fc59074490862e724fdcd3fae56312_cgraph">
+<area shape="rect" title="跟踪特征点" alt="" coords="5,136,191,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a42ccae5b36afd048f31787445a6f73b5" title="integrateImuData Integrates the IMU gyro readings between the two consecutive images,..." alt="" coords="240,5,425,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a2f0daa82bdf82854f82dbf25ef813e05" title="predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tra..." alt="" coords="240,71,425,112"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a5ca4a3dd1f59a57544c4ffe12c8c2f4c" title="removeUnmarkedElements Remove the unmarked elements within a vector." alt="" coords="239,136,427,177"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="240,201,425,243"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="240,267,425,308"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="475,168,660,209"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="475,233,660,275"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#ab6523b76ff7dec84af600f0725aded72" title="估计系数，用于算像素单位与归一化平面单位的一个乘数" alt="" coords="475,299,660,340"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a22fc59074490862e724fdcd3fae56312_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a22fc59074490862e724fdcd3fae56312_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a22fc59074490862e724fdcd3fae56312_icgraph" id="classmsckf__vio_1_1_image_processor_a22fc59074490862e724fdcd3fae56312_icgraph">
+<area shape="rect" title="跟踪特征点" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a036748f869deba538e5726b2997c9bc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a036748f869deba538e5726b2997c9bc2">&#9670;&nbsp;</a></span>twoPointRansac()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::twoPointRansac </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pts1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pts2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Matx33f &amp;&#160;</td>
+          <td class="paramname"><em>R_p_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Vec4d &amp;&#160;</td>
+          <td class="paramname"><em>intrinsics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>distortion_model</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Vec4d &amp;&#160;</td>
+          <td class="paramname"><em>distortion_coeffs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>inlier_error</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>success_probability</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>inlier_markers</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set. </p>
+<p>通过两点RANSAC进一步去除外点并把结果保存在inlier_markers中</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pts1</td><td>first set of points. </td></tr>
+    <tr><td class="paramname">pts2</td><td>second set of points. </td></tr>
+    <tr><td class="paramname">R_p_c</td><td>a rotation matrix takes a vector in the previous camera frame to the current camera frame. </td></tr>
+    <tr><td class="paramname">intrinsics</td><td>intrinsics of the camera. </td></tr>
+    <tr><td class="paramname">distortion_model</td><td>distortion model of the camera. </td></tr>
+    <tr><td class="paramname">distortion_coeffs</td><td>distortion coefficients. </td></tr>
+    <tr><td class="paramname">inlier_error</td><td>acceptable error to be considered as an inlier. </td></tr>
+    <tr><td class="paramname">success_probability</td><td>the required probability of success. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>inlier_flag: 1 for inliers and 0 for outliers.</dd></dl>
+<ol type="1">
+<li>在所有点中随机选择两个点</li>
+<li>用这两个点利用对极约束，根据IMU预测的R，计算出t，然后用t判断每个点是否满足对极约束</li>
+<li>利用上一步选出的所有内点计算一个综合的t，并计算误差</li>
+<li>循环1-3，直到找到一个最优的t <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pts1</td><td>上一帧内图像上的点 </td></tr>
+    <tr><td class="paramname">pts2</td><td>当前帧内图像上的点 </td></tr>
+    <tr><td class="paramname">R_p_c</td><td>上一帧到当前帧的旋转,IMU预测的 </td></tr>
+    <tr><td class="paramname">intrinsics</td><td>内参 </td></tr>
+    <tr><td class="paramname">distortion_model</td><td>畸变模型 </td></tr>
+    <tr><td class="paramname">distortion_coeffs</td><td>畸变参数 </td></tr>
+    <tr><td class="paramname">inlier_error</td><td>内点误差，像素，也就是ransac的阈值 </td></tr>
+    <tr><td class="paramname">success_probability</td><td>成功率, 即有一次选择到都是内点的概率，一般设为0.99 </td></tr>
+    <tr><td class="paramname">inlier_markers</td><td>内外点标志 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点">ImageProcessor::trackFeatures()</a> </dd></dl>
+</li>
+</ol>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a036748f869deba538e5726b2997c9bc2_cgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a036748f869deba538e5726b2997c9bc2_cgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a036748f869deba538e5726b2997c9bc2_cgraph" id="classmsckf__vio_1_1_image_processor_a036748f869deba538e5726b2997c9bc2_cgraph">
+<area shape="rect" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="5,39,191,80"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#ab6523b76ff7dec84af600f0725aded72" title="估计系数，用于算像素单位与归一化平面单位的一个乘数" alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="239,71,424,112"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_a036748f869deba538e5726b2997c9bc2_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_a036748f869deba538e5726b2997c9bc2_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_a036748f869deba538e5726b2997c9bc2_icgraph" id="classmsckf__vio_1_1_image_processor_a036748f869deba538e5726b2997c9bc2_icgraph">
+<area shape="rect" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="939,5,1124,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="705,5,891,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,5,657,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa848b52322df85519e627bf1b6399d24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa848b52322df85519e627bf1b6399d24">&#9670;&nbsp;</a></span>undistortPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::undistortPoints </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pts_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Vec4d &amp;&#160;</td>
+          <td class="paramname"><em>intrinsics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>distortion_model</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Vec4d &amp;&#160;</td>
+          <td class="paramname"><em>distortion_coeffs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; cv::Point2f &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pts_out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Matx33d &amp;&#160;</td>
+          <td class="paramname"><em>rectification_matrix</em> = <code>cv::Matx33d::eye()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Vec4d &amp;&#160;</td>
+          <td class="paramname"><em>new_intrinsics</em> = <code>cv::Vec4d(1,&#160;1,&#160;0,&#160;0)</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>畸变图像中的pts_in点 -&gt; 通过旋转矩阵R转换 -&gt; 另一个图像坐标系中的无畸变归一化坐标 -&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个图像坐标系的无畸变归一化坐标) </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pts_in</td><td>输入像素点(畸变图像中的) </td></tr>
+    <tr><td class="paramname">intrinsics</td><td>相机内参 fx, fy, cx, cy </td></tr>
+    <tr><td class="paramname">distortion_model</td><td>相机畸变模型 </td></tr>
+    <tr><td class="paramname">distortion_coeffs</td><td>畸变系数 k1, k2, p1, p2 </td></tr>
+    <tr><td class="paramname">pts_out</td><td>输出矫正后的像素点（归一化的点） </td></tr>
+    <tr><td class="paramname">rectification_matrix</td><td>R矩阵，默认为单位阵 </td></tr>
+    <tr><td class="paramname">new_intrinsics</td><td>矫正后的内参矩阵, 默认为cv::Vec4d(1, 1, 0, 0) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>不输入rectification_matrix和new_intrinsics时，相当于只是去畸变，得到的是无畸变归一化坐标 </dd></dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_aa848b52322df85519e627bf1b6399d24_icgraph.png" border="0" usemap="#classmsckf__vio_1_1_image_processor_aa848b52322df85519e627bf1b6399d24_icgraph" alt=""/></div>
+<map name="classmsckf__vio_1_1_image_processor_aa848b52322df85519e627bf1b6399d24_icgraph" id="classmsckf__vio_1_1_image_processor_aa848b52322df85519e627bf1b6399d24_icgraph">
+<area shape="rect" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="1172,100,1357,141"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a6257bea2b1464362bdab85d62907741d" title="publish Publish the features on the current image including both the tracked and newly detected ones." alt="" coords="939,5,1124,47"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="939,100,1124,141"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="939,165,1124,207"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,68,657,109"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,68,424,109"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,68,191,109"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="705,35,891,76"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d" title=" " alt="" coords="705,100,891,141"/>
+<area shape="rect" href="classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="705,165,891,207"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a95a9a67dadf9f4e1d3510b6fd8b3d140"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95a9a67dadf9f4e1d3510b6fd8b3d140">&#9670;&nbsp;</a></span>updateFeatureLifetime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessor::updateFeatureLifetime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>没用到，计算特征点的生命周期 </p>
+
+</div>
+</div>
+<h2 class="groupheader">类成员变量说明</h2>
+<a id="a499a592c511d43d4e2d5acce1fbf3f47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a499a592c511d43d4e2d5acce1fbf3f47">&#9670;&nbsp;</a></span>after_matching</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int msckf_vio::ImageProcessor::after_matching</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac5c97ee86a54d2d4e799538af49bd0ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5c97ee86a54d2d4e799538af49bd0ab">&#9670;&nbsp;</a></span>after_ransac</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int msckf_vio::ImageProcessor::after_ransac</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a320bb49aada3921f1af53616b8a6ac88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a320bb49aada3921f1af53616b8a6ac88">&#9670;&nbsp;</a></span>after_tracking</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int msckf_vio::ImageProcessor::after_tracking</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2739e60bfe8fca9f237b3e1ae6bae1d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2739e60bfe8fca9f237b3e1ae6bae1d4">&#9670;&nbsp;</a></span>before_tracking</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int msckf_vio::ImageProcessor::before_tracking</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad23ecc71a326b37fd921d8a372809e93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad23ecc71a326b37fd921d8a372809e93">&#9670;&nbsp;</a></span>cam0_curr_img_ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv_bridge::CvImageConstPtr msckf_vio::ImageProcessor::cam0_curr_img_ptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1be425e2949c02ca614c12ef43834508"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1be425e2949c02ca614c12ef43834508">&#9670;&nbsp;</a></span>cam0_distortion_coeffs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Vec4d msckf_vio::ImageProcessor::cam0_distortion_coeffs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a52d7c010ace8e9372e8d1814c4b303d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52d7c010ace8e9372e8d1814c4b303d4">&#9670;&nbsp;</a></span>cam0_distortion_model</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string msckf_vio::ImageProcessor::cam0_distortion_model</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aae7ee16ed0e78db0774335ff970083e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae7ee16ed0e78db0774335ff970083e4">&#9670;&nbsp;</a></span>cam0_img_sub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">message_filters::Subscriber&lt; sensor_msgs::Image&gt; msckf_vio::ImageProcessor::cam0_img_sub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa43c69cabfc53cf0b617595f83851355"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa43c69cabfc53cf0b617595f83851355">&#9670;&nbsp;</a></span>cam0_intrinsics</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Vec4d msckf_vio::ImageProcessor::cam0_intrinsics</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa774e5ce8b1b44c7f78720f28af92ee6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa774e5ce8b1b44c7f78720f28af92ee6">&#9670;&nbsp;</a></span>cam0_prev_img_ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv_bridge::CvImageConstPtr msckf_vio::ImageProcessor::cam0_prev_img_ptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc4e0d897a597447c8748dd9077fc6af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc4e0d897a597447c8748dd9077fc6af">&#9670;&nbsp;</a></span>cam0_resolution</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Vec2i msckf_vio::ImageProcessor::cam0_resolution</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acea2f7743759f05638148f3a26350025"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acea2f7743759f05638148f3a26350025">&#9670;&nbsp;</a></span>cam1_curr_img_ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv_bridge::CvImageConstPtr msckf_vio::ImageProcessor::cam1_curr_img_ptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a806e8fde57a29f7c84098aa12dd54b85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a806e8fde57a29f7c84098aa12dd54b85">&#9670;&nbsp;</a></span>cam1_distortion_coeffs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Vec4d msckf_vio::ImageProcessor::cam1_distortion_coeffs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad0bd0a96253e5bab40bb5964c14adfef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0bd0a96253e5bab40bb5964c14adfef">&#9670;&nbsp;</a></span>cam1_distortion_model</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string msckf_vio::ImageProcessor::cam1_distortion_model</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4c838dd95b55bd58799eb5efa9a5280b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c838dd95b55bd58799eb5efa9a5280b">&#9670;&nbsp;</a></span>cam1_img_sub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">message_filters::Subscriber&lt; sensor_msgs::Image&gt; msckf_vio::ImageProcessor::cam1_img_sub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad6258ff4e2700c4aa21d5ec4130f10fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6258ff4e2700c4aa21d5ec4130f10fa">&#9670;&nbsp;</a></span>cam1_intrinsics</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Vec4d msckf_vio::ImageProcessor::cam1_intrinsics</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1fbebc2d7b8f85fb9cb520a4841a7d99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fbebc2d7b8f85fb9cb520a4841a7d99">&#9670;&nbsp;</a></span>cam1_resolution</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Vec2i msckf_vio::ImageProcessor::cam1_resolution</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a12699a086cbff99204a376ebfde0b4f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12699a086cbff99204a376ebfde0b4f2">&#9670;&nbsp;</a></span>curr_cam0_pyramid_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;cv::Mat&gt; msckf_vio::ImageProcessor::curr_cam0_pyramid_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abf5e170a4bd5deb4a852cda090a62748"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf5e170a4bd5deb4a852cda090a62748">&#9670;&nbsp;</a></span>curr_cam1_pyramid_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;cv::Mat&gt; msckf_vio::ImageProcessor::curr_cam1_pyramid_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac224a5b3142ad8e8c916a9a3ff4fcb09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac224a5b3142ad8e8c916a9a3ff4fcb09">&#9670;&nbsp;</a></span>curr_features_ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::shared_ptr&lt;<a class="el" href="classmsckf__vio_1_1_image_processor.html#a05c9d3715a9ba9cdbdc5d3ea1a7772d2">GridFeatures</a>&gt; msckf_vio::ImageProcessor::curr_features_ptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6402ecf3551f253a70741606d4870fd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6402ecf3551f253a70741606d4870fd8">&#9670;&nbsp;</a></span>debug_stereo_pub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">image_transport::Publisher msckf_vio::ImageProcessor::debug_stereo_pub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac3a5eccb673851a2d155d83e62416238"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3a5eccb673851a2d155d83e62416238">&#9670;&nbsp;</a></span>detector_ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Ptr&lt;cv::Feature2D&gt; msckf_vio::ImageProcessor::detector_ptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6cae491847050b4996c339ecdf4bffdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cae491847050b4996c339ecdf4bffdd">&#9670;&nbsp;</a></span>feature_lifetime</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;<a class="el" href="classmsckf__vio_1_1_image_processor.html#aa2605b780ef504e0a82483cec58546bf">FeatureIDType</a>, int&gt; msckf_vio::ImageProcessor::feature_lifetime</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1cb13130b2d2de9b3aa5c6e28fea6b22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cb13130b2d2de9b3aa5c6e28fea6b22">&#9670;&nbsp;</a></span>feature_pub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::Publisher msckf_vio::ImageProcessor::feature_pub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5aa40d57441d845fe33bef7f6ba23000"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5aa40d57441d845fe33bef7f6ba23000">&#9670;&nbsp;</a></span>imu_msg_buffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;sensor_msgs::Imu&gt; msckf_vio::ImageProcessor::imu_msg_buffer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe67b167d46075aa6b1d2586f97cdfa2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe67b167d46075aa6b1d2586f97cdfa2">&#9670;&nbsp;</a></span>imu_sub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::Subscriber msckf_vio::ImageProcessor::imu_sub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6cfd8b787e8783fe3426e4c975cafddc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cfd8b787e8783fe3426e4c975cafddc">&#9670;&nbsp;</a></span>is_first_img</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::ImageProcessor::is_first_img</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6570e1a50dff2393c8f9a8ededc3c99f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6570e1a50dff2393c8f9a8ededc3c99f">&#9670;&nbsp;</a></span>next_feature_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmsckf__vio_1_1_image_processor.html#aa2605b780ef504e0a82483cec58546bf">FeatureIDType</a> msckf_vio::ImageProcessor::next_feature_id</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a05feacd11a17b6ce7da1e364b7bdbc77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05feacd11a17b6ce7da1e364b7bdbc77">&#9670;&nbsp;</a></span>nh</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::NodeHandle msckf_vio::ImageProcessor::nh</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a577aa986cdab7bca1d3df41671a86920"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a577aa986cdab7bca1d3df41671a86920">&#9670;&nbsp;</a></span>prev_cam0_pyramid_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;cv::Mat&gt; msckf_vio::ImageProcessor::prev_cam0_pyramid_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6112ece1e389fd2317c094e5452748ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6112ece1e389fd2317c094e5452748ef">&#9670;&nbsp;</a></span>prev_features_ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::shared_ptr&lt;<a class="el" href="classmsckf__vio_1_1_image_processor.html#a05c9d3715a9ba9cdbdc5d3ea1a7772d2">GridFeatures</a>&gt; msckf_vio::ImageProcessor::prev_features_ptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6b0dd384154acf14f2fd6015766672d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b0dd384154acf14f2fd6015766672d8">&#9670;&nbsp;</a></span>processor_config</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmsckf__vio_1_1_image_processor_1_1_processor_config.html">ProcessorConfig</a> msckf_vio::ImageProcessor::processor_config</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac31d47082573e40c32a3b1790858860d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac31d47082573e40c32a3b1790858860d">&#9670;&nbsp;</a></span>R_cam0_imu</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Matx33d msckf_vio::ImageProcessor::R_cam0_imu</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9b033074b2808ab13ed9ca66c80d3868"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b033074b2808ab13ed9ca66c80d3868">&#9670;&nbsp;</a></span>R_cam1_imu</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Matx33d msckf_vio::ImageProcessor::R_cam1_imu</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aafac96c9c2511c7e419ea83604f5cba6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafac96c9c2511c7e419ea83604f5cba6">&#9670;&nbsp;</a></span>stereo_sub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">message_filters::TimeSynchronizer&lt; sensor_msgs::Image, sensor_msgs::Image&gt; msckf_vio::ImageProcessor::stereo_sub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a53d90dc9aff2cf8df895f93521c3d82e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53d90dc9aff2cf8df895f93521c3d82e">&#9670;&nbsp;</a></span>t_cam0_imu</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Vec3d msckf_vio::ImageProcessor::t_cam0_imu</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac50bb7afeb64b7324d0e452e7e9e556d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac50bb7afeb64b7324d0e452e7e9e556d">&#9670;&nbsp;</a></span>t_cam1_imu</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Vec3d msckf_vio::ImageProcessor::t_cam1_imu</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a219c5bd0007417b6dde712276e0724a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a219c5bd0007417b6dde712276e0724a2">&#9670;&nbsp;</a></span>tracking_info_pub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::Publisher msckf_vio::ImageProcessor::tracking_info_pub</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/<a class="el" href="image__processor_8h_source.html">image_processor.h</a></li>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/src/<a class="el" href="image__processor_8cpp.html">image_processor.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespacemsckf__vio.html">msckf_vio</a></li><li class="navelem"><a class="el" href="classmsckf__vio_1_1_image_processor.html">ImageProcessor</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

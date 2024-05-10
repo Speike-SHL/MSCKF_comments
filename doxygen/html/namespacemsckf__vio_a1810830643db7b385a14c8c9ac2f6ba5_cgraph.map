@@ -1,0 +1,4 @@
+<map id="msckf_vio::quaternionMultiplication" name="msckf_vio::quaternionMultiplication">
+<area shape="rect" id="node1" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="5,5,232,32"/>
+<area shape="rect" id="node2" href="$namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="280,5,489,32"/>
+</map>

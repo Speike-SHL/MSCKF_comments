@@ -1,0 +1,51 @@
+\hypertarget{msckf__vio_8h}{}\doxysection{/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/include/msckf\+\_\+vio/msckf\+\_\+vio.h 文件参考}
+\label{msckf__vio_8h}\index{/home/speike/VSLAM/MSCKF\_vio\_ws/src/MSCKF\_comments/include/msckf\_vio/msckf\_vio.h@{/home/speike/VSLAM/MSCKF\_vio\_ws/src/MSCKF\_comments/include/msckf\_vio/msckf\_vio.h}}
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$set$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Dense$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Geometry$>$}\newline
+{\ttfamily \#include $<$boost/shared\+\_\+ptr.\+hpp$>$}\newline
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include $<$sensor\+\_\+msgs/\+Imu.\+h$>$}\newline
+{\ttfamily \#include $<$nav\+\_\+msgs/\+Odometry.\+h$>$}\newline
+{\ttfamily \#include $<$tf/transform\+\_\+broadcaster.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+srvs/\+Trigger.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}imu\+\_\+state.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}cam\+\_\+state.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}feature.\+hpp\char`\"{}}\newline
+{\ttfamily \#include $<$msckf\+\_\+vio/\+Camera\+Measurement.\+h$>$}\newline
+msckf\+\_\+vio.\+h 的引用(Include)关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{msckf__vio_8h__incl}
+\end{center}
+\end{figure}
+此图展示该文件直接或间接的被哪些文件引用了\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{msckf__vio_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{类}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{msckf\+\_\+vio\+::\+Msckf\+Vio}}
+\item 
+struct \mbox{\hyperlink{structmsckf__vio_1_1_msckf_vio_1_1_state_server}{msckf\+\_\+vio\+::\+Msckf\+Vio\+::\+State\+Server}}
+\begin{DoxyCompactList}\small\item\em 管理\+S-\/\+M\+S\+C\+K\+F中的所有状态，包括\+I\+M\+U相关的状态和多个相机的状态 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{命名空间}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemsckf__vio}{msckf\+\_\+vio}}
+\end{DoxyCompactItemize}
+\doxysubsection*{类型定义}
+\begin{DoxyCompactItemize}
+\item 
+typedef Msckf\+Vio\+::\+Ptr \mbox{\hyperlink{namespacemsckf__vio_a019b6a7a582fdad058564216c579f82f}{msckf\+\_\+vio\+::\+Msckf\+Vio\+Ptr}}
+\item 
+typedef Msckf\+Vio\+::\+Const\+Ptr \mbox{\hyperlink{namespacemsckf__vio_a0315f30ef3b83602e6349b3819bae864}{msckf\+\_\+vio\+::\+Msckf\+Vio\+Const\+Ptr}}
+\end{DoxyCompactItemize}

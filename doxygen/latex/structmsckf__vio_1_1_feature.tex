@@ -1,0 +1,337 @@
+\hypertarget{structmsckf__vio_1_1_feature}{}\doxysection{msckf\+\_\+vio\+::Feature结构体 参考}
+\label{structmsckf__vio_1_1_feature}\index{msckf\_vio::Feature@{msckf\_vio::Feature}}
+
+
+\mbox{\hyperlink{structmsckf__vio_1_1_feature}{Feature}} Salient part of an image. Please refer to the Appendix of \char`\"{}\+A Multi-\/\+State Constraint Kalman
+   Filter for Vision-\/aided Inertial Navigation\char`\"{} for how the 3d position of a feature is initialized. 一个特征可以理解为一个三维点，由多帧观测到  
+
+
+
+
+{\ttfamily \#include $<$feature.\+hpp$>$}
+
+
+
+msckf\+\_\+vio\+::Feature 的协作图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{structmsckf__vio_1_1_feature__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{类}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config}{Optimization\+Config}}
+\begin{DoxyCompactList}\small\item\em 优化求解特征点世界系下三维坐标的配置 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmsckf__vio_1_1_feature_a9c551cf33304adc42395e0192c764cfd}{Feature}} ()
+\begin{DoxyCompactList}\small\item\em 构造函数，点\+I\+D，点位置，是否初始化 \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structmsckf__vio_1_1_feature_a21dfec91db487af6caa7654db3ddc3bb}{Feature}} (const \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} \&new\+\_\+id)
+\item 
+void \mbox{\hyperlink{structmsckf__vio_1_1_feature_a0a77dc3abbfb0cf95eea22ddcdcc98c1}{cost}} (const Eigen\+::\+Isometry3d \&T\+\_\+c0\+\_\+ci, const Eigen\+::\+Vector3d \&x, const Eigen\+::\+Vector2d \&z, double \&e) const
+\begin{DoxyCompactList}\small\item\em cost 计算重投影误差（归一化坐标） \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structmsckf__vio_1_1_feature_a21aa6e1b3a43212bea91be949101c327}{jacobian}} (const Eigen\+::\+Isometry3d \&T\+\_\+c0\+\_\+ci, const Eigen\+::\+Vector3d \&x, const Eigen\+::\+Vector2d \&z, Eigen\+::\+Matrix$<$ double, 2, 3 $>$ \&J, Eigen\+::\+Vector2d \&r, double \&w) const
+\begin{DoxyCompactList}\small\item\em jacobian 求一个观测对应的雅可比 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structmsckf__vio_1_1_feature_a8eeba58a017b0ee9a5d74cc667e953ab}{generate\+Initial\+Guess}} (const Eigen\+::\+Isometry3d \&T\+\_\+c1\+\_\+c2, const Eigen\+::\+Vector2d \&z1, const Eigen\+::\+Vector2d \&z2, Eigen\+::\+Vector3d \&p) const
+\begin{DoxyCompactList}\small\item\em generate\+Initial\+Guess Compute the initial guess of the feature\textquotesingle{}s 3d position using only two views. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structmsckf__vio_1_1_feature_a93bccba0f853cd5ef84390d4a41f17e0}{check\+Motion}} (const \mbox{\hyperlink{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}{Cam\+State\+Server}} \&cam\+\_\+states) const
+\begin{DoxyCompactList}\small\item\em 检查输入的相机姿态，确保有足够的平移来进行三角化 \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c}{initialize\+Position}} (const \mbox{\hyperlink{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}{Cam\+State\+Server}} \&cam\+\_\+states)
+\begin{DoxyCompactList}\small\item\em 根据当前所有可用的观测初始化特征点的位置，进行三角化 + L\+M优化 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public 属性}
+\begin{DoxyCompactItemize}
+\item 
+E\+I\+G\+E\+N\+\_\+\+M\+A\+K\+E\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+\+O\+P\+E\+R\+A\+T\+O\+R\+\_\+\+N\+EW typedef long long int \mbox{\hyperlink{structmsckf__vio_1_1_feature_abc5413613134d2ee34a791d177ec30f2}{Feature\+I\+D\+Type}}
+\item 
+\mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} \mbox{\hyperlink{structmsckf__vio_1_1_feature_a931d4ebc04a2c87178cfff466555a9c6}{id}}
+\begin{DoxyCompactList}\small\item\em 特征点唯一的\+ID,long long int \end{DoxyCompactList}\item 
+std\+::map$<$ \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}}, Eigen\+::\+Vector4d, std\+::less$<$ \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} $>$, Eigen\+::aligned\+\_\+allocator$<$ std\+::pair$<$ const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}}, Eigen\+::\+Vector4d $>$ $>$ $>$ \mbox{\hyperlink{structmsckf__vio_1_1_feature_a1a6f79b30bd60d66528393a538618132}{observations}}
+\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_feature_ac006d9767affe836e3cd5207129cff38}{position}}
+\begin{DoxyCompactList}\small\item\em 特征点的3\+D位置，世界坐标系下 \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structmsckf__vio_1_1_feature_a2c037e2caa807ec6abeb1b2224bc8207}{is\+\_\+initialized}}
+\begin{DoxyCompactList}\small\item\em 3d特征点是否初始化, 即是否三角化 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{静态 Public 属性}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} \mbox{\hyperlink{structmsckf__vio_1_1_feature_ac8996367c4703def67bbf823bf3854ce}{next\+\_\+id}} = 0
+\begin{DoxyCompactList}\small\item\em 下一个特征点应该使用的\+ID \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{structmsckf__vio_1_1_feature_a375ed7c3cd0b2ab263389f7bdaf779f1}{observation\+\_\+noise}} = 0.\+01
+\begin{DoxyCompactList}\small\item\em 归一化特征观测的噪声 \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config}{Optimization\+Config}} \mbox{\hyperlink{structmsckf__vio_1_1_feature_ac7ae44e16843e1d6239a1b6245e308a1}{optimization\+\_\+config}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{详细描述}
+\mbox{\hyperlink{structmsckf__vio_1_1_feature}{Feature}} Salient part of an image. Please refer to the Appendix of \char`\"{}\+A Multi-\/\+State Constraint Kalman
+   Filter for Vision-\/aided Inertial Navigation\char`\"{} for how the 3d position of a feature is initialized. 一个特征可以理解为一个三维点，由多帧观测到 
+
+\doxysubsection{构造及析构函数说明}
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a9c551cf33304adc42395e0192c764cfd}\label{structmsckf__vio_1_1_feature_a9c551cf33304adc42395e0192c764cfd}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!Feature@{Feature}}
+\index{Feature@{Feature}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{Feature()}{Feature()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+Feature\+::\+Feature (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+构造函数，点\+I\+D，点位置，是否初始化 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a21dfec91db487af6caa7654db3ddc3bb}\label{structmsckf__vio_1_1_feature_a21dfec91db487af6caa7654db3ddc3bb}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!Feature@{Feature}}
+\index{Feature@{Feature}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{Feature()}{Feature()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+Feature\+::\+Feature (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} \&}]{new\+\_\+id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{成员函数说明}
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a93bccba0f853cd5ef84390d4a41f17e0}\label{structmsckf__vio_1_1_feature_a93bccba0f853cd5ef84390d4a41f17e0}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!checkMotion@{checkMotion}}
+\index{checkMotion@{checkMotion}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{checkMotion()}{checkMotion()}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Feature\+::check\+Motion (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}{Cam\+State\+Server}} \&}]{cam\+\_\+states }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+检查输入的相机姿态，确保有足够的平移来进行三角化 
+
+
+\begin{DoxyParams}{参数}
+{\em cam\+\_\+states} & \+: 所有参与计算的相机位姿 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果输入的相机姿态之间的平移足够，则返回\+True。 
+\end{DoxyReturn}
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structmsckf__vio_1_1_feature_a93bccba0f853cd5ef84390d4a41f17e0_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a0a77dc3abbfb0cf95eea22ddcdcc98c1}\label{structmsckf__vio_1_1_feature_a0a77dc3abbfb0cf95eea22ddcdcc98c1}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!cost@{cost}}
+\index{cost@{cost}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{cost()}{cost()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Feature\+::cost (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Isometry3d \&}]{T\+\_\+c0\+\_\+ci,  }\item[{const Eigen\+::\+Vector3d \&}]{x,  }\item[{const Eigen\+::\+Vector2d \&}]{z,  }\item[{double \&}]{e }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+cost 计算重投影误差（归一化坐标） 
+
+
+\begin{DoxyParams}{参数}
+{\em T\+\_\+c0\+\_\+ci} & 相对位姿，\+Tcic0 第一帧相机在第i帧相机下的位姿 \\
+\hline
+{\em x} & 第一帧相机下的估计的三维点坐标 的逆深度形式(x/z, y/z, 1/z) \\
+\hline
+{\em z} & ci下的真实观测归一化坐标 \\
+\hline
+{\em e} & 误差 \\
+\hline
+\end{DoxyParams}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structmsckf__vio_1_1_feature_a0a77dc3abbfb0cf95eea22ddcdcc98c1_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a8eeba58a017b0ee9a5d74cc667e953ab}\label{structmsckf__vio_1_1_feature_a8eeba58a017b0ee9a5d74cc667e953ab}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!generateInitialGuess@{generateInitialGuess}}
+\index{generateInitialGuess@{generateInitialGuess}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{generateInitialGuess()}{generateInitialGuess()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Feature\+::generate\+Initial\+Guess (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Isometry3d \&}]{T\+\_\+c1\+\_\+c2,  }\item[{const Eigen\+::\+Vector2d \&}]{z1,  }\item[{const Eigen\+::\+Vector2d \&}]{z2,  }\item[{Eigen\+::\+Vector3d \&}]{p }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+generate\+Initial\+Guess Compute the initial guess of the feature\textquotesingle{}s 3d position using only two views. 
+
+generate\+Initial\+Guess 两帧做一次三角化
+
+
+\begin{DoxyParams}{参数}
+{\em T\+\_\+c1\+\_\+c2} & A rigid body transformation taking a vector from c2 frame to c1 frame. \\
+\hline
+{\em z1} & feature observation in c1 frame. \\
+\hline
+{\em z2} & feature observation in c2 frame. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+p\+: Computed feature position in c1 frame.
+\end{DoxyReturn}
+
+\begin{DoxyParams}{参数}
+{\em T\+\_\+c1\+\_\+c2} & 两帧间的相对位姿，c1在c2下的位姿 \\
+\hline
+{\em z1} & c1下的观测 \\
+\hline
+{\em z2} & c2下的观测 都是归一化坐标 \\
+\hline
+{\em p} & 三维点在c1下的坐标 \\
+\hline
+\end{DoxyParams}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structmsckf__vio_1_1_feature_a8eeba58a017b0ee9a5d74cc667e953ab_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c}\label{structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!initializePosition@{initializePosition}}
+\index{initializePosition@{initializePosition}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{initializePosition()}{initializePosition()}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Feature\+::initialize\+Position (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}{Cam\+State\+Server}} \&}]{cam\+\_\+states }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+根据当前所有可用的观测初始化特征点的位置，进行三角化 + L\+M优化 
+
+
+\begin{DoxyParams}{参数}
+{\em cam\+\_\+states} & A map containing the camera poses with its ID as the associated key value. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+The computed 3d position is used to set the position member variable. Note the resulted position is in world frame. 
+
+是否三角化成功 
+\end{DoxyReturn}
+\begin{DoxyNote}{注解}
+Please refer to the Appendix of \char`\"{}\+A Multi-\/\+State Constraint Kalman
+   Filter for Vision-\/aided Inertial Navigation\char`\"{} for how the 3d position of a feature is initialized. 
+\end{DoxyNote}
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=259pt]{structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a21aa6e1b3a43212bea91be949101c327}\label{structmsckf__vio_1_1_feature_a21aa6e1b3a43212bea91be949101c327}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!jacobian@{jacobian}}
+\index{jacobian@{jacobian}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{jacobian()}{jacobian()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Feature\+::jacobian (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Isometry3d \&}]{T\+\_\+c0\+\_\+ci,  }\item[{const Eigen\+::\+Vector3d \&}]{x,  }\item[{const Eigen\+::\+Vector2d \&}]{z,  }\item[{Eigen\+::\+Matrix$<$ double, 2, 3 $>$ \&}]{J,  }\item[{Eigen\+::\+Vector2d \&}]{r,  }\item[{double \&}]{w }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+jacobian 求一个观测对应的雅可比 
+
+
+\begin{DoxyParams}{参数}
+{\em T\+\_\+c0\+\_\+ci} & 相对位姿，\+Tcic0 第一帧相机在第i帧相机下的位姿 \\
+\hline
+{\em x} & 第一帧相机下的估计的三维点坐标 的逆深度形式(x/z, y/z, 1/z) \\
+\hline
+{\em z} & ci下的真实观测归一化坐标 \\
+\hline
+{\em J} & 雅可比 归一化坐标误差相对于三维点的 \\
+\hline
+{\em r} & 误差 \\
+\hline
+{\em w} & 权重，鲁棒核函数 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+是否三角化成功 
+\end{DoxyReturn}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structmsckf__vio_1_1_feature_a21aa6e1b3a43212bea91be949101c327_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{类成员变量说明}
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_abc5413613134d2ee34a791d177ec30f2}\label{structmsckf__vio_1_1_feature_abc5413613134d2ee34a791d177ec30f2}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!FeatureIDType@{FeatureIDType}}
+\index{FeatureIDType@{FeatureIDType}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{FeatureIDType}{FeatureIDType}}
+{\footnotesize\ttfamily E\+I\+G\+E\+N\+\_\+\+M\+A\+K\+E\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+\+O\+P\+E\+R\+A\+T\+O\+R\+\_\+\+N\+EW typedef long long int msckf\+\_\+vio\+::\+Feature\+::\+Feature\+I\+D\+Type}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a931d4ebc04a2c87178cfff466555a9c6}\label{structmsckf__vio_1_1_feature_a931d4ebc04a2c87178cfff466555a9c6}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!id@{id}}
+\index{id@{id}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} msckf\+\_\+vio\+::\+Feature\+::id}
+
+
+
+特征点唯一的\+ID,long long int 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a2c037e2caa807ec6abeb1b2224bc8207}\label{structmsckf__vio_1_1_feature_a2c037e2caa807ec6abeb1b2224bc8207}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!is\_initialized@{is\_initialized}}
+\index{is\_initialized@{is\_initialized}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{is\_initialized}{is\_initialized}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Feature\+::is\+\_\+initialized}
+
+
+
+3d特征点是否初始化, 即是否三角化 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_ac8996367c4703def67bbf823bf3854ce}\label{structmsckf__vio_1_1_feature_ac8996367c4703def67bbf823bf3854ce}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!next\_id@{next\_id}}
+\index{next\_id@{next\_id}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{next\_id}{next\_id}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} msckf\+\_\+vio\+::\+Feature\+::next\+\_\+id = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+下一个特征点应该使用的\+ID 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a375ed7c3cd0b2ab263389f7bdaf779f1}\label{structmsckf__vio_1_1_feature_a375ed7c3cd0b2ab263389f7bdaf779f1}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!observation\_noise@{observation\_noise}}
+\index{observation\_noise@{observation\_noise}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{observation\_noise}{observation\_noise}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Feature\+::observation\+\_\+noise = 0.\+01\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+归一化特征观测的噪声 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_a1a6f79b30bd60d66528393a538618132}\label{structmsckf__vio_1_1_feature_a1a6f79b30bd60d66528393a538618132}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!observations@{observations}}
+\index{observations@{observations}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{observations}{observations}}
+{\footnotesize\ttfamily std\+::map$<$\mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}}, Eigen\+::\+Vector4d, std\+::less$<$\mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}}$>$, Eigen\+::aligned\+\_\+allocator$<$std\+::pair$<$const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}}, Eigen\+::\+Vector4d$>$ $>$ $>$ msckf\+\_\+vio\+::\+Feature\+::observations}
+
+观测，储存当前特征点被哪些相机帧观测到，key为相机帧id，value为该特征点在该相机帧下的归一化坐标 还指定了比较器和分配器用于排序和内存分配，根据id升序排序 \mbox{\Hypertarget{structmsckf__vio_1_1_feature_ac7ae44e16843e1d6239a1b6245e308a1}\label{structmsckf__vio_1_1_feature_ac7ae44e16843e1d6239a1b6245e308a1}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!optimization\_config@{optimization\_config}}
+\index{optimization\_config@{optimization\_config}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{optimization\_config}{optimization\_config}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config}{Feature\+::\+Optimization\+Config}} Feature\+::optimization\+\_\+config\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_ac006d9767affe836e3cd5207129cff38}\label{structmsckf__vio_1_1_feature_ac006d9767affe836e3cd5207129cff38}} 
+\index{msckf\_vio::Feature@{msckf\_vio::Feature}!position@{position}}
+\index{position@{position}!msckf\_vio::Feature@{msckf\_vio::Feature}}
+\doxysubsubsection{\texorpdfstring{position}{position}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d msckf\+\_\+vio\+::\+Feature\+::position}
+
+
+
+特征点的3\+D位置，世界坐标系下 
+
+
+
+该结构体的文档由以下文件生成\+:\begin{DoxyCompactItemize}
+\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/include/msckf\+\_\+vio/\mbox{\hyperlink{feature_8hpp}{feature.\+hpp}}\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/src/\mbox{\hyperlink{msckf__vio_8cpp}{msckf\+\_\+vio.\+cpp}}\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/test/\mbox{\hyperlink{feature__initialization__test_8cpp}{feature\+\_\+initialization\+\_\+test.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,107 @@
+\hypertarget{structmsckf__vio_1_1_feature_1_1_optimization_config}{}\doxysection{msckf\+\_\+vio\+::Feature\+::Optimization\+Config结构体 参考}
+\label{structmsckf__vio_1_1_feature_1_1_optimization_config}\index{msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}}
+
+
+优化求解特征点世界系下三维坐标的配置  
+
+
+
+
+{\ttfamily \#include $<$feature.\+hpp$>$}
+
+\doxysubsection*{Public 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config_a91320fa2b3130adea7b332754a2365a9}{Optimization\+Config}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public 属性}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config_a4bd8688e453d0f5782a87a819f5e16f3}{translation\+\_\+threshold}}
+\begin{DoxyCompactList}\small\item\em 位移是否足够，用于判断点是否能做三角化 \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config_a4abbe630fd65e28a993d5bb902d160a0}{huber\+\_\+epsilon}}
+\begin{DoxyCompactList}\small\item\em huber参数 \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config_abbc35fcf522b69db3d9fa497beeb0f45}{estimation\+\_\+precision}}
+\begin{DoxyCompactList}\small\item\em 迭代更新阈值，优化的每次迭代都会有更新量，这个量如果太小则表示与目标值接近 \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config_a2f246489dd6baaaf955139e5a00029aa}{initial\+\_\+damping}}
+\begin{DoxyCompactList}\small\item\em L\+M算法lambda的初始值 \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config_acec5483da63d88d1e7a548ae0028f609}{outer\+\_\+loop\+\_\+max\+\_\+iteration}}
+\begin{DoxyCompactList}\small\item\em 内外轮最大迭代次数 \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structmsckf__vio_1_1_feature_1_1_optimization_config_aa96a9242723684f180381f0af5448065}{inner\+\_\+loop\+\_\+max\+\_\+iteration}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{详细描述}
+优化求解特征点世界系下三维坐标的配置 
+
+\doxysubsection{构造及析构函数说明}
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_1_1_optimization_config_a91320fa2b3130adea7b332754a2365a9}\label{structmsckf__vio_1_1_feature_1_1_optimization_config_a91320fa2b3130adea7b332754a2365a9}} 
+\index{msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}!OptimizationConfig@{OptimizationConfig}}
+\index{OptimizationConfig@{OptimizationConfig}!msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}}
+\doxysubsubsection{\texorpdfstring{OptimizationConfig()}{OptimizationConfig()}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+Feature\+::\+Optimization\+Config\+::\+Optimization\+Config (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{类成员变量说明}
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_1_1_optimization_config_abbc35fcf522b69db3d9fa497beeb0f45}\label{structmsckf__vio_1_1_feature_1_1_optimization_config_abbc35fcf522b69db3d9fa497beeb0f45}} 
+\index{msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}!estimation\_precision@{estimation\_precision}}
+\index{estimation\_precision@{estimation\_precision}!msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}}
+\doxysubsubsection{\texorpdfstring{estimation\_precision}{estimation\_precision}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Feature\+::\+Optimization\+Config\+::estimation\+\_\+precision}
+
+
+
+迭代更新阈值，优化的每次迭代都会有更新量，这个量如果太小则表示与目标值接近 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_1_1_optimization_config_a4abbe630fd65e28a993d5bb902d160a0}\label{structmsckf__vio_1_1_feature_1_1_optimization_config_a4abbe630fd65e28a993d5bb902d160a0}} 
+\index{msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}!huber\_epsilon@{huber\_epsilon}}
+\index{huber\_epsilon@{huber\_epsilon}!msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}}
+\doxysubsubsection{\texorpdfstring{huber\_epsilon}{huber\_epsilon}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Feature\+::\+Optimization\+Config\+::huber\+\_\+epsilon}
+
+
+
+huber参数 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_1_1_optimization_config_a2f246489dd6baaaf955139e5a00029aa}\label{structmsckf__vio_1_1_feature_1_1_optimization_config_a2f246489dd6baaaf955139e5a00029aa}} 
+\index{msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}!initial\_damping@{initial\_damping}}
+\index{initial\_damping@{initial\_damping}!msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}}
+\doxysubsubsection{\texorpdfstring{initial\_damping}{initial\_damping}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Feature\+::\+Optimization\+Config\+::initial\+\_\+damping}
+
+
+
+L\+M算法lambda的初始值 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_1_1_optimization_config_aa96a9242723684f180381f0af5448065}\label{structmsckf__vio_1_1_feature_1_1_optimization_config_aa96a9242723684f180381f0af5448065}} 
+\index{msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}!inner\_loop\_max\_iteration@{inner\_loop\_max\_iteration}}
+\index{inner\_loop\_max\_iteration@{inner\_loop\_max\_iteration}!msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}}
+\doxysubsubsection{\texorpdfstring{inner\_loop\_max\_iteration}{inner\_loop\_max\_iteration}}
+{\footnotesize\ttfamily int msckf\+\_\+vio\+::\+Feature\+::\+Optimization\+Config\+::inner\+\_\+loop\+\_\+max\+\_\+iteration}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_1_1_optimization_config_acec5483da63d88d1e7a548ae0028f609}\label{structmsckf__vio_1_1_feature_1_1_optimization_config_acec5483da63d88d1e7a548ae0028f609}} 
+\index{msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}!outer\_loop\_max\_iteration@{outer\_loop\_max\_iteration}}
+\index{outer\_loop\_max\_iteration@{outer\_loop\_max\_iteration}!msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}}
+\doxysubsubsection{\texorpdfstring{outer\_loop\_max\_iteration}{outer\_loop\_max\_iteration}}
+{\footnotesize\ttfamily int msckf\+\_\+vio\+::\+Feature\+::\+Optimization\+Config\+::outer\+\_\+loop\+\_\+max\+\_\+iteration}
+
+
+
+内外轮最大迭代次数 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_feature_1_1_optimization_config_a4bd8688e453d0f5782a87a819f5e16f3}\label{structmsckf__vio_1_1_feature_1_1_optimization_config_a4bd8688e453d0f5782a87a819f5e16f3}} 
+\index{msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}!translation\_threshold@{translation\_threshold}}
+\index{translation\_threshold@{translation\_threshold}!msckf\_vio::Feature::OptimizationConfig@{msckf\_vio::Feature::OptimizationConfig}}
+\doxysubsubsection{\texorpdfstring{translation\_threshold}{translation\_threshold}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Feature\+::\+Optimization\+Config\+::translation\+\_\+threshold}
+
+
+
+位移是否足够，用于判断点是否能做三角化 
+
+
+
+该结构体的文档由以下文件生成\+:\begin{DoxyCompactItemize}
+\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/include/msckf\+\_\+vio/\mbox{\hyperlink{feature_8hpp}{feature.\+hpp}}\end{DoxyCompactItemize}

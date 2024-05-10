@@ -1,0 +1,4 @@
+<map id="msckf_vio::ImageProcessor" name="msckf_vio::ImageProcessor">
+<area shape="rect" id="node1" title="ImageProcessor Detects and tracks features in image sequences." alt="" coords="5,109,191,136"/>
+<area shape="rect" id="node2" href="$structmsckf__vio_1_1_image_processor_1_1_processor_config.html" title="ProcessorConfig Configuration parameters for feature detection and tracking." alt="" coords="5,5,191,47"/>
+</map>

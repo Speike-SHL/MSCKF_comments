@@ -1,0 +1,6 @@
+<map id="msckf_vio::MsckfVio::imuCallback" name="msckf_vio::MsckfVio::imuCallback">
+<area shape="rect" id="node1" title="接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推" alt="" coords="5,5,151,47"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#a61d86bf067424803bc2ad162a5c2a237" title="imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计" alt="" coords="199,5,367,47"/>
+<area shape="rect" id="node3" href="$namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="415,13,625,39"/>
+<area shape="rect" id="node4" href="$namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="673,13,883,39"/>
+</map>

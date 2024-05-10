@@ -1,0 +1,595 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>S-MSCKF注释: msckf_vio::IMUState结构体 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">S-MSCKF注释
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('structmsckf__vio_1_1_i_m_u_state.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="#pub-attribs">Public 属性</a> &#124;
+<a href="#pub-static-attribs">静态 Public 属性</a> &#124;
+<a href="structmsckf__vio_1_1_i_m_u_state-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">msckf_vio::IMUState结构体 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>S-MSCKF中IMU状态相关  
+ <a href="structmsckf__vio_1_1_i_m_u_state.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="imu__state_8h_source.html">imu_state.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:a5a64168fe7ba300773e74b0ac20de186"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a5a64168fe7ba300773e74b0ac20de186">IMUState</a> ()</td></tr>
+<tr class="separator:a5a64168fe7ba300773e74b0ac20de186"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63011d3dfb29b611df24cb7580420fc6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a63011d3dfb29b611df24cb7580420fc6">IMUState</a> (const <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> &amp;new_id)</td></tr>
+<tr class="separator:a63011d3dfb29b611df24cb7580420fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public 属性</h2></td></tr>
+<tr class="memitem:a26f4829d2307c3adb26b270de7ab0e5c"><td class="memItemLeft" align="right" valign="top">EIGEN_MAKE_ALIGNED_OPERATOR_NEW typedef long long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a26f4829d2307c3adb26b270de7ab0e5c">StateIDType</a></td></tr>
+<tr class="separator:a26f4829d2307c3adb26b270de7ab0e5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e797ab5041fc5c8a5d8b415aedd8ec7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a7e797ab5041fc5c8a5d8b415aedd8ec7">id</a></td></tr>
+<tr class="memdesc:a7e797ab5041fc5c8a5d8b415aedd8ec7"><td class="mdescLeft">&#160;</td><td class="mdescRight">唯一的IMU状态ID  <a href="structmsckf__vio_1_1_i_m_u_state.html#a7e797ab5041fc5c8a5d8b415aedd8ec7">更多...</a><br /></td></tr>
+<tr class="separator:a7e797ab5041fc5c8a5d8b415aedd8ec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b3f0004a4caf24d7d2aef1c3f03bbc3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a1b3f0004a4caf24d7d2aef1c3f03bbc3">time</a></td></tr>
+<tr class="memdesc:a1b3f0004a4caf24d7d2aef1c3f03bbc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">IMU状态记录的时间  <a href="structmsckf__vio_1_1_i_m_u_state.html#a1b3f0004a4caf24d7d2aef1c3f03bbc3">更多...</a><br /></td></tr>
+<tr class="separator:a1b3f0004a4caf24d7d2aef1c3f03bbc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28c826d5999566d35e389316dd225ec8"><td class="memItemLeft" align="right" valign="top">Eigen::Vector4d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a28c826d5999566d35e389316dd225ec8">orientation</a></td></tr>
+<tr class="memdesc:a28c826d5999566d35e389316dd225ec8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rbw, Take a vector from the world frame to the IMU (body) frame.  <a href="structmsckf__vio_1_1_i_m_u_state.html#a28c826d5999566d35e389316dd225ec8">更多...</a><br /></td></tr>
+<tr class="separator:a28c826d5999566d35e389316dd225ec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83339de307ad0dc7ff6f7d9e176747bc"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a83339de307ad0dc7ff6f7d9e176747bc">position</a></td></tr>
+<tr class="memdesc:a83339de307ad0dc7ff6f7d9e176747bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">twb, Position of the IMU (body) frame in the world frame.  <a href="structmsckf__vio_1_1_i_m_u_state.html#a83339de307ad0dc7ff6f7d9e176747bc">更多...</a><br /></td></tr>
+<tr class="separator:a83339de307ad0dc7ff6f7d9e176747bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86f474dd5ef8a7125a3655555bfa128a"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a86f474dd5ef8a7125a3655555bfa128a">velocity</a></td></tr>
+<tr class="memdesc:a86f474dd5ef8a7125a3655555bfa128a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vwb, Velocity of the IMU (body) frame in the world frame.  <a href="structmsckf__vio_1_1_i_m_u_state.html#a86f474dd5ef8a7125a3655555bfa128a">更多...</a><br /></td></tr>
+<tr class="separator:a86f474dd5ef8a7125a3655555bfa128a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3e536756468a844807ee3db9357e357"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#af3e536756468a844807ee3db9357e357">gyro_bias</a></td></tr>
+<tr class="separator:af3e536756468a844807ee3db9357e357"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac870f12ce60150cac34328b5b19454a4"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#ac870f12ce60150cac34328b5b19454a4">acc_bias</a></td></tr>
+<tr class="separator:ac870f12ce60150cac34328b5b19454a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5333583b1b87e5034cba3ce0ff01868f"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a5333583b1b87e5034cba3ce0ff01868f">R_imu_cam0</a></td></tr>
+<tr class="memdesc:a5333583b1b87e5034cba3ce0ff01868f"><td class="mdescLeft">&#160;</td><td class="mdescRight">左相机坐标系到IMU坐标系的旋转矩阵，外参  <a href="structmsckf__vio_1_1_i_m_u_state.html#a5333583b1b87e5034cba3ce0ff01868f">更多...</a><br /></td></tr>
+<tr class="separator:a5333583b1b87e5034cba3ce0ff01868f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66b5236276d01e2ab9d6f9b488f27dc7"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a66b5236276d01e2ab9d6f9b488f27dc7">t_cam0_imu</a></td></tr>
+<tr class="memdesc:a66b5236276d01e2ab9d6f9b488f27dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">左相机坐标系到IMU坐标系的平移向量，外参  <a href="structmsckf__vio_1_1_i_m_u_state.html#a66b5236276d01e2ab9d6f9b488f27dc7">更多...</a><br /></td></tr>
+<tr class="separator:a66b5236276d01e2ab9d6f9b488f27dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad619ac394e2d329491a7a4d0d516d2c0"><td class="memItemLeft" align="right" valign="top">Eigen::Vector4d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#ad619ac394e2d329491a7a4d0d516d2c0">orientation_null</a></td></tr>
+<tr class="memdesc:ad619ac394e2d329491a7a4d0d516d2c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于可观性约束，可观性矩阵的零空间，实际为存储上次预测时的姿态  <a href="structmsckf__vio_1_1_i_m_u_state.html#ad619ac394e2d329491a7a4d0d516d2c0">更多...</a><br /></td></tr>
+<tr class="separator:ad619ac394e2d329491a7a4d0d516d2c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af030d25ab5ed5c9f6159f6053086214b"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#af030d25ab5ed5c9f6159f6053086214b">position_null</a></td></tr>
+<tr class="memdesc:af030d25ab5ed5c9f6159f6053086214b"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的位置  <a href="structmsckf__vio_1_1_i_m_u_state.html#af030d25ab5ed5c9f6159f6053086214b">更多...</a><br /></td></tr>
+<tr class="separator:af030d25ab5ed5c9f6159f6053086214b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2903cecc49a0b14a7070d47c358daefe"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a2903cecc49a0b14a7070d47c358daefe">velocity_null</a></td></tr>
+<tr class="memdesc:a2903cecc49a0b14a7070d47c358daefe"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的速度  <a href="structmsckf__vio_1_1_i_m_u_state.html#a2903cecc49a0b14a7070d47c358daefe">更多...</a><br /></td></tr>
+<tr class="separator:a2903cecc49a0b14a7070d47c358daefe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+静态 Public 属性</h2></td></tr>
+<tr class="memitem:a96203a566275776ad0a7ad98bcadd571"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a96203a566275776ad0a7ad98bcadd571">next_id</a> = 0</td></tr>
+<tr class="memdesc:a96203a566275776ad0a7ad98bcadd571"><td class="mdescLeft">&#160;</td><td class="mdescRight">下一个IMU状态的ID  <a href="structmsckf__vio_1_1_i_m_u_state.html#a96203a566275776ad0a7ad98bcadd571">更多...</a><br /></td></tr>
+<tr class="separator:a96203a566275776ad0a7ad98bcadd571"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa2d9c0e4405f23f4ea7e58b87e93d71"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#aaa2d9c0e4405f23f4ea7e58b87e93d71">gyro_noise</a> = 0.001</td></tr>
+<tr class="separator:aaa2d9c0e4405f23f4ea7e58b87e93d71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bfc40744ea82f64a2af6939ebfec74f"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a0bfc40744ea82f64a2af6939ebfec74f">acc_noise</a> = 0.01</td></tr>
+<tr class="separator:a0bfc40744ea82f64a2af6939ebfec74f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a468b05afcc02d24dcd51e3b9b8f53c47"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#a468b05afcc02d24dcd51e3b9b8f53c47">gyro_bias_noise</a> = 0.001</td></tr>
+<tr class="separator:a468b05afcc02d24dcd51e3b9b8f53c47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aade8fca6178560ad57d9ec68edff2323"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#aade8fca6178560ad57d9ec68edff2323">acc_bias_noise</a> = 0.01</td></tr>
+<tr class="separator:aade8fca6178560ad57d9ec68edff2323"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab16a43936f2a5b13e0d9e7cd5acacb2f"><td class="memItemLeft" align="right" valign="top">static Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#ab16a43936f2a5b13e0d9e7cd5acacb2f">gravity</a> = Vector3d(0, 0, -<a class="el" href="imu__state_8h.html#a7ef3e798b79749d399b4baf2df8e13dc">GRAVITY_ACCELERATION</a>)</td></tr>
+<tr class="separator:ab16a43936f2a5b13e0d9e7cd5acacb2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1eefddb873c44c22688d25297ad84ca"><td class="memItemLeft" align="right" valign="top">static Eigen::Isometry3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html#ae1eefddb873c44c22688d25297ad84ca">T_imu_body</a> = Isometry3d::Identity()</td></tr>
+<tr class="memdesc:ae1eefddb873c44c22688d25297ad84ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">IMU到机身坐标系的变换矩阵，安装误差，一般为单位矩阵  <a href="structmsckf__vio_1_1_i_m_u_state.html#ae1eefddb873c44c22688d25297ad84ca">更多...</a><br /></td></tr>
+<tr class="separator:ae1eefddb873c44c22688d25297ad84ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>S-MSCKF中IMU状态相关 </p>
+</div><h2 class="groupheader">构造及析构函数说明</h2>
+<a id="a5a64168fe7ba300773e74b0ac20de186"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a64168fe7ba300773e74b0ac20de186">&#9670;&nbsp;</a></span>IMUState() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::IMUState::IMUState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a63011d3dfb29b611df24cb7580420fc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63011d3dfb29b611df24cb7580420fc6">&#9670;&nbsp;</a></span>IMUState() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::IMUState::IMUState </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> &amp;&#160;</td>
+          <td class="paramname"><em>new_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">类成员变量说明</h2>
+<a id="ac870f12ce60150cac34328b5b19454a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac870f12ce60150cac34328b5b19454a4">&#9670;&nbsp;</a></span>acc_bias</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Vector3d msckf_vio::IMUState::acc_bias</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aade8fca6178560ad57d9ec68edff2323"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aade8fca6178560ad57d9ec68edff2323">&#9670;&nbsp;</a></span>acc_bias_noise</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::IMUState::acc_bias_noise = 0.01</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0bfc40744ea82f64a2af6939ebfec74f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bfc40744ea82f64a2af6939ebfec74f">&#9670;&nbsp;</a></span>acc_noise</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::IMUState::acc_noise = 0.01</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab16a43936f2a5b13e0d9e7cd5acacb2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab16a43936f2a5b13e0d9e7cd5acacb2f">&#9670;&nbsp;</a></span>gravity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3d msckf_vio::IMUState::gravity = Vector3d(0, 0, -<a class="el" href="imu__state_8h.html#a7ef3e798b79749d399b4baf2df8e13dc">GRAVITY_ACCELERATION</a>)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af3e536756468a844807ee3db9357e357"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3e536756468a844807ee3db9357e357">&#9670;&nbsp;</a></span>gyro_bias</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Vector3d msckf_vio::IMUState::gyro_bias</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a468b05afcc02d24dcd51e3b9b8f53c47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a468b05afcc02d24dcd51e3b9b8f53c47">&#9670;&nbsp;</a></span>gyro_bias_noise</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::IMUState::gyro_bias_noise = 0.001</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaa2d9c0e4405f23f4ea7e58b87e93d71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa2d9c0e4405f23f4ea7e58b87e93d71">&#9670;&nbsp;</a></span>gyro_noise</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::IMUState::gyro_noise = 0.001</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7e797ab5041fc5c8a5d8b415aedd8ec7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e797ab5041fc5c8a5d8b415aedd8ec7">&#9670;&nbsp;</a></span>id</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> msckf_vio::IMUState::id</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>唯一的IMU状态ID </p>
+
+</div>
+</div>
+<a id="a96203a566275776ad0a7ad98bcadd571"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96203a566275776ad0a7ad98bcadd571">&#9670;&nbsp;</a></span>next_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> msckf_vio::IMUState::next_id = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>下一个IMU状态的ID </p>
+
+</div>
+</div>
+<a id="a28c826d5999566d35e389316dd225ec8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28c826d5999566d35e389316dd225ec8">&#9670;&nbsp;</a></span>orientation</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Vector4d msckf_vio::IMUState::orientation</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Rbw, Take a vector from the world frame to the IMU (body) frame. </p>
+
+</div>
+</div>
+<a id="ad619ac394e2d329491a7a4d0d516d2c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad619ac394e2d329491a7a4d0d516d2c0">&#9670;&nbsp;</a></span>orientation_null</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Vector4d msckf_vio::IMUState::orientation_null</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>用于可观性约束，可观性矩阵的零空间，实际为存储上次预测时的姿态 </p>
+
+</div>
+</div>
+<a id="a83339de307ad0dc7ff6f7d9e176747bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83339de307ad0dc7ff6f7d9e176747bc">&#9670;&nbsp;</a></span>position</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Vector3d msckf_vio::IMUState::position</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>twb, Position of the IMU (body) frame in the world frame. </p>
+
+</div>
+</div>
+<a id="af030d25ab5ed5c9f6159f6053086214b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af030d25ab5ed5c9f6159f6053086214b">&#9670;&nbsp;</a></span>position_null</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Vector3d msckf_vio::IMUState::position_null</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的位置 </p>
+
+</div>
+</div>
+<a id="a5333583b1b87e5034cba3ce0ff01868f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5333583b1b87e5034cba3ce0ff01868f">&#9670;&nbsp;</a></span>R_imu_cam0</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix3d msckf_vio::IMUState::R_imu_cam0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>左相机坐标系到IMU坐标系的旋转矩阵，外参 </p>
+
+</div>
+</div>
+<a id="a26f4829d2307c3adb26b270de7ab0e5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26f4829d2307c3adb26b270de7ab0e5c">&#9670;&nbsp;</a></span>StateIDType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">EIGEN_MAKE_ALIGNED_OPERATOR_NEW typedef long long int msckf_vio::IMUState::StateIDType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a66b5236276d01e2ab9d6f9b488f27dc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66b5236276d01e2ab9d6f9b488f27dc7">&#9670;&nbsp;</a></span>t_cam0_imu</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Vector3d msckf_vio::IMUState::t_cam0_imu</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>左相机坐标系到IMU坐标系的平移向量，外参 </p>
+
+</div>
+</div>
+<a id="ae1eefddb873c44c22688d25297ad84ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1eefddb873c44c22688d25297ad84ca">&#9670;&nbsp;</a></span>T_imu_body</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isometry3d msckf_vio::IMUState::T_imu_body = Isometry3d::Identity()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>IMU到机身坐标系的变换矩阵，安装误差，一般为单位矩阵 </p>
+
+</div>
+</div>
+<a id="a1b3f0004a4caf24d7d2aef1c3f03bbc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b3f0004a4caf24d7d2aef1c3f03bbc3">&#9670;&nbsp;</a></span>time</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::IMUState::time</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>IMU状态记录的时间 </p>
+
+</div>
+</div>
+<a id="a86f474dd5ef8a7125a3655555bfa128a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86f474dd5ef8a7125a3655555bfa128a">&#9670;&nbsp;</a></span>velocity</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Vector3d msckf_vio::IMUState::velocity</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Vwb, Velocity of the IMU (body) frame in the world frame. </p>
+
+</div>
+</div>
+<a id="a2903cecc49a0b14a7070d47c358daefe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2903cecc49a0b14a7070d47c358daefe">&#9670;&nbsp;</a></span>velocity_null</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Vector3d msckf_vio::IMUState::velocity_null</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的速度 </p>
+
+</div>
+</div>
+<hr/>该结构体的文档由以下文件生成:<ul>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/<a class="el" href="imu__state_8h_source.html">imu_state.h</a></li>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/src/<a class="el" href="msckf__vio_8cpp.html">msckf_vio.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespacemsckf__vio.html">msckf_vio</a></li><li class="navelem"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html">IMUState</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

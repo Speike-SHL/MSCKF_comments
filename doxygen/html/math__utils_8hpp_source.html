@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>S-MSCKF注释: /home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/math_utils.hpp 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">S-MSCKF注释
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('math__utils_8hpp_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">math_utils.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="math__utils_8hpp.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * COPYRIGHT AND PERMISSION NOTICE</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Penn Software MSCKF_VIO</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * Copyright (C) 2017 The Trustees of the University of Pennsylvania</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * All rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef MSCKF_VIO_MATH_UTILS_HPP</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define MSCKF_VIO_MATH_UTILS_HPP</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;cmath&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;Eigen/Dense&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacemsckf__vio.html">msckf_vio</a></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61">   24</a></span>&#160;<span class="keyword">inline</span> Eigen::Matrix3d <a class="code" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61">skewSymmetric</a>(<span class="keyword">const</span> Eigen::Vector3d &amp;w)</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    Eigen::Matrix3d w_hat;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    w_hat(0, 0) = 0;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    w_hat(0, 1) = -w(2);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    w_hat(0, 2) = w(1);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    w_hat(1, 0) = w(2);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    w_hat(1, 1) = 0;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    w_hat(1, 2) = -w(0);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    w_hat(2, 0) = -w(1);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    w_hat(2, 1) = w(0);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    w_hat(2, 2) = 0;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">return</span> w_hat;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679">   42</a></span>&#160;<span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679">quaternionNormalize</a>(Eigen::Vector4d &amp;q)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordtype">double</span> norm = q.norm();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    q = q / norm;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5">   54</a></span>&#160;<span class="keyword">inline</span> Eigen::Vector4d <a class="code" href="namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5">quaternionMultiplication</a>(</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">const</span> Eigen::Vector4d &amp;q1,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">const</span> Eigen::Vector4d &amp;q2)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;{</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    Eigen::Matrix4d L;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    L(0, 0) = q1(3);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    L(0, 1) = q1(2);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    L(0, 2) = -q1(1);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    L(0, 3) = q1(0);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    L(1, 0) = -q1(2);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    L(1, 1) = q1(3);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    L(1, 2) = q1(0);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    L(1, 3) = q1(1);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    L(2, 0) = q1(1);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    L(2, 1) = -q1(0);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    L(2, 2) = q1(3);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    L(2, 3) = q1(2);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    L(3, 0) = -q1(0);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    L(3, 1) = -q1(1);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    L(3, 2) = -q1(2);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    L(3, 3) = q1(3);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    Eigen::Vector4d q = L * q2;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679">quaternionNormalize</a>(q);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">return</span> q;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a">   91</a></span>&#160;<span class="keyword">inline</span> Eigen::Vector4d <a class="code" href="namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a">smallAngleQuaternion</a>(</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">const</span> Eigen::Vector3d &amp;dtheta)</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;{</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="comment">// δq ~= (1/2δθ, 1)</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    Eigen::Vector3d dq = dtheta / 2.0;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    Eigen::Vector4d q;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">double</span> dq_square_norm = dq.squaredNorm();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="comment">// 这么做就是为了符合四元数的定义</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="comment">// q(3)的平方+q.head&lt;3&gt;()的平方和的和是1</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">if</span> (dq_square_norm &lt;= 1)</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        q.head&lt;3&gt;() = dq;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        q(3) = std::sqrt(1 - dq_square_norm);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    }</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    {</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        q.head&lt;3&gt;() = dq;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        q(3) = 1;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        q = q / std::sqrt(1 + dq_square_norm);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    }</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordflow">return</span> q;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;}</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9">  126</a></span>&#160;<span class="keyword">inline</span> Eigen::Matrix3d <a class="code" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9">quaternionToRotation</a>(</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keyword">const</span> Eigen::Vector4d &amp;q)</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;{</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keyword">const</span> Eigen::Vector3d &amp;q_vec = q.block(0, 0, 3, 1);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;q4 = q(3);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    Eigen::Matrix3d R =</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        (2 * q4 * q4 - 1) * Eigen::Matrix3d::Identity() -</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        2 * q4 * <a class="code" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61">skewSymmetric</a>(q_vec) +</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        2 * q_vec * q_vec.transpose();</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="comment">// TODO: Is it necessary to use the approximation equation</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="comment">//     (Equation (70)) when the rotation angle is small?</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordflow">return</span> R;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;}</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno"><a class="line" href="namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace">  150</a></span>&#160;<span class="keyword">inline</span> Eigen::Vector4d <a class="code" href="namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace">rotationToQuaternion</a>(</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">const</span> Eigen::Matrix3d &amp;R)</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;{</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    Eigen::Vector4d score;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    score(0) = R(0, 0);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    score(1) = R(1, 1);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    score(2) = R(2, 2);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    score(3) = R.trace();</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keywordtype">int</span> max_row = 0, max_col = 0;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    score.maxCoeff(&amp;max_row, &amp;max_col);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    Eigen::Vector4d q = Eigen::Vector4d::Zero();</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keywordflow">if</span> (max_row == 0)</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    {</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        q(0) = std::sqrt(1 + 2 * R(0, 0) - R.trace()) / 2.0;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        q(1) = (R(0, 1) + R(1, 0)) / (4 * q(0));</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        q(2) = (R(0, 2) + R(2, 0)) / (4 * q(0));</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        q(3) = (R(1, 2) - R(2, 1)) / (4 * q(0));</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    }</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (max_row == 1)</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    {</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        q(1) = std::sqrt(1 + 2 * R(1, 1) - R.trace()) / 2.0;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        q(0) = (R(0, 1) + R(1, 0)) / (4 * q(1));</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        q(2) = (R(1, 2) + R(2, 1)) / (4 * q(1));</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        q(3) = (R(2, 0) - R(0, 2)) / (4 * q(1));</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    }</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (max_row == 2)</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    {</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        q(2) = std::sqrt(1 + 2 * R(2, 2) - R.trace()) / 2.0;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        q(0) = (R(0, 2) + R(2, 0)) / (4 * q(2));</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        q(1) = (R(1, 2) + R(2, 1)) / (4 * q(2));</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        q(3) = (R(0, 1) - R(1, 0)) / (4 * q(2));</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    }</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    {</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        q(3) = std::sqrt(1 + R.trace()) / 2.0;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        q(0) = (R(1, 2) - R(2, 1)) / (4 * q(3));</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        q(1) = (R(2, 0) - R(0, 2)) / (4 * q(3));</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        q(2) = (R(0, 1) - R(1, 0)) / (4 * q(3));</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    }</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keywordflow">if</span> (q(3) &lt; 0)</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        q = -q;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <a class="code" href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679">quaternionNormalize</a>(q);</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="keywordflow">return</span> q;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;}</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;} <span class="comment">// end namespace msckf_vio</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="preprocessor">#endif // MSCKF_VIO_MATH_UTILS_HPP</span></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<div class="ttc" id="anamespacemsckf__vio_html_a8d689b1622675767a13b292e78e40ace"><div class="ttname"><a href="namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace">msckf_vio::rotationToQuaternion</a></div><div class="ttdeci">Eigen::Vector4d rotationToQuaternion(const Eigen::Matrix3d &amp;R)</div><div class="ttdoc">旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion.</div><div class="ttdef"><b>Definition:</b> math_utils.hpp:150</div></div>
+<div class="ttc" id="anamespacemsckf__vio_html"><div class="ttname"><a href="namespacemsckf__vio.html">msckf_vio</a></div><div class="ttdef"><b>Definition:</b> cam_state.h:17</div></div>
+<div class="ttc" id="anamespacemsckf__vio_html_aaf0fc755d0d3c5b59b8eca157ae5cb61"><div class="ttname"><a href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61">msckf_vio::skewSymmetric</a></div><div class="ttdeci">Eigen::Matrix3d skewSymmetric(const Eigen::Vector3d &amp;w)</div><div class="ttdoc">反对称矩阵</div><div class="ttdef"><b>Definition:</b> math_utils.hpp:24</div></div>
+<div class="ttc" id="anamespacemsckf__vio_html_a1810830643db7b385a14c8c9ac2f6ba5"><div class="ttname"><a href="namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5">msckf_vio::quaternionMultiplication</a></div><div class="ttdeci">Eigen::Vector4d quaternionMultiplication(const Eigen::Vector4d &amp;q1, const Eigen::Vector4d &amp;q2)</div><div class="ttdoc">Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法</div><div class="ttdef"><b>Definition:</b> math_utils.hpp:54</div></div>
+<div class="ttc" id="anamespacemsckf__vio_html_afa6ff3990092f7999e51e333220ba679"><div class="ttname"><a href="namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679">msckf_vio::quaternionNormalize</a></div><div class="ttdeci">void quaternionNormalize(Eigen::Vector4d &amp;q)</div><div class="ttdoc">标准化四元数</div><div class="ttdef"><b>Definition:</b> math_utils.hpp:42</div></div>
+<div class="ttc" id="anamespacemsckf__vio_html_a294cc2c50924d54cf548be1b067bd82a"><div class="ttname"><a href="namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a">msckf_vio::smallAngleQuaternion</a></div><div class="ttdeci">Eigen::Vector4d smallAngleQuaternion(const Eigen::Vector3d &amp;dtheta)</div><div class="ttdoc">李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion.</div><div class="ttdef"><b>Definition:</b> math_utils.hpp:91</div></div>
+<div class="ttc" id="anamespacemsckf__vio_html_a84bd0f5d594e685ea07e2b922cf34bb9"><div class="ttname"><a href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9">msckf_vio::quaternionToRotation</a></div><div class="ttdeci">Eigen::Matrix3d quaternionToRotation(const Eigen::Vector4d &amp;q)</div><div class="ttdoc">四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix</div><div class="ttdef"><b>Definition:</b> math_utils.hpp:126</div></div>
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_ebfb6b153c2695f951fb7413b3e875ce.html">msckf_vio</a></li><li class="navelem"><a class="el" href="math__utils_8hpp.html">math_utils.hpp</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

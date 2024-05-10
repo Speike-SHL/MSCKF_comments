@@ -51,6 +51,12 @@ namespace msckf_vio
 
     map<int, double> MsckfVio::chi_squared_test_table;
 
+    /**
+     * @brief MsckfVio构造函数
+     * @param pnh Ros节点句柄
+     * @param is_gravity_set False 设置未初始化重力
+     * @param is_first_img True 设置是第一帧图像
+     */
     MsckfVio::MsckfVio(ros::NodeHandle &pnh) : is_gravity_set(false), is_first_img(true), nh(pnh)
     {
         return;
@@ -195,19 +201,22 @@ namespace msckf_vio
 
     bool MsckfVio::createRosIO()
     {
-        // 发送位姿信息与三维点
+        /// 1. 发布 "odom", 后端计算出的位姿
         odom_pub = nh.advertise<nav_msgs::Odometry>("odom", 10);
+        /// 2. 发布 "feature_point_cloud", 后端计算出的世界系下的点云
         feature_pub = nh.advertise<sensor_msgs::PointCloud2>("feature_point_cloud", 10);
 
-        // 重置
+        /// 3. 服务，重置后端
         reset_srv = nh.advertiseService("reset", &MsckfVio::resetCallback, this);
 
-        // 接收imu数据与前端跟踪的特征
+        /// 4. 接收 "imu", 接收IMU数据。@see MsckfVio::imuCallback(const sensor_msgs::ImuConstPtr &msg)
         imu_sub = nh.subscribe("imu", 100, &MsckfVio::imuCallback, this);
+        /// 5. 接收 "features", 前端特征点数据。 @see MsckfVio::featureCallback(const CameraMeasurementConstPtr &msg)
         feature_sub = nh.subscribe("features", 40, &MsckfVio::featureCallback, this);
 
-        // 接受真值，动作捕捉发来的
+        /// 6. 接收 "mocap_odom"，真值数据，未用到
         mocap_odom_sub = nh.subscribe("mocap_odom", 10, &MsckfVio::mocapOdomCallback, this);
+        /// 7. 发布 "gt_odom"，发布由mocap_odom 算出的真实位姿，未用到
         mocap_odom_pub = nh.advertise<nav_msgs::Odometry>("gt_odom", 1);
 
         return true;
@@ -215,12 +224,12 @@ namespace msckf_vio
 
     bool MsckfVio::initialize()
     {
-        // 1. 加载参数
+        /// 1. 加载参数 @see MsckfVio::loadParameters()
         if (!loadParameters())
             return false;
         ROS_INFO("Finish loading ROS parameters...");
 
-        // imu观测的协方差
+        /// 2. 设置imu观测的协方差
         state_server.continuous_noise_cov =
             Matrix<double, 12, 12>::Zero();
         state_server.continuous_noise_cov.block<3, 3>(0, 0) =
@@ -241,7 +250,7 @@ namespace msckf_vio
                 boost::math::quantile(chi_squared_dist, 0.05);
         }
 
-        // 2. 接收与发布
+        /// 3. 创建后端话题的接受与发布 @see MsckfVio::createRosIO()
         if (!createRosIO())
             return false;
         ROS_INFO("Finish creating ROS IO...");
@@ -408,17 +417,14 @@ namespace msckf_vio
      */
     void MsckfVio::featureCallback(const CameraMeasurementConstPtr &msg)
     {
-        // 1. 必须经过imu初始化
+        /// 1. 必须经过imu(重力)初始化才能继续进行
         if (!is_gravity_set)
         {
             ROS_WARN_THROTTLE(1, "Wait for the IMU initialization!");
             return;
         }
 
-        // Start the system if the first image is received.
-        // The frame where the first image is received will be
-        // the origin.
-        // 开始递推状态的第一个时刻为 初始化后的第一帧特征
+        /// 2. 接收到第一帧图像后，记录时间，后端开始工作
         if (is_first_img)
         {
             is_first_img = false;
@@ -429,23 +435,20 @@ namespace msckf_vio
         static double max_processing_time = 0.0;
         static int critical_time_cntr = 0;
         double processing_start_time = ros::Time::now().toSec();
-
-        // Propogate the IMU state.
-        // that are received before the image msg.
-        // 2. imu积分
+        
+        /// 3. 批量IMU积分，取出上次IMU积分时间到当前特征接收时间中的IMU数据进行积分
+        /// @see MsckfVio::batchImuProcessing(const double &time_bound)
         ros::Time start_time = ros::Time::now();
         batchImuProcessing(msg->header.stamp.toSec());
         double imu_processing_time = (ros::Time::now() - start_time).toSec();
 
-        // Augment the state vector.
-        // 3. 根据imu积分递推出的状态计算相机状态，更新协方差矩阵
+        /// 4. 状态增广，包括名义状态增广和误差协方差矩阵P的增广，主要是增广新的相机状态
+        /// @see MsckfVio::stateAugmentation(const double &time)
         start_time = ros::Time::now();
         stateAugmentation(msg->header.stamp.toSec());
         double state_augmentation_time = (ros::Time::now() - start_time).toSec();
 
-        // Add new observations for existing features or new
-        // features in the map server.
-        // 4. 添加新的观测
+        /// 5. 向map_server中添加新的特征，和旧特征在新相机帧上的观测
         start_time = ros::Time::now();
         addFeatureObservations(msg);
         double add_observations_time = (ros::Time::now() - start_time).toSec();
@@ -572,16 +575,15 @@ namespace msckf_vio
 
     /**
      * @brief imu积分，批量处理imu数据
-     * @param  time_bound 处理到这个时间
+     * @param  time_bound 从state_server.imu_state.time上次处理到这个时间
      */
     void MsckfVio::batchImuProcessing(const double &time_bound)
     {
-        // Counter how many IMU msgs in the buffer are used.
         int used_imu_msg_cntr = 0;
 
-        // 取出两帧之间的imu数据去递推位姿
-        // 这里有个细节问题，time_bound表示新图片的时间戳，
-        // 但是IMU就积分到了距time_bound最近的一个，导致时间会差一点点
+        /// 1. 遍历imu_msg_buffer中的所有imu数据，找到state_server.imu_state.time到
+        /// 当前前端特征时间之间的imu数据，然后进行状态递推
+        /// @see MsckfVio::processModel(const double &time, const Eigen::Vector3d &m_gyro, const Eigen::Vector3d &m_acc)
         for (const auto &imu_msg : imu_msg_buffer)
         {
             double imu_time = imu_msg.header.stamp.toSec();
@@ -605,11 +607,10 @@ namespace msckf_vio
             ++used_imu_msg_cntr;
         }
 
-        // Set the state ID for the new IMU state.
-        // 新的状态，更新id，相机状态的id也根据这个赋值
+        /// 2. 更新IMU状态的id  state_server.imu_state.id, 相机状态id也根据这个赋值
         state_server.imu_state.id = IMUState::next_id++;
 
-        // 删掉已经用过
+        /// 3. 从imu_msg_buffer中删除已经使用过的数据
         imu_msg_buffer.erase(
             imu_msg_buffer.begin(),
             imu_msg_buffer.begin() + used_imu_msg_cntr);
@@ -618,23 +619,23 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 来一个新的imu数据更新协方差矩阵与状态积分
-     * @param  time 新数据时间戳
+     * @brief 对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估
+     * @param  time IMU数据的时间戳
      * @param  m_gyro 角速度
      * @param  m_acc 加速度
      */
     void MsckfVio::processModel(
         const double &time, const Vector3d &m_gyro, const Vector3d &m_acc)
     {
-        // 以引用的方式取出
+        /// 1. 引用的方式取出imu状态
         IMUState &imu_state = state_server.imu_state;
 
-        // 1. imu读数减掉偏置
+        /// 2. 角速度和加速度减去偏置，计算dt
         Vector3d gyro = m_gyro - imu_state.gyro_bias;
         Vector3d acc = m_acc - imu_state.acc_bias; // acc_bias 初始值是0
         double dtime = time - imu_state.time;
 
-        // 2. 计算F G矩阵
+        /// 3. 计算F阵和G阵，见笔记pdf中《IMU误差状态方程总结》
         // Compute discrete transition and noise covariance matrix
         Matrix<double, 21, 21> F = Matrix<double, 21, 21>::Zero();
         Matrix<double, 21, 12> G = Matrix<double, 21, 12>::Zero();
@@ -682,18 +683,18 @@ namespace msckf_vio
         Matrix<double, 21, 21> Fdt_square = Fdt * Fdt;
         Matrix<double, 21, 21> Fdt_cube = Fdt_square * Fdt;
 
-        // 3. 计算转移矩阵Phi矩阵
-        // 论文Indirect Kalman Filter for 3D Attitude Estimation 中 公式164
-        // 其实就是三阶的泰勒展开
+        /// 3. 计算转移矩阵Phi矩阵，使用三阶近似，当dt<0.01s时，这个近似是足够准确的
+        /// 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》
         Matrix<double, 21, 21> Phi =
             Matrix<double, 21, 21>::Identity() + Fdt +
             0.5 * Fdt_square + (1.0 / 6.0) * Fdt_cube;
 
-        // 4. 四阶龙格库塔积分预测状态
+        /// 4. 四阶龙格库塔积分预测名义状态，旋转，速度，位置 
+        /// @see MsckfVio::predictNewState(const double &dt, const Eigen::Vector3d &gyro, const Eigen::Vector3d &acc)
         predictNewState(dtime, gyro, acc);
 
-        // 5. Observability-constrained VINS 可观性约束
-        // Modify the transition matrix
+        /// 5. 可观性约束OC，通过修改Phi阵，保证零空间秩为4。
+        /// 见论文《Observability-constrained Vision-aided Inertial Navigation》中公式20~23
         // 5.1 修改phi_11
         // imu_state.orientation_null为上一个imu数据递推后保存的
         // 这块可能会有疑问，因为当上一个imu假如被观测更新了，
@@ -711,7 +712,6 @@ namespace msckf_vio
         // 5.2 修改phi_31
         Vector3d u = R_kk_1 * IMUState::gravity;
         RowVector3d s = (u.transpose() * u).inverse() * u.transpose();
-
         Matrix3d A1 = Phi.block<3, 3>(6, 0);
         Vector3d w1 =
             skewSymmetric(imu_state.velocity_null - imu_state.velocity) * IMUState::gravity;
@@ -726,14 +726,14 @@ namespace msckf_vio
             IMUState::gravity;
         Phi.block<3, 3>(12, 0) = A2 - (A2 * u - w2) * s;
 
-        // Propogate the state covariance matrix.
-        // 6. 使用0空间约束后的phi计算积分后的新的协方差矩阵
+        /// 6. 使用OC后的Phi阵计算过程噪声协方差矩阵Q, 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》
         Matrix<double, 21, 21> Q =
             Phi * G * state_server.continuous_noise_cov * G.transpose() * Phi.transpose() * dtime;
+
+        /// 7. 预测系统误差状态协方差矩阵P，如果有相机状态量，那么也更新imu状态量与相机状态量交叉的部分
+        /// 见笔记pdf中《预测系统状态协方差矩阵P》
         state_server.state_cov.block<21, 21>(0, 0) =
             Phi * state_server.state_cov.block<21, 21>(0, 0) * Phi.transpose() + Q;
-
-        // 7. 如果有相机状态量，那么更新imu状态量与相机状态量交叉的部分
         if (state_server.cam_states.size() > 0)
         {
             // 起点是0 21  然后是21行 state_server.state_cov.cols() - 21 列的矩阵
@@ -747,24 +747,23 @@ namespace msckf_vio
                 Phi.transpose();
         }
 
-        // 8. 强制对称，因为协方差矩阵就是对称的
+        /// 8. 强制对称，因为协方差矩阵就是对称的
         MatrixXd state_cov_fixed =
             (state_server.state_cov + state_server.state_cov.transpose()) / 2.0;
         state_server.state_cov = state_cov_fixed;
 
-        // Update the state correspondes to null space.
-        // 9. 更新零空间，供下个IMU来了使用
+        /// 9. 更新imu旋转，位置和速度的零空间，其实就是记录此次状态预估后的状态，用于下一次对Phi进行OC
         imu_state.orientation_null = imu_state.orientation;
         imu_state.position_null = imu_state.position;
         imu_state.velocity_null = imu_state.velocity;
 
-        // Update the state info
+        /// 10. 更新imu状态的时间state_server.imu_state.time
         state_server.imu_state.time = time;
         return;
     }
 
     /**
-     * @brief 四阶龙格库塔对IMU状态递推
+     * @brief 四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》
      * @param  dt 相对上一个数据的间隔时间
      * @param  gyro 角速度减去偏置后的
      * @param  acc 加速度减去偏置后的
@@ -842,18 +841,17 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 根据时间分裂出相机状态
+     * @brief 状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P
      * @param  time 图片的时间戳
      */
     void MsckfVio::stateAugmentation(const double &time)
     {
-        // 1. 取出当前更新好的imu状态量
-        // 1.1 取出状态量中的外参，这个东西是参与滤波的
-        // 老规矩R_i_c 按照常理我们应该叫他 Rci imu到cam0的旋转
+        /// 1. 根据现在的IMU状态以及IMU和左目相机的外参，预估出当前相机的名义状态
+        /// 见笔记pdf中《名义状态扩增》
+        // 1.1 取出状态量中的外参，老规矩R_i_c 按照常理我们应该叫他 Rci imu到cam0的旋转
         const Matrix3d &R_i_c = state_server.imu_state.R_imu_cam0;
         const Vector3d &t_c_i = state_server.imu_state.t_cam0_imu;
 
-        // Add a new camera state to the state server.
         // 1.2 取出imu旋转平移，按照外参，将这个时刻cam0的位姿算出来
         Matrix3d R_w_i = quaternionToRotation(
             state_server.imu_state.orientation);
@@ -861,13 +859,13 @@ namespace msckf_vio
         Vector3d t_c_w = state_server.imu_state.position +
                          R_w_i.transpose() * t_c_i;
 
-        // 2. 注册新的相机状态到状态库中
-        // 嗯。。。说人话就是找个记录的，不然咋更新
+        /// 2. 注册新的相机状态到状态库state_server中, 
+        /// 包括id(使用此时的imu状态id作为该帧相机的id), 时间戳，位姿
+        /// QUERY 以及用于OC的零空间(第一次相机帧估计的数据)
         state_server.cam_states[state_server.imu_state.id] =
             CAMState(state_server.imu_state.id);
         CAMState &cam_state = state_server.cam_states[state_server.imu_state.id];
 
-        // 严格上讲这个时间不对，但是几乎没影响
         cam_state.time = time;
         cam_state.orientation = rotationToQuaternion(R_w_c);
         cam_state.position = t_c_w;
@@ -876,12 +874,7 @@ namespace msckf_vio
         cam_state.orientation_null = cam_state.orientation;
         cam_state.position_null = cam_state.position;
 
-        // Update the covariance matrix of the state.
-        // To simplify computation, the matrix J below is the nontrivial block
-        // in Equation (16) in "A Multi-State Constraint Kalman Filter for Vision
-        // -aided Inertial Navigation".
-
-        // 3. 这个雅可比可以认为是cam0位姿相对于imu的状态量的求偏导
+        /// 3. 计算用于增广协方差矩阵P的雅可比矩阵J，见笔记pdf中《求雅可比矩阵 J_I》
         // 此时我们首先要知道相机位姿是 Rcw  twc
         // Rcw = Rci * Riw   twc = twi + Rwi * tic
         Matrix<double, 6, 21> J = Matrix<double, 6, 21>::Zero();
@@ -916,7 +909,7 @@ namespace msckf_vio
         // twc对tic的左扰动导数
         J.block<3, 3>(3, 18) = R_w_i.transpose();
 
-        // 4. 增广协方差矩阵
+        /// 4. 增广误差协方差矩阵P，见笔记pdf中《误差协方差矩阵增广》
         // 简单地说就是原来的协方差是 21 + 6n 维的，现在新来了一个伙计，维度要扩了
         // 并且对应位置的值要根据雅可比跟这个时刻（也就是最新时刻）的imu协方差计算
         // 4.1 扩展矩阵大小 conservativeResize函数不改变原矩阵对应位置的数值
@@ -925,7 +918,6 @@ namespace msckf_vio
         size_t old_cols = state_server.state_cov.cols();
         state_server.state_cov.conservativeResize(old_rows + 6, old_cols + 6);
 
-        // Rename some matrix blocks for convenience.
         // imu的协方差矩阵
         const Matrix<double, 21, 21> &P11 =
             state_server.state_cov.block<21, 21>(0, 0);
@@ -947,8 +939,7 @@ namespace msckf_vio
         state_server.state_cov.block<6, 6>(old_rows, old_cols) =
             J * P11 * J.transpose();
 
-        // Fix the covariance to be symmetric
-        // 强制对称
+        /// 5. 进行强制对称
         MatrixXd state_cov_fixed = (state_server.state_cov +
                                     state_server.state_cov.transpose()) /
                                    2.0;
@@ -958,25 +949,21 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 添加特征点观测
-     * @param  msg 前端发来的特征点信息，里面包含了时间，左右目上的角点及其id（严格意义上不能说是特征点）
+     * @brief 向map_server中添加新的特征，和旧特征在新相机帧上的观测
+     * @param  msg 前端发来的当前帧的所有特征以及对应的归一化坐标
      */
     void MsckfVio::addFeatureObservations(
         const CameraMeasurementConstPtr &msg)
-    {
-        // 这是个long long int 嗯。。。。直接当作int理解吧
-        // 这个id会在 batchImuProcessing 更新
+    {   
+        /// 1. 取出当前imu状态的id作为当前相机帧的id
         StateIDType state_id = state_server.imu_state.id;
 
-        // 1. 获取当前窗口内特征点数量
+        /// 2. 获取当前地图内特征点的数量
         int curr_feature_num = map_server.size();
         int tracked_feature_num = 0;
 
-        // Add new observations for existing features or new
-        // features in the map server.
-        // 2. 添加新来的点，做的花里胡哨，其实就是在现有的特征管理里面找，
-        // id已存在说明是跟踪的点，在已有的上面更新
-        // id不存在说明新来的点，那么就新添加一个
+        /// 3. 若此次前端传来的特征点在地图中没有，那么就添加新的特征点
+        /// 否则就更新旧特征点的观测
         for (const auto &feature : msg->features)
         {
             if (map_server.find(feature.id) == map_server.end())
@@ -997,7 +984,7 @@ namespace msckf_vio
             }
         }
 
-        // 这个东西计算了当前进来的跟踪的点中在总数里面的占比（进来的点有可能是新提的）
+        /// 4. 计算跟踪率。当前帧前端进来的所有点中，有多少是已经在地图中的
         tracking_rate =
             static_cast<double>(tracked_feature_num) /
             static_cast<double>(curr_feature_num);

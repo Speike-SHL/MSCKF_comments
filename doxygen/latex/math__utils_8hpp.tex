@@ -1,0 +1,38 @@
+\hypertarget{math__utils_8hpp}{}\doxysection{/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/include/msckf\+\_\+vio/math\+\_\+utils.hpp 文件参考}
+\label{math__utils_8hpp}\index{/home/speike/VSLAM/MSCKF\_vio\_ws/src/MSCKF\_comments/include/msckf\_vio/math\_utils.hpp@{/home/speike/VSLAM/MSCKF\_vio\_ws/src/MSCKF\_comments/include/msckf\_vio/math\_utils.hpp}}
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Dense$>$}\newline
+math\+\_\+utils.\+hpp 的引用(Include)关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=229pt]{math__utils_8hpp__incl}
+\end{center}
+\end{figure}
+此图展示该文件直接或间接的被哪些文件引用了\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{math__utils_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{命名空间}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemsckf__vio}{msckf\+\_\+vio}}
+\end{DoxyCompactItemize}
+\doxysubsection*{函数}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Matrix3d \mbox{\hyperlink{namespacemsckf__vio_aaf0fc755d0d3c5b59b8eca157ae5cb61}{msckf\+\_\+vio\+::skew\+Symmetric}} (const Eigen\+::\+Vector3d \&w)
+\begin{DoxyCompactList}\small\item\em 反对称矩阵 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespacemsckf__vio_afa6ff3990092f7999e51e333220ba679}{msckf\+\_\+vio\+::quaternion\+Normalize}} (Eigen\+::\+Vector4d \&q)
+\begin{DoxyCompactList}\small\item\em 标准化四元数 \end{DoxyCompactList}\item 
+Eigen\+::\+Vector4d \mbox{\hyperlink{namespacemsckf__vio_a1810830643db7b385a14c8c9ac2f6ba5}{msckf\+\_\+vio\+::quaternion\+Multiplication}} (const Eigen\+::\+Vector4d \&q1, const Eigen\+::\+Vector4d \&q2)
+\begin{DoxyCompactList}\small\item\em Perform q1 $\ast$ q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法 \end{DoxyCompactList}\item 
+Eigen\+::\+Vector4d \mbox{\hyperlink{namespacemsckf__vio_a294cc2c50924d54cf548be1b067bd82a}{msckf\+\_\+vio\+::small\+Angle\+Quaternion}} (const Eigen\+::\+Vector3d \&dtheta)
+\begin{DoxyCompactList}\small\item\em 李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix3d \mbox{\hyperlink{namespacemsckf__vio_a84bd0f5d594e685ea07e2b922cf34bb9}{msckf\+\_\+vio\+::quaternion\+To\+Rotation}} (const Eigen\+::\+Vector4d \&q)
+\begin{DoxyCompactList}\small\item\em 四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix \end{DoxyCompactList}\item 
+Eigen\+::\+Vector4d \mbox{\hyperlink{namespacemsckf__vio_a8d689b1622675767a13b292e78e40ace}{msckf\+\_\+vio\+::rotation\+To\+Quaternion}} (const Eigen\+::\+Matrix3d \&R)
+\begin{DoxyCompactList}\small\item\em 旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion. \end{DoxyCompactList}\end{DoxyCompactItemize}

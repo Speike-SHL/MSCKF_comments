@@ -1,0 +1,88 @@
+.TH "msckf_vio::CAMState" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+msckf_vio::CAMState \- 储存相机状态，包括相机id, 时间，姿态Rcw，位置twc，零空间姿态，零空间位置，和两个相机间的外参  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <cam_state\&.h>\fP
+.SS "Public 成员函数"
+
+.in +1c
+.ti -1c
+.RI "\fBCAMState\fP ()"
+.br
+.ti -1c
+.RI "\fBCAMState\fP (const \fBStateIDType\fP &new_id)"
+.br
+.in -1c
+.SS "Public 属性"
+
+.in +1c
+.ti -1c
+.RI "EIGEN_MAKE_ALIGNED_OPERATOR_NEW \fBStateIDType\fP \fBid\fP"
+.br
+.ti -1c
+.RI "double \fBtime\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector4d \fBorientation\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBposition\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector4d \fBorientation_null\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBposition_null\fP"
+.br
+.in -1c
+.SS "静态 Public 属性"
+
+.in +1c
+.ti -1c
+.RI "static Eigen::Isometry3d \fBT_cam0_cam1\fP = Isometry3d::Identity()"
+.br
+.in -1c
+.SH "详细描述"
+.PP 
+储存相机状态，包括相机id, 时间，姿态Rcw，位置twc，零空间姿态，零空间位置，和两个相机间的外参 
+
+
+.PP
+\fB注解\fP
+.RS 4
+位置是相机坐标系在世界坐标系下的位置；姿态是世界坐标系到相机坐标系的旋转 
+.RE
+.PP
+
+.SH "构造及析构函数说明"
+.PP 
+.SS "msckf_vio::CAMState::CAMState ()\fC [inline]\fP"
+
+.SS "msckf_vio::CAMState::CAMState (const \fBStateIDType\fP & new_id)\fC [inline]\fP"
+
+.SH "类成员变量说明"
+.PP 
+.SS "EIGEN_MAKE_ALIGNED_OPERATOR_NEW \fBStateIDType\fP msckf_vio::CAMState::id"
+
+.SS "Eigen::Vector4d msckf_vio::CAMState::orientation"
+
+.SS "Eigen::Vector4d msckf_vio::CAMState::orientation_null"
+
+.SS "Eigen::Vector3d msckf_vio::CAMState::position"
+
+.SS "Eigen::Vector3d msckf_vio::CAMState::position_null"
+
+.SS "Isometry3d CAMState::T_cam0_cam1 = Isometry3d::Identity()\fC [static]\fP"
+
+.SS "double msckf_vio::CAMState::time"
+
+
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.

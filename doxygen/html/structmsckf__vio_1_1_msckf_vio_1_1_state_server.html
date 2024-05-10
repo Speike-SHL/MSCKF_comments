@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>S-MSCKF注释: msckf_vio::MsckfVio::StateServer结构体 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">S-MSCKF注释
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('structmsckf__vio_1_1_msckf_vio_1_1_state_server.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-attribs">Public 属性</a> &#124;
+<a href="structmsckf__vio_1_1_msckf_vio_1_1_state_server-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">msckf_vio::MsckfVio::StateServer结构体 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>管理S-MSCKF中的所有状态，包括IMU相关的状态和多个相机的状态  
+ <a href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html#details">更多...</a></p>
+<div class="dynheader">
+msckf_vio::MsckfVio::StateServer 的协作图:</div>
+<div class="dyncontent">
+<div class="center"><img src="structmsckf__vio_1_1_msckf_vio_1_1_state_server__coll__graph.png" border="0" usemap="#msckf__vio_1_1_msckf_vio_1_1_state_server_coll__map" alt="Collaboration graph"/></div>
+<map name="msckf__vio_1_1_msckf_vio_1_1_state_server_coll__map" id="msckf__vio_1_1_msckf_vio_1_1_state_server_coll__map">
+<area shape="rect" title="管理S&#45;MSCKF中的所有状态，包括IMU相关的状态和多个相机的状态" alt="" coords="6,95,151,136"/>
+<area shape="rect" href="structmsckf__vio_1_1_i_m_u_state.html" title="S&#45;MSCKF中IMU状态相关" alt="" coords="5,5,152,32"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">图例</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public 属性</h2></td></tr>
+<tr class="memitem:a140701cc498b7b20170211855068289d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html">IMUState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html#a140701cc498b7b20170211855068289d">imu_state</a></td></tr>
+<tr class="memdesc:a140701cc498b7b20170211855068289d"><td class="mdescLeft">&#160;</td><td class="mdescRight">状态量中IMU相关的状态  <a href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html#a140701cc498b7b20170211855068289d">更多...</a><br /></td></tr>
+<tr class="separator:a140701cc498b7b20170211855068289d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bf329dee246596d1548044ac3e9e174"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemsckf__vio.html#a4a1c4cc31c9ba4dadceb295a291d3510">CamStateServer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html#a5bf329dee246596d1548044ac3e9e174">cam_states</a></td></tr>
+<tr class="memdesc:a5bf329dee246596d1548044ac3e9e174"><td class="mdescLeft">&#160;</td><td class="mdescRight">状态量中相机相关的状态，是一个map容器，key为相机帧id, 值为CAMState  <a href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html#a5bf329dee246596d1548044ac3e9e174">更多...</a><br /></td></tr>
+<tr class="separator:a5bf329dee246596d1548044ac3e9e174"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf81d654de5d28115dcd48d0b562b566"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html#abf81d654de5d28115dcd48d0b562b566">state_cov</a></td></tr>
+<tr class="memdesc:abf81d654de5d28115dcd48d0b562b566"><td class="mdescLeft">&#160;</td><td class="mdescRight">所有状态的误差协方差矩阵P  <a href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html#abf81d654de5d28115dcd48d0b562b566">更多...</a><br /></td></tr>
+<tr class="separator:abf81d654de5d28115dcd48d0b562b566"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d1fda019cc5fb89da243401587c27d8"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; double, 12, 12 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html#a1d1fda019cc5fb89da243401587c27d8">continuous_noise_cov</a></td></tr>
+<tr class="memdesc:a1d1fda019cc5fb89da243401587c27d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">噪声协方差矩阵  <a href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html#a1d1fda019cc5fb89da243401587c27d8">更多...</a><br /></td></tr>
+<tr class="separator:a1d1fda019cc5fb89da243401587c27d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>管理S-MSCKF中的所有状态，包括IMU相关的状态和多个相机的状态 </p>
+</div><h2 class="groupheader">类成员变量说明</h2>
+<a id="a5bf329dee246596d1548044ac3e9e174"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bf329dee246596d1548044ac3e9e174">&#9670;&nbsp;</a></span>cam_states</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemsckf__vio.html#a4a1c4cc31c9ba4dadceb295a291d3510">CamStateServer</a> msckf_vio::MsckfVio::StateServer::cam_states</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>状态量中相机相关的状态，是一个map容器，key为相机帧id, 值为CAMState </p>
+
+</div>
+</div>
+<a id="a1d1fda019cc5fb89da243401587c27d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d1fda019cc5fb89da243401587c27d8">&#9670;&nbsp;</a></span>continuous_noise_cov</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix&lt;double, 12, 12&gt; msckf_vio::MsckfVio::StateServer::continuous_noise_cov</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>噪声协方差矩阵 </p>
+
+</div>
+</div>
+<a id="a140701cc498b7b20170211855068289d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a140701cc498b7b20170211855068289d">&#9670;&nbsp;</a></span>imu_state</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmsckf__vio_1_1_i_m_u_state.html">IMUState</a> msckf_vio::MsckfVio::StateServer::imu_state</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>状态量中IMU相关的状态 </p>
+
+</div>
+</div>
+<a id="abf81d654de5d28115dcd48d0b562b566"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf81d654de5d28115dcd48d0b562b566">&#9670;&nbsp;</a></span>state_cov</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::MatrixXd msckf_vio::MsckfVio::StateServer::state_cov</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>所有状态的误差协方差矩阵P </p>
+
+</div>
+</div>
+<hr/>该结构体的文档由以下文件生成:<ul>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/<a class="el" href="msckf__vio_8h_source.html">msckf_vio.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespacemsckf__vio.html">msckf_vio</a></li><li class="navelem"><a class="el" href="classmsckf__vio_1_1_msckf_vio.html">MsckfVio</a></li><li class="navelem"><a class="el" href="structmsckf__vio_1_1_msckf_vio_1_1_state_server.html">StateServer</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

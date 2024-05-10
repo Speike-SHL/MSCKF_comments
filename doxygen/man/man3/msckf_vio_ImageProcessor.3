@@ -1,0 +1,953 @@
+.TH "msckf_vio::ImageProcessor" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+msckf_vio::ImageProcessor \- \fBImageProcessor\fP Detects and tracks features in image sequences\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <image_processor\&.h>\fP
+.SS "类"
+
+.in +1c
+.ti -1c
+.RI "struct \fBFeatureMetaData\fP"
+.br
+.RI "\fBFeatureMetaData\fP Contains necessary information of a feature for easy access\&. "
+.ti -1c
+.RI "struct \fBProcessorConfig\fP"
+.br
+.RI "\fBProcessorConfig\fP Configuration parameters for feature detection and tracking\&. "
+.in -1c
+.SS "Public 类型"
+
+.in +1c
+.ti -1c
+.RI "typedef boost::shared_ptr< \fBImageProcessor\fP > \fBPtr\fP"
+.br
+.ti -1c
+.RI "typedef boost::shared_ptr< const \fBImageProcessor\fP > \fBConstPtr\fP"
+.br
+.in -1c
+.SS "Public 成员函数"
+
+.in +1c
+.ti -1c
+.RI "\fBImageProcessor\fP (ros::NodeHandle &n)"
+.br
+.RI "ImageProcessor构造函数 "
+.ti -1c
+.RI "\fBImageProcessor\fP (const \fBImageProcessor\fP &)=delete"
+.br
+.ti -1c
+.RI "\fBImageProcessor\fP \fBoperator=\fP (const \fBImageProcessor\fP &)=delete"
+.br
+.ti -1c
+.RI "\fB~ImageProcessor\fP ()"
+.br
+.ti -1c
+.RI "bool \fBinitialize\fP ()"
+.br
+.RI "初始化 "
+.in -1c
+.SS "Private 类型"
+
+.in +1c
+.ti -1c
+.RI "typedef unsigned long long int \fBFeatureIDType\fP"
+.br
+.RI "FeatureIDType An alias for unsigned long long int\&. "
+.ti -1c
+.RI "typedef std::map< int, std::vector< \fBFeatureMetaData\fP > > \fBGridFeatures\fP"
+.br
+.RI "GridFeatures Organize features based on the grid they belong to\&. Note that the key is encoded by the grid index\&. "
+.in -1c
+.SS "Private 成员函数"
+
+.in +1c
+.ti -1c
+.RI "bool \fBloadParameters\fP ()"
+.br
+.RI "loadParameters Load parameters from the parameter server\&. "
+.ti -1c
+.RI "bool \fBcreateRosIO\fP ()"
+.br
+.RI "createRosIO Create ros publisher and subscirbers\&. "
+.ti -1c
+.RI "void \fBstereoCallback\fP (const sensor_msgs::ImageConstPtr &cam0_img, const sensor_msgs::ImageConstPtr &cam1_img)"
+.br
+.RI "双目图像回调, 处理双目图像，前端主要流程函数 "
+.ti -1c
+.RI "void \fBimuCallback\fP (const sensor_msgs::ImuConstPtr &msg)"
+.br
+.RI "imuCallback Callback function for the imu message\&. "
+.ti -1c
+.RI "void \fBinitializeFirstFrame\fP ()"
+.br
+.ti -1c
+.RI "void \fBtrackFeatures\fP ()"
+.br
+.RI "跟踪特征点 "
+.ti -1c
+.RI "void \fBaddNewFeatures\fP ()"
+.br
+.RI "在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征 "
+.ti -1c
+.RI "void \fBpruneGridFeatures\fP ()"
+.br
+.RI "pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of that grid, which ensures the number of features within each grid is bounded\&. "
+.ti -1c
+.RI "void \fBpublish\fP ()"
+.br
+.RI "publish Publish the features on the current image including both the tracked and newly detected ones\&. "
+.ti -1c
+.RI "void \fBdrawFeaturesMono\fP ()"
+.br
+.RI "drawFeaturesMono Draw tracked and newly detected features on the left image only\&. "
+.ti -1c
+.RI "void \fBdrawFeaturesStereo\fP ()"
+.br
+.RI "drawFeaturesStereo Draw tracked and newly detected features on the stereo images\&. "
+.ti -1c
+.RI "void \fBcreateImagePyramids\fP ()"
+.br
+.RI "createImagePyramids Create image pyramids used for klt tracking\&. "
+.ti -1c
+.RI "void \fBintegrateImuData\fP (cv::Matx33f &cam0_R_p_c, cv::Matx33f &cam1_R_p_c)"
+.br
+.RI "integrateImuData Integrates the IMU gyro readings between the two consecutive images, which is used for both tracking prediction and 2-point RANSAC\&. "
+.ti -1c
+.RI "void \fBpredictFeatureTracking\fP (const std::vector< cv::Point2f > &input_pts, const cv::Matx33f &R_p_c, const cv::Vec4d &intrinsics, std::vector< cv::Point2f > &compenstated_pts)"
+.br
+.RI "predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tracking would be more robust and fast\&. "
+.ti -1c
+.RI "void \fBtwoPointRansac\fP (const std::vector< cv::Point2f > &pts1, const std::vector< cv::Point2f > &pts2, const cv::Matx33f &R_p_c, const cv::Vec4d &intrinsics, const std::string &distortion_model, const cv::Vec4d &distortion_coeffs, const double &inlier_error, const double &success_probability, std::vector< int > &inlier_markers)"
+.br
+.RI "twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set\&. "
+.ti -1c
+.RI "void \fBundistortPoints\fP (const std::vector< cv::Point2f > &pts_in, const cv::Vec4d &intrinsics, const std::string &distortion_model, const cv::Vec4d &distortion_coeffs, std::vector< cv::Point2f > &pts_out, const cv::Matx33d &rectification_matrix=cv::Matx33d::eye(), const cv::Vec4d &new_intrinsics=cv::Vec4d(1, 1, 0, 0))"
+.br
+.RI "畸变图像中的pts_in点 -> 通过旋转矩阵R转换 -> 另一个图像坐标系中的无畸变归一化坐标 -> 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个图像坐标系的无畸变归一化坐标) "
+.ti -1c
+.RI "void \fBrescalePoints\fP (std::vector< cv::Point2f > &pts1, std::vector< cv::Point2f > &pts2, float &scaling_factor)"
+.br
+.RI "估计系数，用于算像素单位与归一化平面单位的一个乘数 "
+.ti -1c
+.RI "std::vector< cv::Point2f > \fBdistortPoints\fP (const std::vector< cv::Point2f > &pts_in, const cv::Vec4d &intrinsics, const std::string &distortion_model, const cv::Vec4d &distortion_coeffs)"
+.br
+.RI "归一化平面上的坐标 -> 带畸变图像的像素坐标 "
+.ti -1c
+.RI "void \fBstereoMatch\fP (const std::vector< cv::Point2f > &cam0_points, std::vector< cv::Point2f > &cam1_points, std::vector< unsigned char > &inlier_markers)"
+.br
+.RI "stereoMatch Matches features with stereo image pairs\&. "
+.ti -1c
+.RI "template<typename T > void \fBremoveUnmarkedElements\fP (const std::vector< T > &raw_vec, const std::vector< unsigned char > &markers, std::vector< T > &refined_vec)"
+.br
+.RI "removeUnmarkedElements Remove the unmarked elements within a vector\&. "
+.ti -1c
+.RI "void \fBupdateFeatureLifetime\fP ()"
+.br
+.RI "没用到，计算特征点的生命周期 "
+.ti -1c
+.RI "void \fBfeatureLifetimeStatistics\fP ()"
+.br
+.RI "没用到，输出每个点的生命周期 "
+.in -1c
+.SS "静态 Private 成员函数"
+
+.in +1c
+.ti -1c
+.RI "static bool \fBkeyPointCompareByResponse\fP (const cv::KeyPoint &pt1, const cv::KeyPoint &pt2)"
+.br
+.RI "keyPointCompareByResponse Compare two keypoints based on the response\&. "
+.ti -1c
+.RI "static bool \fBfeatureCompareByResponse\fP (const \fBFeatureMetaData\fP &f1, const \fBFeatureMetaData\fP &f2)"
+.br
+.RI "featureCompareByResponse Compare two features based on the response\&. "
+.ti -1c
+.RI "static bool \fBfeatureCompareByLifetime\fP (const \fBFeatureMetaData\fP &f1, const \fBFeatureMetaData\fP &f2)"
+.br
+.RI "featureCompareByLifetime Compare two features based on the lifetime\&. "
+.in -1c
+.SS "Private 属性"
+
+.in +1c
+.ti -1c
+.RI "bool \fBis_first_img\fP"
+.br
+.ti -1c
+.RI "\fBFeatureIDType\fP \fBnext_feature_id\fP"
+.br
+.ti -1c
+.RI "\fBProcessorConfig\fP \fBprocessor_config\fP"
+.br
+.ti -1c
+.RI "cv::Ptr< cv::Feature2D > \fBdetector_ptr\fP"
+.br
+.ti -1c
+.RI "std::vector< sensor_msgs::Imu > \fBimu_msg_buffer\fP"
+.br
+.ti -1c
+.RI "std::string \fBcam0_distortion_model\fP"
+.br
+.ti -1c
+.RI "cv::Vec2i \fBcam0_resolution\fP"
+.br
+.ti -1c
+.RI "cv::Vec4d \fBcam0_intrinsics\fP"
+.br
+.ti -1c
+.RI "cv::Vec4d \fBcam0_distortion_coeffs\fP"
+.br
+.ti -1c
+.RI "std::string \fBcam1_distortion_model\fP"
+.br
+.ti -1c
+.RI "cv::Vec2i \fBcam1_resolution\fP"
+.br
+.ti -1c
+.RI "cv::Vec4d \fBcam1_intrinsics\fP"
+.br
+.ti -1c
+.RI "cv::Vec4d \fBcam1_distortion_coeffs\fP"
+.br
+.ti -1c
+.RI "cv::Matx33d \fBR_cam0_imu\fP"
+.br
+.ti -1c
+.RI "cv::Vec3d \fBt_cam0_imu\fP"
+.br
+.ti -1c
+.RI "cv::Matx33d \fBR_cam1_imu\fP"
+.br
+.ti -1c
+.RI "cv::Vec3d \fBt_cam1_imu\fP"
+.br
+.ti -1c
+.RI "cv_bridge::CvImageConstPtr \fBcam0_prev_img_ptr\fP"
+.br
+.ti -1c
+.RI "cv_bridge::CvImageConstPtr \fBcam0_curr_img_ptr\fP"
+.br
+.ti -1c
+.RI "cv_bridge::CvImageConstPtr \fBcam1_curr_img_ptr\fP"
+.br
+.ti -1c
+.RI "std::vector< cv::Mat > \fBprev_cam0_pyramid_\fP"
+.br
+.ti -1c
+.RI "std::vector< cv::Mat > \fBcurr_cam0_pyramid_\fP"
+.br
+.ti -1c
+.RI "std::vector< cv::Mat > \fBcurr_cam1_pyramid_\fP"
+.br
+.ti -1c
+.RI "boost::shared_ptr< \fBGridFeatures\fP > \fBprev_features_ptr\fP"
+.br
+.ti -1c
+.RI "boost::shared_ptr< \fBGridFeatures\fP > \fBcurr_features_ptr\fP"
+.br
+.ti -1c
+.RI "int \fBbefore_tracking\fP"
+.br
+.ti -1c
+.RI "int \fBafter_tracking\fP"
+.br
+.ti -1c
+.RI "int \fBafter_matching\fP"
+.br
+.ti -1c
+.RI "int \fBafter_ransac\fP"
+.br
+.ti -1c
+.RI "ros::NodeHandle \fBnh\fP"
+.br
+.ti -1c
+.RI "message_filters::Subscriber< sensor_msgs::Image > \fBcam0_img_sub\fP"
+.br
+.ti -1c
+.RI "message_filters::Subscriber< sensor_msgs::Image > \fBcam1_img_sub\fP"
+.br
+.ti -1c
+.RI "message_filters::TimeSynchronizer< sensor_msgs::Image, sensor_msgs::Image > \fBstereo_sub\fP"
+.br
+.ti -1c
+.RI "ros::Subscriber \fBimu_sub\fP"
+.br
+.ti -1c
+.RI "ros::Publisher \fBfeature_pub\fP"
+.br
+.ti -1c
+.RI "ros::Publisher \fBtracking_info_pub\fP"
+.br
+.ti -1c
+.RI "image_transport::Publisher \fBdebug_stereo_pub\fP"
+.br
+.ti -1c
+.RI "std::map< \fBFeatureIDType\fP, int > \fBfeature_lifetime\fP"
+.br
+.in -1c
+.SH "详细描述"
+.PP 
+\fBImageProcessor\fP Detects and tracks features in image sequences\&. 
+.SH "成员类型定义说明"
+.PP 
+.SS "typedef boost::shared_ptr<const \fBImageProcessor\fP> \fBmsckf_vio::ImageProcessor::ConstPtr\fP"
+
+.SS "typedef unsigned long long int \fBmsckf_vio::ImageProcessor::FeatureIDType\fP\fC [private]\fP"
+
+.PP
+FeatureIDType An alias for unsigned long long int\&. 
+.SS "typedef std::map<int, std::vector<\fBFeatureMetaData\fP> > \fBmsckf_vio::ImageProcessor::GridFeatures\fP\fC [private]\fP"
+
+.PP
+GridFeatures Organize features based on the grid they belong to\&. Note that the key is encoded by the grid index\&. 
+.SS "typedef boost::shared_ptr<\fBImageProcessor\fP> \fBmsckf_vio::ImageProcessor::Ptr\fP"
+
+.SH "构造及析构函数说明"
+.PP 
+.SS "msckf_vio::ImageProcessor::ImageProcessor (ros::NodeHandle & n)"
+
+.PP
+ImageProcessor构造函数 
+.PP
+\fB参数\fP
+.RS 4
+\fIn\fP ros节点句柄 
+.br
+\fI列表初始化\fP is_first_img = true, 设置第一帧图像标志位 
+.RE
+.PP
+
+.SS "msckf_vio::ImageProcessor::ImageProcessor (const \fBImageProcessor\fP &)\fC [delete]\fP"
+
+.SS "msckf_vio::ImageProcessor::~ImageProcessor ()"
+
+.SH "成员函数说明"
+.PP 
+.SS "void msckf_vio::ImageProcessor::addNewFeatures ()\fC [private]\fP"
+
+.PP
+在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征 @addNewFeatures Detect new features on the image to ensure that the features are uniformly distributed on the image\&.
+.PP
+.IP "1." 4
+在左目图像上提取新的Fast特征点
+.IP "2." 4
+将新提取的特征点按照网格分组, 保留响应值高的特征点
+.IP "3." 4
+将新提取的特征点与右目图像上的特征点进行匹配(同initializeFirstFrame)
+.IP "4." 4
+将特征点进行网格分组存入curr_features_ptr 
+.PP
+
+.SS "void msckf_vio::ImageProcessor::createImagePyramids ()\fC [private]\fP"
+
+.PP
+createImagePyramids Create image pyramids used for klt tracking\&. 左右目图像构建光流金字塔并保存在curr_cam0/1_pyramid_中，方便后续传递给calcOpticalFlowPyrLK进行光流跟踪
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::stereoCallback\fP 
+.RE
+.PP
+
+.SS "bool msckf_vio::ImageProcessor::createRosIO ()\fC [private]\fP"
+
+.PP
+createRosIO Create ros publisher and subscirbers\&. 创建前端ROS节点的发布和订阅话题 
+.IP "1." 4
+'features'话题，缓存长度为3，用于向后端发布特征点（header,点id,左右目归一化坐标）
+.IP "2." 4
+'tracking_info'话题，缓存长度为1，用于发布跟踪信息，没有地方接收
+.IP "3." 4
+'debug_stereo_image'话题，缓存长度为1，用于发布绘制的双目图像
+.IP "4." 4
+'cam0_image'话题，缓存长度为10，用于订阅左目图像
+.IP "5." 4
+'cam1_image'话题，缓存长度为10，用于订阅右目图像
+.IP "6." 4
+ROS软件同步订阅双目图像消息，缓存长度为10，回调函数为ImageProcessor::stereoCallback
+.IP "7." 4
+'imu'话题，缓存长度为50，用于订阅IMU消息
+.PP
+
+.SS "vector< cv::Point2f > msckf_vio::ImageProcessor::distortPoints (const std::vector< cv::Point2f > & pts_in, const cv::Vec4d & intrinsics, const std::string & distortion_model, const cv::Vec4d & distortion_coeffs)\fC [private]\fP"
+
+.PP
+归一化平面上的坐标 -> 带畸变图像的像素坐标 
+.PP
+\fB参数\fP
+.RS 4
+\fIpts_in\fP 归一化坐标的前两维 
+.br
+\fIintrinsics\fP 内参 
+.br
+\fIdistortion_model\fP 畸变模型 
+.br
+\fIdistortion_coeffs\fP 畸变系数 
+.RE
+.PP
+\fB返回\fP
+.RS 4
+像素坐标的点 
+.RE
+.PP
+
+.SS "void msckf_vio::ImageProcessor::drawFeaturesMono ()\fC [private]\fP"
+
+.PP
+drawFeaturesMono Draw tracked and newly detected features on the left image only\&. 做图相关，且没有用到 
+.SS "void msckf_vio::ImageProcessor::drawFeaturesStereo ()\fC [private]\fP"
+
+.PP
+drawFeaturesStereo Draw tracked and newly detected features on the stereo images\&. 当有其他节点订阅了debug_stereo_image话题时，将双目图像拼接起来并画出特征点位置，作为消息发送出去
+.PP
+\fB注解\fP
+.RS 4
+绿色: 跟踪成功的点 金色: 新添加的点 
+.RE
+.PP
+
+.SS "static bool msckf_vio::ImageProcessor::featureCompareByLifetime (const \fBFeatureMetaData\fP & f1, const \fBFeatureMetaData\fP & f2)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
+.PP
+featureCompareByLifetime Compare two features based on the lifetime\&. 
+.SS "static bool msckf_vio::ImageProcessor::featureCompareByResponse (const \fBFeatureMetaData\fP & f1, const \fBFeatureMetaData\fP & f2)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
+.PP
+featureCompareByResponse Compare two features based on the response\&. 
+.SS "void msckf_vio::ImageProcessor::featureLifetimeStatistics ()\fC [private]\fP"
+
+.PP
+没用到，输出每个点的生命周期 
+.SS "void msckf_vio::ImageProcessor::imuCallback (const sensor_msgs::ImuConstPtr & msg)\fC [private]\fP"
+
+.PP
+imuCallback Callback function for the imu message\&. 接受IMU数据并向imu_msg_buffer添加imu消息
+.PP
+\fB参数\fP
+.RS 4
+\fImsg\fP IMU msg\&.
+.br
+\fImsg\fP imu消息 
+.RE
+.PP
+
+.SS "bool msckf_vio::ImageProcessor::initialize ()"
+
+.PP
+初始化 
+.PP
+\fB返回\fP
+.RS 4
+成功或失败 
+.RE
+.PP
+
+.IP "1." 4
+加载参数 
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::loadParameters()\fP
+.RE
+.PP
+
+.IP "2." 4
+构造OpenCV的FAST特征提取器
+.IP "3." 4
+构造ROS IO进行消息的订阅和发布 
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::createRosIO()\fP
+.RE
+.PP
+
+.PP
+
+.SS "void msckf_vio::ImageProcessor::initializeFirstFrame ()\fC [private]\fP"
+
+.IP "1." 4
+从cam0的图像中提取FAST特征
+.IP "2." 4
+利用cam0到cam1的外参, 将cam0中的特征点投影到cam1中, 作为光流法寻找cam1中匹配点的初始值
+.IP "3." 4
+利用LKT光流法在cam1的图像中寻找匹配的像素点
+.IP "4." 4
+利用双目外参构成的对极几何约束进行野点筛选。
+.IP "5." 4
+然后根据cam0中所有匹配特征点的位置将它们分配到不同的grid中
+.IP "6." 4
+按提取FAST特征时的response对每个grid中的特征进行排序
+.IP "7." 4
+最后将它们存储到相应的类成员变量中（每个grid特征数有限制）。 执行完后能在curr_features_ptr中找到第一帧图像中提取的左右目特征点 
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::stereoCallback\fP 
+.RE
+.PP
+
+.PP
+
+.SS "void msckf_vio::ImageProcessor::integrateImuData (cv::Matx33f & cam0_R_p_c, cv::Matx33f & cam1_R_p_c)\fC [private]\fP"
+
+.PP
+integrateImuData Integrates the IMU gyro readings between the two consecutive images, which is used for both tracking prediction and 2-point RANSAC\&. 利用imu的角速度计算前后帧的旋转，左右相机分开计算
+.PP
+\fB返回\fP
+.RS 4
+cam0_R_p_c: a rotation matrix which takes a vector from previous cam0 frame to current cam0 frame\&. 
+.PP
+cam1_R_p_c: a rotation matrix which takes a vector from previous cam1 frame to current cam1 frame\&.
+.RE
+.PP
+\fB参数\fP
+.RS 4
+\fIcam0_R_p_c\fP 左相机prev帧到curr帧的旋转 
+.br
+\fIcam1_R_p_c\fP 右相机prev帧到curr帧的旋转 
+.RE
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::trackFeatures()\fP 
+.RE
+.PP
+
+.SS "static bool msckf_vio::ImageProcessor::keyPointCompareByResponse (const cv::KeyPoint & pt1, const cv::KeyPoint & pt2)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
+.PP
+keyPointCompareByResponse Compare two keypoints based on the response\&. 
+.SS "bool msckf_vio::ImageProcessor::loadParameters ()\fC [private]\fP"
+
+.PP
+loadParameters Load parameters from the parameter server\&. 导入节点launch时提供的各种参数
+.PP
+\fB返回\fP
+.RS 4
+成功或失败 一直为true 
+.RE
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::initialize()\fP 
+.RE
+.PP
+
+.SS "\fBImageProcessor\fP msckf_vio::ImageProcessor::operator= (const \fBImageProcessor\fP &)\fC [delete]\fP"
+
+.SS "void msckf_vio::ImageProcessor::predictFeatureTracking (const std::vector< cv::Point2f > & input_pts, const cv::Matx33f & R_p_c, const cv::Vec4d & intrinsics, std::vector< cv::Point2f > & compenstated_pts)\fC [private]\fP"
+
+.PP
+predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tracking would be more robust and fast\&. 利用输入的前一帧特征点图像坐标、前一帧到当前帧的旋转矩阵以及相机内参，预测当前帧中的特征点图像坐标。 作用是给LKT光流一个initial guess。
+.PP
+\fB参数\fP
+.RS 4
+\fIinput_pts\fP features in the previous image to be tracked\&. 
+.br
+\fIR_p_c\fP a rotation matrix takes a vector in the previous camera frame to the current camera frame\&. 
+.br
+\fIintrinsics\fP intrinsic matrix of the camera\&. 
+.RE
+.PP
+\fB返回\fP
+.RS 4
+compensated_pts: predicted locations of the features in the current image based on the provided rotation\&.
+.RE
+.PP
+Note that the input and output points are of pixel coordinates\&.
+.PP
+\fB参数\fP
+.RS 4
+\fIinput_pts\fP 上一帧的像素点 
+.br
+\fIR_p_c\fP 旋转，左相机的上一帧到当前帧 
+.br
+\fIintrinsics\fP 内参 
+.br
+\fIcompensated_pts\fP 输出预测的点 
+.RE
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::trackFeatures()\fP 
+.RE
+.PP
+
+.SS "void msckf_vio::ImageProcessor::pruneGridFeatures ()\fC [private]\fP"
+
+.PP
+pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of that grid, which ensures the number of features within each grid is bounded\&. 剔除每个格多余的点
+.PP
+\fB注解\fP
+.RS 4
+为什么addNewFeatures中明明每个格子都是按照最小需要的点数添加的，这里格子内的点还会超出最大值？ 因为trackFeatures中只按照每个格子最少的点补齐了， 但某个格子内的点可能移动到了另一个格子， 所以超出了格子内点的最大值 
+.RE
+.PP
+
+.SS "void msckf_vio::ImageProcessor::publish ()\fC [private]\fP"
+
+.PP
+publish Publish the features on the current image including both the tracked and newly detected ones\&. 发送前端提取的特征点和id到后端 
+.SS "template<typename T > void msckf_vio::ImageProcessor::removeUnmarkedElements (const std::vector< T > & raw_vec, const std::vector< unsigned char > & markers, std::vector< T > & refined_vec)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+removeUnmarkedElements Remove the unmarked elements within a vector\&. 
+.PP
+\fB参数\fP
+.RS 4
+\fIraw_vec\fP 所有点 
+.br
+\fImarkers\fP 0 外点, 1 内点 
+.RE
+.PP
+\fB返回\fP
+.RS 4
+refined_vec: 没有外点
+.RE
+.PP
+Note that the order of the inliers in the raw_vec is perserved in the refined_vec\&. 
+.SS "void msckf_vio::ImageProcessor::rescalePoints (std::vector< cv::Point2f > & pts1, std::vector< cv::Point2f > & pts2, float & scaling_factor)\fC [private]\fP"
+
+.PP
+估计系数，用于算像素单位与归一化平面单位的一个乘数 
+.PP
+\fB参数\fP
+.RS 4
+\fIpts1\fP 非归一化坐标 
+.br
+\fIpts2\fP 归一化坐标 
+.br
+\fIscaling_factor\fP 尺度 
+.RE
+.PP
+
+.SS "void msckf_vio::ImageProcessor::stereoCallback (const sensor_msgs::ImageConstPtr & cam0_img, const sensor_msgs::ImageConstPtr & cam1_img)\fC [private]\fP"
+
+.PP
+双目图像回调, 处理双目图像，前端主要流程函数 
+.PP
+\fB参数\fP
+.RS 4
+\fIcam0_img\fP 左图消息 
+.br
+\fIcam1_img\fP 右图消息 
+.RE
+.PP
+
+.IP "1." 4
+创建图像金字塔， 
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::createImagePyramids()\fP
+.RE
+.PP
+
+.IP "2." 4
+检测是否是第一帧图像, 如果是第一帧图像，初始化第一帧特征点并绘制发布双目图像 
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::initializeFirstFrame()\fP, \fBImageProcessor::drawFeaturesStereo()\fP
+.RE
+.PP
+
+.IP "3." 4
+如果不是第一帧图像，进行下述操作
+.IP "  1." 6
+跟踪特征点 
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::trackFeatures()\fP
+.RE
+.PP
+
+.IP "  2." 6
+在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征 
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::addNewFeatures()\fP
+.RE
+.PP
+
+.IP "  3." 6
+剔除每个格多余的点 
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::pruneGridFeatures()\fP
+.RE
+.PP
+
+.IP "  4." 6
+当有其他节点订阅了debug_stereo_image消息时，将双目图像拼接起来并画出特征点位置，作为消息发送出去 
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::drawFeaturesStereo()\fP
+.RE
+.PP
+
+.PP
+
+.IP "5." 4
+发布图片特征点跟踪的结果到后端 
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::publish()\fP
+.RE
+.PP
+
+.PP
+
+.SS "void msckf_vio::ImageProcessor::stereoMatch (const std::vector< cv::Point2f > & cam0_points, std::vector< cv::Point2f > & cam1_points, std::vector< unsigned char > & inlier_markers)\fC [private]\fP"
+
+.PP
+stereoMatch Matches features with stereo image pairs\&. 在右相机cam1中找到与左相机cam0中特征点匹配的点
+.PP
+\fB参数\fP
+.RS 4
+\fIcam0_points\fP points in the primary image\&. 
+.RE
+.PP
+\fB返回\fP
+.RS 4
+cam1_points: points in the secondary image\&. 
+.PP
+inlier_markers: 1 if the match is valid, 0 otherwise\&.
+.RE
+.PP
+.IP "1." 4
+先利用双目的已知外参将左相机的点投影到右相机中，作为右相机中特征点的初值
+.IP "2." 4
+利用LKT光流法在右相机中找到和左相机中特征点匹配的点
+.IP "3." 4
+利用双目外参构成的对极几何约束进行野点筛选 
+.PP
+\fB注解\fP
+.RS 4
+筛选的点是在inlier_markers中标记, 而不是将其在cam1_points中删除 
+.RE
+.PP
+\fB参数\fP
+.RS 4
+\fIcam0_points\fP 左图像的特征点，输入 
+.br
+\fIcam1_points\fP 与cam0_points匹配的点 
+.br
+\fIinlier_markers\fP 是否是内点 1是 0否 
+.RE
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::addNewFeatures()\fP \fBImageProcessor::trackFeatures()\fP \fBImageProcessor::initializeFirstFrame()\fP 
+.RE
+.PP
+
+.PP
+
+.SS "void msckf_vio::ImageProcessor::trackFeatures ()\fC [private]\fP"
+
+.PP
+跟踪特征点 
+.IP "1." 4
+上一帧左目特征点 --(光流跟踪)-> 当前帧左目特征点
+.IP "2." 4
+当前帧左目特征点 --(双目匹配)-> 当前帧右目特征点
+.IP "3." 4
+当前帧左目特征点 & 前一帧左目特征点 --(RANSAC去除外点)
+.IP "4." 4
+当前帧右目特征点 & 前一帧右目特征点 --(RANSAC去除外点)
+.IP "5." 4
+保存当前帧左右目特征点到curr_features_ptr 
+.PP
+
+.SS "void msckf_vio::ImageProcessor::twoPointRansac (const std::vector< cv::Point2f > & pts1, const std::vector< cv::Point2f > & pts2, const cv::Matx33f & R_p_c, const cv::Vec4d & intrinsics, const std::string & distortion_model, const cv::Vec4d & distortion_coeffs, const double & inlier_error, const double & success_probability, std::vector< int > & inlier_markers)\fC [private]\fP"
+
+.PP
+twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set\&. 通过两点RANSAC进一步去除外点并把结果保存在inlier_markers中
+.PP
+\fB参数\fP
+.RS 4
+\fIpts1\fP first set of points\&. 
+.br
+\fIpts2\fP second set of points\&. 
+.br
+\fIR_p_c\fP a rotation matrix takes a vector in the previous camera frame to the current camera frame\&. 
+.br
+\fIintrinsics\fP intrinsics of the camera\&. 
+.br
+\fIdistortion_model\fP distortion model of the camera\&. 
+.br
+\fIdistortion_coeffs\fP distortion coefficients\&. 
+.br
+\fIinlier_error\fP acceptable error to be considered as an inlier\&. 
+.br
+\fIsuccess_probability\fP the required probability of success\&. 
+.RE
+.PP
+\fB返回\fP
+.RS 4
+inlier_flag: 1 for inliers and 0 for outliers\&.
+.RE
+.PP
+.IP "1." 4
+在所有点中随机选择两个点
+.IP "2." 4
+用这两个点利用对极约束，根据IMU预测的R，计算出t，然后用t判断每个点是否满足对极约束
+.IP "3." 4
+利用上一步选出的所有内点计算一个综合的t，并计算误差
+.IP "4." 4
+循环1-3，直到找到一个最优的t 
+.PP
+\fB参数\fP
+.RS 4
+\fIpts1\fP 上一帧内图像上的点 
+.br
+\fIpts2\fP 当前帧内图像上的点 
+.br
+\fIR_p_c\fP 上一帧到当前帧的旋转,IMU预测的 
+.br
+\fIintrinsics\fP 内参 
+.br
+\fIdistortion_model\fP 畸变模型 
+.br
+\fIdistortion_coeffs\fP 畸变参数 
+.br
+\fIinlier_error\fP 内点误差，像素，也就是ransac的阈值 
+.br
+\fIsuccess_probability\fP 成功率, 即有一次选择到都是内点的概率，一般设为0\&.99 
+.br
+\fIinlier_markers\fP 内外点标志 
+.RE
+.PP
+\fB参见\fP
+.RS 4
+\fBImageProcessor::trackFeatures()\fP 
+.RE
+.PP
+
+.PP
+
+.SS "void msckf_vio::ImageProcessor::undistortPoints (const std::vector< cv::Point2f > & pts_in, const cv::Vec4d & intrinsics, const std::string & distortion_model, const cv::Vec4d & distortion_coeffs, std::vector< cv::Point2f > & pts_out, const cv::Matx33d & rectification_matrix = \fCcv::Matx33d::eye()\fP, const cv::Vec4d & new_intrinsics = \fCcv::Vec4d(1, 1, 0, 0)\fP)\fC [private]\fP"
+
+.PP
+畸变图像中的pts_in点 -> 通过旋转矩阵R转换 -> 另一个图像坐标系中的无畸变归一化坐标 -> 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个图像坐标系的无畸变归一化坐标) 
+.PP
+\fB参数\fP
+.RS 4
+\fIpts_in\fP 输入像素点(畸变图像中的) 
+.br
+\fIintrinsics\fP 相机内参 fx, fy, cx, cy 
+.br
+\fIdistortion_model\fP 相机畸变模型 
+.br
+\fIdistortion_coeffs\fP 畸变系数 k1, k2, p1, p2 
+.br
+\fIpts_out\fP 输出矫正后的像素点（归一化的点） 
+.br
+\fIrectification_matrix\fP R矩阵，默认为单位阵 
+.br
+\fInew_intrinsics\fP 矫正后的内参矩阵, 默认为cv::Vec4d(1, 1, 0, 0) 
+.RE
+.PP
+\fB注解\fP
+.RS 4
+不输入rectification_matrix和new_intrinsics时，相当于只是去畸变，得到的是无畸变归一化坐标 
+.RE
+.PP
+
+.SS "void msckf_vio::ImageProcessor::updateFeatureLifetime ()\fC [private]\fP"
+
+.PP
+没用到，计算特征点的生命周期 
+.SH "类成员变量说明"
+.PP 
+.SS "int msckf_vio::ImageProcessor::after_matching\fC [private]\fP"
+
+.SS "int msckf_vio::ImageProcessor::after_ransac\fC [private]\fP"
+
+.SS "int msckf_vio::ImageProcessor::after_tracking\fC [private]\fP"
+
+.SS "int msckf_vio::ImageProcessor::before_tracking\fC [private]\fP"
+
+.SS "cv_bridge::CvImageConstPtr msckf_vio::ImageProcessor::cam0_curr_img_ptr\fC [private]\fP"
+
+.SS "cv::Vec4d msckf_vio::ImageProcessor::cam0_distortion_coeffs\fC [private]\fP"
+
+.SS "std::string msckf_vio::ImageProcessor::cam0_distortion_model\fC [private]\fP"
+
+.SS "message_filters::Subscriber< sensor_msgs::Image> msckf_vio::ImageProcessor::cam0_img_sub\fC [private]\fP"
+
+.SS "cv::Vec4d msckf_vio::ImageProcessor::cam0_intrinsics\fC [private]\fP"
+
+.SS "cv_bridge::CvImageConstPtr msckf_vio::ImageProcessor::cam0_prev_img_ptr\fC [private]\fP"
+
+.SS "cv::Vec2i msckf_vio::ImageProcessor::cam0_resolution\fC [private]\fP"
+
+.SS "cv_bridge::CvImageConstPtr msckf_vio::ImageProcessor::cam1_curr_img_ptr\fC [private]\fP"
+
+.SS "cv::Vec4d msckf_vio::ImageProcessor::cam1_distortion_coeffs\fC [private]\fP"
+
+.SS "std::string msckf_vio::ImageProcessor::cam1_distortion_model\fC [private]\fP"
+
+.SS "message_filters::Subscriber< sensor_msgs::Image> msckf_vio::ImageProcessor::cam1_img_sub\fC [private]\fP"
+
+.SS "cv::Vec4d msckf_vio::ImageProcessor::cam1_intrinsics\fC [private]\fP"
+
+.SS "cv::Vec2i msckf_vio::ImageProcessor::cam1_resolution\fC [private]\fP"
+
+.SS "std::vector<cv::Mat> msckf_vio::ImageProcessor::curr_cam0_pyramid_\fC [private]\fP"
+
+.SS "std::vector<cv::Mat> msckf_vio::ImageProcessor::curr_cam1_pyramid_\fC [private]\fP"
+
+.SS "boost::shared_ptr<\fBGridFeatures\fP> msckf_vio::ImageProcessor::curr_features_ptr\fC [private]\fP"
+
+.SS "image_transport::Publisher msckf_vio::ImageProcessor::debug_stereo_pub\fC [private]\fP"
+
+.SS "cv::Ptr<cv::Feature2D> msckf_vio::ImageProcessor::detector_ptr\fC [private]\fP"
+
+.SS "std::map<\fBFeatureIDType\fP, int> msckf_vio::ImageProcessor::feature_lifetime\fC [private]\fP"
+
+.SS "ros::Publisher msckf_vio::ImageProcessor::feature_pub\fC [private]\fP"
+
+.SS "std::vector<sensor_msgs::Imu> msckf_vio::ImageProcessor::imu_msg_buffer\fC [private]\fP"
+
+.SS "ros::Subscriber msckf_vio::ImageProcessor::imu_sub\fC [private]\fP"
+
+.SS "bool msckf_vio::ImageProcessor::is_first_img\fC [private]\fP"
+
+.SS "\fBFeatureIDType\fP msckf_vio::ImageProcessor::next_feature_id\fC [private]\fP"
+
+.SS "ros::NodeHandle msckf_vio::ImageProcessor::nh\fC [private]\fP"
+
+.SS "std::vector<cv::Mat> msckf_vio::ImageProcessor::prev_cam0_pyramid_\fC [private]\fP"
+
+.SS "boost::shared_ptr<\fBGridFeatures\fP> msckf_vio::ImageProcessor::prev_features_ptr\fC [private]\fP"
+
+.SS "\fBProcessorConfig\fP msckf_vio::ImageProcessor::processor_config\fC [private]\fP"
+
+.SS "cv::Matx33d msckf_vio::ImageProcessor::R_cam0_imu\fC [private]\fP"
+
+.SS "cv::Matx33d msckf_vio::ImageProcessor::R_cam1_imu\fC [private]\fP"
+
+.SS "message_filters::TimeSynchronizer< sensor_msgs::Image, sensor_msgs::Image> msckf_vio::ImageProcessor::stereo_sub\fC [private]\fP"
+
+.SS "cv::Vec3d msckf_vio::ImageProcessor::t_cam0_imu\fC [private]\fP"
+
+.SS "cv::Vec3d msckf_vio::ImageProcessor::t_cam1_imu\fC [private]\fP"
+
+.SS "ros::Publisher msckf_vio::ImageProcessor::tracking_info_pub\fC [private]\fP"
+
+
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.

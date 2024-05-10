@@ -1,0 +1,13 @@
+<map id="msckf_vio::MsckfVio::pruneCamStateBuffer" name="msckf_vio::MsckfVio::pruneCamStateBuffer">
+<area shape="rect" id="node1" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="5,93,161,135"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="212,5,357,47"/>
+<area shape="rect" id="node6" href="$classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id" alt="" coords="431,71,611,112"/>
+<area shape="rect" id="node7" href="$classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1" title=" " alt="" coords="212,123,357,164"/>
+<area shape="rect" id="node8" href="$classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="209,188,360,229"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="441,5,602,47"/>
+<area shape="rect" id="node4" href="$namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="683,74,896,101"/>
+<area shape="rect" id="node5" href="$namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="944,46,1128,73"/>
+<area shape="rect" id="node9" href="$namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="408,193,635,219"/>
+<area shape="rect" id="node11" href="$namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="413,243,630,270"/>
+<area shape="rect" id="node10" href="$namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="685,193,894,219"/>
+</map>

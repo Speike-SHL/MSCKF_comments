@@ -1,0 +1,4 @@
+<map id="msckf_vio::rotationToQuaternion" name="msckf_vio::rotationToQuaternion">
+<area shape="rect" id="node1" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="5,5,216,32"/>
+<area shape="rect" id="node2" href="$namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="264,5,473,32"/>
+</map>

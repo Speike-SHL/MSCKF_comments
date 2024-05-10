@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>S-MSCKF注释: MSCKF_VIO</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">S-MSCKF注释
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('md__home_speike__v_s_l_a_m__m_s_c_k_f_vio_ws_src__m_s_c_k_f_comments__r_e_a_d_m_e.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">MSCKF_VIO </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p>The <code>MSCKF_VIO</code> package is a stereo version of MSCKF. The software takes in synchronized stereo images and IMU messages and generates real-time 6DOF pose estimation of the IMU frame.</p>
+<p>The software is tested on Ubuntu 16.04 with ROS Kinetic.</p>
+<p>Video: <a href="https://www.youtube.com/watch?v=jxfJFgzmNSw&amp;t=3s">https://www.youtube.com/watch?v=jxfJFgzmNSw&amp;t</a><br  />
+ Paper Draft: <a href="https://arxiv.org/abs/1712.00036">https://arxiv.org/abs/1712.00036</a></p>
+<h1><a class="anchor" id="autotoc_md1"></a>
+License</h1>
+<p>Penn Software License. See <a class="el" href="_l_i_c_e_n_s_e_8txt.html">LICENSE.txt</a> for further details.</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Dependencies</h1>
+<p>Most of the dependencies are standard including <code>Eigen</code>, <code>OpenCV</code>, and <code>Boost</code>. The standard shipment from Ubuntu 16.04 and ROS Kinetic works fine. One special requirement is <code>suitesparse</code>, which can be installed through,</p>
+<div class="fragment"><div class="line">sudo apt-get install libsuitesparse-dev</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
+Compling</h1>
+<p>The software is a standard catkin package. Make sure the package is on <code>ROS_PACKAGE_PATH</code> after cloning the package to your workspace. And the normal procedure for compiling a catkin package should work.</p>
+<div class="fragment"><div class="line">cd your_work_space</div>
+<div class="line">catkin_make --pkg msckf_vio --cmake-args -DCMAKE_BUILD_TYPE=Release</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md4"></a>
+Calibration</h1>
+<p>An accurate calibration is crucial for successfully running the software. To get the best performance of the software, the stereo cameras and IMU should be hardware synchronized. Note that for the stereo calibration, which includes the camera intrinsics, distortion, and extrinsics between the two cameras, you have to use a calibration software. <b>Manually setting these parameters will not be accurate enough.</b> <a href="https://github.com/ethz-asl/kalibr">Kalibr</a> can be used for the stereo calibration and also to get the transformation between the stereo cameras and IMU. The yaml file generated by Kalibr can be directly used in this software. See calibration files in the <code>config</code> folder for details. The two calibration files in the <code>config</code> folder should work directly with the EuRoC and <a href="https://github.com/KumarRobotics/msckf_vio/wiki">fast flight</a> datasets. The convention of the calibration file is as follows:</p>
+<p><code>camx/T_cam_imu</code>: takes a vector from the IMU frame to the camx frame. <code>cam1/T_cn_cnm1</code>: takes a vector from the cam0 frame to the cam1 frame.</p>
+<p>The filter uses the first 200 IMU messages to initialize the gyro bias, acc bias, and initial orientation. Therefore, the robot is required to start from a stationary state in order to initialize the VIO successfully.</p>
+<h1><a class="anchor" id="autotoc_md5"></a>
+EuRoC and UPenn Fast flight dataset example usage</h1>
+<p>First obtain either the <a href="https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets">EuRoC</a> or the <a href="https://github.com/KumarRobotics/msckf_vio/wiki/Dataset">UPenn fast flight</a> dataset.</p>
+<p>Recommended EuRoC ROS Bags:</p><ul>
+<li><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room1/V1_01_easy/V1_01_easy.bag">Vicon Room 1 01</a></li>
+<li><a href="http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room1/V1_02_easy/V1_02_easy.bag">Vicon Room 1 02</a></li>
+</ul>
+<p>Once the <code><a class="el" href="namespacemsckf__vio.html">msckf_vio</a></code> is built and sourced (via <code>source &lt;path to catkin_ws&gt;/devel/setup.bash</code>), there are two launch files prepared for the <a href="https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets">EuRoC</a> and <a href="https://github.com/KumarRobotics/msckf_vio/wiki/Dataset">UPenn fast flight</a> dataset named <code>msckf_vio_euroc.launch</code> and <code>msckf_vio_fla.launch</code> respectively. Each launch files instantiates two ROS nodes:</p>
+<ul>
+<li><code>image_processor</code> processes stereo images to detect and track features</li>
+<li><code>vio</code> obtains feature measurements from the <code>image_processor</code> and tightly fuses them with the IMU messages to estimate pose.</li>
+</ul>
+<p>These launch files can be executed via</p>
+<div class="fragment"><div class="line">roslaunch msckf_vio msckf_vio_euroc.launch</div>
+</div><!-- fragment --><p>or</p>
+<div class="fragment"><div class="line">roslaunch msckf_vio msckf_vio_fla.launch</div>
+</div><!-- fragment --><p>Once the nodes are running you need to run the dataset rosbags (in a different terminal), for example:</p>
+<div class="fragment"><div class="line">rosbag play V1_01_easy.bag</div>
+</div><!-- fragment --><p>As mentioned in the previous section, <b>The robot is required to start from a stationary state in order to initialize the VIO successfully.</b></p>
+<p>To visualize the pose and feature estimates you can use the provided rviz configurations found in <code>msckf_vio/rviz</code> folder (EuRoC: <code>rviz_euroc_config.rviz</code>, Fast dataset: <code>rviz_fla_config.rviz</code>).</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
+ROS Nodes</h1>
+<h2><a class="anchor" id="autotoc_md7"></a>
+&lt;tt&gt;image_processor&lt;/tt&gt; node</h2>
+<p><b>Subscribed Topics</b></p>
+<p><code>imu</code> (<code>sensor_msgs/Imu</code>)</p>
+<p>IMU messages is used for compensating rotation in feature tracking, and 2-point RANSAC.</p>
+<p><code>cam[x]_image</code> (<code>sensor_msgs/Image</code>)</p>
+<p>Synchronized stereo images.</p>
+<p><b>Published Topics</b></p>
+<p><code>features</code> (<code>msckf_vio/CameraMeasurement</code>)</p>
+<p>Records the feature measurements on the current stereo image pair.</p>
+<p><code>tracking_info</code> (<code>msckf_vio/TrackingInfo</code>)</p>
+<p>Records the feature tracking status for debugging purpose.</p>
+<p><code>debug_stereo_img</code> (<code>sensor_msgs::Image</code>)</p>
+<p>Draw current features on the stereo images for debugging purpose. Note that this debugging image is only generated upon subscription.</p>
+<h2><a class="anchor" id="autotoc_md8"></a>
+&lt;tt&gt;vio&lt;/tt&gt; node</h2>
+<p><b>Subscribed Topics</b></p>
+<p><code>imu</code> (<code>sensor_msgs/Imu</code>)</p>
+<p>IMU measurements.</p>
+<p><code>features</code> (<code>msckf_vio/CameraMeasurement</code>)</p>
+<p>Stereo feature measurements from the <code>image_processor</code> node.</p>
+<p><b>Published Topics</b></p>
+<p><code>odom</code> (<code>nav_msgs/Odometry</code>)</p>
+<p>Odometry of the IMU frame including a proper covariance.</p>
+<p><code>feature_point_cloud</code> (<code>sensor_msgs/PointCloud2</code>)</p>
+<p>Shows current features in the map which is used for estimation. </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

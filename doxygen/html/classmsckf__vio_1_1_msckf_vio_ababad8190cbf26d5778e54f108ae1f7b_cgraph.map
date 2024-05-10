@@ -1,0 +1,8 @@
+<map id="msckf_vio::MsckfVio::batchImuProcessing" name="msckf_vio::MsckfVio::batchImuProcessing">
+<area shape="rect" id="node1" title="imu积分，批量处理imu数据" alt="" coords="5,99,155,141"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="203,99,348,141"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="396,41,541,82"/>
+<area shape="rect" id="node5" href="$namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="589,107,803,133"/>
+<area shape="rect" id="node6" href="$namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="851,107,1035,133"/>
+<area shape="rect" id="node4" href="$namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="591,5,801,32"/>
+</map>

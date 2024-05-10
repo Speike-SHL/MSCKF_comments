@@ -18,71 +18,55 @@
 namespace msckf_vio
 {
 
-/*
- * @brief IMUState State for IMU
+/**
+ * @brief S-MSCKF中IMU状态相关
  */
 struct IMUState
 {
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     typedef long long int StateIDType;
 
-    // An unique identifier for the IMU state.
+    /// 唯一的IMU状态ID
     StateIDType id;
 
-    // id for next IMU state
+    /// 下一个IMU状态的ID
     static StateIDType next_id;
 
-    // Time when the state is recorded
+    /// IMU状态记录的时间
     double time;
 
-    // Orientation
-    // Take a vector from the world frame to
-    // the IMU (body) frame.
-    // Rbw
+    /// Rbw, Take a vector from the world frame to the IMU (body) frame.
     Eigen::Vector4d orientation;
 
-    // Position of the IMU (body) frame
-    // in the world frame.
-    // twb
+    /// twb, Position of the IMU (body) frame in the world frame.
     Eigen::Vector3d position;
 
-    // Velocity of the IMU (body) frame
-    // in the world frame.
+    /// Vwb, Velocity of the IMU (body) frame in the world frame.
     Eigen::Vector3d velocity;
 
-    // Bias for measured angular velocity
-    // and acceleration.
     Eigen::Vector3d gyro_bias;
     Eigen::Vector3d acc_bias;
 
-    // Transformation between the IMU and the
+    /// 左相机坐标系到IMU坐标系的旋转矩阵，外参
     Eigen::Matrix3d R_imu_cam0;
+    /// 左相机坐标系到IMU坐标系的平移向量，外参
     Eigen::Vector3d t_cam0_imu;
 
-    // These three variables should have the same physical
-    // interpretation with `orientation`, `position`, and
-    // `velocity`. There three variables are used to modify
-    // the transition matrices to make the observability matrix
-    // have proper null space.
-    // 用于使可观测性矩阵具有适当的零空间
+    /// 用于可观性约束，可观性矩阵的零空间，实际为存储上次预测时的姿态
     Eigen::Vector4d orientation_null;
+    /// 用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的位置
     Eigen::Vector3d position_null;
+    /// 用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的速度
     Eigen::Vector3d velocity_null;
 
-    // Process noise
     static double gyro_noise;
     static double acc_noise;
     static double gyro_bias_noise;
     static double acc_bias_noise;
 
-    // Gravity vector in the world frame
     static Eigen::Vector3d gravity;
-
-    // Transformation offset from the IMU frame to
-    // the body frame. The transformation takes a
-    // vector from the IMU frame to the body frame.
-    // The z axis of the body frame should point upwards.
-    // Normally, this transform should be identity.
+    
+    /// IMU到机身坐标系的变换矩阵，安装误差，一般为单位矩阵
     static Eigen::Isometry3d T_imu_body;
 
     IMUState() 

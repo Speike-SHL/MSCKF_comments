@@ -1,0 +1,11 @@
+<map id="msckf_vio::ImageProcessor::trackFeatures" name="msckf_vio::ImageProcessor::trackFeatures">
+<area shape="rect" id="node1" title="跟踪特征点" alt="" coords="5,136,191,177"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_image_processor.html#a42ccae5b36afd048f31787445a6f73b5" title="integrateImuData Integrates the IMU gyro readings between the two consecutive images,..." alt="" coords="240,5,425,47"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_image_processor.html#a2f0daa82bdf82854f82dbf25ef813e05" title="predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tra..." alt="" coords="240,71,425,112"/>
+<area shape="rect" id="node4" href="$classmsckf__vio_1_1_image_processor.html#a5ca4a3dd1f59a57544c4ffe12c8c2f4c" title="removeUnmarkedElements Remove the unmarked elements within a vector." alt="" coords="239,136,427,177"/>
+<area shape="rect" id="node5" href="$classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="240,201,425,243"/>
+<area shape="rect" id="node8" href="$classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="240,267,425,308"/>
+<area shape="rect" id="node6" href="$classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="475,168,660,209"/>
+<area shape="rect" id="node7" href="$classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="475,233,660,275"/>
+<area shape="rect" id="node9" href="$classmsckf__vio_1_1_image_processor.html#ab6523b76ff7dec84af600f0725aded72" title="估计系数，用于算像素单位与归一化平面单位的一个乘数" alt="" coords="475,299,660,340"/>
+</map>

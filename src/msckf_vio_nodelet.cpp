@@ -9,16 +9,19 @@
 
 namespace msckf_vio
 {
-void MsckfVioNodelet::onInit()
-{
-    setlocale(LC_ALL, "");
-    msckf_vio_ptr.reset(new MsckfVio(getPrivateNodeHandle()));
-    if (!msckf_vio_ptr->initialize())
+    /// @brief 创建后端节点并初始化MsckfVio类
+    /// @see MsckfVio::MsckfVio(ros::NodeHandle &pnh)
+    /// @see MsckfVio::initialize()
+    void MsckfVioNodelet::onInit()
     {
-        ROS_ERROR("Cannot initialize MSCKF VIO...");
+        setlocale(LC_ALL, "");
+        msckf_vio_ptr.reset(new MsckfVio(getPrivateNodeHandle()));
+        if (!msckf_vio_ptr->initialize())
+        {
+            ROS_ERROR("Cannot initialize MSCKF VIO...");
+            return;
+        }
         return;
-    }
-    return;
 }
 
 PLUGINLIB_EXPORT_CLASS(msckf_vio::MsckfVioNodelet, nodelet::Nodelet);

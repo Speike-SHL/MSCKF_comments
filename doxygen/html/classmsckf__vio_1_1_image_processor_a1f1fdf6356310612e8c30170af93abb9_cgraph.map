@@ -1,0 +1,4 @@
+<map id="msckf_vio::ImageProcessor::pruneGridFeatures" name="msckf_vio::ImageProcessor::pruneGridFeatures">
+<area shape="rect" id="node1" title="pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of..." alt="" coords="5,5,191,47"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_image_processor.html#a5ba15337f275bf17eaf6dccfeda37671" title="featureCompareByLifetime Compare two features based on the lifetime." alt="" coords="239,5,424,47"/>
+</map>

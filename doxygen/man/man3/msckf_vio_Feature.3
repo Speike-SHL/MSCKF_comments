@@ -1,0 +1,230 @@
+.TH "msckf_vio::Feature" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+msckf_vio::Feature \- \fBFeature\fP Salient part of an image\&. Please refer to the Appendix of 'A Multi-State Constraint Kalman
+   Filter for Vision-aided Inertial Navigation' for how the 3d position of a feature is initialized\&. 一个特征可以理解为一个三维点，由多帧观测到  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <feature\&.hpp>\fP
+.SS "类"
+
+.in +1c
+.ti -1c
+.RI "struct \fBOptimizationConfig\fP"
+.br
+.RI "3D点位置的优化参数 "
+.in -1c
+.SS "Public 成员函数"
+
+.in +1c
+.ti -1c
+.RI "\fBFeature\fP ()"
+.br
+.ti -1c
+.RI "\fBFeature\fP (const \fBFeatureIDType\fP &new_id)"
+.br
+.ti -1c
+.RI "void \fBcost\fP (const Eigen::Isometry3d &T_c0_ci, const Eigen::Vector3d &x, const Eigen::Vector2d &z, double &e) const"
+.br
+.RI "cost 计算重投影误差（归一化坐标） "
+.ti -1c
+.RI "void \fBjacobian\fP (const Eigen::Isometry3d &T_c0_ci, const Eigen::Vector3d &x, const Eigen::Vector2d &z, Eigen::Matrix< double, 2, 3 > &J, Eigen::Vector2d &r, double &w) const"
+.br
+.RI "jacobian 求一个观测对应的雅可比 "
+.ti -1c
+.RI "void \fBgenerateInitialGuess\fP (const Eigen::Isometry3d &T_c1_c2, const Eigen::Vector2d &z1, const Eigen::Vector2d &z2, Eigen::Vector3d &p) const"
+.br
+.RI "generateInitialGuess Compute the initial guess of the feature's 3d position using only two views\&. "
+.ti -1c
+.RI "bool \fBcheckMotion\fP (const \fBCamStateServer\fP &cam_states) const"
+.br
+.RI "检查输入的相机姿态，确保有足够的平移来进行三角化 "
+.ti -1c
+.RI "bool \fBinitializePosition\fP (const \fBCamStateServer\fP &cam_states)"
+.br
+.RI "根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化 "
+.in -1c
+.SS "Public 属性"
+
+.in +1c
+.ti -1c
+.RI "EIGEN_MAKE_ALIGNED_OPERATOR_NEW typedef long long int \fBFeatureIDType\fP"
+.br
+.ti -1c
+.RI "\fBFeatureIDType\fP \fBid\fP"
+.br
+.ti -1c
+.RI "std::map< \fBStateIDType\fP, Eigen::Vector4d, std::less< \fBStateIDType\fP >, Eigen::aligned_allocator< std::pair< const \fBStateIDType\fP, Eigen::Vector4d > > > \fBobservations\fP"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBposition\fP"
+.br
+.ti -1c
+.RI "bool \fBis_initialized\fP"
+.br
+.in -1c
+.SS "静态 Public 属性"
+
+.in +1c
+.ti -1c
+.RI "static \fBFeatureIDType\fP \fBnext_id\fP = 0"
+.br
+.ti -1c
+.RI "static double \fBobservation_noise\fP = 0\&.01"
+.br
+.ti -1c
+.RI "static \fBOptimizationConfig\fP \fBoptimization_config\fP"
+.br
+.in -1c
+.SH "详细描述"
+.PP 
+\fBFeature\fP Salient part of an image\&. Please refer to the Appendix of 'A Multi-State Constraint Kalman
+   Filter for Vision-aided Inertial Navigation' for how the 3d position of a feature is initialized\&. 一个特征可以理解为一个三维点，由多帧观测到 
+.SH "构造及析构函数说明"
+.PP 
+.SS "msckf_vio::Feature::Feature ()\fC [inline]\fP"
+
+.SS "msckf_vio::Feature::Feature (const \fBFeatureIDType\fP & new_id)\fC [inline]\fP"
+
+.SH "成员函数说明"
+.PP 
+.SS "bool msckf_vio::Feature::checkMotion (const \fBCamStateServer\fP & cam_states) const\fC [inline]\fP"
+
+.PP
+检查输入的相机姿态，确保有足够的平移来进行三角化 
+.PP
+\fB参数\fP
+.RS 4
+\fIcam_states\fP : 所有参与计算的相机位姿 
+.RE
+.PP
+\fB返回\fP
+.RS 4
+如果输入的相机姿态之间的平移足够，则返回True。 
+.RE
+.PP
+
+.SS "void msckf_vio::Feature::cost (const Eigen::Isometry3d & T_c0_ci, const Eigen::Vector3d & x, const Eigen::Vector2d & z, double & e) const\fC [inline]\fP"
+
+.PP
+cost 计算重投影误差（归一化坐标） 
+.PP
+\fB参数\fP
+.RS 4
+\fIT_c0_ci\fP 相对位姿，Tcic0 第一帧相机在第i帧相机下的位姿 
+.br
+\fIx\fP 第一帧相机下的估计的三维点坐标 的逆深度形式(x/z, y/z, 1/z) 
+.br
+\fIz\fP ci下的真实观测归一化坐标 
+.br
+\fIe\fP 误差 
+.RE
+.PP
+
+.SS "void msckf_vio::Feature::generateInitialGuess (const Eigen::Isometry3d & T_c1_c2, const Eigen::Vector2d & z1, const Eigen::Vector2d & z2, Eigen::Vector3d & p) const\fC [inline]\fP"
+
+.PP
+generateInitialGuess Compute the initial guess of the feature's 3d position using only two views\&. generateInitialGuess 两帧做一次三角化
+.PP
+\fB参数\fP
+.RS 4
+\fIT_c1_c2\fP A rigid body transformation taking a vector from c2 frame to c1 frame\&. 
+.br
+\fIz1\fP feature observation in c1 frame\&. 
+.br
+\fIz2\fP feature observation in c2 frame\&. 
+.RE
+.PP
+\fB返回\fP
+.RS 4
+p: Computed feature position in c1 frame\&.
+.RE
+.PP
+\fB参数\fP
+.RS 4
+\fIT_c1_c2\fP 两帧间的相对位姿，c1在c2下的位姿 
+.br
+\fIz1\fP c1下的观测 
+.br
+\fIz2\fP c2下的观测 都是归一化坐标 
+.br
+\fIp\fP 三维点在c1下的坐标 
+.RE
+.PP
+
+.SS "bool msckf_vio::Feature::initializePosition (const \fBCamStateServer\fP & cam_states)\fC [inline]\fP"
+
+.PP
+根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化 
+.PP
+\fB参数\fP
+.RS 4
+\fIcam_states\fP A map containing the camera poses with its ID as the associated key value\&. 
+.RE
+.PP
+\fB返回\fP
+.RS 4
+The computed 3d position is used to set the position member variable\&. Note the resulted position is in world frame\&. 
+.PP
+是否三角化成功 
+.RE
+.PP
+\fB注解\fP
+.RS 4
+Please refer to the Appendix of 'A Multi-State Constraint Kalman
+   Filter for Vision-aided Inertial Navigation' for how the 3d position of a feature is initialized\&. 
+.RE
+.PP
+
+.SS "void msckf_vio::Feature::jacobian (const Eigen::Isometry3d & T_c0_ci, const Eigen::Vector3d & x, const Eigen::Vector2d & z, Eigen::Matrix< double, 2, 3 > & J, Eigen::Vector2d & r, double & w) const\fC [inline]\fP"
+
+.PP
+jacobian 求一个观测对应的雅可比 
+.PP
+\fB参数\fP
+.RS 4
+\fIT_c0_ci\fP 相对位姿，Tcic0 第一帧相机在第i帧相机下的位姿 
+.br
+\fIx\fP 第一帧相机下的估计的三维点坐标 的逆深度形式(x/z, y/z, 1/z) 
+.br
+\fIz\fP ci下的真实观测归一化坐标 
+.br
+\fIJ\fP 雅可比 归一化坐标误差相对于三维点的 
+.br
+\fIr\fP 误差 
+.br
+\fIw\fP 权重，鲁棒核函数 
+.RE
+.PP
+\fB返回\fP
+.RS 4
+是否三角化成功 
+.RE
+.PP
+
+.SH "类成员变量说明"
+.PP 
+.SS "EIGEN_MAKE_ALIGNED_OPERATOR_NEW typedef long long int msckf_vio::Feature::FeatureIDType"
+
+.SS "\fBFeatureIDType\fP msckf_vio::Feature::id"
+
+.SS "bool msckf_vio::Feature::is_initialized"
+
+.SS "\fBFeatureIDType\fP msckf_vio::Feature::next_id = 0\fC [static]\fP"
+
+.SS "double msckf_vio::Feature::observation_noise = 0\&.01\fC [static]\fP"
+
+.SS "std::map<\fBStateIDType\fP, Eigen::Vector4d, std::less<\fBStateIDType\fP>, Eigen::aligned_allocator<std::pair<const \fBStateIDType\fP, Eigen::Vector4d> > > msckf_vio::Feature::observations"
+
+.SS "\fBFeature::OptimizationConfig\fP Feature::optimization_config\fC [static]\fP"
+
+.SS "Eigen::Vector3d msckf_vio::Feature::position"
+
+
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.

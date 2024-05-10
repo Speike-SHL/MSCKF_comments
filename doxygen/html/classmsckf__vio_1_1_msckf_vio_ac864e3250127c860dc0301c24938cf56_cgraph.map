@@ -1,0 +1,23 @@
+<map id="msckf_vio::MsckfVio::featureCallback" name="msckf_vio::MsckfVio::featureCallback">
+<area shape="rect" id="node1" title="后端主要函数，处理新来的数据" alt="" coords="5,291,151,333"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#abbf83eee8f45afffaac75481eb870765" title="向map_server中添加新的特征，和旧特征在新相机帧上的观测" alt="" coords="199,109,371,150"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b" title="imu积分，批量处理imu数据" alt="" coords="210,291,359,333"/>
+<area shape="rect" id="node9" href="$classmsckf__vio_1_1_msckf_vio.html#a2d50f41474d62068258aea6fad747b9b" title=" " alt="" coords="212,226,357,267"/>
+<area shape="rect" id="node10" href="$classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="207,474,363,515"/>
+<area shape="rect" id="node18" href="$classmsckf__vio_1_1_msckf_vio.html#a9fb43d4dfe65743ab04f72d496efbdd0" title=" " alt="" coords="687,358,833,399"/>
+<area shape="rect" id="node19" href="$classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用不再跟踪上的点来更新" alt="" coords="210,409,359,450"/>
+<area shape="rect" id="node20" href="$classmsckf__vio_1_1_msckf_vio.html#a8b19358fe83d8a377b795674044b566e" title="状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P" alt="" coords="436,131,581,173"/>
+<area shape="rect" id="node4" href="$classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="436,226,581,267"/>
+<area shape="rect" id="node5" href="$classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="687,190,833,231"/>
+<area shape="rect" id="node7" href="$namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="921,336,1135,363"/>
+<area shape="rect" id="node8" href="$namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="1183,197,1367,224"/>
+<area shape="rect" id="node6" href="$namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="923,139,1133,165"/>
+<area shape="rect" id="node11" href="$classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="436,474,581,515"/>
+<area shape="rect" id="node13" href="$classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id" alt="" coords="419,605,599,646"/>
+<area shape="rect" id="node14" href="$classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1" title=" " alt="" coords="436,539,581,581"/>
+<area shape="rect" id="node15" href="$classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="433,409,584,450"/>
+<area shape="rect" id="node12" href="$classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="679,526,841,567"/>
+<area shape="rect" id="node16" href="$namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="647,139,873,165"/>
+<area shape="rect" id="node17" href="$namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="651,475,869,501"/>
+<area shape="rect" id="node21" href="$namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="655,37,865,64"/>
+</map>

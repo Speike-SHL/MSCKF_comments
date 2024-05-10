@@ -1,0 +1,1038 @@
+\hypertarget{classmsckf__vio_1_1_msckf_vio}{}\doxysection{msckf\+\_\+vio\+::Msckf\+Vio类 参考}
+\label{classmsckf__vio_1_1_msckf_vio}\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+
+
+{\ttfamily \#include $<$msckf\+\_\+vio.\+h$>$}
+
+
+
+msckf\+\_\+vio\+::Msckf\+Vio 的协作图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=193pt]{classmsckf__vio_1_1_msckf_vio__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{类}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmsckf__vio_1_1_msckf_vio_1_1_state_server}{State\+Server}}
+\begin{DoxyCompactList}\small\item\em 管理\+S-\/\+M\+S\+C\+K\+F中的所有状态，包括\+I\+M\+U相关的状态和多个相机的状态 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public 类型}
+\begin{DoxyCompactItemize}
+\item 
+typedef boost\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}} $>$ \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a84125095bce81c6de3be0558405f69fb}{Ptr}}
+\item 
+typedef boost\+::shared\+\_\+ptr$<$ const \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}} $>$ \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a4ff8cec4cc043591912921f1ff0cf79f}{Const\+Ptr}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+E\+I\+G\+E\+N\+\_\+\+M\+A\+K\+E\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+\+O\+P\+E\+R\+A\+T\+O\+R\+\_\+\+N\+EW \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a6e1d5e62116c85665bc7442b7e1487ae}{Msckf\+Vio}} (ros\+::\+Node\+Handle \&pnh)
+\begin{DoxyCompactList}\small\item\em Msckf\+Vio构造函数 \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_adf5d1cf816a9a50302fe71d8a4768a34}{Msckf\+Vio}} (const \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}} \&)=delete
+\item 
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}} \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a2129eb894834138ba6159f531b2d8b81}{operator=}} (const \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}} \&)=delete
+\item 
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a52e396a79e36a1ff675eece579286fb0}{$\sim$\+Msckf\+Vio}} ()
+\item 
+bool \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a3087eaaf3635b9c26a7aea079fc985d9}{initialize}} ()
+\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a26fb3bfbf78d3f340b20ca021437d8b9}{reset}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d}{load\+Parameters}} ()
+\begin{DoxyCompactList}\small\item\em 导入各种参数，包括阈值、传感器误差标准差等 \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80}{create\+Ros\+IO}} ()
+\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97}{imu\+Callback}} (const sensor\+\_\+msgs\+::\+Imu\+Const\+Ptr \&msg)
+\begin{DoxyCompactList}\small\item\em 接受\+I\+M\+U数据存入imu\+\_\+msg\+\_\+buffer中，并不立刻进行状态递推 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56}{feature\+Callback}} (const Camera\+Measurement\+Const\+Ptr \&msg)
+\begin{DoxyCompactList}\small\item\em 后端主要函数，处理新来的数据 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0}{publish}} (const ros\+::\+Time \&time)
+\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237}{initialize\+Gravity\+And\+Bias}} ()
+\begin{DoxyCompactList}\small\item\em imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计 \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0}{reset\+Callback}} (std\+\_\+srvs\+::\+Trigger\+::\+Request \&req, std\+\_\+srvs\+::\+Trigger\+::\+Response \&res)
+\begin{DoxyCompactList}\small\item\em 重置 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b}{batch\+Imu\+Processing}} (const double \&time\+\_\+bound)
+\begin{DoxyCompactList}\small\item\em imu积分，批量处理imu数据 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013}{process\+Model}} (const double \&time, const Eigen\+::\+Vector3d \&m\+\_\+gyro, const Eigen\+::\+Vector3d \&m\+\_\+acc)
+\begin{DoxyCompactList}\small\item\em 对一帧\+I\+M\+U数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62}{predict\+New\+State}} (const double \&dt, const Eigen\+::\+Vector3d \&gyro, const Eigen\+::\+Vector3d \&acc)
+\begin{DoxyCompactList}\small\item\em 四阶龙格库塔积对\+I\+M\+U状态递推，见笔记pdf中《名义状态递推》 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e}{state\+Augmentation}} (const double \&time)
+\begin{DoxyCompactList}\small\item\em 状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_abbf83eee8f45afffaac75481eb870765}{add\+Feature\+Observations}} (const Camera\+Measurement\+Const\+Ptr \&msg)
+\begin{DoxyCompactList}\small\item\em 向map\+\_\+server中添加新的特征，和旧特征在新相机帧上的观测 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e}{measurement\+Jacobian}} (const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} \&cam\+\_\+state\+\_\+id, const \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} \&feature\+\_\+id, Eigen\+::\+Matrix$<$ double, 4, 6 $>$ \&H\+\_\+x, Eigen\+::\+Matrix$<$ double, 4, 3 $>$ \&H\+\_\+f, Eigen\+::\+Vector4d \&r)
+\begin{DoxyCompactList}\small\item\em 计算一个路标点的雅可比 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96}{feature\+Jacobian}} (const \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} \&feature\+\_\+id, const std\+::vector$<$ \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} $>$ \&cam\+\_\+state\+\_\+ids, Eigen\+::\+Matrix\+Xd \&H\+\_\+x, Eigen\+::\+Vector\+Xd \&r)
+\begin{DoxyCompactList}\small\item\em 计算一个路标点的雅可比 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05}{measurement\+Update}} (const Eigen\+::\+Matrix\+Xd \&H, const Eigen\+::\+Vector\+Xd \&r)
+\begin{DoxyCompactList}\small\item\em 更新 \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a4b5bfa4f80f602d39aecc1bb6627a1c1}{gating\+Test}} (const Eigen\+::\+Matrix\+Xd \&H, const Eigen\+::\+Vector\+Xd \&r, const int \&dof)
+\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa}{remove\+Lost\+Features}} ()
+\begin{DoxyCompactList}\small\item\em 使用不再跟踪上的点来更新 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc}{find\+Redundant\+Cam\+States}} (std\+::vector$<$ \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} $>$ \&rm\+\_\+cam\+\_\+state\+\_\+ids)
+\begin{DoxyCompactList}\small\item\em 找出该删的相机状态的id \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d}{prune\+Cam\+State\+Buffer}} ()
+\begin{DoxyCompactList}\small\item\em 当cam状态数达到最大值时，挑出若干cam状态待删除 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a2d50f41474d62068258aea6fad747b9b}{online\+Reset}} ()
+\item 
+void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a57555099ff0ccea1d26691df0ceceec5}{mocap\+Odom\+Callback}} (const nav\+\_\+msgs\+::\+Odometry\+Const\+Ptr \&msg)
+\begin{DoxyCompactList}\small\item\em 没用，暂时不看 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private 属性}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmsckf__vio_1_1_msckf_vio_1_1_state_server}{State\+Server}} \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a4d65ce6743d94f2120564bd92fefc2cb}{state\+\_\+server}}
+\begin{DoxyCompactList}\small\item\em 包含\+S-\/\+M\+S\+K\+C\+F中的\+I\+M\+U状态和所有相机状态 \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a9136355c28ea76cf27b7bf0e5ae58653}{max\+\_\+cam\+\_\+state\+\_\+size}}
+\item 
+\mbox{\hyperlink{namespacemsckf__vio_a3669e349a8845867230c069f72b0aebd}{Map\+Server}} \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_aea133d27a69b160be298da96e1aae343}{map\+\_\+server}}
+\begin{DoxyCompactList}\small\item\em 包含所有的特征点的map容器，key为特征点id，值为\+Feature类, \end{DoxyCompactList}\item 
+std\+::vector$<$ sensor\+\_\+msgs\+::\+Imu $>$ \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ad635032fae4940247c18975d4abf7758}{imu\+\_\+msg\+\_\+buffer}}
+\begin{DoxyCompactList}\small\item\em 储存进入的\+I\+M\+U的消息，有时间同步的作用 \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ad90d0d8dd61524e5b7463ca075cec845}{is\+\_\+gravity\+\_\+set}}
+\begin{DoxyCompactList}\small\item\em Indicate if the gravity vector is set， 即是否做了\+I\+M\+U的初始化 \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_afacac4dec98c2bab46de34fb10efec21}{is\+\_\+first\+\_\+img}}
+\begin{DoxyCompactList}\small\item\em 判断是否是第一帧图像，后端在接收到第一帧图像后才开始工作 \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a81daf053429e04d1bb8df1e64a175faa}{position\+\_\+std\+\_\+threshold}}
+\item 
+double \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a54d31202fa15c449008cc6b0a01757b6}{tracking\+\_\+rate}}
+\item 
+double \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a3252b15da149502bd2917d54e026e1fb}{translation\+\_\+threshold}}
+\item 
+double \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ac0d63490324b6cf7bf25f0235722f3e8}{rotation\+\_\+threshold}}
+\item 
+double \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a50314a0603313740200bb1a6ae681d5c}{tracking\+\_\+rate\+\_\+threshold}}
+\item 
+ros\+::\+Node\+Handle \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a06d92037f176362788d41a5e69656f81}{nh}}
+\item 
+ros\+::\+Subscriber \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a10a8b25ec1f46387ab4dd818bd086ad6}{imu\+\_\+sub}}
+\item 
+ros\+::\+Subscriber \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_af46c5ea59e203b1ede51a2076a22542d}{feature\+\_\+sub}}
+\item 
+ros\+::\+Publisher \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a364f1c3c98bb76e294ab3e11dce2aa51}{odom\+\_\+pub}}
+\item 
+ros\+::\+Publisher \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a32c72fd37f4c93c9c06d0d452786879c}{feature\+\_\+pub}}
+\item 
+tf\+::\+Transform\+Broadcaster \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ad36d1caef41b43be14b9f8b38df4aedd}{tf\+\_\+pub}}
+\item 
+ros\+::\+Service\+Server \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a3c2a7f22996453e2ad6a4b902a31a405}{reset\+\_\+srv}}
+\item 
+std\+::string \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_aac9d36b0745819997b1b24c29d639b74}{fixed\+\_\+frame\+\_\+id}}
+\item 
+std\+::string \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a9fdf37e894b8ed8e2769d4197dcd5779}{child\+\_\+frame\+\_\+id}}
+\item 
+bool \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_aaba2f4881dd89350ad1420fa747cced1}{publish\+\_\+tf}}
+\item 
+double \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a0b8c206699cde61bcfc4d74a702d450f}{frame\+\_\+rate}}
+\item 
+ros\+::\+Subscriber \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a9c8b76de3b67702dc21cb658b5722b12}{mocap\+\_\+odom\+\_\+sub}}
+\item 
+ros\+::\+Publisher \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a03bcfe3789df9ebb966b730ce17ca369}{mocap\+\_\+odom\+\_\+pub}}
+\item 
+geometry\+\_\+msgs\+::\+Transform\+Stamped \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a104f53b87ec9dc080c0f97f326dfa1e1}{raw\+\_\+mocap\+\_\+odom\+\_\+msg}}
+\item 
+Eigen\+::\+Isometry3d \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a8c9ff3b4cb1e5bfa19c6262f7d6921e8}{mocap\+\_\+initial\+\_\+frame}}
+\end{DoxyCompactItemize}
+\doxysubsection*{静态 Private 属性}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::map$<$ int, double $>$ \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a567e4532763f55a7d261ddfd14834462}{chi\+\_\+squared\+\_\+test\+\_\+table}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{成员类型定义说明}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a4ff8cec4cc043591912921f1ff0cf79f}\label{classmsckf__vio_1_1_msckf_vio_a4ff8cec4cc043591912921f1ff0cf79f}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!ConstPtr@{ConstPtr}}
+\index{ConstPtr@{ConstPtr}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{ConstPtr}{ConstPtr}}
+{\footnotesize\ttfamily typedef boost\+::shared\+\_\+ptr$<$const \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}}$>$ \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a4ff8cec4cc043591912921f1ff0cf79f}{msckf\+\_\+vio\+::\+Msckf\+Vio\+::\+Const\+Ptr}}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a84125095bce81c6de3be0558405f69fb}\label{classmsckf__vio_1_1_msckf_vio_a84125095bce81c6de3be0558405f69fb}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!Ptr@{Ptr}}
+\index{Ptr@{Ptr}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{Ptr}{Ptr}}
+{\footnotesize\ttfamily typedef boost\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}}$>$ \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a84125095bce81c6de3be0558405f69fb}{msckf\+\_\+vio\+::\+Msckf\+Vio\+::\+Ptr}}}
+
+
+
+\doxysubsection{构造及析构函数说明}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a6e1d5e62116c85665bc7442b7e1487ae}\label{classmsckf__vio_1_1_msckf_vio_a6e1d5e62116c85665bc7442b7e1487ae}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!MsckfVio@{MsckfVio}}
+\index{MsckfVio@{MsckfVio}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{MsckfVio()}{MsckfVio()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+Msckf\+Vio\+::\+Msckf\+Vio (\begin{DoxyParamCaption}\item[{ros\+::\+Node\+Handle \&}]{pnh }\end{DoxyParamCaption})}
+
+
+
+Msckf\+Vio构造函数 
+
+
+\begin{DoxyParams}{参数}
+{\em pnh} & Ros节点句柄 \\
+\hline
+{\em is\+\_\+gravity\+\_\+set} & False 设置未初始化重力 \\
+\hline
+{\em is\+\_\+first\+\_\+img} & True 设置是第一帧图像 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_adf5d1cf816a9a50302fe71d8a4768a34}\label{classmsckf__vio_1_1_msckf_vio_adf5d1cf816a9a50302fe71d8a4768a34}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!MsckfVio@{MsckfVio}}
+\index{MsckfVio@{MsckfVio}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{MsckfVio()}{MsckfVio()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+Msckf\+Vio\+::\+Msckf\+Vio (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a52e396a79e36a1ff675eece579286fb0}\label{classmsckf__vio_1_1_msckf_vio_a52e396a79e36a1ff675eece579286fb0}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!````~MsckfVio@{$\sim$MsckfVio}}
+\index{````~MsckfVio@{$\sim$MsckfVio}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{$\sim$MsckfVio()}{~MsckfVio()}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+Msckf\+Vio\+::$\sim$\+Msckf\+Vio (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{成员函数说明}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_abbf83eee8f45afffaac75481eb870765}\label{classmsckf__vio_1_1_msckf_vio_abbf83eee8f45afffaac75481eb870765}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!addFeatureObservations@{addFeatureObservations}}
+\index{addFeatureObservations@{addFeatureObservations}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{addFeatureObservations()}{addFeatureObservations()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::add\+Feature\+Observations (\begin{DoxyParamCaption}\item[{const Camera\+Measurement\+Const\+Ptr \&}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+向map\+\_\+server中添加新的特征，和旧特征在新相机帧上的观测 
+
+
+\begin{DoxyParams}{参数}
+{\em msg} & 前端发来的当前帧的所有特征以及对应的归一化坐标 \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyEnumerate}
+\item 取出当前imu状态的id作为当前相机帧的id
+\item 获取当前地图内特征点的数量
+\item 若此次前端传来的特征点在地图中没有，那么就添加新的特征点 否则就更新旧特征点的观测
+\item 计算跟踪率。当前帧前端进来的所有点中，有多少是已经在地图中的
+\end{DoxyEnumerate}这是这个函数的调用关系图\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_abbf83eee8f45afffaac75481eb870765_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b}\label{classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!batchImuProcessing@{batchImuProcessing}}
+\index{batchImuProcessing@{batchImuProcessing}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{batchImuProcessing()}{batchImuProcessing()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::batch\+Imu\+Processing (\begin{DoxyParamCaption}\item[{const double \&}]{time\+\_\+bound }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+imu积分，批量处理imu数据 
+
+
+\begin{DoxyParams}{参数}
+{\em time\+\_\+bound} & 从state\+\_\+server.\+imu\+\_\+state.\+time上次处理到这个时间 \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyEnumerate}
+\item 遍历imu\+\_\+msg\+\_\+buffer中的所有imu数据，找到state\+\_\+server.\+imu\+\_\+state.\+time到 当前前端特征时间之间的imu数据，然后进行状态递推 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013}{Msckf\+Vio\+::process\+Model(const double \&time, const Eigen\+::\+Vector3d \&m\+\_\+gyro, const Eigen\+::\+Vector3d \&m\+\_\+acc)}}
+\end{DoxySeeAlso}
+
+\item 更新\+I\+M\+U状态的id state\+\_\+server.\+imu\+\_\+state.\+id, 相机状态id也根据这个赋值
+\item 从imu\+\_\+msg\+\_\+buffer中删除已经使用过的数据
+\end{DoxyEnumerate}函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80}\label{classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!createRosIO@{createRosIO}}
+\index{createRosIO@{createRosIO}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{createRosIO()}{createRosIO()}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Msckf\+Vio\+::create\+Ros\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+\begin{DoxyEnumerate}
+\item 发布 \char`\"{}odom\char`\"{}, 后端计算出的位姿
+\item 发布 \char`\"{}feature\+\_\+point\+\_\+cloud\char`\"{}, 后端计算出的世界系下的点云
+\item 服务，重置后端
+\item 接收 \char`\"{}imu\char`\"{}, 接收\+I\+M\+U数据。\begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97}{Msckf\+Vio\+::imu\+Callback(const sensor\+\_\+msgs\+::\+Imu\+Const\+Ptr \&msg)}}
+\end{DoxySeeAlso}
+
+\item 接收 \char`\"{}features\char`\"{}, 前端特征点数据。 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56}{Msckf\+Vio\+::feature\+Callback(const Camera\+Measurement\+Const\+Ptr \&msg)}}
+\end{DoxySeeAlso}
+
+\item 接收 \char`\"{}mocap\+\_\+odom\char`\"{}，真值数据，未用到
+\item 发布 \char`\"{}gt\+\_\+odom\char`\"{}，发布由mocap\+\_\+odom 算出的真实位姿，未用到
+\end{DoxyEnumerate}函数调用图\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=334pt]{classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56}\label{classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!featureCallback@{featureCallback}}
+\index{featureCallback@{featureCallback}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{featureCallback()}{featureCallback()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::feature\+Callback (\begin{DoxyParamCaption}\item[{const Camera\+Measurement\+Const\+Ptr \&}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+后端主要函数，处理新来的数据 
+
+
+\begin{DoxyParams}{参数}
+{\em msg} & 新来的数据, 包括时间戳、点id、和左右目去畸变后归一化坐标 \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyEnumerate}
+\item 必须经过imu(重力)初始化才能继续进行
+\item 接收到第一帧图像后，记录时间，后端开始工作
+\item 批量\+I\+M\+U积分，取出上次\+I\+M\+U积分时间到当前特征接收时间中的\+I\+M\+U数据进行积分 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ababad8190cbf26d5778e54f108ae1f7b}{Msckf\+Vio\+::batch\+Imu\+Processing(const double \&time\+\_\+bound)}}
+\end{DoxySeeAlso}
+
+\item 状态增广，包括名义状态增广和误差协方差矩阵\+P的增广，主要是增广新的相机状态 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e}{Msckf\+Vio\+::state\+Augmentation(const double \&time)}}
+\end{DoxySeeAlso}
+
+\item 向map\+\_\+server中添加新的特征，和旧特征在新相机帧上的观测
+\end{DoxyEnumerate}函数调用图\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96}\label{classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!featureJacobian@{featureJacobian}}
+\index{featureJacobian@{featureJacobian}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{featureJacobian()}{featureJacobian()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::feature\+Jacobian (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} \&}]{feature\+\_\+id,  }\item[{const std\+::vector$<$ \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} $>$ \&}]{cam\+\_\+state\+\_\+ids,  }\item[{Eigen\+::\+Matrix\+Xd \&}]{H\+\_\+x,  }\item[{Eigen\+::\+Vector\+Xd \&}]{r }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+计算一个路标点的雅可比 
+
+
+\begin{DoxyParams}{参数}
+{\em feature\+\_\+id} & 路标点id \\
+\hline
+{\em cam\+\_\+state\+\_\+ids} & 这个点对应的所有的相机状态id \\
+\hline
+{\em H\+\_\+x} & 雅可比 \\
+\hline
+{\em r} & 误差 \\
+\hline
+\end{DoxyParams}
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc}\label{classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!findRedundantCamStates@{findRedundantCamStates}}
+\index{findRedundantCamStates@{findRedundantCamStates}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{findRedundantCamStates()}{findRedundantCamStates()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::find\+Redundant\+Cam\+States (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} $>$ \&}]{rm\+\_\+cam\+\_\+state\+\_\+ids }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+找出该删的相机状态的id 
+
+
+\begin{DoxyParams}{参数}
+{\em rm\+\_\+cam\+\_\+state\+\_\+ids} & 要删除的相机状态id \\
+\hline
+\end{DoxyParams}
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a4b5bfa4f80f602d39aecc1bb6627a1c1}\label{classmsckf__vio_1_1_msckf_vio_a4b5bfa4f80f602d39aecc1bb6627a1c1}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!gatingTest@{gatingTest}}
+\index{gatingTest@{gatingTest}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{gatingTest()}{gatingTest()}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Msckf\+Vio\+::gating\+Test (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix\+Xd \&}]{H,  }\item[{const Eigen\+::\+Vector\+Xd \&}]{r,  }\item[{const int \&}]{dof }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a4b5bfa4f80f602d39aecc1bb6627a1c1_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97}\label{classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!imuCallback@{imuCallback}}
+\index{imuCallback@{imuCallback}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{imuCallback()}{imuCallback()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::imu\+Callback (\begin{DoxyParamCaption}\item[{const sensor\+\_\+msgs\+::\+Imu\+Const\+Ptr \&}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+接受\+I\+M\+U数据存入imu\+\_\+msg\+\_\+buffer中，并不立刻进行状态递推 
+
+\begin{DoxyNote}{注解}
+前200个imu数据需要静止不动进行初始化，如果移动会导致轨迹飘 
+\end{DoxyNote}
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd192500da97_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a3087eaaf3635b9c26a7aea079fc985d9}\label{classmsckf__vio_1_1_msckf_vio_a3087eaaf3635b9c26a7aea079fc985d9}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!initialize@{initialize}}
+\index{initialize@{initialize}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Msckf\+Vio\+::initialize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyEnumerate}
+\item 加载参数 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d}{Msckf\+Vio\+::load\+Parameters()}}
+\end{DoxySeeAlso}
+
+\item 设置imu观测的协方差
+\item 创建后端话题的接受与发布 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ac8a40018e7997bf6dd13808d6a9f6e80}{Msckf\+Vio\+::create\+Ros\+I\+O()}}
+\end{DoxySeeAlso}
+
+\end{DoxyEnumerate}函数调用图\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a3087eaaf3635b9c26a7aea079fc985d9_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237}\label{classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!initializeGravityAndBias@{initializeGravityAndBias}}
+\index{initializeGravityAndBias@{initializeGravityAndBias}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{initializeGravityAndBias()}{initializeGravityAndBias()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::initialize\+Gravity\+And\+Bias (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计 
+
+\begin{DoxyNote}{注解}
+为什么要做\+I\+M\+U初始化？因为初始时刻\+I\+M\+U的摆放和机器人的位置是未知的，可能在斜坡上，可能不水平，或者\+I\+M\+U竖直安装， 但是使用\+I\+M\+U积分时是需要减去重力的，因此需要知道重力方向，另外陀螺仪的偏置也是未知的，因此需要初始化 
+\end{DoxyNote}
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d}\label{classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!loadParameters@{loadParameters}}
+\index{loadParameters@{loadParameters}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{loadParameters()}{loadParameters()}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Msckf\+Vio\+::load\+Parameters (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+导入各种参数，包括阈值、传感器误差标准差等 
+
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=334pt]{classmsckf__vio_1_1_msckf_vio_a1e49f09dc62af5f1461fe59fa15dd48d_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e}\label{classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!measurementJacobian@{measurementJacobian}}
+\index{measurementJacobian@{measurementJacobian}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{measurementJacobian()}{measurementJacobian()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::measurement\+Jacobian (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} \&}]{cam\+\_\+state\+\_\+id,  }\item[{const \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} \&}]{feature\+\_\+id,  }\item[{Eigen\+::\+Matrix$<$ double, 4, 6 $>$ \&}]{H\+\_\+x,  }\item[{Eigen\+::\+Matrix$<$ double, 4, 3 $>$ \&}]{H\+\_\+f,  }\item[{Eigen\+::\+Vector4d \&}]{r }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+计算一个路标点的雅可比 
+
+
+\begin{DoxyParams}{参数}
+{\em cam\+\_\+state\+\_\+id} & 有效的相机状态id \\
+\hline
+{\em feature\+\_\+id} & 路标点id \\
+\hline
+{\em H\+\_\+x} & 误差相对于位姿的雅可比 \\
+\hline
+{\em H\+\_\+f} & 误差相对于三维点的雅可比 \\
+\hline
+{\em r} & 误差 \\
+\hline
+\end{DoxyParams}
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05}\label{classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!measurementUpdate@{measurementUpdate}}
+\index{measurementUpdate@{measurementUpdate}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{measurementUpdate()}{measurementUpdate()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::measurement\+Update (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix\+Xd \&}]{H,  }\item[{const Eigen\+::\+Vector\+Xd \&}]{r }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+更新 
+
+
+\begin{DoxyParams}{参数}
+{\em H} & 雅可比 \\
+\hline
+{\em r} & 误差 \\
+\hline
+\end{DoxyParams}
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a57555099ff0ccea1d26691df0ceceec5}\label{classmsckf__vio_1_1_msckf_vio_a57555099ff0ccea1d26691df0ceceec5}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!mocapOdomCallback@{mocapOdomCallback}}
+\index{mocapOdomCallback@{mocapOdomCallback}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{mocapOdomCallback()}{mocapOdomCallback()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::mocap\+Odom\+Callback (\begin{DoxyParamCaption}\item[{const nav\+\_\+msgs\+::\+Odometry\+Const\+Ptr \&}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+没用，暂时不看 
+
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a57555099ff0ccea1d26691df0ceceec5_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a2d50f41474d62068258aea6fad747b9b}\label{classmsckf__vio_1_1_msckf_vio_a2d50f41474d62068258aea6fad747b9b}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!onlineReset@{onlineReset}}
+\index{onlineReset@{onlineReset}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{onlineReset()}{onlineReset()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::online\+Reset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a2d50f41474d62068258aea6fad747b9b_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a2129eb894834138ba6159f531b2d8b81}\label{classmsckf__vio_1_1_msckf_vio_a2129eb894834138ba6159f531b2d8b81}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!operator=@{operator=}}
+\index{operator=@{operator=}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}} msckf\+\_\+vio\+::\+Msckf\+Vio\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62}\label{classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!predictNewState@{predictNewState}}
+\index{predictNewState@{predictNewState}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{predictNewState()}{predictNewState()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::predict\+New\+State (\begin{DoxyParamCaption}\item[{const double \&}]{dt,  }\item[{const Eigen\+::\+Vector3d \&}]{gyro,  }\item[{const Eigen\+::\+Vector3d \&}]{acc }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+四阶龙格库塔积对\+I\+M\+U状态递推，见笔记pdf中《名义状态递推》 
+
+
+\begin{DoxyParams}{参数}
+{\em dt} & 相对上一个数据的间隔时间 \\
+\hline
+{\em gyro} & 角速度减去偏置后的 \\
+\hline
+{\em acc} & 加速度减去偏置后的 \\
+\hline
+\end{DoxyParams}
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013}\label{classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!processModel@{processModel}}
+\index{processModel@{processModel}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{processModel()}{processModel()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::process\+Model (\begin{DoxyParamCaption}\item[{const double \&}]{time,  }\item[{const Eigen\+::\+Vector3d \&}]{m\+\_\+gyro,  }\item[{const Eigen\+::\+Vector3d \&}]{m\+\_\+acc }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+对一帧\+I\+M\+U数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估 
+
+
+\begin{DoxyParams}{参数}
+{\em time} & I\+M\+U数据的时间戳 \\
+\hline
+{\em m\+\_\+gyro} & 角速度 \\
+\hline
+{\em m\+\_\+acc} & 加速度 \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyEnumerate}
+\item 引用的方式取出imu状态
+\item 角速度和加速度减去偏置，计算dt
+\item 计算\+F阵和\+G阵，见笔记pdf中《\+I\+M\+U误差状态方程总结》
+\end{DoxyEnumerate}
+\begin{DoxyEnumerate}
+\item 计算转移矩阵\+Phi矩阵，使用三阶近似，当dt$<$0.\+01s时，这个近似是足够准确的 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》
+\item 四阶龙格库塔积分预测名义状态，旋转，速度，位置 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a1d31e150c1817362cd5dfa0f112c1a62}{Msckf\+Vio\+::predict\+New\+State(const double \&dt, const Eigen\+::\+Vector3d \&gyro, const Eigen\+::\+Vector3d \&acc)}}
+\end{DoxySeeAlso}
+
+\item 可观性约束\+O\+C，通过修改\+Phi阵，保证零空间秩为4。 见论文《\+Observability-\/constrained Vision-\/aided Inertial Navigation》中公式20$\sim$23
+\item 使用\+O\+C后的\+Phi阵计算过程噪声协方差矩阵Q, 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》
+\item 预测系统误差状态协方差矩阵\+P，如果有相机状态量，那么也更新imu状态量与相机状态量交叉的部分 见笔记pdf中《预测系统状态协方差矩阵\+P》
+\item 强制对称，因为协方差矩阵就是对称的
+\item 更新imu旋转，位置和速度的零空间，其实就是记录此次状态预估后的状态，用于下一次对\+Phi进行\+OC
+\item 更新imu状态的时间state\+\_\+server.\+imu\+\_\+state.\+time
+\end{DoxyEnumerate}函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_ae49d9e1a90ffa5df61a8aa94b0bb1013_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d}\label{classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!pruneCamStateBuffer@{pruneCamStateBuffer}}
+\index{pruneCamStateBuffer@{pruneCamStateBuffer}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{pruneCamStateBuffer()}{pruneCamStateBuffer()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::prune\+Cam\+State\+Buffer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+当cam状态数达到最大值时，挑出若干cam状态待删除 
+
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0}\label{classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!publish@{publish}}
+\index{publish@{publish}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{publish()}{publish()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::publish (\begin{DoxyParamCaption}\item[{const ros\+::\+Time \&}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa}\label{classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!removeLostFeatures@{removeLostFeatures}}
+\index{removeLostFeatures@{removeLostFeatures}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{removeLostFeatures()}{removeLostFeatures()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::remove\+Lost\+Features (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+使用不再跟踪上的点来更新 
+
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a26fb3bfbf78d3f340b20ca021437d8b9}\label{classmsckf__vio_1_1_msckf_vio_a26fb3bfbf78d3f340b20ca021437d8b9}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!reset@{reset}}
+\index{reset@{reset}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::reset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0}\label{classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!resetCallback@{resetCallback}}
+\index{resetCallback@{resetCallback}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{resetCallback()}{resetCallback()}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Msckf\+Vio\+::reset\+Callback (\begin{DoxyParamCaption}\item[{std\+\_\+srvs\+::\+Trigger\+::\+Request \&}]{req,  }\item[{std\+\_\+srvs\+::\+Trigger\+::\+Response \&}]{res }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+重置 
+
+函数调用图\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e}\label{classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!stateAugmentation@{stateAugmentation}}
+\index{stateAugmentation@{stateAugmentation}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{stateAugmentation()}{stateAugmentation()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::state\+Augmentation (\begin{DoxyParamCaption}\item[{const double \&}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P 
+
+
+\begin{DoxyParams}{参数}
+{\em time} & 图片的时间戳 \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyEnumerate}
+\item 根据现在的\+I\+M\+U状态以及\+I\+M\+U和左目相机的外参，预估出当前相机的名义状态 见笔记pdf中《名义状态扩增》
+\item 注册新的相机状态到状态库state\+\_\+server中, 包括id(使用此时的imu状态id作为该帧相机的id), 时间戳，位姿 Q\+U\+E\+RY 以及用于\+O\+C的零空间(第一次相机帧估计的数据)
+\item 计算用于增广协方差矩阵\+P的雅可比矩阵\+J，见笔记pdf中《求雅可比矩阵 J\+\_\+\+I》
+\item 增广误差协方差矩阵\+P，见笔记pdf中《误差协方差矩阵增广》
+\item 进行强制对称
+\end{DoxyEnumerate}函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{类成员变量说明}
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a567e4532763f55a7d261ddfd14834462}\label{classmsckf__vio_1_1_msckf_vio_a567e4532763f55a7d261ddfd14834462}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!chi\_squared\_test\_table@{chi\_squared\_test\_table}}
+\index{chi\_squared\_test\_table@{chi\_squared\_test\_table}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{chi\_squared\_test\_table}{chi\_squared\_test\_table}}
+{\footnotesize\ttfamily map$<$ int, double $>$ msckf\+\_\+vio\+::\+Msckf\+Vio\+::chi\+\_\+squared\+\_\+test\+\_\+table\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a9fdf37e894b8ed8e2769d4197dcd5779}\label{classmsckf__vio_1_1_msckf_vio_a9fdf37e894b8ed8e2769d4197dcd5779}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!child\_frame\_id@{child\_frame\_id}}
+\index{child\_frame\_id@{child\_frame\_id}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{child\_frame\_id}{child\_frame\_id}}
+{\footnotesize\ttfamily std\+::string msckf\+\_\+vio\+::\+Msckf\+Vio\+::child\+\_\+frame\+\_\+id\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a32c72fd37f4c93c9c06d0d452786879c}\label{classmsckf__vio_1_1_msckf_vio_a32c72fd37f4c93c9c06d0d452786879c}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!feature\_pub@{feature\_pub}}
+\index{feature\_pub@{feature\_pub}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{feature\_pub}{feature\_pub}}
+{\footnotesize\ttfamily ros\+::\+Publisher msckf\+\_\+vio\+::\+Msckf\+Vio\+::feature\+\_\+pub\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_af46c5ea59e203b1ede51a2076a22542d}\label{classmsckf__vio_1_1_msckf_vio_af46c5ea59e203b1ede51a2076a22542d}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!feature\_sub@{feature\_sub}}
+\index{feature\_sub@{feature\_sub}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{feature\_sub}{feature\_sub}}
+{\footnotesize\ttfamily ros\+::\+Subscriber msckf\+\_\+vio\+::\+Msckf\+Vio\+::feature\+\_\+sub\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_aac9d36b0745819997b1b24c29d639b74}\label{classmsckf__vio_1_1_msckf_vio_aac9d36b0745819997b1b24c29d639b74}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!fixed\_frame\_id@{fixed\_frame\_id}}
+\index{fixed\_frame\_id@{fixed\_frame\_id}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{fixed\_frame\_id}{fixed\_frame\_id}}
+{\footnotesize\ttfamily std\+::string msckf\+\_\+vio\+::\+Msckf\+Vio\+::fixed\+\_\+frame\+\_\+id\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a0b8c206699cde61bcfc4d74a702d450f}\label{classmsckf__vio_1_1_msckf_vio_a0b8c206699cde61bcfc4d74a702d450f}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!frame\_rate@{frame\_rate}}
+\index{frame\_rate@{frame\_rate}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{frame\_rate}{frame\_rate}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Msckf\+Vio\+::frame\+\_\+rate\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_ad635032fae4940247c18975d4abf7758}\label{classmsckf__vio_1_1_msckf_vio_ad635032fae4940247c18975d4abf7758}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!imu\_msg\_buffer@{imu\_msg\_buffer}}
+\index{imu\_msg\_buffer@{imu\_msg\_buffer}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{imu\_msg\_buffer}{imu\_msg\_buffer}}
+{\footnotesize\ttfamily std\+::vector$<$sensor\+\_\+msgs\+::\+Imu$>$ msckf\+\_\+vio\+::\+Msckf\+Vio\+::imu\+\_\+msg\+\_\+buffer\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+储存进入的\+I\+M\+U的消息，有时间同步的作用 
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a10a8b25ec1f46387ab4dd818bd086ad6}\label{classmsckf__vio_1_1_msckf_vio_a10a8b25ec1f46387ab4dd818bd086ad6}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!imu\_sub@{imu\_sub}}
+\index{imu\_sub@{imu\_sub}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{imu\_sub}{imu\_sub}}
+{\footnotesize\ttfamily ros\+::\+Subscriber msckf\+\_\+vio\+::\+Msckf\+Vio\+::imu\+\_\+sub\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_afacac4dec98c2bab46de34fb10efec21}\label{classmsckf__vio_1_1_msckf_vio_afacac4dec98c2bab46de34fb10efec21}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!is\_first\_img@{is\_first\_img}}
+\index{is\_first\_img@{is\_first\_img}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{is\_first\_img}{is\_first\_img}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Msckf\+Vio\+::is\+\_\+first\+\_\+img\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+判断是否是第一帧图像，后端在接收到第一帧图像后才开始工作 
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_ad90d0d8dd61524e5b7463ca075cec845}\label{classmsckf__vio_1_1_msckf_vio_ad90d0d8dd61524e5b7463ca075cec845}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!is\_gravity\_set@{is\_gravity\_set}}
+\index{is\_gravity\_set@{is\_gravity\_set}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{is\_gravity\_set}{is\_gravity\_set}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Msckf\+Vio\+::is\+\_\+gravity\+\_\+set\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Indicate if the gravity vector is set， 即是否做了\+I\+M\+U的初始化 
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_aea133d27a69b160be298da96e1aae343}\label{classmsckf__vio_1_1_msckf_vio_aea133d27a69b160be298da96e1aae343}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!map\_server@{map\_server}}
+\index{map\_server@{map\_server}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{map\_server}{map\_server}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemsckf__vio_a3669e349a8845867230c069f72b0aebd}{Map\+Server}} msckf\+\_\+vio\+::\+Msckf\+Vio\+::map\+\_\+server\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+包含所有的特征点的map容器，key为特征点id，值为\+Feature类, 
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a9136355c28ea76cf27b7bf0e5ae58653}\label{classmsckf__vio_1_1_msckf_vio_a9136355c28ea76cf27b7bf0e5ae58653}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!max\_cam\_state\_size@{max\_cam\_state\_size}}
+\index{max\_cam\_state\_size@{max\_cam\_state\_size}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{max\_cam\_state\_size}{max\_cam\_state\_size}}
+{\footnotesize\ttfamily int msckf\+\_\+vio\+::\+Msckf\+Vio\+::max\+\_\+cam\+\_\+state\+\_\+size\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a8c9ff3b4cb1e5bfa19c6262f7d6921e8}\label{classmsckf__vio_1_1_msckf_vio_a8c9ff3b4cb1e5bfa19c6262f7d6921e8}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!mocap\_initial\_frame@{mocap\_initial\_frame}}
+\index{mocap\_initial\_frame@{mocap\_initial\_frame}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{mocap\_initial\_frame}{mocap\_initial\_frame}}
+{\footnotesize\ttfamily Eigen\+::\+Isometry3d msckf\+\_\+vio\+::\+Msckf\+Vio\+::mocap\+\_\+initial\+\_\+frame\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a03bcfe3789df9ebb966b730ce17ca369}\label{classmsckf__vio_1_1_msckf_vio_a03bcfe3789df9ebb966b730ce17ca369}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!mocap\_odom\_pub@{mocap\_odom\_pub}}
+\index{mocap\_odom\_pub@{mocap\_odom\_pub}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{mocap\_odom\_pub}{mocap\_odom\_pub}}
+{\footnotesize\ttfamily ros\+::\+Publisher msckf\+\_\+vio\+::\+Msckf\+Vio\+::mocap\+\_\+odom\+\_\+pub\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a9c8b76de3b67702dc21cb658b5722b12}\label{classmsckf__vio_1_1_msckf_vio_a9c8b76de3b67702dc21cb658b5722b12}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!mocap\_odom\_sub@{mocap\_odom\_sub}}
+\index{mocap\_odom\_sub@{mocap\_odom\_sub}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{mocap\_odom\_sub}{mocap\_odom\_sub}}
+{\footnotesize\ttfamily ros\+::\+Subscriber msckf\+\_\+vio\+::\+Msckf\+Vio\+::mocap\+\_\+odom\+\_\+sub\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a06d92037f176362788d41a5e69656f81}\label{classmsckf__vio_1_1_msckf_vio_a06d92037f176362788d41a5e69656f81}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!nh@{nh}}
+\index{nh@{nh}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{nh}{nh}}
+{\footnotesize\ttfamily ros\+::\+Node\+Handle msckf\+\_\+vio\+::\+Msckf\+Vio\+::nh\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a364f1c3c98bb76e294ab3e11dce2aa51}\label{classmsckf__vio_1_1_msckf_vio_a364f1c3c98bb76e294ab3e11dce2aa51}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!odom\_pub@{odom\_pub}}
+\index{odom\_pub@{odom\_pub}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{odom\_pub}{odom\_pub}}
+{\footnotesize\ttfamily ros\+::\+Publisher msckf\+\_\+vio\+::\+Msckf\+Vio\+::odom\+\_\+pub\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a81daf053429e04d1bb8df1e64a175faa}\label{classmsckf__vio_1_1_msckf_vio_a81daf053429e04d1bb8df1e64a175faa}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!position\_std\_threshold@{position\_std\_threshold}}
+\index{position\_std\_threshold@{position\_std\_threshold}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{position\_std\_threshold}{position\_std\_threshold}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Msckf\+Vio\+::position\+\_\+std\+\_\+threshold\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_aaba2f4881dd89350ad1420fa747cced1}\label{classmsckf__vio_1_1_msckf_vio_aaba2f4881dd89350ad1420fa747cced1}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!publish\_tf@{publish\_tf}}
+\index{publish\_tf@{publish\_tf}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{publish\_tf}{publish\_tf}}
+{\footnotesize\ttfamily bool msckf\+\_\+vio\+::\+Msckf\+Vio\+::publish\+\_\+tf\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a104f53b87ec9dc080c0f97f326dfa1e1}\label{classmsckf__vio_1_1_msckf_vio_a104f53b87ec9dc080c0f97f326dfa1e1}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!raw\_mocap\_odom\_msg@{raw\_mocap\_odom\_msg}}
+\index{raw\_mocap\_odom\_msg@{raw\_mocap\_odom\_msg}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{raw\_mocap\_odom\_msg}{raw\_mocap\_odom\_msg}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Transform\+Stamped msckf\+\_\+vio\+::\+Msckf\+Vio\+::raw\+\_\+mocap\+\_\+odom\+\_\+msg\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a3c2a7f22996453e2ad6a4b902a31a405}\label{classmsckf__vio_1_1_msckf_vio_a3c2a7f22996453e2ad6a4b902a31a405}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!reset\_srv@{reset\_srv}}
+\index{reset\_srv@{reset\_srv}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{reset\_srv}{reset\_srv}}
+{\footnotesize\ttfamily ros\+::\+Service\+Server msckf\+\_\+vio\+::\+Msckf\+Vio\+::reset\+\_\+srv\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_ac0d63490324b6cf7bf25f0235722f3e8}\label{classmsckf__vio_1_1_msckf_vio_ac0d63490324b6cf7bf25f0235722f3e8}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!rotation\_threshold@{rotation\_threshold}}
+\index{rotation\_threshold@{rotation\_threshold}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{rotation\_threshold}{rotation\_threshold}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Msckf\+Vio\+::rotation\+\_\+threshold\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a4d65ce6743d94f2120564bd92fefc2cb}\label{classmsckf__vio_1_1_msckf_vio_a4d65ce6743d94f2120564bd92fefc2cb}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!state\_server@{state\_server}}
+\index{state\_server@{state\_server}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{state\_server}{state\_server}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmsckf__vio_1_1_msckf_vio_1_1_state_server}{State\+Server}} msckf\+\_\+vio\+::\+Msckf\+Vio\+::state\+\_\+server\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+包含\+S-\/\+M\+S\+K\+C\+F中的\+I\+M\+U状态和所有相机状态 
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_ad36d1caef41b43be14b9f8b38df4aedd}\label{classmsckf__vio_1_1_msckf_vio_ad36d1caef41b43be14b9f8b38df4aedd}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!tf\_pub@{tf\_pub}}
+\index{tf\_pub@{tf\_pub}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{tf\_pub}{tf\_pub}}
+{\footnotesize\ttfamily tf\+::\+Transform\+Broadcaster msckf\+\_\+vio\+::\+Msckf\+Vio\+::tf\+\_\+pub\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a54d31202fa15c449008cc6b0a01757b6}\label{classmsckf__vio_1_1_msckf_vio_a54d31202fa15c449008cc6b0a01757b6}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!tracking\_rate@{tracking\_rate}}
+\index{tracking\_rate@{tracking\_rate}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{tracking\_rate}{tracking\_rate}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Msckf\+Vio\+::tracking\+\_\+rate\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a50314a0603313740200bb1a6ae681d5c}\label{classmsckf__vio_1_1_msckf_vio_a50314a0603313740200bb1a6ae681d5c}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!tracking\_rate\_threshold@{tracking\_rate\_threshold}}
+\index{tracking\_rate\_threshold@{tracking\_rate\_threshold}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{tracking\_rate\_threshold}{tracking\_rate\_threshold}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Msckf\+Vio\+::tracking\+\_\+rate\+\_\+threshold\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmsckf__vio_1_1_msckf_vio_a3252b15da149502bd2917d54e026e1fb}\label{classmsckf__vio_1_1_msckf_vio_a3252b15da149502bd2917d54e026e1fb}} 
+\index{msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}!translation\_threshold@{translation\_threshold}}
+\index{translation\_threshold@{translation\_threshold}!msckf\_vio::MsckfVio@{msckf\_vio::MsckfVio}}
+\doxysubsubsection{\texorpdfstring{translation\_threshold}{translation\_threshold}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+Msckf\+Vio\+::translation\+\_\+threshold\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+该类的文档由以下文件生成\+:\begin{DoxyCompactItemize}
+\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/include/msckf\+\_\+vio/\mbox{\hyperlink{msckf__vio_8h}{msckf\+\_\+vio.\+h}}\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/src/\mbox{\hyperlink{msckf__vio_8cpp}{msckf\+\_\+vio.\+cpp}}\end{DoxyCompactItemize}

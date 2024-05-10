@@ -1,0 +1,8 @@
+<map id="msckf_vio::MsckfVio::measurementUpdate" name="msckf_vio::MsckfVio::measurementUpdate">
+<area shape="rect" id="node1" title="更新" alt="" coords="5,49,156,90"/>
+<area shape="rect" id="node2" href="$namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="204,5,431,32"/>
+<area shape="rect" id="node4" href="$namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="211,56,424,83"/>
+<area shape="rect" id="node6" href="$namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="209,107,426,133"/>
+<area shape="rect" id="node3" href="$namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="479,5,688,32"/>
+<area shape="rect" id="node5" href="$namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="491,56,675,83"/>
+</map>

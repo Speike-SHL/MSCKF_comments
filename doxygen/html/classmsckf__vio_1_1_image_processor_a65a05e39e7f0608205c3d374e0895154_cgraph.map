@@ -1,0 +1,23 @@
+<map id="msckf_vio::ImageProcessor::createRosIO" name="msckf_vio::ImageProcessor::createRosIO">
+<area shape="rect" id="node1" title="createRosIO Create ros publisher and subscirbers." alt="" coords="5,235,191,276"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_image_processor.html#a4944cd8b2d83b9bab4b17cfb5a06c168" title="imuCallback Callback function for the imu message." alt="" coords="239,201,424,243"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="239,267,424,308"/>
+<area shape="rect" id="node4" href="$classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="472,71,657,112"/>
+<area shape="rect" id="node10" href="$classmsckf__vio_1_1_image_processor.html#a987c40bc7344d935d661d11311f79946" title="createImagePyramids Create image pyramids used for klt tracking." alt="" coords="472,332,657,373"/>
+<area shape="rect" id="node11" href="$classmsckf__vio_1_1_image_processor.html#a7016d93a91c704d63e1dc99f0fb7dfd7" title="drawFeaturesStereo Draw tracked and newly detected features on the stereo images." alt="" coords="472,397,657,439"/>
+<area shape="rect" id="node12" href="$classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d" title=" " alt="" coords="472,136,657,177"/>
+<area shape="rect" id="node13" href="$classmsckf__vio_1_1_image_processor.html#a1f1fdf6356310612e8c30170af93abb9" title="pruneGridFeatures Remove some of the features of a grid in case there are too many features inside of..." alt="" coords="472,488,657,529"/>
+<area shape="rect" id="node15" href="$classmsckf__vio_1_1_image_processor.html#a6257bea2b1464362bdab85d62907741d" title="publish Publish the features on the current image including both the tracked and newly detected ones." alt="" coords="472,201,657,243"/>
+<area shape="rect" id="node16" href="$classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="472,267,657,308"/>
+<area shape="rect" id="node5" href="$classmsckf__vio_1_1_image_processor.html#a336c459b2928779ba65cf0e731c9d58f" title="featureCompareByResponse Compare two features based on the response." alt="" coords="711,71,909,112"/>
+<area shape="rect" id="node6" href="$classmsckf__vio_1_1_image_processor.html#a09d932297eb660c1d90c14c439555081" title="keyPointCompareByResponse Compare two keypoints based on the response." alt="" coords="705,5,915,47"/>
+<area shape="rect" id="node7" href="$classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="717,136,903,177"/>
+<area shape="rect" id="node8" href="$classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="963,133,1148,175"/>
+<area shape="rect" id="node9" href="$classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="963,199,1148,240"/>
+<area shape="rect" id="node14" href="$classmsckf__vio_1_1_image_processor.html#a5ba15337f275bf17eaf6dccfeda37671" title="featureCompareByLifetime Compare two features based on the lifetime." alt="" coords="717,515,903,556"/>
+<area shape="rect" id="node17" href="$classmsckf__vio_1_1_image_processor.html#a42ccae5b36afd048f31787445a6f73b5" title="integrateImuData Integrates the IMU gyro readings between the two consecutive images,..." alt="" coords="717,253,903,295"/>
+<area shape="rect" id="node18" href="$classmsckf__vio_1_1_image_processor.html#a2f0daa82bdf82854f82dbf25ef813e05" title="predictFeatureTracking Compensates the rotation between consecutive camera frames so that feature tra..." alt="" coords="717,319,903,360"/>
+<area shape="rect" id="node19" href="$classmsckf__vio_1_1_image_processor.html#a5ca4a3dd1f59a57544c4ffe12c8c2f4c" title="removeUnmarkedElements Remove the unmarked elements within a vector." alt="" coords="716,384,904,425"/>
+<area shape="rect" id="node20" href="$classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="717,449,903,491"/>
+<area shape="rect" id="node21" href="$classmsckf__vio_1_1_image_processor.html#ab6523b76ff7dec84af600f0725aded72" title="估计系数，用于算像素单位与归一化平面单位的一个乘数" alt="" coords="963,449,1148,491"/>
+</map>

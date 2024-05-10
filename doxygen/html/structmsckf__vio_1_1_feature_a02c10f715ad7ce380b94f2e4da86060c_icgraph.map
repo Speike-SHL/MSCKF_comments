@@ -1,0 +1,4 @@
+<map id="msckf_vio::Feature::initializePosition" name="msckf_vio::Feature::initializePosition">
+<area shape="rect" id="node1" title="根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化" alt="" coords="109,5,244,47"/>
+<area shape="rect" id="node2" href="$feature__initialization__test_8cpp.html#a4fc6861826176ad5a2c588d4b4ff7ff4" title=" " alt="" coords="5,13,61,39"/>
+</map>

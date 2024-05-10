@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>S-MSCKF注释: msckf_vio::ImageProcessorNodelet类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">S-MSCKF注释
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('classmsckf__vio_1_1_image_processor_nodelet.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="#pri-methods">Private 成员函数</a> &#124;
+<a href="#pri-attribs">Private 属性</a> &#124;
+<a href="classmsckf__vio_1_1_image_processor_nodelet-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">msckf_vio::ImageProcessorNodelet类 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="classmsckf__vio_1_1_image_processor_nodelet.html" title="ImageProcessorNodelet 继承自ros中的Nodelet类 Nodelet类是ROS中的一种插件类，可以在一个节点中运行多个Nodelet插件, 但是实际运行时 看起来就像是多个节点在...">ImageProcessorNodelet</a> 继承自ros中的Nodelet类 Nodelet类是ROS中的一种插件类，可以在一个节点中运行多个Nodelet插件, 但是实际运行时 看起来就像是多个节点在运行。Nodelet插件通过将多个节点的功能集成到一个进程中，可以 减少节点间的通信开销，提高系统的性能，这对于传输图像和点云特别有用。  
+ <a href="classmsckf__vio_1_1_image_processor_nodelet.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="image__processor__nodelet_8h_source.html">image_processor_nodelet.h</a>&gt;</code></p>
+<div class="dynheader">
+类 msckf_vio::ImageProcessorNodelet 继承关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_nodelet__inherit__graph.png" border="0" usemap="#msckf__vio_1_1_image_processor_nodelet_inherit__map" alt="Inheritance graph"/></div>
+<map name="msckf__vio_1_1_image_processor_nodelet_inherit__map" id="msckf__vio_1_1_image_processor_nodelet_inherit__map">
+<area shape="rect" title="ImageProcessorNodelet 继承自ros中的Nodelet类 Nodelet类是ROS中的一种插件类，可以在一个节点中运行多个Nodelet插件, 但是实际运行时 看起来就像是多个节点在..." alt="" coords="5,80,191,121"/>
+<area shape="rect" title=" " alt="" coords="65,5,131,32"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">图例</a>]</span></center></div>
+<div class="dynheader">
+msckf_vio::ImageProcessorNodelet 的协作图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmsckf__vio_1_1_image_processor_nodelet__coll__graph.png" border="0" usemap="#msckf__vio_1_1_image_processor_nodelet_coll__map" alt="Collaboration graph"/></div>
+<map name="msckf__vio_1_1_image_processor_nodelet_coll__map" id="msckf__vio_1_1_image_processor_nodelet_coll__map">
+<area shape="rect" title="ImageProcessorNodelet 继承自ros中的Nodelet类 Nodelet类是ROS中的一种插件类，可以在一个节点中运行多个Nodelet插件, 但是实际运行时 看起来就像是多个节点在..." alt="" coords="5,80,191,121"/>
+<area shape="rect" title=" " alt="" coords="65,5,131,32"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">图例</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:a89e1f948b7305cf57c4828b1dded03c0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor_nodelet.html#a89e1f948b7305cf57c4828b1dded03c0">ImageProcessorNodelet</a> ()</td></tr>
+<tr class="separator:a89e1f948b7305cf57c4828b1dded03c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3afc2789104d8f790f423b2b13573016"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor_nodelet.html#a3afc2789104d8f790f423b2b13573016">~ImageProcessorNodelet</a> ()</td></tr>
+<tr class="separator:a3afc2789104d8f790f423b2b13573016"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private 成员函数</h2></td></tr>
+<tr class="memitem:a0b5f0364ec8101229276afc35621c0dd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor_nodelet.html#a0b5f0364ec8101229276afc35621c0dd">onInit</a> ()</td></tr>
+<tr class="memdesc:a0b5f0364ec8101229276afc35621c0dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建前端ImageProcessor节点并初始化ImageProcessor类  <a href="classmsckf__vio_1_1_image_processor_nodelet.html#a0b5f0364ec8101229276afc35621c0dd">更多...</a><br /></td></tr>
+<tr class="separator:a0b5f0364ec8101229276afc35621c0dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private 属性</h2></td></tr>
+<tr class="memitem:adb8fa6f4563f9ec086f024e94d9b3422"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemsckf__vio.html#ab9686b6b5119a75790b2b2343c7886e9">ImageProcessorPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmsckf__vio_1_1_image_processor_nodelet.html#adb8fa6f4563f9ec086f024e94d9b3422">img_processor_ptr</a></td></tr>
+<tr class="separator:adb8fa6f4563f9ec086f024e94d9b3422"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p><a class="el" href="classmsckf__vio_1_1_image_processor_nodelet.html" title="ImageProcessorNodelet 继承自ros中的Nodelet类 Nodelet类是ROS中的一种插件类，可以在一个节点中运行多个Nodelet插件, 但是实际运行时 看起来就像是多个节点在...">ImageProcessorNodelet</a> 继承自ros中的Nodelet类 Nodelet类是ROS中的一种插件类，可以在一个节点中运行多个Nodelet插件, 但是实际运行时 看起来就像是多个节点在运行。Nodelet插件通过将多个节点的功能集成到一个进程中，可以 减少节点间的通信开销，提高系统的性能，这对于传输图像和点云特别有用。 </p>
+</div><h2 class="groupheader">构造及析构函数说明</h2>
+<a id="a89e1f948b7305cf57c4828b1dded03c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89e1f948b7305cf57c4828b1dded03c0">&#9670;&nbsp;</a></span>ImageProcessorNodelet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::ImageProcessorNodelet::ImageProcessorNodelet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3afc2789104d8f790f423b2b13573016"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3afc2789104d8f790f423b2b13573016">&#9670;&nbsp;</a></span>~ImageProcessorNodelet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::ImageProcessorNodelet::~ImageProcessorNodelet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">成员函数说明</h2>
+<a id="a0b5f0364ec8101229276afc35621c0dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b5f0364ec8101229276afc35621c0dd">&#9670;&nbsp;</a></span>onInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::ImageProcessorNodelet::onInit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>创建前端ImageProcessor节点并初始化ImageProcessor类 </p>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="classmsckf__vio_1_1_image_processor.html#a6b2ca38c502b2e1952bb9169b4ad79d0" title="ImageProcessor构造函数">ImageProcessor::ImageProcessor(ros::NodeHandle &amp;n)</a> </dd>
+<dd>
+<a class="el" href="classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化">ImageProcessor::initialize()</a> </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">类成员变量说明</h2>
+<a id="adb8fa6f4563f9ec086f024e94d9b3422"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb8fa6f4563f9ec086f024e94d9b3422">&#9670;&nbsp;</a></span>img_processor_ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemsckf__vio.html#ab9686b6b5119a75790b2b2343c7886e9">ImageProcessorPtr</a> msckf_vio::ImageProcessorNodelet::img_processor_ptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/<a class="el" href="image__processor__nodelet_8h_source.html">image_processor_nodelet.h</a></li>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/src/<a class="el" href="image__processor__nodelet_8cpp.html">image_processor_nodelet.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespacemsckf__vio.html">msckf_vio</a></li><li class="navelem"><a class="el" href="classmsckf__vio_1_1_image_processor_nodelet.html">ImageProcessorNodelet</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

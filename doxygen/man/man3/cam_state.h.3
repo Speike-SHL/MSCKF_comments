@@ -1,0 +1,42 @@
+.TH "/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/cam_state.h" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/cam_state.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <map>\fP
+.br
+\fC#include <vector>\fP
+.br
+\fC#include <Eigen/Dense>\fP
+.br
+\fC#include 'imu_state\&.h'\fP
+.br
+
+.SS "类"
+
+.in +1c
+.ti -1c
+.RI "struct \fBmsckf_vio::CAMState\fP"
+.br
+.RI "储存相机状态，包括相机id, 时间，姿态Rcw，位置twc，零空间姿态，零空间位置，和两个相机间的外参 "
+.in -1c
+.SS "命名空间"
+
+.in +1c
+.ti -1c
+.RI " \fBmsckf_vio\fP"
+.br
+.in -1c
+.SS "类型定义"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< StateIDType, CAMState, std::less< int >, Eigen::aligned_allocator< std::pair< const StateIDType, CAMState > > > \fBmsckf_vio::CamStateServer\fP"
+.br
+.in -1c
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.

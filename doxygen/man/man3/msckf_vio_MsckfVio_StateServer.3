@@ -1,0 +1,54 @@
+.TH "msckf_vio::MsckfVio::StateServer" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+msckf_vio::MsckfVio::StateServer \- 管理S-MSCKF中的所有状态，包括IMU相关的状态和多个相机的状态  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public 属性"
+
+.in +1c
+.ti -1c
+.RI "\fBIMUState\fP \fBimu_state\fP"
+.br
+.RI "状态量中IMU相关的状态 "
+.ti -1c
+.RI "\fBCamStateServer\fP \fBcam_states\fP"
+.br
+.RI "状态量中相机相关的状态，是一个map容器，key为相机帧id, 值为CAMState "
+.ti -1c
+.RI "Eigen::MatrixXd \fBstate_cov\fP"
+.br
+.RI "所有状态的误差协方差矩阵P "
+.ti -1c
+.RI "Eigen::Matrix< double, 12, 12 > \fBcontinuous_noise_cov\fP"
+.br
+.RI "噪声协方差矩阵 "
+.in -1c
+.SH "详细描述"
+.PP 
+管理S-MSCKF中的所有状态，包括IMU相关的状态和多个相机的状态 
+.SH "类成员变量说明"
+.PP 
+.SS "\fBCamStateServer\fP msckf_vio::MsckfVio::StateServer::cam_states"
+
+.PP
+状态量中相机相关的状态，是一个map容器，key为相机帧id, 值为CAMState 
+.SS "Eigen::Matrix<double, 12, 12> msckf_vio::MsckfVio::StateServer::continuous_noise_cov"
+
+.PP
+噪声协方差矩阵 
+.SS "\fBIMUState\fP msckf_vio::MsckfVio::StateServer::imu_state"
+
+.PP
+状态量中IMU相关的状态 
+.SS "Eigen::MatrixXd msckf_vio::MsckfVio::StateServer::state_cov"
+
+.PP
+所有状态的误差协方差矩阵P 
+
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.

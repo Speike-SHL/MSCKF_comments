@@ -1,0 +1,7 @@
+<map id="msckf_vio::ImageProcessor::initializeFirstFrame" name="msckf_vio::ImageProcessor::initializeFirstFrame">
+<area shape="rect" id="node1" title=" " alt="" coords="5,39,191,80"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_image_processor.html#a336c459b2928779ba65cf0e731c9d58f" title="featureCompareByResponse Compare two features based on the response." alt="" coords="239,5,437,47"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="245,71,431,112"/>
+<area shape="rect" id="node4" href="$classmsckf__vio_1_1_image_processor.html#af0849c88b21075c59b88f7f4476ccbec" title="归一化平面上的坐标 &#45;&gt; 带畸变图像的像素坐标" alt="" coords="485,37,671,79"/>
+<area shape="rect" id="node5" href="$classmsckf__vio_1_1_image_processor.html#aa848b52322df85519e627bf1b6399d24" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="485,103,671,144"/>
+</map>

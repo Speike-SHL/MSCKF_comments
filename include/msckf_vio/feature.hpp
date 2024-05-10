@@ -36,20 +36,20 @@ namespace msckf_vio
         typedef long long int FeatureIDType;
 
         /**
-         * @brief 3D点位置的优化参数
+         * @brief 优化求解特征点世界系下三维坐标的配置
          */
         struct OptimizationConfig
         {
-            // 位移是否足够，用于判断点是否能做三角化
+            /// 位移是否足够，用于判断点是否能做三角化
             double translation_threshold;
-            // huber参数
+            /// huber参数
             double huber_epsilon;
-            // 迭代更新阈值，优化的每次迭代都会有更新量，这个量如果太小则表示与目标值接近
+            /// 迭代更新阈值，优化的每次迭代都会有更新量，这个量如果太小则表示与目标值接近
             double estimation_precision;
-            // LM算法lambda的初始值
+            /// LM算法lambda的初始值
             double initial_damping;
 
-            // 内外轮最大迭代次数
+            /// 内外轮最大迭代次数
             int outer_loop_max_iteration;
             int inner_loop_max_iteration;
 
@@ -65,15 +65,11 @@ namespace msckf_vio
             }
         };
 
-        // Constructors for the struct.
-        Feature()
-            : id(0), position(Eigen::Vector3d::Zero()),
-              is_initialized(false) {}
+        /// 构造函数，点ID，点位置，是否初始化
+        Feature() : id(0), position(Eigen::Vector3d::Zero()), is_initialized(false) {}
 
-        Feature(const FeatureIDType &new_id)
-            : id(new_id),
-              position(Eigen::Vector3d::Zero()),
-              is_initialized(false) {}
+        Feature(const FeatureIDType &new_id) : id(new_id), position(Eigen::Vector3d::Zero()),
+                                            is_initialized(false) {}
 
         inline void cost(
             const Eigen::Isometry3d &T_c0_ci,
@@ -131,28 +127,25 @@ namespace msckf_vio
         inline bool initializePosition(
             const CamStateServer &cam_states);
 
-        // An unique identifier for the feature.
-        // In case of long time running, the variable
-        // type of id is set to FeatureIDType in order
-        // to avoid duplication.
+        /// 特征点唯一的ID,long long int
         FeatureIDType id;
 
-        // id for next feature
+        /// 下一个特征点应该使用的ID
         static FeatureIDType next_id;
 
-        // 储存单个三维特征点的所有相机观测和左右目归一化坐标
-        // key是相机id(long long int)，value是左右目的归一化坐标(Vector4d), 还指定了比较器和分配器用于排序和内存分配，根据id升序排序
+        /// 观测，储存当前特征点被哪些相机帧观测到，key为相机帧id，value为该特征点在该相机帧下的归一化坐标
+        /// 还指定了比较器和分配器用于排序和内存分配，根据id升序排序
         std::map<StateIDType, Eigen::Vector4d, std::less<StateIDType>,
                  Eigen::aligned_allocator<std::pair<const StateIDType, Eigen::Vector4d>>>
             observations;
 
-        // 3d特征点的位置，世界系下
+        /// 特征点的3D位置，世界坐标系下
         Eigen::Vector3d position;
 
-        // 3d特征点是否初始化, 即是否三角化
+        /// 3d特征点是否初始化, 即是否三角化
         bool is_initialized;
 
-        // 归一化特征观测的噪声
+        /// 归一化特征观测的噪声
         static double observation_noise;
 
         // Optimization configuration for solving the 3d position.
@@ -161,7 +154,7 @@ namespace msckf_vio
 
     typedef Feature::FeatureIDType FeatureIDType;
 
-    // 键为特征点id(long long int)，值为特征点(feature), 升序排序，内存分配器为Eigen::aligned_allocator
+    /// 键为特征点id(long long int)，值为特征点(feature), 升序排序，内存分配器为Eigen::aligned_allocator
     typedef std::map<FeatureIDType, Feature, std::less<int>,
                      Eigen::aligned_allocator<std::pair<const FeatureIDType, Feature>>>
         MapServer;

@@ -1,0 +1,12 @@
+<map id="msckf_vio::ImageProcessor::undistortPoints" name="msckf_vio::ImageProcessor::undistortPoints">
+<area shape="rect" id="node1" title="畸变图像中的pts_in点 &#45;&gt; 通过旋转矩阵R转换 &#45;&gt; 另一个图像坐标系中的无畸变归一化坐标 &#45;&gt; 通过新的内参矩阵K_new转换到图像坐标系上 (如果K_new是单位矩阵，那么最后的结果就是另一个..." alt="" coords="1172,100,1357,141"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_image_processor.html#a6257bea2b1464362bdab85d62907741d" title="publish Publish the features on the current image including both the tracked and newly detected ones." alt="" coords="939,5,1124,47"/>
+<area shape="rect" id="node6" href="$classmsckf__vio_1_1_image_processor.html#a8fdbdfb5403cb062cdb927828bd75f0c" title="stereoMatch Matches features with stereo image pairs." alt="" coords="939,100,1124,141"/>
+<area shape="rect" id="node10" href="$classmsckf__vio_1_1_image_processor.html#a036748f869deba538e5726b2997c9bc2" title="twoPointRansac Applies two point ransac algorithm to mark the inliers in the input set." alt="" coords="939,165,1124,207"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_image_processor.html#a40010455f5bf8585edc488bb12f4507b" title="双目图像回调, 处理双目图像，前端主要流程函数" alt="" coords="472,68,657,109"/>
+<area shape="rect" id="node4" href="$classmsckf__vio_1_1_image_processor.html#a65a05e39e7f0608205c3d374e0895154" title="createRosIO Create ros publisher and subscirbers." alt="" coords="239,68,424,109"/>
+<area shape="rect" id="node5" href="$classmsckf__vio_1_1_image_processor.html#a0072210e89ef5ed8cbd8f0a87e92c6b3" title="初始化" alt="" coords="5,68,191,109"/>
+<area shape="rect" id="node7" href="$classmsckf__vio_1_1_image_processor.html#a516fc0c03915ab2b242b52ac89c0ff77" title="在左目提取新的特征，通过左右目光流跟踪去外点，向变量添加新的特征" alt="" coords="705,35,891,76"/>
+<area shape="rect" id="node8" href="$classmsckf__vio_1_1_image_processor.html#a03457ad5d0564d18cf6a78c66d46af7d" title=" " alt="" coords="705,100,891,141"/>
+<area shape="rect" id="node9" href="$classmsckf__vio_1_1_image_processor.html#a22fc59074490862e724fdcd3fae56312" title="跟踪特征点" alt="" coords="705,165,891,207"/>
+</map>

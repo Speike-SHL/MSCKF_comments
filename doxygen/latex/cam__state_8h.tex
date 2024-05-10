@@ -1,0 +1,35 @@
+\hypertarget{cam__state_8h}{}\doxysection{/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/include/msckf\+\_\+vio/cam\+\_\+state.h 文件参考}
+\label{cam__state_8h}\index{/home/speike/VSLAM/MSCKF\_vio\_ws/src/MSCKF\_comments/include/msckf\_vio/cam\_state.h@{/home/speike/VSLAM/MSCKF\_vio\_ws/src/MSCKF\_comments/include/msckf\_vio/cam\_state.h}}
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Dense$>$}\newline
+{\ttfamily \#include \char`\"{}imu\+\_\+state.\+h\char`\"{}}\newline
+cam\+\_\+state.\+h 的引用(Include)关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{cam__state_8h__incl}
+\end{center}
+\end{figure}
+此图展示该文件直接或间接的被哪些文件引用了\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{cam__state_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{类}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state}{msckf\+\_\+vio\+::\+C\+A\+M\+State}}
+\begin{DoxyCompactList}\small\item\em 储存相机状态，包括相机id, 时间，姿态\+Rcw，位置twc，零空间姿态，零空间位置，和两个相机间的外参 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{命名空间}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemsckf__vio}{msckf\+\_\+vio}}
+\end{DoxyCompactItemize}
+\doxysubsection*{类型定义}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::map$<$ State\+I\+D\+Type, C\+A\+M\+State, std\+::less$<$ int $>$, Eigen\+::aligned\+\_\+allocator$<$ std\+::pair$<$ const State\+I\+D\+Type, C\+A\+M\+State $>$ $>$ $>$ \mbox{\hyperlink{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}{msckf\+\_\+vio\+::\+Cam\+State\+Server}}
+\end{DoxyCompactItemize}

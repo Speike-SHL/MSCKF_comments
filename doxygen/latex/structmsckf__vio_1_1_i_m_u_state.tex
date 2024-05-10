@@ -1,0 +1,259 @@
+\hypertarget{structmsckf__vio_1_1_i_m_u_state}{}\doxysection{msckf\+\_\+vio\+::I\+M\+U\+State结构体 参考}
+\label{structmsckf__vio_1_1_i_m_u_state}\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+
+
+S-\/\+M\+S\+C\+K\+F中\+I\+M\+U状态相关  
+
+
+
+
+{\ttfamily \#include $<$imu\+\_\+state.\+h$>$}
+
+\doxysubsection*{Public 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a5a64168fe7ba300773e74b0ac20de186}{I\+M\+U\+State}} ()
+\item 
+\mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a63011d3dfb29b611df24cb7580420fc6}{I\+M\+U\+State}} (const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} \&new\+\_\+id)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public 属性}
+\begin{DoxyCompactItemize}
+\item 
+E\+I\+G\+E\+N\+\_\+\+M\+A\+K\+E\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+\+O\+P\+E\+R\+A\+T\+O\+R\+\_\+\+N\+EW typedef long long int \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a26f4829d2307c3adb26b270de7ab0e5c}{State\+I\+D\+Type}}
+\item 
+\mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a7e797ab5041fc5c8a5d8b415aedd8ec7}{id}}
+\begin{DoxyCompactList}\small\item\em 唯一的\+I\+M\+U状态\+ID \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a1b3f0004a4caf24d7d2aef1c3f03bbc3}{time}}
+\begin{DoxyCompactList}\small\item\em I\+M\+U状态记录的时间 \end{DoxyCompactList}\item 
+Eigen\+::\+Vector4d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a28c826d5999566d35e389316dd225ec8}{orientation}}
+\begin{DoxyCompactList}\small\item\em Rbw, Take a vector from the world frame to the I\+MU (body) frame. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a83339de307ad0dc7ff6f7d9e176747bc}{position}}
+\begin{DoxyCompactList}\small\item\em twb, Position of the I\+MU (body) frame in the world frame. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a86f474dd5ef8a7125a3655555bfa128a}{velocity}}
+\begin{DoxyCompactList}\small\item\em Vwb, Velocity of the I\+MU (body) frame in the world frame. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_af3e536756468a844807ee3db9357e357}{gyro\+\_\+bias}}
+\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_ac870f12ce60150cac34328b5b19454a4}{acc\+\_\+bias}}
+\item 
+Eigen\+::\+Matrix3d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a5333583b1b87e5034cba3ce0ff01868f}{R\+\_\+imu\+\_\+cam0}}
+\begin{DoxyCompactList}\small\item\em 左相机坐标系到\+I\+M\+U坐标系的旋转矩阵，外参 \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a66b5236276d01e2ab9d6f9b488f27dc7}{t\+\_\+cam0\+\_\+imu}}
+\begin{DoxyCompactList}\small\item\em 左相机坐标系到\+I\+M\+U坐标系的平移向量，外参 \end{DoxyCompactList}\item 
+Eigen\+::\+Vector4d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_ad619ac394e2d329491a7a4d0d516d2c0}{orientation\+\_\+null}}
+\begin{DoxyCompactList}\small\item\em 用于可观性约束，可观性矩阵的零空间，实际为存储上次预测时的姿态 \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_af030d25ab5ed5c9f6159f6053086214b}{position\+\_\+null}}
+\begin{DoxyCompactList}\small\item\em 用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的位置 \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a2903cecc49a0b14a7070d47c358daefe}{velocity\+\_\+null}}
+\begin{DoxyCompactList}\small\item\em 用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的速度 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{静态 Public 属性}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a96203a566275776ad0a7ad98bcadd571}{next\+\_\+id}} = 0
+\begin{DoxyCompactList}\small\item\em 下一个\+I\+M\+U状态的\+ID \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_aaa2d9c0e4405f23f4ea7e58b87e93d71}{gyro\+\_\+noise}} = 0.\+001
+\item 
+static double \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a0bfc40744ea82f64a2af6939ebfec74f}{acc\+\_\+noise}} = 0.\+01
+\item 
+static double \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_a468b05afcc02d24dcd51e3b9b8f53c47}{gyro\+\_\+bias\+\_\+noise}} = 0.\+001
+\item 
+static double \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_aade8fca6178560ad57d9ec68edff2323}{acc\+\_\+bias\+\_\+noise}} = 0.\+01
+\item 
+static Eigen\+::\+Vector3d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_ab16a43936f2a5b13e0d9e7cd5acacb2f}{gravity}} = Vector3d(0, 0, -\/\mbox{\hyperlink{imu__state_8h_a7ef3e798b79749d399b4baf2df8e13dc}{G\+R\+A\+V\+I\+T\+Y\+\_\+\+A\+C\+C\+E\+L\+E\+R\+A\+T\+I\+ON}})
+\item 
+static Eigen\+::\+Isometry3d \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state_ae1eefddb873c44c22688d25297ad84ca}{T\+\_\+imu\+\_\+body}} = Isometry3d\+::\+Identity()
+\begin{DoxyCompactList}\small\item\em I\+M\+U到机身坐标系的变换矩阵，安装误差，一般为单位矩阵 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{详细描述}
+S-\/\+M\+S\+C\+K\+F中\+I\+M\+U状态相关 
+
+\doxysubsection{构造及析构函数说明}
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a5a64168fe7ba300773e74b0ac20de186}\label{structmsckf__vio_1_1_i_m_u_state_a5a64168fe7ba300773e74b0ac20de186}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!IMUState@{IMUState}}
+\index{IMUState@{IMUState}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{IMUState()}{IMUState()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+I\+M\+U\+State\+::\+I\+M\+U\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a63011d3dfb29b611df24cb7580420fc6}\label{structmsckf__vio_1_1_i_m_u_state_a63011d3dfb29b611df24cb7580420fc6}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!IMUState@{IMUState}}
+\index{IMUState@{IMUState}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{IMUState()}{IMUState()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+I\+M\+U\+State\+::\+I\+M\+U\+State (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} \&}]{new\+\_\+id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{类成员变量说明}
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_ac870f12ce60150cac34328b5b19454a4}\label{structmsckf__vio_1_1_i_m_u_state_ac870f12ce60150cac34328b5b19454a4}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!acc\_bias@{acc\_bias}}
+\index{acc\_bias@{acc\_bias}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{acc\_bias}{acc\_bias}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::acc\+\_\+bias}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_aade8fca6178560ad57d9ec68edff2323}\label{structmsckf__vio_1_1_i_m_u_state_aade8fca6178560ad57d9ec68edff2323}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!acc\_bias\_noise@{acc\_bias\_noise}}
+\index{acc\_bias\_noise@{acc\_bias\_noise}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{acc\_bias\_noise}{acc\_bias\_noise}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+I\+M\+U\+State\+::acc\+\_\+bias\+\_\+noise = 0.\+01\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a0bfc40744ea82f64a2af6939ebfec74f}\label{structmsckf__vio_1_1_i_m_u_state_a0bfc40744ea82f64a2af6939ebfec74f}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!acc\_noise@{acc\_noise}}
+\index{acc\_noise@{acc\_noise}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{acc\_noise}{acc\_noise}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+I\+M\+U\+State\+::acc\+\_\+noise = 0.\+01\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_ab16a43936f2a5b13e0d9e7cd5acacb2f}\label{structmsckf__vio_1_1_i_m_u_state_ab16a43936f2a5b13e0d9e7cd5acacb2f}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!gravity@{gravity}}
+\index{gravity@{gravity}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{gravity}{gravity}}
+{\footnotesize\ttfamily Vector3d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::gravity = Vector3d(0, 0, -\/\mbox{\hyperlink{imu__state_8h_a7ef3e798b79749d399b4baf2df8e13dc}{G\+R\+A\+V\+I\+T\+Y\+\_\+\+A\+C\+C\+E\+L\+E\+R\+A\+T\+I\+ON}})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_af3e536756468a844807ee3db9357e357}\label{structmsckf__vio_1_1_i_m_u_state_af3e536756468a844807ee3db9357e357}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!gyro\_bias@{gyro\_bias}}
+\index{gyro\_bias@{gyro\_bias}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{gyro\_bias}{gyro\_bias}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::gyro\+\_\+bias}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a468b05afcc02d24dcd51e3b9b8f53c47}\label{structmsckf__vio_1_1_i_m_u_state_a468b05afcc02d24dcd51e3b9b8f53c47}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!gyro\_bias\_noise@{gyro\_bias\_noise}}
+\index{gyro\_bias\_noise@{gyro\_bias\_noise}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{gyro\_bias\_noise}{gyro\_bias\_noise}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+I\+M\+U\+State\+::gyro\+\_\+bias\+\_\+noise = 0.\+001\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_aaa2d9c0e4405f23f4ea7e58b87e93d71}\label{structmsckf__vio_1_1_i_m_u_state_aaa2d9c0e4405f23f4ea7e58b87e93d71}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!gyro\_noise@{gyro\_noise}}
+\index{gyro\_noise@{gyro\_noise}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{gyro\_noise}{gyro\_noise}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+I\+M\+U\+State\+::gyro\+\_\+noise = 0.\+001\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a7e797ab5041fc5c8a5d8b415aedd8ec7}\label{structmsckf__vio_1_1_i_m_u_state_a7e797ab5041fc5c8a5d8b415aedd8ec7}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!id@{id}}
+\index{id@{id}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} msckf\+\_\+vio\+::\+I\+M\+U\+State\+::id}
+
+
+
+唯一的\+I\+M\+U状态\+ID 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a96203a566275776ad0a7ad98bcadd571}\label{structmsckf__vio_1_1_i_m_u_state_a96203a566275776ad0a7ad98bcadd571}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!next\_id@{next\_id}}
+\index{next\_id@{next\_id}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{next\_id}{next\_id}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} msckf\+\_\+vio\+::\+I\+M\+U\+State\+::next\+\_\+id = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+下一个\+I\+M\+U状态的\+ID 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a28c826d5999566d35e389316dd225ec8}\label{structmsckf__vio_1_1_i_m_u_state_a28c826d5999566d35e389316dd225ec8}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!orientation@{orientation}}
+\index{orientation@{orientation}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{orientation}{orientation}}
+{\footnotesize\ttfamily Eigen\+::\+Vector4d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::orientation}
+
+
+
+Rbw, Take a vector from the world frame to the I\+MU (body) frame. 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_ad619ac394e2d329491a7a4d0d516d2c0}\label{structmsckf__vio_1_1_i_m_u_state_ad619ac394e2d329491a7a4d0d516d2c0}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!orientation\_null@{orientation\_null}}
+\index{orientation\_null@{orientation\_null}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{orientation\_null}{orientation\_null}}
+{\footnotesize\ttfamily Eigen\+::\+Vector4d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::orientation\+\_\+null}
+
+
+
+用于可观性约束，可观性矩阵的零空间，实际为存储上次预测时的姿态 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a83339de307ad0dc7ff6f7d9e176747bc}\label{structmsckf__vio_1_1_i_m_u_state_a83339de307ad0dc7ff6f7d9e176747bc}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!position@{position}}
+\index{position@{position}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{position}{position}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::position}
+
+
+
+twb, Position of the I\+MU (body) frame in the world frame. 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_af030d25ab5ed5c9f6159f6053086214b}\label{structmsckf__vio_1_1_i_m_u_state_af030d25ab5ed5c9f6159f6053086214b}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!position\_null@{position\_null}}
+\index{position\_null@{position\_null}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{position\_null}{position\_null}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::position\+\_\+null}
+
+
+
+用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的位置 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a5333583b1b87e5034cba3ce0ff01868f}\label{structmsckf__vio_1_1_i_m_u_state_a5333583b1b87e5034cba3ce0ff01868f}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!R\_imu\_cam0@{R\_imu\_cam0}}
+\index{R\_imu\_cam0@{R\_imu\_cam0}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{R\_imu\_cam0}{R\_imu\_cam0}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix3d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::\+R\+\_\+imu\+\_\+cam0}
+
+
+
+左相机坐标系到\+I\+M\+U坐标系的旋转矩阵，外参 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a26f4829d2307c3adb26b270de7ab0e5c}\label{structmsckf__vio_1_1_i_m_u_state_a26f4829d2307c3adb26b270de7ab0e5c}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!StateIDType@{StateIDType}}
+\index{StateIDType@{StateIDType}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{StateIDType}{StateIDType}}
+{\footnotesize\ttfamily E\+I\+G\+E\+N\+\_\+\+M\+A\+K\+E\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+\+O\+P\+E\+R\+A\+T\+O\+R\+\_\+\+N\+EW typedef long long int msckf\+\_\+vio\+::\+I\+M\+U\+State\+::\+State\+I\+D\+Type}
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a66b5236276d01e2ab9d6f9b488f27dc7}\label{structmsckf__vio_1_1_i_m_u_state_a66b5236276d01e2ab9d6f9b488f27dc7}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!t\_cam0\_imu@{t\_cam0\_imu}}
+\index{t\_cam0\_imu@{t\_cam0\_imu}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{t\_cam0\_imu}{t\_cam0\_imu}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::t\+\_\+cam0\+\_\+imu}
+
+
+
+左相机坐标系到\+I\+M\+U坐标系的平移向量，外参 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_ae1eefddb873c44c22688d25297ad84ca}\label{structmsckf__vio_1_1_i_m_u_state_ae1eefddb873c44c22688d25297ad84ca}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!T\_imu\_body@{T\_imu\_body}}
+\index{T\_imu\_body@{T\_imu\_body}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{T\_imu\_body}{T\_imu\_body}}
+{\footnotesize\ttfamily Isometry3d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::\+T\+\_\+imu\+\_\+body = Isometry3d\+::\+Identity()\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+I\+M\+U到机身坐标系的变换矩阵，安装误差，一般为单位矩阵 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a1b3f0004a4caf24d7d2aef1c3f03bbc3}\label{structmsckf__vio_1_1_i_m_u_state_a1b3f0004a4caf24d7d2aef1c3f03bbc3}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!time@{time}}
+\index{time@{time}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{time}{time}}
+{\footnotesize\ttfamily double msckf\+\_\+vio\+::\+I\+M\+U\+State\+::time}
+
+
+
+I\+M\+U状态记录的时间 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a86f474dd5ef8a7125a3655555bfa128a}\label{structmsckf__vio_1_1_i_m_u_state_a86f474dd5ef8a7125a3655555bfa128a}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!velocity@{velocity}}
+\index{velocity@{velocity}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{velocity}{velocity}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::velocity}
+
+
+
+Vwb, Velocity of the I\+MU (body) frame in the world frame. 
+
+\mbox{\Hypertarget{structmsckf__vio_1_1_i_m_u_state_a2903cecc49a0b14a7070d47c358daefe}\label{structmsckf__vio_1_1_i_m_u_state_a2903cecc49a0b14a7070d47c358daefe}} 
+\index{msckf\_vio::IMUState@{msckf\_vio::IMUState}!velocity\_null@{velocity\_null}}
+\index{velocity\_null@{velocity\_null}!msckf\_vio::IMUState@{msckf\_vio::IMUState}}
+\doxysubsubsection{\texorpdfstring{velocity\_null}{velocity\_null}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d msckf\+\_\+vio\+::\+I\+M\+U\+State\+::velocity\+\_\+null}
+
+
+
+用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的速度 
+
+
+
+该结构体的文档由以下文件生成\+:\begin{DoxyCompactItemize}
+\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/include/msckf\+\_\+vio/\mbox{\hyperlink{imu__state_8h}{imu\+\_\+state.\+h}}\item 
+/home/speike/\+V\+S\+L\+A\+M/\+M\+S\+C\+K\+F\+\_\+vio\+\_\+ws/src/\+M\+S\+C\+K\+F\+\_\+comments/src/\mbox{\hyperlink{msckf__vio_8cpp}{msckf\+\_\+vio.\+cpp}}\end{DoxyCompactItemize}

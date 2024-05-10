@@ -1,0 +1,271 @@
+\hypertarget{namespacemsckf__vio}{}\doxysection{msckf\+\_\+vio 命名空间参考}
+\label{namespacemsckf__vio}\index{msckf\_vio@{msckf\_vio}}
+\doxysubsection*{命名空间}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemsckf__vio_1_1utils}{utils}}
+\end{DoxyCompactItemize}
+\doxysubsection*{类}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state}{C\+A\+M\+State}}
+\begin{DoxyCompactList}\small\item\em 储存相机状态，包括相机id, 时间，姿态\+Rcw，位置twc，零空间姿态，零空间位置，和两个相机间的外参 \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmsckf__vio_1_1_feature}{Feature}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{structmsckf__vio_1_1_feature}{Feature}} Salient part of an image. Please refer to the Appendix of \char`\"{}\+A Multi-\/\+State Constraint Kalman
+   Filter for Vision-\/aided Inertial Navigation\char`\"{} for how the 3d position of a feature is initialized. 一个特征可以理解为一个三维点，由多帧观测到 \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classmsckf__vio_1_1_image_processor}{Image\+Processor}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classmsckf__vio_1_1_image_processor}{Image\+Processor}} Detects and tracks features in image sequences. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classmsckf__vio_1_1_image_processor_nodelet}{Image\+Processor\+Nodelet}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classmsckf__vio_1_1_image_processor_nodelet}{Image\+Processor\+Nodelet}} 继承自ros中的\+Nodelet类 Nodelet类是\+R\+O\+S中的一种插件类，可以在一个节点中运行多个\+Nodelet插件, 但是实际运行时 看起来就像是多个节点在运行。\+Nodelet插件通过将多个节点的功能集成到一个进程中，可以 减少节点间的通信开销，提高系统的性能，这对于传输图像和点云特别有用。 \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmsckf__vio_1_1_i_m_u_state}{I\+M\+U\+State}}
+\begin{DoxyCompactList}\small\item\em S-\/\+M\+S\+C\+K\+F中\+I\+M\+U状态相关 \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio}{Msckf\+Vio}}
+\item 
+class \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_nodelet}{Msckf\+Vio\+Nodelet}}
+\end{DoxyCompactItemize}
+\doxysubsection*{类型定义}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::map$<$ \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}}, \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state}{C\+A\+M\+State}}, std\+::less$<$ int $>$, Eigen\+::aligned\+\_\+allocator$<$ std\+::pair$<$ const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}}, \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state}{C\+A\+M\+State}} $>$ $>$ $>$ \mbox{\hyperlink{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}{Cam\+State\+Server}}
+\item 
+typedef Feature\+::\+Feature\+I\+D\+Type \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}}
+\item 
+typedef std\+::map$<$ \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}}, \mbox{\hyperlink{structmsckf__vio_1_1_feature}{Feature}}, std\+::less$<$ int $>$, Eigen\+::aligned\+\_\+allocator$<$ std\+::pair$<$ const \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}}, \mbox{\hyperlink{structmsckf__vio_1_1_feature}{Feature}} $>$ $>$ $>$ \mbox{\hyperlink{namespacemsckf__vio_a3669e349a8845867230c069f72b0aebd}{Map\+Server}}
+\begin{DoxyCompactList}\small\item\em 键为特征点id(long long int)，值为特征点(feature), 升序排序，内存分配器为\+Eigen\+::aligned\+\_\+allocator \end{DoxyCompactList}\item 
+typedef \mbox{\hyperlink{classmsckf__vio_1_1_image_processor_a255b1672881b598f1201d7b9a4e1e732}{Image\+Processor\+::\+Ptr}} \mbox{\hyperlink{namespacemsckf__vio_ab9686b6b5119a75790b2b2343c7886e9}{Image\+Processor\+Ptr}}
+\item 
+typedef \mbox{\hyperlink{classmsckf__vio_1_1_image_processor_affbea3f8d7884d93fb28863aeb0f0e1d}{Image\+Processor\+::\+Const\+Ptr}} \mbox{\hyperlink{namespacemsckf__vio_a8ff6f3ad004afac01b21bd8d80cef029}{Image\+Processor\+Const\+Ptr}}
+\item 
+typedef I\+M\+U\+State\+::\+State\+I\+D\+Type \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}}
+\item 
+typedef \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a84125095bce81c6de3be0558405f69fb}{Msckf\+Vio\+::\+Ptr}} \mbox{\hyperlink{namespacemsckf__vio_a019b6a7a582fdad058564216c579f82f}{Msckf\+Vio\+Ptr}}
+\item 
+typedef \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a4ff8cec4cc043591912921f1ff0cf79f}{Msckf\+Vio\+::\+Const\+Ptr}} \mbox{\hyperlink{namespacemsckf__vio_a0315f30ef3b83602e6349b3819bae864}{Msckf\+Vio\+Const\+Ptr}}
+\end{DoxyCompactItemize}
+\doxysubsection*{函数}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Matrix3d \mbox{\hyperlink{namespacemsckf__vio_aaf0fc755d0d3c5b59b8eca157ae5cb61}{skew\+Symmetric}} (const Eigen\+::\+Vector3d \&w)
+\begin{DoxyCompactList}\small\item\em 反对称矩阵 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespacemsckf__vio_afa6ff3990092f7999e51e333220ba679}{quaternion\+Normalize}} (Eigen\+::\+Vector4d \&q)
+\begin{DoxyCompactList}\small\item\em 标准化四元数 \end{DoxyCompactList}\item 
+Eigen\+::\+Vector4d \mbox{\hyperlink{namespacemsckf__vio_a1810830643db7b385a14c8c9ac2f6ba5}{quaternion\+Multiplication}} (const Eigen\+::\+Vector4d \&q1, const Eigen\+::\+Vector4d \&q2)
+\begin{DoxyCompactList}\small\item\em Perform q1 $\ast$ q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法 \end{DoxyCompactList}\item 
+Eigen\+::\+Vector4d \mbox{\hyperlink{namespacemsckf__vio_a294cc2c50924d54cf548be1b067bd82a}{small\+Angle\+Quaternion}} (const Eigen\+::\+Vector3d \&dtheta)
+\begin{DoxyCompactList}\small\item\em 李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix3d \mbox{\hyperlink{namespacemsckf__vio_a84bd0f5d594e685ea07e2b922cf34bb9}{quaternion\+To\+Rotation}} (const Eigen\+::\+Vector4d \&q)
+\begin{DoxyCompactList}\small\item\em 四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix \end{DoxyCompactList}\item 
+Eigen\+::\+Vector4d \mbox{\hyperlink{namespacemsckf__vio_a8d689b1622675767a13b292e78e40ace}{rotation\+To\+Quaternion}} (const Eigen\+::\+Matrix3d \&R)
+\begin{DoxyCompactList}\small\item\em 旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacemsckf__vio_a443965104b6257915d1a550ea8804287}{P\+L\+U\+G\+I\+N\+L\+I\+B\+\_\+\+E\+X\+P\+O\+R\+T\+\_\+\+C\+L\+A\+SS}} (\mbox{\hyperlink{classmsckf__vio_1_1_image_processor_nodelet}{msckf\+\_\+vio\+::\+Image\+Processor\+Nodelet}}, nodelet\+::\+Nodelet)
+\item 
+\mbox{\hyperlink{namespacemsckf__vio_ab10e144f6b7c57ea7dcc48cb27f85709}{P\+L\+U\+G\+I\+N\+L\+I\+B\+\_\+\+E\+X\+P\+O\+R\+T\+\_\+\+C\+L\+A\+SS}} (\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_nodelet}{msckf\+\_\+vio\+::\+Msckf\+Vio\+Nodelet}}, nodelet\+::\+Nodelet)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{类型定义说明}
+\mbox{\Hypertarget{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}\label{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}} 
+\index{msckf\_vio@{msckf\_vio}!CamStateServer@{CamStateServer}}
+\index{CamStateServer@{CamStateServer}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{CamStateServer}{CamStateServer}}
+{\footnotesize\ttfamily typedef std\+::map$<$\mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}}, \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state}{C\+A\+M\+State}}, std\+::less$<$int$>$, Eigen\+::aligned\+\_\+allocator$<$ std\+::pair$<$const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}}, \mbox{\hyperlink{structmsckf__vio_1_1_c_a_m_state}{C\+A\+M\+State}}$>$ $>$ $>$ \mbox{\hyperlink{namespacemsckf__vio_a4a1c4cc31c9ba4dadceb295a291d3510}{msckf\+\_\+vio\+::\+Cam\+State\+Server}}}
+
+\mbox{\Hypertarget{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}\label{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}} 
+\index{msckf\_vio@{msckf\_vio}!FeatureIDType@{FeatureIDType}}
+\index{FeatureIDType@{FeatureIDType}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{FeatureIDType}{FeatureIDType}}
+{\footnotesize\ttfamily typedef Feature\+::\+Feature\+I\+D\+Type \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{msckf\+\_\+vio\+::\+Feature\+I\+D\+Type}}}
+
+\mbox{\Hypertarget{namespacemsckf__vio_a8ff6f3ad004afac01b21bd8d80cef029}\label{namespacemsckf__vio_a8ff6f3ad004afac01b21bd8d80cef029}} 
+\index{msckf\_vio@{msckf\_vio}!ImageProcessorConstPtr@{ImageProcessorConstPtr}}
+\index{ImageProcessorConstPtr@{ImageProcessorConstPtr}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{ImageProcessorConstPtr}{ImageProcessorConstPtr}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{classmsckf__vio_1_1_image_processor_affbea3f8d7884d93fb28863aeb0f0e1d}{Image\+Processor\+::\+Const\+Ptr}} \mbox{\hyperlink{namespacemsckf__vio_a8ff6f3ad004afac01b21bd8d80cef029}{msckf\+\_\+vio\+::\+Image\+Processor\+Const\+Ptr}}}
+
+\mbox{\Hypertarget{namespacemsckf__vio_ab9686b6b5119a75790b2b2343c7886e9}\label{namespacemsckf__vio_ab9686b6b5119a75790b2b2343c7886e9}} 
+\index{msckf\_vio@{msckf\_vio}!ImageProcessorPtr@{ImageProcessorPtr}}
+\index{ImageProcessorPtr@{ImageProcessorPtr}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{ImageProcessorPtr}{ImageProcessorPtr}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{classmsckf__vio_1_1_image_processor_a255b1672881b598f1201d7b9a4e1e732}{Image\+Processor\+::\+Ptr}} \mbox{\hyperlink{namespacemsckf__vio_ab9686b6b5119a75790b2b2343c7886e9}{msckf\+\_\+vio\+::\+Image\+Processor\+Ptr}}}
+
+\mbox{\Hypertarget{namespacemsckf__vio_a3669e349a8845867230c069f72b0aebd}\label{namespacemsckf__vio_a3669e349a8845867230c069f72b0aebd}} 
+\index{msckf\_vio@{msckf\_vio}!MapServer@{MapServer}}
+\index{MapServer@{MapServer}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{MapServer}{MapServer}}
+{\footnotesize\ttfamily typedef std\+::map$<$\mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}}, \mbox{\hyperlink{structmsckf__vio_1_1_feature}{Feature}}, std\+::less$<$int$>$, Eigen\+::aligned\+\_\+allocator$<$std\+::pair$<$const \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}}, \mbox{\hyperlink{structmsckf__vio_1_1_feature}{Feature}}$>$ $>$ $>$ \mbox{\hyperlink{namespacemsckf__vio_a3669e349a8845867230c069f72b0aebd}{msckf\+\_\+vio\+::\+Map\+Server}}}
+
+
+
+键为特征点id(long long int)，值为特征点(feature), 升序排序，内存分配器为\+Eigen\+::aligned\+\_\+allocator 
+
+\mbox{\Hypertarget{namespacemsckf__vio_a0315f30ef3b83602e6349b3819bae864}\label{namespacemsckf__vio_a0315f30ef3b83602e6349b3819bae864}} 
+\index{msckf\_vio@{msckf\_vio}!MsckfVioConstPtr@{MsckfVioConstPtr}}
+\index{MsckfVioConstPtr@{MsckfVioConstPtr}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{MsckfVioConstPtr}{MsckfVioConstPtr}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a4ff8cec4cc043591912921f1ff0cf79f}{Msckf\+Vio\+::\+Const\+Ptr}} \mbox{\hyperlink{namespacemsckf__vio_a0315f30ef3b83602e6349b3819bae864}{msckf\+\_\+vio\+::\+Msckf\+Vio\+Const\+Ptr}}}
+
+\mbox{\Hypertarget{namespacemsckf__vio_a019b6a7a582fdad058564216c579f82f}\label{namespacemsckf__vio_a019b6a7a582fdad058564216c579f82f}} 
+\index{msckf\_vio@{msckf\_vio}!MsckfVioPtr@{MsckfVioPtr}}
+\index{MsckfVioPtr@{MsckfVioPtr}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{MsckfVioPtr}{MsckfVioPtr}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a84125095bce81c6de3be0558405f69fb}{Msckf\+Vio\+::\+Ptr}} \mbox{\hyperlink{namespacemsckf__vio_a019b6a7a582fdad058564216c579f82f}{msckf\+\_\+vio\+::\+Msckf\+Vio\+Ptr}}}
+
+\mbox{\Hypertarget{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}\label{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}} 
+\index{msckf\_vio@{msckf\_vio}!StateIDType@{StateIDType}}
+\index{StateIDType@{StateIDType}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{StateIDType}{StateIDType}}
+{\footnotesize\ttfamily typedef I\+M\+U\+State\+::\+State\+I\+D\+Type \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{msckf\+\_\+vio\+::\+State\+I\+D\+Type}}}
+
+
+
+\doxysubsection{函数说明}
+\mbox{\Hypertarget{namespacemsckf__vio_a443965104b6257915d1a550ea8804287}\label{namespacemsckf__vio_a443965104b6257915d1a550ea8804287}} 
+\index{msckf\_vio@{msckf\_vio}!PLUGINLIB\_EXPORT\_CLASS@{PLUGINLIB\_EXPORT\_CLASS}}
+\index{PLUGINLIB\_EXPORT\_CLASS@{PLUGINLIB\_EXPORT\_CLASS}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{PLUGINLIB\_EXPORT\_CLASS()}{PLUGINLIB\_EXPORT\_CLASS()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+P\+L\+U\+G\+I\+N\+L\+I\+B\+\_\+\+E\+X\+P\+O\+R\+T\+\_\+\+C\+L\+A\+SS (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmsckf__vio_1_1_image_processor_nodelet}{msckf\+\_\+vio\+::\+Image\+Processor\+Nodelet}}}]{,  }\item[{nodelet\+::\+Nodelet}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacemsckf__vio_ab10e144f6b7c57ea7dcc48cb27f85709}\label{namespacemsckf__vio_ab10e144f6b7c57ea7dcc48cb27f85709}} 
+\index{msckf\_vio@{msckf\_vio}!PLUGINLIB\_EXPORT\_CLASS@{PLUGINLIB\_EXPORT\_CLASS}}
+\index{PLUGINLIB\_EXPORT\_CLASS@{PLUGINLIB\_EXPORT\_CLASS}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{PLUGINLIB\_EXPORT\_CLASS()}{PLUGINLIB\_EXPORT\_CLASS()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily msckf\+\_\+vio\+::\+P\+L\+U\+G\+I\+N\+L\+I\+B\+\_\+\+E\+X\+P\+O\+R\+T\+\_\+\+C\+L\+A\+SS (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_nodelet}{msckf\+\_\+vio\+::\+Msckf\+Vio\+Nodelet}}}]{,  }\item[{nodelet\+::\+Nodelet}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacemsckf__vio_a1810830643db7b385a14c8c9ac2f6ba5}\label{namespacemsckf__vio_a1810830643db7b385a14c8c9ac2f6ba5}} 
+\index{msckf\_vio@{msckf\_vio}!quaternionMultiplication@{quaternionMultiplication}}
+\index{quaternionMultiplication@{quaternionMultiplication}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{quaternionMultiplication()}{quaternionMultiplication()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector4d msckf\+\_\+vio\+::quaternion\+Multiplication (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector4d \&}]{q1,  }\item[{const Eigen\+::\+Vector4d \&}]{q2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Perform q1 $\ast$ q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法 
+
+函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacemsckf__vio_a1810830643db7b385a14c8c9ac2f6ba5_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacemsckf__vio_a1810830643db7b385a14c8c9ac2f6ba5_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacemsckf__vio_afa6ff3990092f7999e51e333220ba679}\label{namespacemsckf__vio_afa6ff3990092f7999e51e333220ba679}} 
+\index{msckf\_vio@{msckf\_vio}!quaternionNormalize@{quaternionNormalize}}
+\index{quaternionNormalize@{quaternionNormalize}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{quaternionNormalize()}{quaternionNormalize()}}
+{\footnotesize\ttfamily void msckf\+\_\+vio\+::quaternion\+Normalize (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector4d \&}]{q }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+标准化四元数 
+
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacemsckf__vio_afa6ff3990092f7999e51e333220ba679_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacemsckf__vio_a84bd0f5d594e685ea07e2b922cf34bb9}\label{namespacemsckf__vio_a84bd0f5d594e685ea07e2b922cf34bb9}} 
+\index{msckf\_vio@{msckf\_vio}!quaternionToRotation@{quaternionToRotation}}
+\index{quaternionToRotation@{quaternionToRotation}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{quaternionToRotation()}{quaternionToRotation()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix3d msckf\+\_\+vio\+::quaternion\+To\+Rotation (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector4d \&}]{q }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix 
+
+\begin{DoxyNote}{注解}
+Pay attention to the convention used. The function follows the conversion in \char`\"{}\+Indirect Kalman Filter for 3\+D Attitude Estimation\+:
+   A Tutorial for Quaternion Algebra\char`\"{}, Equation (62).
+\end{DoxyNote}
+The input quaternion should be in the form \mbox{[}q1, q2, q3, q4(scalar)\mbox{]}$^\wedge$T 函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacemsckf__vio_a84bd0f5d594e685ea07e2b922cf34bb9_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacemsckf__vio_a84bd0f5d594e685ea07e2b922cf34bb9_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacemsckf__vio_a8d689b1622675767a13b292e78e40ace}\label{namespacemsckf__vio_a8d689b1622675767a13b292e78e40ace}} 
+\index{msckf\_vio@{msckf\_vio}!rotationToQuaternion@{rotationToQuaternion}}
+\index{rotationToQuaternion@{rotationToQuaternion}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{rotationToQuaternion()}{rotationToQuaternion()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector4d msckf\+\_\+vio\+::rotation\+To\+Quaternion (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{R }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion. 
+
+\begin{DoxyNote}{注解}
+Pay attention to the convention used. The function follows the conversion in \char`\"{}\+Indirect Kalman Filter for 3\+D Attitude Estimation\+:
+   A Tutorial for Quaternion Algebra\char`\"{}, Equation (78).
+\end{DoxyNote}
+The input quaternion should be in the form \mbox{[}q1, q2, q3, q4(scalar)\mbox{]}$^\wedge$T 函数调用图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacemsckf__vio_a8d689b1622675767a13b292e78e40ace_cgraph}
+\end{center}
+\end{figure}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacemsckf__vio_a8d689b1622675767a13b292e78e40ace_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacemsckf__vio_aaf0fc755d0d3c5b59b8eca157ae5cb61}\label{namespacemsckf__vio_aaf0fc755d0d3c5b59b8eca157ae5cb61}} 
+\index{msckf\_vio@{msckf\_vio}!skewSymmetric@{skewSymmetric}}
+\index{skewSymmetric@{skewSymmetric}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{skewSymmetric()}{skewSymmetric()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix3d msckf\+\_\+vio\+::skew\+Symmetric (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{w }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+反对称矩阵 
+
+\begin{DoxyNote}{注解}
+Performs the operation\+: w -\/$>$ \mbox{[} 0 -\/w3 w2\mbox{]} \mbox{[} w3 0 -\/w1\mbox{]} \mbox{[}-\/w2 w1 0\mbox{]} 
+\end{DoxyNote}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacemsckf__vio_aaf0fc755d0d3c5b59b8eca157ae5cb61_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacemsckf__vio_a294cc2c50924d54cf548be1b067bd82a}\label{namespacemsckf__vio_a294cc2c50924d54cf548be1b067bd82a}} 
+\index{msckf\_vio@{msckf\_vio}!smallAngleQuaternion@{smallAngleQuaternion}}
+\index{smallAngleQuaternion@{smallAngleQuaternion}!msckf\_vio@{msckf\_vio}}
+\doxysubsubsection{\texorpdfstring{smallAngleQuaternion()}{smallAngleQuaternion()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector4d msckf\+\_\+vio\+::small\+Angle\+Quaternion (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{dtheta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion. 
+
+\begin{DoxyNote}{注解}
+This function is useful to convert delta quaternion which is usually a 3x1 vector to a full quaternion. For more details, check Section 3.\+2 \char`\"{}\+Kalman Filter Update\char`\"{} in \char`\"{}\+Indirect Kalman Filter for 3\+D Attitude Estimation\+:
+   A Tutorial for quaternion Algebra\char`\"{}. 
+\end{DoxyNote}
+这是这个函数的调用关系图\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacemsckf__vio_a294cc2c50924d54cf548be1b067bd82a_icgraph}
+\end{center}
+\end{figure}

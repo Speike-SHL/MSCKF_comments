@@ -1,0 +1,69 @@
+.TH "/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/image_processor.h" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/image_processor.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <vector>\fP
+.br
+\fC#include <map>\fP
+.br
+\fC#include <boost/shared_ptr\&.hpp>\fP
+.br
+\fC#include <opencv2/opencv\&.hpp>\fP
+.br
+\fC#include <opencv2/video\&.hpp>\fP
+.br
+\fC#include <ros/ros\&.h>\fP
+.br
+\fC#include <cv_bridge/cv_bridge\&.h>\fP
+.br
+\fC#include <image_transport/image_transport\&.h>\fP
+.br
+\fC#include <sensor_msgs/Imu\&.h>\fP
+.br
+\fC#include <sensor_msgs/Image\&.h>\fP
+.br
+\fC#include <message_filters/subscriber\&.h>\fP
+.br
+\fC#include <message_filters/time_synchronizer\&.h>\fP
+.br
+
+.SS "类"
+
+.in +1c
+.ti -1c
+.RI "class \fBmsckf_vio::ImageProcessor\fP"
+.br
+.RI "\fBImageProcessor\fP Detects and tracks features in image sequences\&. "
+.ti -1c
+.RI "struct \fBmsckf_vio::ImageProcessor::ProcessorConfig\fP"
+.br
+.RI "\fBProcessorConfig\fP Configuration parameters for feature detection and tracking\&. "
+.ti -1c
+.RI "struct \fBmsckf_vio::ImageProcessor::FeatureMetaData\fP"
+.br
+.RI "\fBFeatureMetaData\fP Contains necessary information of a feature for easy access\&. "
+.in -1c
+.SS "命名空间"
+
+.in +1c
+.ti -1c
+.RI " \fBmsckf_vio\fP"
+.br
+.in -1c
+.SS "类型定义"
+
+.in +1c
+.ti -1c
+.RI "typedef ImageProcessor::Ptr \fBmsckf_vio::ImageProcessorPtr\fP"
+.br
+.ti -1c
+.RI "typedef ImageProcessor::ConstPtr \fBmsckf_vio::ImageProcessorConstPtr\fP"
+.br
+.in -1c
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.

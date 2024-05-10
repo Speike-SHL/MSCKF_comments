@@ -1,0 +1,727 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>S-MSCKF注释: msckf_vio::Feature结构体 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">S-MSCKF注释
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('structmsckf__vio_1_1_feature.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">类</a> &#124;
+<a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="#pub-attribs">Public 属性</a> &#124;
+<a href="#pub-static-attribs">静态 Public 属性</a> &#124;
+<a href="structmsckf__vio_1_1_feature-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">msckf_vio::Feature结构体 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="structmsckf__vio_1_1_feature.html" title="Feature Salient part of an image. Please refer to the Appendix of &quot;A Multi-State Constraint Kalman   ...">Feature</a> Salient part of an image. Please refer to the Appendix of "A Multi-State Constraint Kalman
+   Filter for Vision-aided Inertial Navigation" for how the 3d position of a feature is initialized. 一个特征可以理解为一个三维点，由多帧观测到  
+ <a href="structmsckf__vio_1_1_feature.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="feature_8hpp_source.html">feature.hpp</a>&gt;</code></p>
+<div class="dynheader">
+msckf_vio::Feature 的协作图:</div>
+<div class="dyncontent">
+<div class="center"><img src="structmsckf__vio_1_1_feature__coll__graph.png" border="0" usemap="#msckf__vio_1_1_feature_coll__map" alt="Collaboration graph"/></div>
+<map name="msckf__vio_1_1_feature_coll__map" id="msckf__vio_1_1_feature_coll__map">
+<area shape="rect" title="Feature Salient part of an image. Please refer to the Appendix of &quot;A Multi&#45;State Constraint Kalman &#160;&#160;..." alt="" coords="9,109,143,136"/>
+<area shape="rect" href="structmsckf__vio_1_1_feature_1_1_optimization_config.html" title="优化求解特征点世界系下三维坐标的配置" alt="" coords="5,5,147,47"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">图例</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature_1_1_optimization_config.html">OptimizationConfig</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">优化求解特征点世界系下三维坐标的配置  <a href="structmsckf__vio_1_1_feature_1_1_optimization_config.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:a9c551cf33304adc42395e0192c764cfd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a9c551cf33304adc42395e0192c764cfd">Feature</a> ()</td></tr>
+<tr class="memdesc:a9c551cf33304adc42395e0192c764cfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，点ID，点位置，是否初始化  <a href="structmsckf__vio_1_1_feature.html#a9c551cf33304adc42395e0192c764cfd">更多...</a><br /></td></tr>
+<tr class="separator:a9c551cf33304adc42395e0192c764cfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21dfec91db487af6caa7654db3ddc3bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a21dfec91db487af6caa7654db3ddc3bb">Feature</a> (const <a class="el" href="namespacemsckf__vio.html#a2953d19549f64dd919d06e3f075738aa">FeatureIDType</a> &amp;new_id)</td></tr>
+<tr class="separator:a21dfec91db487af6caa7654db3ddc3bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a77dc3abbfb0cf95eea22ddcdcc98c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a0a77dc3abbfb0cf95eea22ddcdcc98c1">cost</a> (const Eigen::Isometry3d &amp;T_c0_ci, const Eigen::Vector3d &amp;x, const Eigen::Vector2d &amp;z, double &amp;e) const</td></tr>
+<tr class="memdesc:a0a77dc3abbfb0cf95eea22ddcdcc98c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">cost 计算重投影误差（归一化坐标）  <a href="structmsckf__vio_1_1_feature.html#a0a77dc3abbfb0cf95eea22ddcdcc98c1">更多...</a><br /></td></tr>
+<tr class="separator:a0a77dc3abbfb0cf95eea22ddcdcc98c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21aa6e1b3a43212bea91be949101c327"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a21aa6e1b3a43212bea91be949101c327">jacobian</a> (const Eigen::Isometry3d &amp;T_c0_ci, const Eigen::Vector3d &amp;x, const Eigen::Vector2d &amp;z, Eigen::Matrix&lt; double, 2, 3 &gt; &amp;J, Eigen::Vector2d &amp;r, double &amp;w) const</td></tr>
+<tr class="memdesc:a21aa6e1b3a43212bea91be949101c327"><td class="mdescLeft">&#160;</td><td class="mdescRight">jacobian 求一个观测对应的雅可比  <a href="structmsckf__vio_1_1_feature.html#a21aa6e1b3a43212bea91be949101c327">更多...</a><br /></td></tr>
+<tr class="separator:a21aa6e1b3a43212bea91be949101c327"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8eeba58a017b0ee9a5d74cc667e953ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a8eeba58a017b0ee9a5d74cc667e953ab">generateInitialGuess</a> (const Eigen::Isometry3d &amp;T_c1_c2, const Eigen::Vector2d &amp;z1, const Eigen::Vector2d &amp;z2, Eigen::Vector3d &amp;p) const</td></tr>
+<tr class="memdesc:a8eeba58a017b0ee9a5d74cc667e953ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">generateInitialGuess Compute the initial guess of the feature's 3d position using only two views.  <a href="structmsckf__vio_1_1_feature.html#a8eeba58a017b0ee9a5d74cc667e953ab">更多...</a><br /></td></tr>
+<tr class="separator:a8eeba58a017b0ee9a5d74cc667e953ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93bccba0f853cd5ef84390d4a41f17e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a93bccba0f853cd5ef84390d4a41f17e0">checkMotion</a> (const <a class="el" href="namespacemsckf__vio.html#a4a1c4cc31c9ba4dadceb295a291d3510">CamStateServer</a> &amp;cam_states) const</td></tr>
+<tr class="memdesc:a93bccba0f853cd5ef84390d4a41f17e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">检查输入的相机姿态，确保有足够的平移来进行三角化  <a href="structmsckf__vio_1_1_feature.html#a93bccba0f853cd5ef84390d4a41f17e0">更多...</a><br /></td></tr>
+<tr class="separator:a93bccba0f853cd5ef84390d4a41f17e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02c10f715ad7ce380b94f2e4da86060c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a02c10f715ad7ce380b94f2e4da86060c">initializePosition</a> (const <a class="el" href="namespacemsckf__vio.html#a4a1c4cc31c9ba4dadceb295a291d3510">CamStateServer</a> &amp;cam_states)</td></tr>
+<tr class="memdesc:a02c10f715ad7ce380b94f2e4da86060c"><td class="mdescLeft">&#160;</td><td class="mdescRight">根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化  <a href="structmsckf__vio_1_1_feature.html#a02c10f715ad7ce380b94f2e4da86060c">更多...</a><br /></td></tr>
+<tr class="separator:a02c10f715ad7ce380b94f2e4da86060c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public 属性</h2></td></tr>
+<tr class="memitem:abc5413613134d2ee34a791d177ec30f2"><td class="memItemLeft" align="right" valign="top">EIGEN_MAKE_ALIGNED_OPERATOR_NEW typedef long long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#abc5413613134d2ee34a791d177ec30f2">FeatureIDType</a></td></tr>
+<tr class="separator:abc5413613134d2ee34a791d177ec30f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a931d4ebc04a2c87178cfff466555a9c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemsckf__vio.html#a2953d19549f64dd919d06e3f075738aa">FeatureIDType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a931d4ebc04a2c87178cfff466555a9c6">id</a></td></tr>
+<tr class="memdesc:a931d4ebc04a2c87178cfff466555a9c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">特征点唯一的ID,long long int  <a href="structmsckf__vio_1_1_feature.html#a931d4ebc04a2c87178cfff466555a9c6">更多...</a><br /></td></tr>
+<tr class="separator:a931d4ebc04a2c87178cfff466555a9c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a6f79b30bd60d66528393a538618132"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a>, Eigen::Vector4d, std::less&lt; <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a> &gt;, Eigen::aligned_allocator&lt; std::pair&lt; const <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a>, Eigen::Vector4d &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a1a6f79b30bd60d66528393a538618132">observations</a></td></tr>
+<tr class="separator:a1a6f79b30bd60d66528393a538618132"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac006d9767affe836e3cd5207129cff38"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#ac006d9767affe836e3cd5207129cff38">position</a></td></tr>
+<tr class="memdesc:ac006d9767affe836e3cd5207129cff38"><td class="mdescLeft">&#160;</td><td class="mdescRight">特征点的3D位置，世界坐标系下  <a href="structmsckf__vio_1_1_feature.html#ac006d9767affe836e3cd5207129cff38">更多...</a><br /></td></tr>
+<tr class="separator:ac006d9767affe836e3cd5207129cff38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c037e2caa807ec6abeb1b2224bc8207"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a2c037e2caa807ec6abeb1b2224bc8207">is_initialized</a></td></tr>
+<tr class="memdesc:a2c037e2caa807ec6abeb1b2224bc8207"><td class="mdescLeft">&#160;</td><td class="mdescRight">3d特征点是否初始化, 即是否三角化  <a href="structmsckf__vio_1_1_feature.html#a2c037e2caa807ec6abeb1b2224bc8207">更多...</a><br /></td></tr>
+<tr class="separator:a2c037e2caa807ec6abeb1b2224bc8207"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+静态 Public 属性</h2></td></tr>
+<tr class="memitem:ac8996367c4703def67bbf823bf3854ce"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemsckf__vio.html#a2953d19549f64dd919d06e3f075738aa">FeatureIDType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#ac8996367c4703def67bbf823bf3854ce">next_id</a> = 0</td></tr>
+<tr class="memdesc:ac8996367c4703def67bbf823bf3854ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">下一个特征点应该使用的ID  <a href="structmsckf__vio_1_1_feature.html#ac8996367c4703def67bbf823bf3854ce">更多...</a><br /></td></tr>
+<tr class="separator:ac8996367c4703def67bbf823bf3854ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a375ed7c3cd0b2ab263389f7bdaf779f1"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#a375ed7c3cd0b2ab263389f7bdaf779f1">observation_noise</a> = 0.01</td></tr>
+<tr class="memdesc:a375ed7c3cd0b2ab263389f7bdaf779f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">归一化特征观测的噪声  <a href="structmsckf__vio_1_1_feature.html#a375ed7c3cd0b2ab263389f7bdaf779f1">更多...</a><br /></td></tr>
+<tr class="separator:a375ed7c3cd0b2ab263389f7bdaf779f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7ae44e16843e1d6239a1b6245e308a1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structmsckf__vio_1_1_feature_1_1_optimization_config.html">OptimizationConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmsckf__vio_1_1_feature.html#ac7ae44e16843e1d6239a1b6245e308a1">optimization_config</a></td></tr>
+<tr class="separator:ac7ae44e16843e1d6239a1b6245e308a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p><a class="el" href="structmsckf__vio_1_1_feature.html" title="Feature Salient part of an image. Please refer to the Appendix of &quot;A Multi-State Constraint Kalman   ...">Feature</a> Salient part of an image. Please refer to the Appendix of "A Multi-State Constraint Kalman
+   Filter for Vision-aided Inertial Navigation" for how the 3d position of a feature is initialized. 一个特征可以理解为一个三维点，由多帧观测到 </p>
+</div><h2 class="groupheader">构造及析构函数说明</h2>
+<a id="a9c551cf33304adc42395e0192c764cfd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c551cf33304adc42395e0192c764cfd">&#9670;&nbsp;</a></span>Feature() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::Feature::Feature </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>构造函数，点ID，点位置，是否初始化 </p>
+
+</div>
+</div>
+<a id="a21dfec91db487af6caa7654db3ddc3bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21dfec91db487af6caa7654db3ddc3bb">&#9670;&nbsp;</a></span>Feature() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">msckf_vio::Feature::Feature </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemsckf__vio.html#a2953d19549f64dd919d06e3f075738aa">FeatureIDType</a> &amp;&#160;</td>
+          <td class="paramname"><em>new_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">成员函数说明</h2>
+<a id="a93bccba0f853cd5ef84390d4a41f17e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93bccba0f853cd5ef84390d4a41f17e0">&#9670;&nbsp;</a></span>checkMotion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::Feature::checkMotion </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemsckf__vio.html#a4a1c4cc31c9ba4dadceb295a291d3510">CamStateServer</a> &amp;&#160;</td>
+          <td class="paramname"><em>cam_states</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>检查输入的相机姿态，确保有足够的平移来进行三角化 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cam_states</td><td>: 所有参与计算的相机位姿 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>如果输入的相机姿态之间的平移足够，则返回True。 </dd></dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="structmsckf__vio_1_1_feature_a93bccba0f853cd5ef84390d4a41f17e0_cgraph.png" border="0" usemap="#structmsckf__vio_1_1_feature_a93bccba0f853cd5ef84390d4a41f17e0_cgraph" alt=""/></div>
+<map name="structmsckf__vio_1_1_feature_a93bccba0f853cd5ef84390d4a41f17e0_cgraph" id="structmsckf__vio_1_1_feature_a93bccba0f853cd5ef84390d4a41f17e0_cgraph">
+<area shape="rect" title="检查输入的相机姿态，确保有足够的平移来进行三角化" alt="" coords="5,5,140,47"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="188,13,401,39"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="449,13,633,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0a77dc3abbfb0cf95eea22ddcdcc98c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a77dc3abbfb0cf95eea22ddcdcc98c1">&#9670;&nbsp;</a></span>cost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::Feature::cost </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Isometry3d &amp;&#160;</td>
+          <td class="paramname"><em>T_c0_ci</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Vector3d &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Vector2d &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>e</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>cost 计算重投影误差（归一化坐标） </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T_c0_ci</td><td>相对位姿，Tcic0 第一帧相机在第i帧相机下的位姿 </td></tr>
+    <tr><td class="paramname">x</td><td>第一帧相机下的估计的三维点坐标 的逆深度形式(x/z, y/z, 1/z) </td></tr>
+    <tr><td class="paramname">z</td><td>ci下的真实观测归一化坐标 </td></tr>
+    <tr><td class="paramname">e</td><td>误差 </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="structmsckf__vio_1_1_feature_a0a77dc3abbfb0cf95eea22ddcdcc98c1_icgraph.png" border="0" usemap="#structmsckf__vio_1_1_feature_a0a77dc3abbfb0cf95eea22ddcdcc98c1_icgraph" alt=""/></div>
+<map name="structmsckf__vio_1_1_feature_a0a77dc3abbfb0cf95eea22ddcdcc98c1_icgraph" id="structmsckf__vio_1_1_feature_a0a77dc3abbfb0cf95eea22ddcdcc98c1_icgraph">
+<area shape="rect" title="cost 计算重投影误差（归一化坐标）" alt="" coords="292,5,427,47"/>
+<area shape="rect" href="structmsckf__vio_1_1_feature.html#a02c10f715ad7ce380b94f2e4da86060c" title="根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化" alt="" coords="109,5,244,47"/>
+<area shape="rect" href="feature__initialization__test_8cpp.html#a4fc6861826176ad5a2c588d4b4ff7ff4" title=" " alt="" coords="5,13,61,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a8eeba58a017b0ee9a5d74cc667e953ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8eeba58a017b0ee9a5d74cc667e953ab">&#9670;&nbsp;</a></span>generateInitialGuess()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::Feature::generateInitialGuess </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Isometry3d &amp;&#160;</td>
+          <td class="paramname"><em>T_c1_c2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Vector2d &amp;&#160;</td>
+          <td class="paramname"><em>z1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Vector2d &amp;&#160;</td>
+          <td class="paramname"><em>z2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Vector3d &amp;&#160;</td>
+          <td class="paramname"><em>p</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>generateInitialGuess Compute the initial guess of the feature's 3d position using only two views. </p>
+<p>generateInitialGuess 两帧做一次三角化</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T_c1_c2</td><td>A rigid body transformation taking a vector from c2 frame to c1 frame. </td></tr>
+    <tr><td class="paramname">z1</td><td>feature observation in c1 frame. </td></tr>
+    <tr><td class="paramname">z2</td><td>feature observation in c2 frame. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>p: Computed feature position in c1 frame.</dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T_c1_c2</td><td>两帧间的相对位姿，c1在c2下的位姿 </td></tr>
+    <tr><td class="paramname">z1</td><td>c1下的观测 </td></tr>
+    <tr><td class="paramname">z2</td><td>c2下的观测 都是归一化坐标 </td></tr>
+    <tr><td class="paramname">p</td><td>三维点在c1下的坐标 </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="structmsckf__vio_1_1_feature_a8eeba58a017b0ee9a5d74cc667e953ab_icgraph.png" border="0" usemap="#structmsckf__vio_1_1_feature_a8eeba58a017b0ee9a5d74cc667e953ab_icgraph" alt=""/></div>
+<map name="structmsckf__vio_1_1_feature_a8eeba58a017b0ee9a5d74cc667e953ab_icgraph" id="structmsckf__vio_1_1_feature_a8eeba58a017b0ee9a5d74cc667e953ab_icgraph">
+<area shape="rect" title="generateInitialGuess Compute the initial guess of the feature&#39;s 3d position using only two views." alt="" coords="292,5,441,47"/>
+<area shape="rect" href="structmsckf__vio_1_1_feature.html#a02c10f715ad7ce380b94f2e4da86060c" title="根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化" alt="" coords="109,5,244,47"/>
+<area shape="rect" href="feature__initialization__test_8cpp.html#a4fc6861826176ad5a2c588d4b4ff7ff4" title=" " alt="" coords="5,13,61,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a02c10f715ad7ce380b94f2e4da86060c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02c10f715ad7ce380b94f2e4da86060c">&#9670;&nbsp;</a></span>initializePosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::Feature::initializePosition </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemsckf__vio.html#a4a1c4cc31c9ba4dadceb295a291d3510">CamStateServer</a> &amp;&#160;</td>
+          <td class="paramname"><em>cam_states</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cam_states</td><td>A map containing the camera poses with its ID as the associated key value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>The computed 3d position is used to set the position member variable. Note the resulted position is in world frame. </dd>
+<dd>
+是否三角化成功 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>Please refer to the Appendix of "A Multi-State Constraint Kalman
+   Filter for Vision-aided Inertial Navigation" for how the 3d position of a feature is initialized. </dd></dl>
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c_cgraph.png" border="0" usemap="#structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c_cgraph" alt=""/></div>
+<map name="structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c_cgraph" id="structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c_cgraph">
+<area shape="rect" title="根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化" alt="" coords="5,104,140,145"/>
+<area shape="rect" href="structmsckf__vio_1_1_feature.html#a0a77dc3abbfb0cf95eea22ddcdcc98c1" title="cost 计算重投影误差（归一化坐标）" alt="" coords="227,5,362,47"/>
+<area shape="rect" href="structmsckf__vio_1_1_feature.html#a8eeba58a017b0ee9a5d74cc667e953ab" title="generateInitialGuess Compute the initial guess of the feature&#39;s 3d position using only two views." alt="" coords="220,71,369,112"/>
+<area shape="rect" href="structmsckf__vio_1_1_feature.html#a21aa6e1b3a43212bea91be949101c327" title="jacobian 求一个观测对应的雅可比" alt="" coords="227,136,362,177"/>
+<area shape="rect" href="namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="188,202,401,229"/>
+<area shape="rect" href="namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="449,202,633,229"/>
+</map>
+</div>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c_icgraph.png" border="0" usemap="#structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c_icgraph" alt=""/></div>
+<map name="structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c_icgraph" id="structmsckf__vio_1_1_feature_a02c10f715ad7ce380b94f2e4da86060c_icgraph">
+<area shape="rect" title="根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化" alt="" coords="109,5,244,47"/>
+<area shape="rect" href="feature__initialization__test_8cpp.html#a4fc6861826176ad5a2c588d4b4ff7ff4" title=" " alt="" coords="5,13,61,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a21aa6e1b3a43212bea91be949101c327"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21aa6e1b3a43212bea91be949101c327">&#9670;&nbsp;</a></span>jacobian()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void msckf_vio::Feature::jacobian </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Isometry3d &amp;&#160;</td>
+          <td class="paramname"><em>T_c0_ci</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Vector3d &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Vector2d &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Matrix&lt; double, 2, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>J</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Vector2d &amp;&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>jacobian 求一个观测对应的雅可比 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T_c0_ci</td><td>相对位姿，Tcic0 第一帧相机在第i帧相机下的位姿 </td></tr>
+    <tr><td class="paramname">x</td><td>第一帧相机下的估计的三维点坐标 的逆深度形式(x/z, y/z, 1/z) </td></tr>
+    <tr><td class="paramname">z</td><td>ci下的真实观测归一化坐标 </td></tr>
+    <tr><td class="paramname">J</td><td>雅可比 归一化坐标误差相对于三维点的 </td></tr>
+    <tr><td class="paramname">r</td><td>误差 </td></tr>
+    <tr><td class="paramname">w</td><td>权重，鲁棒核函数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>是否三角化成功 </dd></dl>
+<div class="dynheader">
+这是这个函数的调用关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="structmsckf__vio_1_1_feature_a21aa6e1b3a43212bea91be949101c327_icgraph.png" border="0" usemap="#structmsckf__vio_1_1_feature_a21aa6e1b3a43212bea91be949101c327_icgraph" alt=""/></div>
+<map name="structmsckf__vio_1_1_feature_a21aa6e1b3a43212bea91be949101c327_icgraph" id="structmsckf__vio_1_1_feature_a21aa6e1b3a43212bea91be949101c327_icgraph">
+<area shape="rect" title="jacobian 求一个观测对应的雅可比" alt="" coords="292,5,427,47"/>
+<area shape="rect" href="structmsckf__vio_1_1_feature.html#a02c10f715ad7ce380b94f2e4da86060c" title="根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化" alt="" coords="109,5,244,47"/>
+<area shape="rect" href="feature__initialization__test_8cpp.html#a4fc6861826176ad5a2c588d4b4ff7ff4" title=" " alt="" coords="5,13,61,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">类成员变量说明</h2>
+<a id="abc5413613134d2ee34a791d177ec30f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc5413613134d2ee34a791d177ec30f2">&#9670;&nbsp;</a></span>FeatureIDType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">EIGEN_MAKE_ALIGNED_OPERATOR_NEW typedef long long int msckf_vio::Feature::FeatureIDType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a931d4ebc04a2c87178cfff466555a9c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a931d4ebc04a2c87178cfff466555a9c6">&#9670;&nbsp;</a></span>id</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemsckf__vio.html#a2953d19549f64dd919d06e3f075738aa">FeatureIDType</a> msckf_vio::Feature::id</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>特征点唯一的ID,long long int </p>
+
+</div>
+</div>
+<a id="a2c037e2caa807ec6abeb1b2224bc8207"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c037e2caa807ec6abeb1b2224bc8207">&#9670;&nbsp;</a></span>is_initialized</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool msckf_vio::Feature::is_initialized</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>3d特征点是否初始化, 即是否三角化 </p>
+
+</div>
+</div>
+<a id="ac8996367c4703def67bbf823bf3854ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8996367c4703def67bbf823bf3854ce">&#9670;&nbsp;</a></span>next_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemsckf__vio.html#a2953d19549f64dd919d06e3f075738aa">FeatureIDType</a> msckf_vio::Feature::next_id = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>下一个特征点应该使用的ID </p>
+
+</div>
+</div>
+<a id="a375ed7c3cd0b2ab263389f7bdaf779f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a375ed7c3cd0b2ab263389f7bdaf779f1">&#9670;&nbsp;</a></span>observation_noise</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double msckf_vio::Feature::observation_noise = 0.01</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>归一化特征观测的噪声 </p>
+
+</div>
+</div>
+<a id="a1a6f79b30bd60d66528393a538618132"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a6f79b30bd60d66528393a538618132">&#9670;&nbsp;</a></span>observations</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;<a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a>, Eigen::Vector4d, std::less&lt;<a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a>&gt;, Eigen::aligned_allocator&lt;std::pair&lt;const <a class="el" href="namespacemsckf__vio.html#a665a9347ce6f87365e6a04522408205e">StateIDType</a>, Eigen::Vector4d&gt; &gt; &gt; msckf_vio::Feature::observations</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>观测，储存当前特征点被哪些相机帧观测到，key为相机帧id，value为该特征点在该相机帧下的归一化坐标 还指定了比较器和分配器用于排序和内存分配，根据id升序排序 </p>
+
+</div>
+</div>
+<a id="ac7ae44e16843e1d6239a1b6245e308a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7ae44e16843e1d6239a1b6245e308a1">&#9670;&nbsp;</a></span>optimization_config</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmsckf__vio_1_1_feature_1_1_optimization_config.html">Feature::OptimizationConfig</a> Feature::optimization_config</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac006d9767affe836e3cd5207129cff38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac006d9767affe836e3cd5207129cff38">&#9670;&nbsp;</a></span>position</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Vector3d msckf_vio::Feature::position</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>特征点的3D位置，世界坐标系下 </p>
+
+</div>
+</div>
+<hr/>该结构体的文档由以下文件生成:<ul>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/include/msckf_vio/<a class="el" href="feature_8hpp_source.html">feature.hpp</a></li>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/src/<a class="el" href="msckf__vio_8cpp.html">msckf_vio.cpp</a></li>
+<li>/home/speike/VSLAM/MSCKF_vio_ws/src/MSCKF_comments/test/<a class="el" href="feature__initialization__test_8cpp.html">feature_initialization_test.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespacemsckf__vio.html">msckf_vio</a></li><li class="navelem"><a class="el" href="structmsckf__vio_1_1_feature.html">Feature</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

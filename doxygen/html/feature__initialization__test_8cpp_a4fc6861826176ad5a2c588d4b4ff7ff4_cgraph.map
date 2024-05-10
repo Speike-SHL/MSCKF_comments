@@ -1,0 +1,11 @@
+<map id="TEST" name="TEST">
+<area shape="rect" id="node1" title=" " alt="" coords="5,198,61,225"/>
+<area shape="rect" id="node2" href="$structmsckf__vio_1_1_feature.html#a02c10f715ad7ce380b94f2e4da86060c" title="根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化" alt="" coords="147,136,282,177"/>
+<area shape="rect" id="node8" href="$namespacemsckf__vio.html#a8d689b1622675767a13b292e78e40ace" title="旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion." alt="" coords="109,227,320,254"/>
+<area shape="rect" id="node3" href="$structmsckf__vio_1_1_feature.html#a0a77dc3abbfb0cf95eea22ddcdcc98c1" title="cost 计算重投影误差（归一化坐标）" alt="" coords="407,5,542,47"/>
+<area shape="rect" id="node4" href="$structmsckf__vio_1_1_feature.html#a8eeba58a017b0ee9a5d74cc667e953ab" title="generateInitialGuess Compute the initial guess of the feature&#39;s 3d position using only two views." alt="" coords="400,71,549,112"/>
+<area shape="rect" id="node5" href="$structmsckf__vio_1_1_feature.html#a21aa6e1b3a43212bea91be949101c327" title="jacobian 求一个观测对应的雅可比" alt="" coords="407,136,542,177"/>
+<area shape="rect" id="node6" href="$namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="368,202,581,229"/>
+<area shape="rect" id="node7" href="$namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="629,202,813,229"/>
+<area shape="rect" id="node9" href="$namespacemsckf__vio.html#afa6ff3990092f7999e51e333220ba679" title="标准化四元数" alt="" coords="370,253,579,279"/>
+</map>

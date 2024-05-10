@@ -1,0 +1,559 @@
+.TH "msckf_vio::MsckfVio" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+msckf_vio::MsckfVio
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <msckf_vio\&.h>\fP
+.SS "类"
+
+.in +1c
+.ti -1c
+.RI "struct \fBStateServer\fP"
+.br
+.RI "管理S-MSCKF中的所有状态，包括IMU相关的状态和多个相机的状态 "
+.in -1c
+.SS "Public 类型"
+
+.in +1c
+.ti -1c
+.RI "typedef boost::shared_ptr< \fBMsckfVio\fP > \fBPtr\fP"
+.br
+.ti -1c
+.RI "typedef boost::shared_ptr< const \fBMsckfVio\fP > \fBConstPtr\fP"
+.br
+.in -1c
+.SS "Public 成员函数"
+
+.in +1c
+.ti -1c
+.RI "EIGEN_MAKE_ALIGNED_OPERATOR_NEW \fBMsckfVio\fP (ros::NodeHandle &pnh)"
+.br
+.RI "MsckfVio构造函数 "
+.ti -1c
+.RI "\fBMsckfVio\fP (const \fBMsckfVio\fP &)=delete"
+.br
+.ti -1c
+.RI "\fBMsckfVio\fP \fBoperator=\fP (const \fBMsckfVio\fP &)=delete"
+.br
+.ti -1c
+.RI "\fB~MsckfVio\fP ()"
+.br
+.ti -1c
+.RI "bool \fBinitialize\fP ()"
+.br
+.ti -1c
+.RI "void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Private 成员函数"
+
+.in +1c
+.ti -1c
+.RI "bool \fBloadParameters\fP ()"
+.br
+.RI "导入各种参数，包括阈值、传感器误差标准差等 "
+.ti -1c
+.RI "bool \fBcreateRosIO\fP ()"
+.br
+.ti -1c
+.RI "void \fBimuCallback\fP (const sensor_msgs::ImuConstPtr &msg)"
+.br
+.RI "接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推 "
+.ti -1c
+.RI "void \fBfeatureCallback\fP (const CameraMeasurementConstPtr &msg)"
+.br
+.RI "后端主要函数，处理新来的数据 "
+.ti -1c
+.RI "void \fBpublish\fP (const ros::Time &time)"
+.br
+.ti -1c
+.RI "void \fBinitializeGravityAndBias\fP ()"
+.br
+.RI "imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计 "
+.ti -1c
+.RI "bool \fBresetCallback\fP (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)"
+.br
+.RI "重置 "
+.ti -1c
+.RI "void \fBbatchImuProcessing\fP (const double &time_bound)"
+.br
+.RI "imu积分，批量处理imu数据 "
+.ti -1c
+.RI "void \fBprocessModel\fP (const double &time, const Eigen::Vector3d &m_gyro, const Eigen::Vector3d &m_acc)"
+.br
+.RI "来一个新的imu数据更新协方差矩阵与状态积分 "
+.ti -1c
+.RI "void \fBpredictNewState\fP (const double &dt, const Eigen::Vector3d &gyro, const Eigen::Vector3d &acc)"
+.br
+.RI "四阶龙格库塔对IMU状态递推 "
+.ti -1c
+.RI "void \fBstateAugmentation\fP (const double &time)"
+.br
+.RI "根据时间分裂出相机状态 "
+.ti -1c
+.RI "void \fBaddFeatureObservations\fP (const CameraMeasurementConstPtr &msg)"
+.br
+.RI "添加特征点观测 "
+.ti -1c
+.RI "void \fBmeasurementJacobian\fP (const \fBStateIDType\fP &cam_state_id, const \fBFeatureIDType\fP &feature_id, Eigen::Matrix< double, 4, 6 > &H_x, Eigen::Matrix< double, 4, 3 > &H_f, Eigen::Vector4d &r)"
+.br
+.RI "计算一个路标点的雅可比 "
+.ti -1c
+.RI "void \fBfeatureJacobian\fP (const \fBFeatureIDType\fP &feature_id, const std::vector< \fBStateIDType\fP > &cam_state_ids, Eigen::MatrixXd &H_x, Eigen::VectorXd &r)"
+.br
+.RI "计算一个路标点的雅可比 "
+.ti -1c
+.RI "void \fBmeasurementUpdate\fP (const Eigen::MatrixXd &H, const Eigen::VectorXd &r)"
+.br
+.RI "更新 "
+.ti -1c
+.RI "bool \fBgatingTest\fP (const Eigen::MatrixXd &H, const Eigen::VectorXd &r, const int &dof)"
+.br
+.ti -1c
+.RI "void \fBremoveLostFeatures\fP ()"
+.br
+.RI "使用不再跟踪上的点来更新 "
+.ti -1c
+.RI "void \fBfindRedundantCamStates\fP (std::vector< \fBStateIDType\fP > &rm_cam_state_ids)"
+.br
+.RI "找出该删的相机状态的id "
+.ti -1c
+.RI "void \fBpruneCamStateBuffer\fP ()"
+.br
+.RI "当cam状态数达到最大值时，挑出若干cam状态待删除 "
+.ti -1c
+.RI "void \fBonlineReset\fP ()"
+.br
+.ti -1c
+.RI "void \fBmocapOdomCallback\fP (const nav_msgs::OdometryConstPtr &msg)"
+.br
+.RI "没用，暂时不看 "
+.in -1c
+.SS "Private 属性"
+
+.in +1c
+.ti -1c
+.RI "\fBStateServer\fP \fBstate_server\fP"
+.br
+.ti -1c
+.RI "int \fBmax_cam_state_size\fP"
+.br
+.ti -1c
+.RI "\fBMapServer\fP \fBmap_server\fP"
+.br
+.ti -1c
+.RI "std::vector< sensor_msgs::Imu > \fBimu_msg_buffer\fP"
+.br
+.ti -1c
+.RI "bool \fBis_gravity_set\fP"
+.br
+.ti -1c
+.RI "bool \fBis_first_img\fP"
+.br
+.ti -1c
+.RI "double \fBposition_std_threshold\fP"
+.br
+.ti -1c
+.RI "double \fBtracking_rate\fP"
+.br
+.ti -1c
+.RI "double \fBtranslation_threshold\fP"
+.br
+.ti -1c
+.RI "double \fBrotation_threshold\fP"
+.br
+.ti -1c
+.RI "double \fBtracking_rate_threshold\fP"
+.br
+.ti -1c
+.RI "ros::NodeHandle \fBnh\fP"
+.br
+.ti -1c
+.RI "ros::Subscriber \fBimu_sub\fP"
+.br
+.ti -1c
+.RI "ros::Subscriber \fBfeature_sub\fP"
+.br
+.ti -1c
+.RI "ros::Publisher \fBodom_pub\fP"
+.br
+.ti -1c
+.RI "ros::Publisher \fBfeature_pub\fP"
+.br
+.ti -1c
+.RI "tf::TransformBroadcaster \fBtf_pub\fP"
+.br
+.ti -1c
+.RI "ros::ServiceServer \fBreset_srv\fP"
+.br
+.ti -1c
+.RI "std::string \fBfixed_frame_id\fP"
+.br
+.ti -1c
+.RI "std::string \fBchild_frame_id\fP"
+.br
+.ti -1c
+.RI "bool \fBpublish_tf\fP"
+.br
+.ti -1c
+.RI "double \fBframe_rate\fP"
+.br
+.ti -1c
+.RI "ros::Subscriber \fBmocap_odom_sub\fP"
+.br
+.ti -1c
+.RI "ros::Publisher \fBmocap_odom_pub\fP"
+.br
+.ti -1c
+.RI "geometry_msgs::TransformStamped \fBraw_mocap_odom_msg\fP"
+.br
+.ti -1c
+.RI "Eigen::Isometry3d \fBmocap_initial_frame\fP"
+.br
+.in -1c
+.SS "静态 Private 属性"
+
+.in +1c
+.ti -1c
+.RI "static std::map< int, double > \fBchi_squared_test_table\fP"
+.br
+.in -1c
+.SH "成员类型定义说明"
+.PP 
+.SS "typedef boost::shared_ptr<const \fBMsckfVio\fP> \fBmsckf_vio::MsckfVio::ConstPtr\fP"
+
+.SS "typedef boost::shared_ptr<\fBMsckfVio\fP> \fBmsckf_vio::MsckfVio::Ptr\fP"
+
+.SH "构造及析构函数说明"
+.PP 
+.SS "msckf_vio::MsckfVio::MsckfVio (ros::NodeHandle & pnh)"
+
+.PP
+MsckfVio构造函数 
+.PP
+\fB参数\fP
+.RS 4
+\fIpnh\fP Ros节点句柄 
+.br
+\fIis_gravity_set\fP False 设置未初始化重力 
+.br
+\fIis_first_img\fP True 设置是第一帧图像 
+.RE
+.PP
+
+.SS "msckf_vio::MsckfVio::MsckfVio (const \fBMsckfVio\fP &)\fC [delete]\fP"
+
+.SS "msckf_vio::MsckfVio::~MsckfVio ()\fC [inline]\fP"
+
+.SH "成员函数说明"
+.PP 
+.SS "void msckf_vio::MsckfVio::addFeatureObservations (const CameraMeasurementConstPtr & msg)\fC [private]\fP"
+
+.PP
+添加特征点观测 
+.PP
+\fB参数\fP
+.RS 4
+\fImsg\fP 前端发来的特征点信息，里面包含了时间，左右目上的角点及其id（严格意义上不能说是特征点） 
+.RE
+.PP
+
+.SS "void msckf_vio::MsckfVio::batchImuProcessing (const double & time_bound)\fC [private]\fP"
+
+.PP
+imu积分，批量处理imu数据 
+.PP
+\fB参数\fP
+.RS 4
+\fItime_bound\fP 处理到这个时间 
+.RE
+.PP
+
+.SS "bool msckf_vio::MsckfVio::createRosIO ()\fC [private]\fP"
+
+.IP "1." 4
+发布 'odom', 后端计算出的位姿
+.IP "2." 4
+发布 'feature_point_cloud', 后端计算出的世界系下的点云
+.IP "3." 4
+服务，重置后端
+.IP "4." 4
+接收 'imu', 接收IMU数据。
+.PP
+\fB参见\fP
+.RS 4
+\fBMsckfVio::imuCallback(const sensor_msgs::ImuConstPtr &msg)\fP
+.RE
+.PP
+
+.IP "5." 4
+接收 'features', 前端特征点数据。 
+.PP
+\fB参见\fP
+.RS 4
+\fBMsckfVio::featureCallback(const CameraMeasurementConstPtr &msg)\fP
+.RE
+.PP
+
+.IP "6." 4
+接收 'mocap_odom'，真值数据，未用到
+.IP "7." 4
+发布 'gt_odom'，发布由mocap_odom 算出的真实位姿，未用到
+.PP
+
+.SS "void msckf_vio::MsckfVio::featureCallback (const CameraMeasurementConstPtr & msg)\fC [private]\fP"
+
+.PP
+后端主要函数，处理新来的数据 
+.PP
+\fB参数\fP
+.RS 4
+\fImsg\fP 新来的数据, 包括时间戳、点id、和左右目去畸变后归一化坐标 
+.RE
+.PP
+
+.IP "1." 4
+必须经过imu(重力)初始化才能继续进行
+.PP
+
+.SS "void msckf_vio::MsckfVio::featureJacobian (const \fBFeatureIDType\fP & feature_id, const std::vector< \fBStateIDType\fP > & cam_state_ids, Eigen::MatrixXd & H_x, Eigen::VectorXd & r)\fC [private]\fP"
+
+.PP
+计算一个路标点的雅可比 
+.PP
+\fB参数\fP
+.RS 4
+\fIfeature_id\fP 路标点id 
+.br
+\fIcam_state_ids\fP 这个点对应的所有的相机状态id 
+.br
+\fIH_x\fP 雅可比 
+.br
+\fIr\fP 误差 
+.RE
+.PP
+
+.SS "void msckf_vio::MsckfVio::findRedundantCamStates (std::vector< \fBStateIDType\fP > & rm_cam_state_ids)\fC [private]\fP"
+
+.PP
+找出该删的相机状态的id 
+.PP
+\fB参数\fP
+.RS 4
+\fIrm_cam_state_ids\fP 要删除的相机状态id 
+.RE
+.PP
+
+.SS "bool msckf_vio::MsckfVio::gatingTest (const Eigen::MatrixXd & H, const Eigen::VectorXd & r, const int & dof)\fC [private]\fP"
+
+.SS "void msckf_vio::MsckfVio::imuCallback (const sensor_msgs::ImuConstPtr & msg)\fC [private]\fP"
+
+.PP
+接受IMU数据存入imu_msg_buffer中，并不立刻进行状态递推 
+.PP
+\fB注解\fP
+.RS 4
+前200个imu数据需要静止不动进行初始化，如果移动会导致轨迹飘 
+.RE
+.PP
+
+.SS "bool msckf_vio::MsckfVio::initialize ()"
+
+.IP "1." 4
+加载参数 
+.PP
+\fB参见\fP
+.RS 4
+\fBMsckfVio::loadParameters()\fP
+.RE
+.PP
+
+.IP "2." 4
+设置imu观测的协方差
+.IP "3." 4
+创建后端话题的接受与发布 
+.PP
+\fB参见\fP
+.RS 4
+\fBMsckfVio::createRosIO()\fP
+.RE
+.PP
+
+.PP
+
+.SS "void msckf_vio::MsckfVio::initializeGravityAndBias ()\fC [private]\fP"
+
+.PP
+imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计 
+.PP
+\fB注解\fP
+.RS 4
+为什么要做IMU初始化？因为初始时刻IMU的摆放和机器人的位置是未知的，可能在斜坡上，可能不水平，或者IMU竖直安装， 但是使用IMU积分时是需要减去重力的，因此需要知道重力方向，另外陀螺仪的偏置也是未知的，因此需要初始化 
+.RE
+.PP
+
+.SS "bool msckf_vio::MsckfVio::loadParameters ()\fC [private]\fP"
+
+.PP
+导入各种参数，包括阈值、传感器误差标准差等 
+.SS "void msckf_vio::MsckfVio::measurementJacobian (const \fBStateIDType\fP & cam_state_id, const \fBFeatureIDType\fP & feature_id, Eigen::Matrix< double, 4, 6 > & H_x, Eigen::Matrix< double, 4, 3 > & H_f, Eigen::Vector4d & r)\fC [private]\fP"
+
+.PP
+计算一个路标点的雅可比 
+.PP
+\fB参数\fP
+.RS 4
+\fIcam_state_id\fP 有效的相机状态id 
+.br
+\fIfeature_id\fP 路标点id 
+.br
+\fIH_x\fP 误差相对于位姿的雅可比 
+.br
+\fIH_f\fP 误差相对于三维点的雅可比 
+.br
+\fIr\fP 误差 
+.RE
+.PP
+
+.SS "void msckf_vio::MsckfVio::measurementUpdate (const Eigen::MatrixXd & H, const Eigen::VectorXd & r)\fC [private]\fP"
+
+.PP
+更新 
+.PP
+\fB参数\fP
+.RS 4
+\fIH\fP 雅可比 
+.br
+\fIr\fP 误差 
+.RE
+.PP
+
+.SS "void msckf_vio::MsckfVio::mocapOdomCallback (const nav_msgs::OdometryConstPtr & msg)\fC [private]\fP"
+
+.PP
+没用，暂时不看 
+.SS "void msckf_vio::MsckfVio::onlineReset ()\fC [private]\fP"
+
+.SS "\fBMsckfVio\fP msckf_vio::MsckfVio::operator= (const \fBMsckfVio\fP &)\fC [delete]\fP"
+
+.SS "void msckf_vio::MsckfVio::predictNewState (const double & dt, const Eigen::Vector3d & gyro, const Eigen::Vector3d & acc)\fC [private]\fP"
+
+.PP
+四阶龙格库塔对IMU状态递推 
+.PP
+\fB参数\fP
+.RS 4
+\fIdt\fP 相对上一个数据的间隔时间 
+.br
+\fIgyro\fP 角速度减去偏置后的 
+.br
+\fIacc\fP 加速度减去偏置后的 
+.RE
+.PP
+
+.SS "void msckf_vio::MsckfVio::processModel (const double & time, const Eigen::Vector3d & m_gyro, const Eigen::Vector3d & m_acc)\fC [private]\fP"
+
+.PP
+来一个新的imu数据更新协方差矩阵与状态积分 
+.PP
+\fB参数\fP
+.RS 4
+\fItime\fP 新数据时间戳 
+.br
+\fIm_gyro\fP 角速度 
+.br
+\fIm_acc\fP 加速度 
+.RE
+.PP
+
+.SS "void msckf_vio::MsckfVio::pruneCamStateBuffer ()\fC [private]\fP"
+
+.PP
+当cam状态数达到最大值时，挑出若干cam状态待删除 
+.SS "void msckf_vio::MsckfVio::publish (const ros::Time & time)\fC [private]\fP"
+
+.SS "void msckf_vio::MsckfVio::removeLostFeatures ()\fC [private]\fP"
+
+.PP
+使用不再跟踪上的点来更新 
+.SS "void msckf_vio::MsckfVio::reset ()"
+
+.SS "bool msckf_vio::MsckfVio::resetCallback (std_srvs::Trigger::Request & req, std_srvs::Trigger::Response & res)\fC [private]\fP"
+
+.PP
+重置 
+.SS "void msckf_vio::MsckfVio::stateAugmentation (const double & time)\fC [private]\fP"
+
+.PP
+根据时间分裂出相机状态 
+.PP
+\fB参数\fP
+.RS 4
+\fItime\fP 图片的时间戳 
+.RE
+.PP
+
+.SH "类成员变量说明"
+.PP 
+.SS "map< int, double > msckf_vio::MsckfVio::chi_squared_test_table\fC [static]\fP, \fC [private]\fP"
+
+.SS "std::string msckf_vio::MsckfVio::child_frame_id\fC [private]\fP"
+
+.SS "ros::Publisher msckf_vio::MsckfVio::feature_pub\fC [private]\fP"
+
+.SS "ros::Subscriber msckf_vio::MsckfVio::feature_sub\fC [private]\fP"
+
+.SS "std::string msckf_vio::MsckfVio::fixed_frame_id\fC [private]\fP"
+
+.SS "double msckf_vio::MsckfVio::frame_rate\fC [private]\fP"
+
+.SS "std::vector<sensor_msgs::Imu> msckf_vio::MsckfVio::imu_msg_buffer\fC [private]\fP"
+
+.SS "ros::Subscriber msckf_vio::MsckfVio::imu_sub\fC [private]\fP"
+
+.SS "bool msckf_vio::MsckfVio::is_first_img\fC [private]\fP"
+
+.SS "bool msckf_vio::MsckfVio::is_gravity_set\fC [private]\fP"
+
+.SS "\fBMapServer\fP msckf_vio::MsckfVio::map_server\fC [private]\fP"
+
+.SS "int msckf_vio::MsckfVio::max_cam_state_size\fC [private]\fP"
+
+.SS "Eigen::Isometry3d msckf_vio::MsckfVio::mocap_initial_frame\fC [private]\fP"
+
+.SS "ros::Publisher msckf_vio::MsckfVio::mocap_odom_pub\fC [private]\fP"
+
+.SS "ros::Subscriber msckf_vio::MsckfVio::mocap_odom_sub\fC [private]\fP"
+
+.SS "ros::NodeHandle msckf_vio::MsckfVio::nh\fC [private]\fP"
+
+.SS "ros::Publisher msckf_vio::MsckfVio::odom_pub\fC [private]\fP"
+
+.SS "double msckf_vio::MsckfVio::position_std_threshold\fC [private]\fP"
+
+.SS "bool msckf_vio::MsckfVio::publish_tf\fC [private]\fP"
+
+.SS "geometry_msgs::TransformStamped msckf_vio::MsckfVio::raw_mocap_odom_msg\fC [private]\fP"
+
+.SS "ros::ServiceServer msckf_vio::MsckfVio::reset_srv\fC [private]\fP"
+
+.SS "double msckf_vio::MsckfVio::rotation_threshold\fC [private]\fP"
+
+.SS "\fBStateServer\fP msckf_vio::MsckfVio::state_server\fC [private]\fP"
+
+.SS "tf::TransformBroadcaster msckf_vio::MsckfVio::tf_pub\fC [private]\fP"
+
+.SS "double msckf_vio::MsckfVio::tracking_rate\fC [private]\fP"
+
+.SS "double msckf_vio::MsckfVio::tracking_rate_threshold\fC [private]\fP"
+
+.SS "double msckf_vio::MsckfVio::translation_threshold\fC [private]\fP"
+
+
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.

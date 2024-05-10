@@ -1,0 +1,189 @@
+.TH "msckf_vio" 3 "2024年 五月 9日 星期四" "S-MSCKF注释" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+msckf_vio
+.SH SYNOPSIS
+.br
+.PP
+.SS "命名空间"
+
+.in +1c
+.ti -1c
+.RI " \fButils\fP"
+.br
+.in -1c
+.SS "类"
+
+.in +1c
+.ti -1c
+.RI "struct \fBCAMState\fP"
+.br
+.RI "储存相机状态，包括相机id, 时间，姿态Rcw，位置twc，零空间姿态，零空间位置，和两个相机间的外参 "
+.ti -1c
+.RI "struct \fBFeature\fP"
+.br
+.RI "\fBFeature\fP Salient part of an image\&. Please refer to the Appendix of 'A Multi-State Constraint Kalman
+   Filter for Vision-aided Inertial Navigation' for how the 3d position of a feature is initialized\&. 一个特征可以理解为一个三维点，由多帧观测到 "
+.ti -1c
+.RI "class \fBImageProcessor\fP"
+.br
+.RI "\fBImageProcessor\fP Detects and tracks features in image sequences\&. "
+.ti -1c
+.RI "class \fBImageProcessorNodelet\fP"
+.br
+.RI "\fBImageProcessorNodelet\fP 继承自ros中的Nodelet类 Nodelet类是ROS中的一种插件类，可以在一个节点中运行多个Nodelet插件, 但是实际运行时 看起来就像是多个节点在运行。Nodelet插件通过将多个节点的功能集成到一个进程中，可以 减少节点间的通信开销，提高系统的性能，这对于传输图像和点云特别有用。 "
+.ti -1c
+.RI "struct \fBIMUState\fP"
+.br
+.ti -1c
+.RI "class \fBMsckfVio\fP"
+.br
+.ti -1c
+.RI "class \fBMsckfVioNodelet\fP"
+.br
+.in -1c
+.SS "类型定义"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< \fBStateIDType\fP, \fBCAMState\fP, std::less< int >, Eigen::aligned_allocator< std::pair< const \fBStateIDType\fP, \fBCAMState\fP > > > \fBCamStateServer\fP"
+.br
+.ti -1c
+.RI "typedef Feature::FeatureIDType \fBFeatureIDType\fP"
+.br
+.ti -1c
+.RI "typedef std::map< \fBFeatureIDType\fP, \fBFeature\fP, std::less< int >, Eigen::aligned_allocator< std::pair< const \fBFeatureIDType\fP, \fBFeature\fP > > > \fBMapServer\fP"
+.br
+.ti -1c
+.RI "typedef \fBImageProcessor::Ptr\fP \fBImageProcessorPtr\fP"
+.br
+.ti -1c
+.RI "typedef \fBImageProcessor::ConstPtr\fP \fBImageProcessorConstPtr\fP"
+.br
+.ti -1c
+.RI "typedef IMUState::StateIDType \fBStateIDType\fP"
+.br
+.ti -1c
+.RI "typedef \fBMsckfVio::Ptr\fP \fBMsckfVioPtr\fP"
+.br
+.ti -1c
+.RI "typedef \fBMsckfVio::ConstPtr\fP \fBMsckfVioConstPtr\fP"
+.br
+.in -1c
+.SS "函数"
+
+.in +1c
+.ti -1c
+.RI "Eigen::Matrix3d \fBskewSymmetric\fP (const Eigen::Vector3d &w)"
+.br
+.RI "反对称矩阵 "
+.ti -1c
+.RI "void \fBquaternionNormalize\fP (Eigen::Vector4d &q)"
+.br
+.RI "标准化四元数 "
+.ti -1c
+.RI "Eigen::Vector4d \fBquaternionMultiplication\fP (const Eigen::Vector4d &q1, const Eigen::Vector4d &q2)"
+.br
+.RI "Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法 "
+.ti -1c
+.RI "Eigen::Vector4d \fBsmallAngleQuaternion\fP (const Eigen::Vector3d &dtheta)"
+.br
+.RI "李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion\&. "
+.ti -1c
+.RI "Eigen::Matrix3d \fBquaternionToRotation\fP (const Eigen::Vector4d &q)"
+.br
+.RI "四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix "
+.ti -1c
+.RI "Eigen::Vector4d \fBrotationToQuaternion\fP (const Eigen::Matrix3d &R)"
+.br
+.RI "旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion\&. "
+.ti -1c
+.RI "\fBPLUGINLIB_EXPORT_CLASS\fP (\fBmsckf_vio::ImageProcessorNodelet\fP, nodelet::Nodelet)"
+.br
+.ti -1c
+.RI "\fBPLUGINLIB_EXPORT_CLASS\fP (\fBmsckf_vio::MsckfVioNodelet\fP, nodelet::Nodelet)"
+.br
+.in -1c
+.SH "类型定义说明"
+.PP 
+.SS "typedef std::map<\fBStateIDType\fP, \fBCAMState\fP, std::less<int>, Eigen::aligned_allocator< std::pair<const \fBStateIDType\fP, \fBCAMState\fP> > > \fBmsckf_vio::CamStateServer\fP"
+
+.SS "typedef Feature::FeatureIDType \fBmsckf_vio::FeatureIDType\fP"
+
+.SS "typedef \fBImageProcessor::ConstPtr\fP \fBmsckf_vio::ImageProcessorConstPtr\fP"
+
+.SS "typedef \fBImageProcessor::Ptr\fP \fBmsckf_vio::ImageProcessorPtr\fP"
+
+.SS "typedef std::map<\fBFeatureIDType\fP, \fBFeature\fP, std::less<int>, Eigen::aligned_allocator<std::pair<const \fBFeatureIDType\fP, \fBFeature\fP> > > \fBmsckf_vio::MapServer\fP"
+
+.SS "typedef \fBMsckfVio::ConstPtr\fP \fBmsckf_vio::MsckfVioConstPtr\fP"
+
+.SS "typedef \fBMsckfVio::Ptr\fP \fBmsckf_vio::MsckfVioPtr\fP"
+
+.SS "typedef IMUState::StateIDType \fBmsckf_vio::StateIDType\fP"
+
+.SH "函数说明"
+.PP 
+.SS "msckf_vio::PLUGINLIB_EXPORT_CLASS (\fBmsckf_vio::ImageProcessorNodelet\fP, nodelet::Nodelet)"
+
+.SS "msckf_vio::PLUGINLIB_EXPORT_CLASS (\fBmsckf_vio::MsckfVioNodelet\fP, nodelet::Nodelet)"
+
+.SS "Eigen::Vector4d msckf_vio::quaternionMultiplication (const Eigen::Vector4d & q1, const Eigen::Vector4d & q2)\fC [inline]\fP"
+
+.PP
+Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法 
+.SS "void msckf_vio::quaternionNormalize (Eigen::Vector4d & q)\fC [inline]\fP"
+
+.PP
+标准化四元数 
+.SS "Eigen::Matrix3d msckf_vio::quaternionToRotation (const Eigen::Vector4d & q)\fC [inline]\fP"
+
+.PP
+四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix 
+.PP
+\fB注解\fP
+.RS 4
+Pay attention to the convention used\&. The function follows the conversion in 'Indirect Kalman Filter for 3D Attitude Estimation:
+   A Tutorial for Quaternion Algebra', Equation (62)\&.
+.RE
+.PP
+The input quaternion should be in the form [q1, q2, q3, q4(scalar)]^T 
+.SS "Eigen::Vector4d msckf_vio::rotationToQuaternion (const Eigen::Matrix3d & R)\fC [inline]\fP"
+
+.PP
+旋转矩阵转四元数 没在论文里找到，这里不用看，直接用！ Convert a rotation matrix to a quaternion\&. 
+.PP
+\fB注解\fP
+.RS 4
+Pay attention to the convention used\&. The function follows the conversion in 'Indirect Kalman Filter for 3D Attitude Estimation:
+   A Tutorial for Quaternion Algebra', Equation (78)\&.
+.RE
+.PP
+The input quaternion should be in the form [q1, q2, q3, q4(scalar)]^T 
+.SS "Eigen::Matrix3d msckf_vio::skewSymmetric (const Eigen::Vector3d & w)\fC [inline]\fP"
+
+.PP
+反对称矩阵 
+.PP
+\fB注解\fP
+.RS 4
+Performs the operation: w -> [ 0 -w3 w2] [ w3 0 -w1] [-w2 w1 0] 
+.RE
+.PP
+
+.SS "Eigen::Vector4d msckf_vio::smallAngleQuaternion (const Eigen::Vector3d & dtheta)\fC [inline]\fP"
+
+.PP
+李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion\&. 
+.PP
+\fB注解\fP
+.RS 4
+This function is useful to convert delta quaternion which is usually a 3x1 vector to a full quaternion\&. For more details, check Section 3\&.2 'Kalman Filter Update' in 'Indirect Kalman Filter for 3D Attitude Estimation:
+   A Tutorial for quaternion Algebra'\&. 
+.RE
+.PP
+
+.SH "作者"
+.PP 
+由 Doyxgen 通过分析 S-MSCKF注释 的 源代码自动生成\&.
