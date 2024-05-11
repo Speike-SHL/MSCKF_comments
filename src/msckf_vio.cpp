@@ -449,30 +449,32 @@ namespace msckf_vio
         double state_augmentation_time = (ros::Time::now() - start_time).toSec();
 
         /// 5. 向map_server中添加新的特征，和旧特征在新相机帧上的观测
+        /// @see MsckfVio::addFeatureObservations(const CameraMeasurementConstPtr &msg)
         start_time = ros::Time::now();
         addFeatureObservations(msg);
         double add_observations_time = (ros::Time::now() - start_time).toSec();
 
-        // Perform measurement update if necessary.
-        // 5. 使用不再跟踪上的点来更新
+        /// 6. 使用当前帧没有跟踪上的点进行ESKF的状态更新
+        /// @see MsckfVio::removeLostFeatures()
         start_time = ros::Time::now();
         removeLostFeatures();
         double remove_lost_features_time = (ros::Time::now() - start_time).toSec();
 
-        // 6. 当cam状态数达到最大值时，挑出若干cam状态待删除
-        // 并基于能被2帧以上这些cam观测到的feature进行MSCKF测量更新
+        /// 7. 当状态量中的相机状态数达到最大值时，挑出若干cam状态进行滑窗删除
+        /// 同时删除前再利用有效的特征点进行一次更新
+        /// @see MsckfVio::pruneCamStateBuffer()
         start_time = ros::Time::now();
         pruneCamStateBuffer();
         double prune_cam_states_time = (ros::Time::now() - start_time).toSec();
 
-        // Publish the odometry.
-        // 7. 发布位姿
+        /// 8. 发布位姿，点云，tf以及协方差
+        /// @see MsckfVio::publish(const ros::Time &time)
         start_time = ros::Time::now();
         publish(msg->header.stamp);
         double publish_time = (ros::Time::now() - start_time).toSec();
 
-        // Reset the system if necessary.
-        // 8. 根据IMU状态位置协方差判断是否重置整个系统
+        /// 9. 根据IMU状态位置协方差判断是否重置整个系统
+        /// @see MsckfVio::onlineReset()
         onlineReset();
 
         // 一些调试数据
@@ -993,48 +995,41 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 使用不再跟踪上的点来更新
+     * @brief 使用当前帧没有跟踪上的点进行ESKF的状态更新，并从地图中删除无用的点
      */
     void MsckfVio::removeLostFeatures()
     {
         // Remove the features that lost track.
         // BTW, find the size the final Jacobian matrix and residual vector.
         int jacobian_row_size = 0;
-        // FeatureIDType 这是个long long int 嗯。。。。直接当作int理解吧
         vector<FeatureIDType> invalid_feature_ids(0);   // 无效点，最后要删的
         vector<FeatureIDType> processed_feature_ids(0); // 待参与更新的点，用完也被无情的删掉
 
-        // 遍历所有特征管理里面的点，包括新进来的
+        /// 1. 遍历地图(map_server)中的所有特征点，先找到当前帧中跟踪丢失的点，再从这些点中
+        /// 从地图中删除跟踪小于3帧的点，再从剩下点中尝试利用多帧观测三角化其三维坐标，删除三角化失败的点，
+        /// 最后剩下的点就是可以用来更新的点，准备进行更新。(如果没有点可以用来更新，那么就直接返回)
         for (auto iter = map_server.begin();
              iter != map_server.end(); ++iter)
         {
-            // Rename the feature to be checked.
             // 引用，改变feature相当于改变iter->second，类似于指针的效果
             auto &feature = iter->second;
 
-            // Pass the features that are still being tracked.
-            // 1. 这个点被当前状态观测到，说明这个点后面还有可能被跟踪
-            // 跳过这些点
+            // 这个点被当前状态观测到，说明这个点后面还有可能被跟踪，跳过这些点
             if (feature.observations.find(state_server.imu_state.id) !=
                 feature.observations.end())
                 continue;
 
-            // 2. 跟踪小于3帧的点，认为是质量不高的点
-            // 也好理解，三角化起码要两个观测，但是只有两个没有其他观测来验证
+            // 跟踪小于3帧的点，认为是质量不高的点，也好理解，三角化起码要两个观测，但是只有两个没有其他观测来验证
             if (feature.observations.size() < 3)
             {
                 invalid_feature_ids.push_back(feature.id);
                 continue;
             }
 
-            // Check if the feature can be initialized if it
-            // has not been.
-            // 3. 如果这个特征没有被初始化，尝试去初始化
-            // 初始化就是三角化
+            // 如果这个特征没有被初始化，尝试去初始化，初始化就是三角化
             if (!feature.is_initialized)
             {
-                // 3.1 看看运动是否足够，没有足够视差或者平移小旋转多这种不符合三角化
-                // 所以就不要这些点了
+                // 看看运动是否足够，没有足够视差或者平移小旋转多这种不符合三角化，所以就不要这些点了
                 if (!feature.checkMotion(state_server.cam_states))
                 {
                     invalid_feature_ids.push_back(feature.id);
@@ -1042,7 +1037,7 @@ namespace msckf_vio
                 }
                 else
                 {
-                    // 3.3 尝试三角化，失败也不要了
+                    // 尝试三角化，失败也不要了
                     if (!feature.initializePosition(state_server.cam_states))
                     {
                         invalid_feature_ids.push_back(feature.id);
@@ -1051,7 +1046,7 @@ namespace msckf_vio
                 }
             }
 
-            // 4. 到这里表示这个点能用于更新，所以准备下一步计算
+            // 到这里表示这个点能用于更新，所以准备下一步计算
             // 一个观测代表一帧，一帧有左右两个观测
             // 也就是算重投影误差时维度将会是4 * feature.observations.size()
             // 这里为什么减3下面会提到
@@ -1065,8 +1060,7 @@ namespace msckf_vio
         //   processed_feature_ids.size() << endl;
         // cout << "jacobian row #: " << jacobian_row_size << endl;
 
-        // Remove the features that do not have enough measurements.
-        // 5. 删掉非法点
+        // 删掉非法点
         for (const auto &feature_id : invalid_feature_ids)
             map_server.erase(feature_id);
 
@@ -1074,14 +1068,16 @@ namespace msckf_vio
         if (processed_feature_ids.size() == 0)
             return;
 
-        // 准备好误差相对于状态量的雅可比
+        /// 2. 根据待更新的特征点和相机观测数量，准备好总的重投影误差和观测雅可比矩阵
+        /// \f$\mathbf{r}_o\f$ 和 \f$\mathbf{H}_{\mathbf{x}o}\f$ 的维度
+        /// 见笔记pdf中《累积所有特征点的所有观测》
         MatrixXd H_x = MatrixXd::Zero(jacobian_row_size,
-                                      21 + 6 * state_server.cam_states.size());
+                                          21 + 6 * state_server.cam_states.size());
         VectorXd r = VectorXd::Zero(jacobian_row_size);
         int stack_cntr = 0;
 
-        // Process the features which lose track.
-        // 6. 处理特征点
+        /// 3. 遍历所有待更新的特征点，找到其对应的相机观测，并计算一个特征点的所有相机观测
+        /// @see MsckfVio::featureJacobian(const FeatureIDType &feature_id, const std::vector<StateIDType> &cam_state_ids, Eigen::MatrixXd &H_x, Eigen::VectorXd &r)
         for (const auto &feature_id : processed_feature_ids)
         {
             auto &feature = map_server[feature_id];
@@ -1092,20 +1088,19 @@ namespace msckf_vio
 
             MatrixXd H_xj;
             VectorXd r_j;
-            // 6.1 计算雅可比，计算重投影误差
+            // 计算雅可比，计算重投影误差
             featureJacobian(feature.id, cam_state_ids, H_xj, r_j);
 
-            // 6.2 卡方检验，剔除错误点，并不是所有点都用
+            // 卡方检验，剔除错误点，并不是所有点都用
             if (gatingTest(H_xj, r_j, cam_state_ids.size() - 1))
             {
+                /// 4. 组合所有点的观测为最终的\f$\mathbf{r}_o\f$ 和 \f$\mathbf{H}_{\mathbf{x}o}\f$
                 H_x.block(stack_cntr, 0, H_xj.rows(), H_xj.cols()) = H_xj;
                 r.segment(stack_cntr, r_j.rows()) = r_j;
                 stack_cntr += H_xj.rows();
             }
 
-            // Put an upper bound on the row size of measurement Jacobian,
-            // which helps guarantee the executation time.
-            // 限制最大更新量
+            /// 5. 为了保证速度，限制重投影误差和观测雅可比矩阵的行数不超过1500行，resize为1500行
             if (stack_cntr > 1500)
                 break;
         }
@@ -1114,12 +1109,11 @@ namespace msckf_vio
         H_x.conservativeResize(stack_cntr, H_x.cols());
         r.conservativeResize(stack_cntr);
 
-        // Perform the measurement update step.
-        // 7. 使用误差及雅可比更新状态
+        /// 6. 使用\f$\mathbf{r}_o\f$ 和 \f$\mathbf{H}_{\mathbf{x}o}\f$进行ESKF更新
+        /// @see MsckfVio::measurementUpdate(const Eigen::MatrixXd &H, const Eigen::VectorXd &r)
         measurementUpdate(H_x, r);
 
-        // Remove all processed features from the map.
-        // 8. 删除用完的点
+        /// 7. 从地图中删除更新后的点
         for (const auto &feature_id : processed_feature_ids)
             map_server.erase(feature_id);
 
@@ -1127,14 +1121,14 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 更新
+     * @brief 使用ESKF进行最终的状态更新，更新前还使用了QR分解简化雅可比矩阵和重投影误差
+     * 见笔记pdf中《QR分解简化最终观测雅可比和误差》以及 《误差扩展卡尔曼滤波进行更新》
      * @param  H 雅可比
      * @param  r 误差
      */
     void MsckfVio::measurementUpdate(
         const MatrixXd &H, const VectorXd &r)
     {
-
         if (H.rows() == 0 || r.rows() == 0)
             return;
 
@@ -1222,7 +1216,6 @@ namespace msckf_vio
             quaternionToRotation(dq_extrinsic) * state_server.imu_state.R_imu_cam0;
         state_server.imu_state.t_cam0_imu += delta_x_imu.segment<3>(18);
 
-        // Update the camera states.
         // 更新相机姿态
         auto cam_state_iter = state_server.cam_states.begin();
         for (int i = 0; i < state_server.cam_states.size(); ++i, ++cam_state_iter)
@@ -1251,55 +1244,51 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 计算一个路标点的雅可比
-     * @param  feature_id 路标点id
-     * @param  cam_state_ids 这个点对应的所有的相机状态id
-     * @param  H_x 雅可比
-     * @param  r 误差
+     * @brief 计算一个特征点的所有相机观测的雅可比和重投影误差。还包括左零空间投影(边缘化)
+     * 见笔记pdf中《累积一个特征点的所有相机观测并进行左零空间投影(边缘化)》
+     * @param  [in]  feature_id 特征点id
+     * @param  [in]  cam_state_ids 观测到该特征点的所有相机状态id
+     * @param  [out] H_x 观测雅可比
+     * @param  [out] r 重投影误差
      */
     void MsckfVio::featureJacobian(
         const FeatureIDType &feature_id,
         const std::vector<StateIDType> &cam_state_ids,
         MatrixXd &H_x, VectorXd &r)
     {
-        // 取出特征
+        /// 1. 取出特征点和有效的相机观测
         const auto &feature = map_server[feature_id];
-
-        // Check how many camera states in the provided camera
-        // id camera has actually seen this feature.
-        // 1. 统计有效观测的相机状态，因为对应的个别状态有可能被滑走了
         vector<StateIDType> valid_cam_state_ids(0);
         for (const auto &cam_id : cam_state_ids)
         {
             if (feature.observations.find(cam_id) ==
                 feature.observations.end())
                 continue;
-
             valid_cam_state_ids.push_back(cam_id);
         }
 
+        /// 2. 准备重投影误差矩阵和相对于相机状态与三维点的雅可比矩阵
         int jacobian_row_size = 0;
-        // 行数等于4*观测数量，一个观测在双目上都有，所以是2*2
-        // 此时还没有0空间投影
         jacobian_row_size = 4 * valid_cam_state_ids.size();
-
-        // 误差相对于状态量的雅可比，没有约束列数，因为列数一直是最新的
         MatrixXd H_xj = MatrixXd::Zero(jacobian_row_size,
                                        21 + state_server.cam_states.size() * 6);
-        // 误差相对于三维点的雅可比
         MatrixXd H_fj = MatrixXd::Zero(jacobian_row_size, 3);
-        // 误差
         VectorXd r_j = VectorXd::Zero(jacobian_row_size);
         int stack_cntr = 0;
 
-        // 2. 计算每一个观测（同一帧左右目这里被叫成一个观测）的雅可比与误差
+        /// 3. 遍历该特征点的所有相机观测，先计算一个特征点相对于一个相机状态的雅可比和重投影误差
+        /// \f$\mathbf{r}^j_i\f$, \f$\mathbf{H}^j_{C_i}\f$ 和 \f$\mathbf{H}^j_{f_i}\f$
+        /// @see MsckfVio::measurementJacobian(const StateIDType &cam_state_id, const FeatureIDType &feature_id, Eigen::Matrix<double, 4, 6> &H_x, Eigen::Matrix<double, 4, 3> &H_f, Eigen::Vector4d &r)
+        ///
+        /// 再累积该特征点相对于所有相机状态的雅可比和重投影误差
+        /// \f$\mathbf{r}^j\f$, \f$\mathbf{H}^j_x\f$ 和 \f$\mathbf{H}^j_f\f$
         for (const auto &cam_id : valid_cam_state_ids)
         {
 
             Matrix<double, 4, 6> H_xi = Matrix<double, 4, 6>::Zero();
             Matrix<double, 4, 3> H_fi = Matrix<double, 4, 3>::Zero();
             Vector4d r_i = Vector4d::Zero();
-            // 2.1 计算一个左右目观测的雅可比
+            // 计算一个左右目观测的雅可比
             measurementJacobian(cam_id, feature.id, H_xi, H_fi, r_i);
 
             // 计算这个cam_id在整个矩阵的列数，因为要在大矩阵里面放
@@ -1314,9 +1303,7 @@ namespace msckf_vio
             stack_cntr += 4;
         }
 
-        // Project the residual and Jacobians onto the nullspace
-        // of H_fj.
-        // 零空间投影
+        /// 4. 使用SVD分解进行边缘化(左零空间投影)，QR分解也可以
         JacobiSVD<MatrixXd> svd_helper(H_fj, ComputeFullU | ComputeThinV);
         MatrixXd A = svd_helper.matrixU().rightCols(
             jacobian_row_size - 3);
@@ -1335,12 +1322,13 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 计算一个路标点的雅可比
-     * @param  cam_state_id 有效的相机状态id
-     * @param  feature_id 路标点id
-     * @param  H_x 误差相对于位姿的雅可比
-     * @param  H_f 误差相对于三维点的雅可比
-     * @param  r 误差
+     * @brief 计算一个特征点相对于一个相机帧的雅可比和重投影误差
+     * 见笔记pdf中《观测误差的雅可比》
+     * @param  [in] cam_state_id 观测到该特征点的一个相机状态id
+     * @param  [in] feature_id 特征点id
+     * @param  [out] H_x 重投影误差相对于位姿的雅可比
+     * @param  [out] H_f 重投影误差相对于三维点的雅可比
+     * @param  [out] r 重投影误差
      */
     void MsckfVio::measurementJacobian(
         const StateIDType &cam_state_id,
@@ -1437,25 +1425,27 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 当cam状态数达到最大值时，挑出若干cam状态待删除
+     * @brief 当状态量中的相机状态量过多时，删除一些相机状态量。同时使用待删除的相机帧
+     * 中共同观测到的特征点再进行一次计算重投影误差，观测雅可比矩阵和ESKF更新的操作
+     * 见笔记pdf中《滑窗删除冗余帧》
      */
     void MsckfVio::pruneCamStateBuffer()
     {
-        // 数量还不到该删的程度，配置文件里面是20个
+        /// 1. 状态量中相机状态小于20个，直接return
         if (state_server.cam_states.size() < max_cam_state_size)
             return;
 
-        // 1. 找出两个该删的相机状态的id
+        /// 2. 从所有相机状态中挑选出两个该删的相机帧，挑选策略见笔记pdf《找出应该删除的相机帧》
+        /// @see MsckfVio::findRedundantCamStates(std::vector<StateIDType> &rm_cam_state_ids)
         vector<StateIDType> rm_cam_state_ids(0);
         findRedundantCamStates(rm_cam_state_ids);
 
-        // 2. 找到待删除帧涉及的观测数量，从而计算雅可比与误差的行数
+        /// 3. 遍历所有特征点，查找被带删除相机帧共同观测过的特征点(后面的步骤看代码，暂时不写了)
         int jacobian_row_size = 0;
-        // 遍历所有特征点
         for (auto &item : map_server)
         {
             auto &feature = item.second;
-            // 2.1 查找该特征点中储存的观测中(特征点中储存了哪些帧观测到了该特征点)是否有待删除的帧
+            // 3.1 查找该特征点中储存的观测中(特征点中储存了哪些帧观测到了该特征点)是否有待删除的帧
             vector<StateIDType> involved_cam_state_ids(0);
             for (const auto &cam_id : rm_cam_state_ids)
             {
@@ -1467,7 +1457,7 @@ namespace msckf_vio
             // 如果involved_cam_state_ids为空，说明该特征点没有被待删除的帧观测到，直接跳过
             if (involved_cam_state_ids.size() == 0)
                 continue;
-            // 2.2 如果只有一个待删除的帧观测到了该特征点，那么将该特征点中关于该待删除帧的观测删除(即该特征点不再被该帧观测到，因为该帧删除了)
+            // 3.2 如果只有一个待删除的帧观测到了该特征点，那么将该特征点中关于该待删除帧的观测删除(即该特征点不再被该帧观测到，因为该帧删除了)
             if (involved_cam_state_ids.size() == 1)
             {
                 feature.observations.erase(involved_cam_state_ids[0]);
@@ -1475,7 +1465,7 @@ namespace msckf_vio
             }
             // 程序到这里说明involved_cam_state_ids至少大于等于2
             // 说明该特征点记录的相机帧id中至少有两个帧是待删除的帧
-            // 2.3 如果该特征点没有做过三角化，做一下三角化，如果失败直接从 该特征点记录的 观测到该特征点的相机帧id 中删除该待删除的帧
+            // 3.3 如果该特征点没有做过三角化，做一下三角化，如果失败直接从 该特征点记录的 观测到该特征点的相机帧id 中删除该待删除的帧
             if (!feature.is_initialized)
             {
                 // Check if the feature can be initialize.
@@ -1496,14 +1486,14 @@ namespace msckf_vio
                 }
             }
 
-            // 2.4 计算出雅可比与误差的行数
+            // 3.4 计算出雅可比与误差的行数
             // 因为删除这些帧不能只删除，其中还包含有用的观测信息，最终还可以做一次更新
             jacobian_row_size += 4 * involved_cam_state_ids.size() - 3;
         }
 
         // cout << "jacobian row #: " << jacobian_row_size << endl;
 
-        // 3. 计算待删掉的这部分观测的雅可比与误差
+        // 计算待删掉的这部分观测的雅可比与误差
         // 预设大小
         MatrixXd H_x = MatrixXd::Zero(jacobian_row_size,
                                       21 + 6 * state_server.cam_states.size());
@@ -1548,10 +1538,10 @@ namespace msckf_vio
         H_x.conservativeResize(stack_cntr, H_x.cols());
         r.conservativeResize(stack_cntr);
 
-        // 4. 用上述计算的雅可比与误差更新状态
+        // 用上述计算的雅可比与误差更新状态
         measurementUpdate(H_x, r);
 
-        // 5. 删除相机状态和协方差矩阵中对应的行列
+        // 删除相机状态和协方差矩阵中对应的行列
         for (const auto &cam_id : rm_cam_state_ids)
         {
             // 找到相机状态在状态向量中的位置
@@ -1595,6 +1585,7 @@ namespace msckf_vio
 
     /**
      * @brief 找出该删的相机状态的id
+     * 见笔记pdf中《找出应该删除的相机帧》流程图
      * @param  rm_cam_state_ids 要删除的相机状态id
      */
     void MsckfVio::findRedundantCamStates(
@@ -1684,7 +1675,6 @@ namespace msckf_vio
 
     void MsckfVio::onlineReset()
     {
-
         // Never perform online reset if position std threshold
         // is non-positive.
         if (position_std_threshold <= 0)
@@ -1744,6 +1734,9 @@ namespace msckf_vio
         return;
     }
 
+    /**
+     * @brief 发布位姿，点云，tf以及协方差
+     */
     void MsckfVio::publish(const ros::Time &time)
     {
 

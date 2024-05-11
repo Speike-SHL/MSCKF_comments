@@ -52,7 +52,7 @@ void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a5f00e4d8e8146b89239fbd19250
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ac864e3250127c860dc0301c24938cf56}{feature\+Callback}} (const Camera\+Measurement\+Const\+Ptr \&msg)
 \begin{DoxyCompactList}\small\item\em 后端主要函数，处理新来的数据 \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0}{publish}} (const ros\+::\+Time \&time)
-\item 
+\begin{DoxyCompactList}\small\item\em 发布位姿，点云，tf以及协方差 \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a61d86bf067424803bc2ad162a5c2a237}{initialize\+Gravity\+And\+Bias}} ()
 \begin{DoxyCompactList}\small\item\em imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须都是静止，且不做加速度计的偏置估计 \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a4d441e2dc9b58aeed19a33f4bb9c5aa0}{reset\+Callback}} (std\+\_\+srvs\+::\+Trigger\+::\+Request \&req, std\+\_\+srvs\+::\+Trigger\+::\+Response \&res)
@@ -68,19 +68,19 @@ void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_abbf83eee8f45afffaac75481eb870765}{add\+Feature\+Observations}} (const Camera\+Measurement\+Const\+Ptr \&msg)
 \begin{DoxyCompactList}\small\item\em 向map\+\_\+server中添加新的特征，和旧特征在新相机帧上的观测 \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e}{measurement\+Jacobian}} (const \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} \&cam\+\_\+state\+\_\+id, const \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} \&feature\+\_\+id, Eigen\+::\+Matrix$<$ double, 4, 6 $>$ \&H\+\_\+x, Eigen\+::\+Matrix$<$ double, 4, 3 $>$ \&H\+\_\+f, Eigen\+::\+Vector4d \&r)
-\begin{DoxyCompactList}\small\item\em 计算一个路标点的雅可比 \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em 计算一个特征点相对于一个相机帧的雅可比和重投影误差 见笔记pdf中《观测误差的雅可比》 \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96}{feature\+Jacobian}} (const \mbox{\hyperlink{namespacemsckf__vio_a2953d19549f64dd919d06e3f075738aa}{Feature\+I\+D\+Type}} \&feature\+\_\+id, const std\+::vector$<$ \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} $>$ \&cam\+\_\+state\+\_\+ids, Eigen\+::\+Matrix\+Xd \&H\+\_\+x, Eigen\+::\+Vector\+Xd \&r)
-\begin{DoxyCompactList}\small\item\em 计算一个路标点的雅可比 \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em 计算一个特征点的所有相机观测的雅可比和重投影误差。还包括左零空间投影(边缘化) 见笔记pdf中《累积一个特征点的所有相机观测并进行左零空间投影(边缘化)》 \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05}{measurement\+Update}} (const Eigen\+::\+Matrix\+Xd \&H, const Eigen\+::\+Vector\+Xd \&r)
-\begin{DoxyCompactList}\small\item\em 更新 \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em 使用\+E\+S\+K\+F进行最终的状态更新，更新前还使用了\+Q\+R分解简化雅可比矩阵和重投影误差 见笔记pdf中《\+Q\+R分解简化最终观测雅可比和误差》以及 《误差扩展卡尔曼滤波进行更新》 \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a4b5bfa4f80f602d39aecc1bb6627a1c1}{gating\+Test}} (const Eigen\+::\+Matrix\+Xd \&H, const Eigen\+::\+Vector\+Xd \&r, const int \&dof)
 \item 
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa}{remove\+Lost\+Features}} ()
-\begin{DoxyCompactList}\small\item\em 使用不再跟踪上的点来更新 \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em 使用当前帧没有跟踪上的点进行\+E\+S\+K\+F的状态更新，并从地图中删除无用的点 \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc}{find\+Redundant\+Cam\+States}} (std\+::vector$<$ \mbox{\hyperlink{namespacemsckf__vio_a665a9347ce6f87365e6a04522408205e}{State\+I\+D\+Type}} $>$ \&rm\+\_\+cam\+\_\+state\+\_\+ids)
-\begin{DoxyCompactList}\small\item\em 找出该删的相机状态的id \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em 找出该删的相机状态的id 见笔记pdf中《找出应该删除的相机帧》流程图 \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d}{prune\+Cam\+State\+Buffer}} ()
-\begin{DoxyCompactList}\small\item\em 当cam状态数达到最大值时，挑出若干cam状态待删除 \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em 当状态量中的相机状态量过多时，删除一些相机状态量。同时使用待删除的相机帧 中共同观测到的特征点再进行一次计算重投影误差，观测雅可比矩阵和\+E\+S\+K\+F更新的操作 见笔记pdf中《滑窗删除冗余帧》 \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a2d50f41474d62068258aea6fad747b9b}{online\+Reset}} ()
 \item 
 void \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a57555099ff0ccea1d26691df0ceceec5}{mocap\+Odom\+Callback}} (const nav\+\_\+msgs\+::\+Odometry\+Const\+Ptr \&msg)
@@ -218,8 +218,7 @@ Msckf\+Vio构造函数
 \item 获取当前地图内特征点的数量
 \item 若此次前端传来的特征点在地图中没有，那么就添加新的特征点 否则就更新旧特征点的观测
 \item 计算跟踪率。当前帧前端进来的所有点中，有多少是已经在地图中的
-\end{DoxyEnumerate}这是这个函数的调用关系图\+:
-\nopagebreak
+\end{DoxyEnumerate}这是这个函数的调用关系图\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -326,7 +325,26 @@ imu积分，批量处理imu数据
 \mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a8b19358fe83d8a377b795674044b566e}{Msckf\+Vio\+::state\+Augmentation(const double \&time)}}
 \end{DoxySeeAlso}
 
-\item 向map\+\_\+server中添加新的特征，和旧特征在新相机帧上的观测
+\item 向map\+\_\+server中添加新的特征，和旧特征在新相机帧上的观测 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_abbf83eee8f45afffaac75481eb870765}{Msckf\+Vio\+::add\+Feature\+Observations(const Camera\+Measurement\+Const\+Ptr \&msg)}}
+\end{DoxySeeAlso}
+
+\item 使用当前帧没有跟踪上的点进行\+E\+S\+K\+F的状态更新 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_ada4eaddd00dfcc715128fec67b232baa}{Msckf\+Vio\+::remove\+Lost\+Features()}}
+\end{DoxySeeAlso}
+
+\item 当状态量中的相机状态数达到最大值时，挑出若干cam状态进行滑窗删除 同时删除前再利用有效的特征点进行一次更新 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_aa2140c83e2fb3b81ffd5338b0864854d}{Msckf\+Vio\+::prune\+Cam\+State\+Buffer()}}
+\end{DoxySeeAlso}
+
+\item 发布位姿，点云，tf以及协方差 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0}{Msckf\+Vio\+::publish(const ros\+::\+Time \&time)}}
+\end{DoxySeeAlso}
+
+\item 根据\+I\+M\+U状态位置协方差判断是否重置整个系统 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a2d50f41474d62068258aea6fad747b9b}{Msckf\+Vio\+::online\+Reset()}}
+\end{DoxySeeAlso}
+
 \end{DoxyEnumerate}函数调用图\+:
 \nopagebreak
 \begin{figure}[H]
@@ -350,20 +368,29 @@ imu积分，批量处理imu数据
 
 
 
-计算一个路标点的雅可比 
+计算一个特征点的所有相机观测的雅可比和重投影误差。还包括左零空间投影(边缘化) 见笔记pdf中《累积一个特征点的所有相机观测并进行左零空间投影(边缘化)》 
 
 
-\begin{DoxyParams}{参数}
-{\em feature\+\_\+id} & 路标点id \\
+\begin{DoxyParams}[1]{参数}
+\mbox{\texttt{ in}}  & {\em feature\+\_\+id} & 特征点id \\
 \hline
-{\em cam\+\_\+state\+\_\+ids} & 这个点对应的所有的相机状态id \\
+\mbox{\texttt{ in}}  & {\em cam\+\_\+state\+\_\+ids} & 观测到该特征点的所有相机状态id \\
 \hline
-{\em H\+\_\+x} & 雅可比 \\
+\mbox{\texttt{ out}}  & {\em H\+\_\+x} & 观测雅可比 \\
 \hline
-{\em r} & 误差 \\
+\mbox{\texttt{ out}}  & {\em r} & 重投影误差 \\
 \hline
 \end{DoxyParams}
-函数调用图\+:\nopagebreak
+
+\begin{DoxyEnumerate}
+\item 取出特征点和有效的相机观测
+\item 准备重投影误差矩阵和相对于相机状态与三维点的雅可比矩阵
+\item 遍历该特征点的所有相机观测，先计算一个特征点相对于一个相机状态的雅可比和重投影误差 $\mathbf{r}^j_i$, $\mathbf{H}^j_{C_i}$ 和 $\mathbf{H}^j_{f_i}$ \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_abe782d625472e6c9f0c21329ba7cea8e}{Msckf\+Vio\+::measurement\+Jacobian(const State\+I\+D\+Type \&cam\+\_\+state\+\_\+id, const Feature\+I\+D\+Type \&feature\+\_\+id, Eigen\+::\+Matrix$<$double, 4, 6$>$ \&\+H\+\_\+x, Eigen\+::\+Matrix$<$double, 4, 3$>$ \&\+H\+\_\+f, Eigen\+::\+Vector4d \&r)}}
+\end{DoxySeeAlso}
+再累积该特征点相对于所有相机状态的雅可比和重投影误差 $\mathbf{r}^j$, $\mathbf{H}^j_x$ 和 $\mathbf{H}^j_f$
+\item 使用\+S\+V\+D分解进行边缘化(左零空间投影)，\+Q\+R分解也可以
+\end{DoxyEnumerate}函数调用图\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -385,7 +412,7 @@ imu积分，批量处理imu数据
 
 
 
-找出该删的相机状态的id 
+找出该删的相机状态的id 见笔记pdf中《找出应该删除的相机帧》流程图 
 
 
 \begin{DoxyParams}{参数}
@@ -530,19 +557,19 @@ imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须�
 
 
 
-计算一个路标点的雅可比 
+计算一个特征点相对于一个相机帧的雅可比和重投影误差 见笔记pdf中《观测误差的雅可比》 
 
 
-\begin{DoxyParams}{参数}
-{\em cam\+\_\+state\+\_\+id} & 有效的相机状态id \\
+\begin{DoxyParams}[1]{参数}
+\mbox{\texttt{ in}}  & {\em cam\+\_\+state\+\_\+id} & 观测到该特征点的一个相机状态id \\
 \hline
-{\em feature\+\_\+id} & 路标点id \\
+\mbox{\texttt{ in}}  & {\em feature\+\_\+id} & 特征点id \\
 \hline
-{\em H\+\_\+x} & 误差相对于位姿的雅可比 \\
+\mbox{\texttt{ out}}  & {\em H\+\_\+x} & 重投影误差相对于位姿的雅可比 \\
 \hline
-{\em H\+\_\+f} & 误差相对于三维点的雅可比 \\
+\mbox{\texttt{ out}}  & {\em H\+\_\+f} & 重投影误差相对于三维点的雅可比 \\
 \hline
-{\em r} & 误差 \\
+\mbox{\texttt{ out}}  & {\em r} & 重投影误差 \\
 \hline
 \end{DoxyParams}
 函数调用图\+:\nopagebreak
@@ -567,7 +594,7 @@ imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须�
 
 
 
-更新 
+使用\+E\+S\+K\+F进行最终的状态更新，更新前还使用了\+Q\+R分解简化雅可比矩阵和重投影误差 见笔记pdf中《\+Q\+R分解简化最终观测雅可比和误差》以及 《误差扩展卡尔曼滤波进行更新》 
 
 
 \begin{DoxyParams}{参数}
@@ -718,9 +745,17 @@ imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须�
 
 
 
-当cam状态数达到最大值时，挑出若干cam状态待删除 
+当状态量中的相机状态量过多时，删除一些相机状态量。同时使用待删除的相机帧 中共同观测到的特征点再进行一次计算重投影误差，观测雅可比矩阵和\+E\+S\+K\+F更新的操作 见笔记pdf中《滑窗删除冗余帧》 
 
-函数调用图\+:\nopagebreak
+
+\begin{DoxyEnumerate}
+\item 状态量中相机状态小于20个，直接return
+\item 从所有相机状态中挑选出两个该删的相机帧，挑选策略见笔记pdf《找出应该删除的相机帧》 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a1b1c1f8d726d98a15ed4774a2089ddfc}{Msckf\+Vio\+::find\+Redundant\+Cam\+States(std\+::vector$<$\+State\+I\+D\+Type$>$ \&rm\+\_\+cam\+\_\+state\+\_\+ids)}}
+\end{DoxySeeAlso}
+
+\item 遍历所有特征点，查找被带删除相机帧共同观测过的特征点(后面的步骤看代码，暂时不写了)
+\end{DoxyEnumerate}函数调用图\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -740,14 +775,20 @@ imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须�
 \doxysubsubsection{\texorpdfstring{publish()}{publish()}}
 {\footnotesize\ttfamily void msckf\+\_\+vio\+::\+Msckf\+Vio\+::publish (\begin{DoxyParamCaption}\item[{const ros\+::\+Time \&}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
-函数调用图\+:\nopagebreak
+
+
+发布位姿，点云，tf以及协方差 
+
+函数调用图\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{classmsckf__vio_1_1_msckf_vio_a9fb43d4dfe65743ab04f72d496efbdd0_cgraph}
 \end{center}
 \end{figure}
-这是这个函数的调用关系图\+:\nopagebreak
+这是这个函数的调用关系图\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -762,9 +803,24 @@ imu初始化，计算陀螺仪偏置，重力方向以及初始姿态，必须�
 
 
 
-使用不再跟踪上的点来更新 
+使用当前帧没有跟踪上的点进行\+E\+S\+K\+F的状态更新，并从地图中删除无用的点 
 
-函数调用图\+:\nopagebreak
+
+\begin{DoxyEnumerate}
+\item 遍历地图(map\+\_\+server)中的所有特征点，先找到当前帧中跟踪丢失的点，再从这些点中 从地图中删除跟踪小于3帧的点，再从剩下点中尝试利用多帧观测三角化其三维坐标，删除三角化失败的点， 最后剩下的点就是可以用来更新的点，准备进行更新。(如果没有点可以用来更新，那么就直接返回)
+\item 根据待更新的特征点和相机观测数量，准备好总的重投影误差和观测雅可比矩阵 $\mathbf{r}_o$ 和 $\mathbf{H}_{\mathbf{x}o}$ 的维度 见笔记pdf中《累积所有特征点的所有观测》
+\item 遍历所有待更新的特征点，找到其对应的相机观测，并计算一个特征点的所有相机观测 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_a57deb3897a72e4ffbdade0f57eba3f96}{Msckf\+Vio\+::feature\+Jacobian(const Feature\+I\+D\+Type \&feature\+\_\+id, const std\+::vector$<$\+State\+I\+D\+Type$>$ \&cam\+\_\+state\+\_\+ids, Eigen\+::\+Matrix\+Xd \&\+H\+\_\+x, Eigen\+::\+Vector\+Xd \&r)}}
+\end{DoxySeeAlso}
+
+\item 组合所有点的观测为最终的 $\mathbf{r}_o$ 和 $\mathbf{H}_{\mathbf{x}o}$
+\item 为了保证速度，限制重投影误差和观测雅可比矩阵的行数不超过1500行，resize为1500行
+\item 使用 $\mathbf{r}_o$ 和 $\mathbf{H}_{\mathbf{x}o}$进行\+E\+S\+K\+F更新 \begin{DoxySeeAlso}{参见}
+\mbox{\hyperlink{classmsckf__vio_1_1_msckf_vio_af3d955ec59e25f9345835eeb220cec05}{Msckf\+Vio\+::measurement\+Update(const Eigen\+::\+Matrix\+Xd \&\+H, const Eigen\+::\+Vector\+Xd \&r)}}
+\end{DoxySeeAlso}
+
+\item 从地图中删除更新后的点
+\end{DoxyEnumerate}函数调用图\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
