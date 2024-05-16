@@ -1,6 +1,6 @@
 <map id="msckf_vio::MsckfVio::featureJacobian" name="msckf_vio::MsckfVio::featureJacobian">
-<area shape="rect" id="node1" title="计算一个特征点的所有相机观测的雅可比和重投影误差。还包括左零空间投影(边缘化) 见笔记pdf中《累积一个特征点的所有相机观测并进行左零空间投影(边缘化)》" alt="" coords="5,23,151,65"/>
-<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个特征点相对于一个相机帧的雅可比和重投影误差 见笔记pdf中《观测误差的雅可比》" alt="" coords="199,23,360,65"/>
+<area shape="rect" id="node1" title="计算一个路标点的雅可比" alt="" coords="5,23,151,65"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="199,23,360,65"/>
 <area shape="rect" id="node3" href="$namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="408,5,621,32"/>
 <area shape="rect" id="node4" href="$namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="669,31,853,57"/>
 </map>

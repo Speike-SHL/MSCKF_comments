@@ -1,5 +1,5 @@
 <map id="msckf_vio::MsckfVio::measurementUpdate" name="msckf_vio::MsckfVio::measurementUpdate">
-<area shape="rect" id="node1" title="使用ESKF进行最终的状态更新，更新前还使用了QR分解简化雅可比矩阵和重投影误差 见笔记pdf中《QR分解简化最终观测雅可比和误差》以及 《误差扩展卡尔曼滤波进行更新》" alt="" coords="5,49,156,90"/>
+<area shape="rect" id="node1" title="更新" alt="" coords="5,49,156,90"/>
 <area shape="rect" id="node2" href="$namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="204,5,431,32"/>
 <area shape="rect" id="node4" href="$namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="211,56,424,83"/>
 <area shape="rect" id="node6" href="$namespacemsckf__vio.html#a294cc2c50924d54cf548be1b067bd82a" title="李代数转四元数，小量 Convert the vector part of a quaternion to a full quaternion." alt="" coords="209,107,426,133"/>

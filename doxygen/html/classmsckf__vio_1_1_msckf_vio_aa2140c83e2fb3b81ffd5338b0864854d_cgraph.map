@@ -1,10 +1,10 @@
 <map id="msckf_vio::MsckfVio::pruneCamStateBuffer" name="msckf_vio::MsckfVio::pruneCamStateBuffer">
-<area shape="rect" id="node1" title="当状态量中的相机状态量过多时，删除一些相机状态量。同时使用待删除的相机帧 中共同观测到的特征点再进行一次计算重投影误差，观测雅可比矩阵和ESKF更新的操作 见笔记pdf中《滑窗删除冗余帧》" alt="" coords="5,93,161,135"/>
-<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个特征点的所有相机观测的雅可比和重投影误差。还包括左零空间投影(边缘化) 见笔记pdf中《累积一个特征点的所有相机观测并进行左零空间投影(边缘化)》" alt="" coords="212,5,357,47"/>
-<area shape="rect" id="node6" href="$classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id 见笔记pdf中《找出应该删除的相机帧》流程图" alt="" coords="431,71,611,112"/>
+<area shape="rect" id="node1" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="5,93,161,135"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="212,5,357,47"/>
+<area shape="rect" id="node6" href="$classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id" alt="" coords="431,71,611,112"/>
 <area shape="rect" id="node7" href="$classmsckf__vio_1_1_msckf_vio.html#a4b5bfa4f80f602d39aecc1bb6627a1c1" title=" " alt="" coords="212,123,357,164"/>
-<area shape="rect" id="node8" href="$classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="使用ESKF进行最终的状态更新，更新前还使用了QR分解简化雅可比矩阵和重投影误差 见笔记pdf中《QR分解简化最终观测雅可比和误差》以及 《误差扩展卡尔曼滤波进行更新》" alt="" coords="209,188,360,229"/>
-<area shape="rect" id="node3" href="$classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个特征点相对于一个相机帧的雅可比和重投影误差 见笔记pdf中《观测误差的雅可比》" alt="" coords="441,5,602,47"/>
+<area shape="rect" id="node8" href="$classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="209,188,360,229"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="441,5,602,47"/>
 <area shape="rect" id="node4" href="$namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="683,74,896,101"/>
 <area shape="rect" id="node5" href="$namespacemsckf__vio.html#aaf0fc755d0d3c5b59b8eca157ae5cb61" title="反对称矩阵" alt="" coords="944,46,1128,73"/>
 <area shape="rect" id="node9" href="$namespacemsckf__vio.html#a1810830643db7b385a14c8c9ac2f6ba5" title="Perform q1 * q2 Indirect Kalman Filter for 3D Attitude Estimation 公式8 jpl四元数乘法" alt="" coords="408,193,635,219"/>

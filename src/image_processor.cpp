@@ -1504,7 +1504,6 @@ namespace msckf_vio
         for (const auto &inlier_idx : best_inlier_set)
             inlier_markers[inlier_idx] = 1;
 
-.
         // printf("inlier ratio: %lu/%lu\n",
         //     best_inlier_set.size(), inlier_markers.size());
 

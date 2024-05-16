@@ -1,24 +1,24 @@
 <map id="msckf_vio::skewSymmetric" name="msckf_vio::skewSymmetric">
 <area shape="rect" id="node1" title="反对称矩阵" alt="" coords="1681,162,1865,189"/>
-<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个特征点相对于一个相机帧的雅可比和重投影误差 见笔记pdf中《观测误差的雅可比》" alt="" coords="1211,92,1372,134"/>
+<area shape="rect" id="node2" href="$classmsckf__vio_1_1_msckf_vio.html#abe782d625472e6c9f0c21329ba7cea8e" title="计算一个路标点的雅可比" alt="" coords="1211,92,1372,134"/>
 <area shape="rect" id="node10" href="$classmsckf__vio_1_1_msckf_vio.html#a1d31e150c1817362cd5dfa0f112c1a62" title="四阶龙格库塔积对IMU状态递推，见笔记pdf中《名义状态递推》" alt="" coords="1219,27,1364,68"/>
 <area shape="rect" id="node11" href="$classmsckf__vio_1_1_msckf_vio.html#ae49d9e1a90ffa5df61a8aa94b0bb1013" title="对一帧IMU数据进行状态预估，包括名义状态递推，误差协方差矩阵的预估" alt="" coords="1000,50,1145,91"/>
 <area shape="rect" id="node13" href="$namespacemsckf__vio.html#a84bd0f5d594e685ea07e2b922cf34bb9" title="四元数转旋转矩阵 jpl Convert a quaternion to the corresponding rotation matrix" alt="" coords="1420,246,1633,273"/>
 <area shape="rect" id="node20" href="$classmsckf__vio_1_1_msckf_vio.html#a8b19358fe83d8a377b795674044b566e" title="状态增广，向状态中增加新的相机状态，同时增广误差协方差矩阵P" alt="" coords="1219,544,1364,586"/>
 <area shape="rect" id="node22" href="$math__utils__test_8cpp.html#ad67728cbfd669b1ec94873a1cf5e6644" title=" " alt="" coords="1499,348,1555,374"/>
-<area shape="rect" id="node3" href="$classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个特征点的所有相机观测的雅可比和重投影误差。还包括左零空间投影(边缘化) 见笔记pdf中《累积一个特征点的所有相机观测并进行左零空间投影(边缘化)》" alt="" coords="1000,136,1145,178"/>
-<area shape="rect" id="node4" href="$classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当状态量中的相机状态量过多时，删除一些相机状态量。同时使用待删除的相机帧 中共同观测到的特征点再进行一次计算重投影误差，观测雅可比矩阵和ESKF更新的操作 见笔记pdf中《滑窗删除冗余帧》" alt="" coords="779,240,935,282"/>
-<area shape="rect" id="node9" href="$classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用当前帧没有跟踪上的点进行ESKF的状态更新，并从地图中删除无用的点" alt="" coords="782,175,931,216"/>
+<area shape="rect" id="node3" href="$classmsckf__vio_1_1_msckf_vio.html#a57deb3897a72e4ffbdade0f57eba3f96" title="计算一个路标点的雅可比" alt="" coords="1000,136,1145,178"/>
+<area shape="rect" id="node4" href="$classmsckf__vio_1_1_msckf_vio.html#aa2140c83e2fb3b81ffd5338b0864854d" title="当cam状态数达到最大值时，挑出若干cam状态待删除" alt="" coords="779,240,935,282"/>
+<area shape="rect" id="node9" href="$classmsckf__vio_1_1_msckf_vio.html#ada4eaddd00dfcc715128fec67b232baa" title="使用不再跟踪上的点来更新" alt="" coords="782,175,931,216"/>
 <area shape="rect" id="node5" href="$classmsckf__vio_1_1_msckf_vio.html#ac864e3250127c860dc0301c24938cf56" title="后端主要函数，处理新来的数据" alt="" coords="585,240,731,282"/>
 <area shape="rect" id="node6" href="$classmsckf__vio_1_1_msckf_vio.html#ac8a40018e7997bf6dd13808d6a9f6e80" title=" " alt="" coords="199,240,344,282"/>
 <area shape="rect" id="node8" href="$classmsckf__vio_1_1_msckf_vio.html#a4d441e2dc9b58aeed19a33f4bb9c5aa0" title="重置" alt="" coords="392,270,537,311"/>
 <area shape="rect" id="node7" href="$classmsckf__vio_1_1_msckf_vio.html#a3087eaaf3635b9c26a7aea079fc985d9" title=" " alt="" coords="5,240,151,282"/>
 <area shape="rect" id="node12" href="$classmsckf__vio_1_1_msckf_vio.html#ababad8190cbf26d5778e54f108ae1f7b" title="imu积分，批量处理imu数据" alt="" coords="782,78,931,119"/>
 <area shape="rect" id="node14" href="$structmsckf__vio_1_1_feature.html#a93bccba0f853cd5ef84390d4a41f17e0" title="检查输入的相机姿态，确保有足够的平移来进行三角化" alt="" coords="1224,326,1359,367"/>
-<area shape="rect" id="node15" href="$classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id 见笔记pdf中《找出应该删除的相机帧》流程图" alt="" coords="983,347,1163,388"/>
+<area shape="rect" id="node15" href="$classmsckf__vio_1_1_msckf_vio.html#a1b1c1f8d726d98a15ed4774a2089ddfc" title="找出该删的相机状态的id" alt="" coords="983,347,1163,388"/>
 <area shape="rect" id="node16" href="$structmsckf__vio_1_1_feature.html#a02c10f715ad7ce380b94f2e4da86060c" title="根据当前所有可用的观测初始化特征点的位置，进行三角化 + LM优化" alt="" coords="1224,260,1359,302"/>
-<area shape="rect" id="node18" href="$classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="使用ESKF进行最终的状态更新，更新前还使用了QR分解简化雅可比矩阵和重投影误差 见笔记pdf中《QR分解简化最终观测雅可比和误差》以及 《误差扩展卡尔曼滤波进行更新》" alt="" coords="997,202,1148,243"/>
-<area shape="rect" id="node19" href="$classmsckf__vio_1_1_msckf_vio.html#a9fb43d4dfe65743ab04f72d496efbdd0" title="发布位姿，点云，tf以及协方差" alt="" coords="784,352,929,394"/>
+<area shape="rect" id="node18" href="$classmsckf__vio_1_1_msckf_vio.html#af3d955ec59e25f9345835eeb220cec05" title="更新" alt="" coords="997,202,1148,243"/>
+<area shape="rect" id="node19" href="$classmsckf__vio_1_1_msckf_vio.html#a9fb43d4dfe65743ab04f72d496efbdd0" title=" " alt="" coords="784,352,929,394"/>
 <area shape="rect" id="node21" href="$math__utils__test_8cpp.html#ae036ae012800fcad246f5db30c1a5c38" title=" " alt="" coords="1263,493,1319,520"/>
 <area shape="rect" id="node17" href="$feature__initialization__test_8cpp.html#a4fc6861826176ad5a2c588d4b4ff7ff4" title=" " alt="" coords="1045,268,1101,294"/>
 </map>
