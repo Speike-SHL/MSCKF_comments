@@ -59,6 +59,7 @@ namespace msckf_vio
      */
     MsckfVio::MsckfVio(ros::NodeHandle &pnh) : is_gravity_set(false), is_first_img(true), nh(pnh)
     {
+        align_thread = std::thread(&MsckfVio::alignThreadTask, this);
         return;
     }
 
@@ -219,6 +220,16 @@ namespace msckf_vio
         /// 7. 发布 "gt_odom"，发布由mocap_odom 算出的真实位姿，未用到
         mocap_odom_pub = nh.advertise<nav_msgs::Odometry>("gt_odom", 1);
 
+        /// 8. 接收 "/leica/position"， 即Euroc MH-* 数据集中的3D真实位置
+        leica_sub = nh.subscribe("/leica/position", 10, &MsckfVio::leicaCallback, this);
+        /// 9. 接收 "/vicon/firefly_sbx/firefly_sbx"， 即Euroc VH-* 数据集中的6D真实位姿
+        vicon_sub = nh.subscribe("/vicon/firefly_sbx/firefly_sbx", 10, &MsckfVio::viconCallback, this);
+        /// 10. 发布 "ground_truth_path"，真实轨迹
+        ground_truth_pub = nh.advertise<nav_msgs::Path>("ground_truth_path", 1);
+        /// 11. 发布 "ground_truth_odom"，真实姿态
+        ground_truth_odom_pub = nh.advertise<nav_msgs::Odometry>("ground_truth_odom", 10);
+        /// 12. 发布 "vio_path"，VIO估计的轨迹
+        vio_path_pub = nh.advertise<nav_msgs::Path>("vio_path", 1);
         return true;
     }
 
@@ -435,7 +446,7 @@ namespace msckf_vio
         static double max_processing_time = 0.0;
         static int critical_time_cntr = 0;
         double processing_start_time = ros::Time::now().toSec();
-        
+
         /// 3. 批量IMU积分，取出上次IMU积分时间到当前特征接收时间中的IMU数据进行积分
         /// @see MsckfVio::batchImuProcessing(const double &time_bound)
         ros::Time start_time = ros::Time::now();
@@ -689,7 +700,7 @@ namespace msckf_vio
             Matrix<double, 21, 21>::Identity() + Fdt +
             0.5 * Fdt_square + (1.0 / 6.0) * Fdt_cube;
 
-        /// 4. 四阶龙格库塔积分预测名义状态，旋转，速度，位置 
+        /// 4. 四阶龙格库塔积分预测名义状态，旋转，速度，位置
         /// @see MsckfVio::predictNewState(const double &dt, const Eigen::Vector3d &gyro, const Eigen::Vector3d &acc)
         predictNewState(dtime, gyro, acc);
 
@@ -859,7 +870,7 @@ namespace msckf_vio
         Vector3d t_c_w = state_server.imu_state.position +
                          R_w_i.transpose() * t_c_i;
 
-        /// 2. 注册新的相机状态到状态库state_server中, 
+        /// 2. 注册新的相机状态到状态库state_server中,
         /// 包括id(使用此时的imu状态id作为该帧相机的id), 时间戳，位姿
         /// QUERY 以及用于OC的零空间(第一次相机帧估计的数据)
         state_server.cam_states[state_server.imu_state.id] =
@@ -954,7 +965,7 @@ namespace msckf_vio
      */
     void MsckfVio::addFeatureObservations(
         const CameraMeasurementConstPtr &msg)
-    {   
+    {
         /// 1. 取出当前imu状态的id作为当前相机帧的id
         StateIDType state_id = state_server.imu_state.id;
 
@@ -1814,8 +1825,16 @@ namespace msckf_vio
         // 发布位姿
         odom_pub.publish(odom_msg);
 
-        // Publish the 3D positions of the features that
-        // has been initialized.
+        // 发布轨迹
+        vio_path.header = odom_msg.header;
+        geometry_msgs::PoseStamped pose;
+        pose.header = odom_msg.header;
+        pose.pose = odom_msg.pose.pose;
+        vio_path.poses.push_back(pose);
+        vio_path_pub.publish(vio_path);
+        vio_flag = true;
+        vio_point = Eigen::Vector3d(pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
+
         // 4. 发布点云
         boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ>> feature_msg_ptr(
             new pcl::PointCloud<pcl::PointXYZ>());
@@ -1839,4 +1858,101 @@ namespace msckf_vio
         return;
     }
 
+    void MsckfVio::leicaCallback(const geometry_msgs::PointStampedConstPtr &msg)
+    {
+        // 这里leica和Vicon的轨迹与估计间还差一个转换，但是数据集中没有给这个转换，用EVO评估的话是
+        // 自动对齐的，但这里要想显示的话需要人工求解。即先时间软同步得到估计和真实的轨迹点，再用最小二乘求
+        // p1 = T12p2
+        ground_truth_path.header = msg->header;
+        ground_truth_path.header.frame_id = fixed_frame_id;
+
+        geometry_msgs::PoseStamped pose;
+        pose.header = ground_truth_path.header;
+        // 自己根据轨迹用最小二乘求解的转换矩阵，因为每个数据包都不一样，所以实际比对时需要用evo工具做轨迹对齐。
+        Eigen::Vector4d point_leica(msg->point.x, msg->point.y, msg->point.z, 1);
+        Eigen::Vector4d point_leica_w = T_WR * point_leica;
+        pose.pose.position.x = point_leica_w(0);
+        pose.pose.position.y = point_leica_w(1);
+        pose.pose.position.z = point_leica_w(2);
+        ground_truth_path.poses.push_back(pose);
+        ground_truth_pub.publish(ground_truth_path);
+        ground_truth_flag = true;
+        ground_truth_point = Eigen::Vector3d(msg->point.x, msg->point.y, msg->point.z);
+    }
+
+    void MsckfVio::viconCallback(const geometry_msgs::TransformStampedConstPtr &msg)
+    {
+        ground_truth_path.header = msg->header;
+        ground_truth_path.header.frame_id = fixed_frame_id;
+
+        geometry_msgs::PoseStamped pose;
+        pose.header = ground_truth_path.header;
+        Eigen::Isometry3d T_RS;
+        tf::transformMsgToEigen(msg->transform, T_RS);
+        Eigen::Matrix4d T_BS = Eigen::Matrix4d::Identity();
+        // 官方提供的外参
+        T_BS << 0.33638, -0.01749, 0.94156, 0.06901, -0.02078, -0.99972, -0.01114, -0.02781, 0.94150, -0.01582, -0.33665, -0.12395, 0.0, 0.0, 0.0, 1.0;
+        Eigen::Isometry3d T_RB = T_RS * Eigen::Isometry3d(T_BS).inverse();
+        // 官方没给，自己根据轨迹用最小二乘求解的转换矩阵，因为数据集中没给，需要做轨迹对齐
+        // T_WR = Eigen::Matrix4d::Identity();
+        Eigen::Isometry3d T_WB = Eigen::Isometry3d(T_WR) * T_RB;
+        tf::poseEigenToMsg(T_WB, pose.pose);
+        ground_truth_path.poses.push_back(pose);
+        ground_truth_pub.publish(ground_truth_path);
+
+        nav_msgs::Odometry odom_msg;
+        odom_msg.header = ground_truth_path.header;
+        odom_msg.child_frame_id = child_frame_id;
+        odom_msg.pose.pose = pose.pose;
+        ground_truth_odom_pub.publish(odom_msg);
+        ground_truth_flag = true;
+        ground_truth_point = T_RB.translation();
+    }
+
+    void MsckfVio::alignThreadTask()
+    {
+        while(true)
+        {
+            if(vio_flag && ground_truth_flag)
+            {
+                std::unique_lock<std::mutex> lock(mtx);
+                vio_flag = false;
+                ground_truth_flag = false;
+                path_vio.push_back(vio_point);
+                path_ground_truth.push_back(ground_truth_point);
+                vio_point = Eigen::Vector3d::Zero();
+                ground_truth_point = Eigen::Vector3d::Zero();
+                lock.unlock();
+            }
+            // 数据量足够后，计算转换矩阵
+            if (path_vio.size() > 1000)
+            {
+                Eigen::MatrixXd P1, P2;
+                P1 = Eigen::MatrixXd::Ones(4, (int) path_vio.size());
+                P2 = Eigen::MatrixXd::Ones(4, (int) path_ground_truth.size());
+                for (int i = 0; i < (int) path_vio.size(); ++i)
+                {
+                    P1.block<3, 1>(0, i) = path_vio[i];
+                    P2.block<3, 1>(0, i) = path_ground_truth[i];
+                }
+                T_WR = P1 * pinv_eigen_based(P2);
+                // 然后把所有的历史轨迹点都转换一下
+                for (int i = 0; i < (int) ground_truth_path.poses.size(); ++i)
+                {
+                    Eigen::Vector4d point_ground_truth(ground_truth_path.poses[i].pose.position.x, ground_truth_path.poses[i].pose.position.y, ground_truth_path.poses[i].pose.position.z, 1);
+                    Eigen::Vector4d point_ground_truth_w = T_WR * point_ground_truth;
+                    ground_truth_path.poses[i].pose.position.x = point_ground_truth_w(0);
+                    ground_truth_path.poses[i].pose.position.y = point_ground_truth_w(1);
+                    ground_truth_path.poses[i].pose.position.z = point_ground_truth_w(2);
+                }
+                ROS_INFO("================ align done =================");
+                // 最后清空储存的轨迹点并结束线程
+                path_vio.clear();
+                path_ground_truth.clear();
+                break;
+            }
+            // 延时一段时间
+            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        }
+    }
 } // namespace msckf_vio

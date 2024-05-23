@@ -19,6 +19,12 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
 #include <nav_msgs/Odometry.h>
+#include <nav_msgs/Path.h>
+#include <geometry_msgs/PointStamped.h>
+#include <geometry_msgs/TransformStamped.h>
+#include <thread>
+#include <mutex>
+#include "mathtools.h"
 #include <tf/transform_broadcaster.h>
 #include <std_srvs/Trigger.h>
 
@@ -47,7 +53,11 @@ public:
     MsckfVio operator=(const MsckfVio &) = delete;
 
     // Destructor
-    ~MsckfVio() {}
+    ~MsckfVio() {
+        if (align_thread.joinable()) {
+            align_thread.join();
+        }
+    }
 
     bool initialize();
 
@@ -195,6 +205,28 @@ private:
     ros::Publisher feature_pub;
     tf::TransformBroadcaster tf_pub;
     ros::ServiceServer reset_srv;
+    ros::Subscriber leica_sub;  // Euroc MH-* 数据集中的3D真实位置
+    ros::Subscriber vicon_sub;  // Euroc VH-* 数据集中的6D真实位姿
+    ros::Publisher ground_truth_pub;  // 真实轨迹
+    ros::Publisher ground_truth_odom_pub; // 用于显示真实姿态
+    ros::Publisher vio_path_pub;  // VIO估计的轨迹
+
+    nav_msgs::Path ground_truth_path;
+    nav_msgs::Path vio_path;
+    void leicaCallback(const geometry_msgs::PointStampedConstPtr &msg);
+    void viconCallback(const geometry_msgs::TransformStampedConstPtr &msg);
+
+    // 计算轨迹对齐转换矩阵
+    std::vector<Eigen::Vector3d> path_vio;
+    std::vector<Eigen::Vector3d> path_ground_truth;
+    bool vio_flag;
+    bool ground_truth_flag;
+    Eigen::Vector3d vio_point;
+    Eigen::Vector3d ground_truth_point;
+    Eigen::Matrix4d T_WR = Eigen::Matrix4d::Identity();
+    std::thread align_thread;
+    std::mutex mtx;
+    void alignThreadTask();
 
     // Frame id
     std::string fixed_frame_id;
