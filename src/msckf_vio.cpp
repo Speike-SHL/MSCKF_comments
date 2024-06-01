@@ -345,8 +345,7 @@ namespace msckf_vio
         Quaterniond q0_i_w = Quaterniond::FromTwoVectors(
             gravity_imu, -RobotState::gravity);
         // 得出姿态
-        state_server.robot_state.orientation =
-            rotationToQuaternion(q0_i_w.toRotationMatrix().transpose());
+        state_server.robot_state.setR_GI(q0_i_w.toRotationMatrix());
 
         return;
     }
@@ -368,7 +367,7 @@ namespace msckf_vio
         // Reset the IMU state.
         RobotState &robot_state = state_server.robot_state;
         robot_state.time = 0.0;
-        robot_state.orientation = Vector4d(0.0, 0.0, 0.0, 1.0);
+        robot_state.setR_GI(Matrix3d::Identity());
         robot_state.setp_GI(Vector3d::Zero());
         robot_state.setv_GI(Vector3d::Zero());
         robot_state.setbg(Vector3d::Zero());
@@ -648,42 +647,16 @@ namespace msckf_vio
         /// 3. 计算F阵和G阵，见笔记pdf中《IMU误差状态方程总结》
         // Compute discrete transition and noise covariance matrix
         Matrix<double, 21, 21> F = Matrix<double, 21, 21>::Zero();
-        Matrix<double, 21, 12> G = Matrix<double, 21, 12>::Zero();
-
-        // 误差为真值（观测） - 预测
-        // F矩阵表示的是误差的导数的微分方程，其实就是想求δ的递推公式
-        // δ`= F · δ + G    δ表示误差
-        // δn+1 = (I + F·dt)·δn + G·dt·Q    Q表示imu噪声
-
-        // 两种推法，一种是通过论文中四元数的推，这个过程不再重复
-        // 下面给出李代数推法，我们知道msckf的四元数使用的是反人类的jpl
-        // 也就是同一个数值的旋转四元数经过两种不同定义得到的旋转是互为转置的
-        // 这里面的四元数转成的旋转表示的是Riw，所以要以李代数推的话也要按照Riw推
-        // 按照下面的旋转更新方式为左乘，因此李代数也要用左乘，且jpl模式下左乘一个δq = Exp(-δθ)
-        // δQj * Qjw = Exp(-(w - b) * t) * δQi * Qiw
-        // Exp(-δθj) * Qjw = Exp(-(w - b) * t) * Exp(-δθi) * Qiw
-        // 其中Qjw = Exp(-(w - b) * t) * Qiw
-        // 两边除得到 Exp(-δθj) = Exp(-(w - b) * t) * Exp(-δθi) * Exp(-(w - b) * t).t()
-        // -δθj = - Exp(-(w - b) * t) * δθi
-        // δθj = (I - (w - b)^ * t)  * δθi  得证
-
-        // 关于偏置一样可以这么算，只不过式子变成了
-        // δQj * Qjw = Exp(-(w - b - δb) * t) * Qiw
-        // 上式使用bch近似公式可以得到 δθj = -t * δb
-        // 其他也可以通过这个方法推出，是正确的
-
         F.block<3, 3>(0, 0) = -skewSymmetric(gyro);
         F.block<3, 3>(0, 3) = -Matrix3d::Identity();
-
-        F.block<3, 3>(6, 0) =
-            -quaternionToRotation(robot_state.orientation).transpose() * skewSymmetric(acc);
-        F.block<3, 3>(6, 9) = -quaternionToRotation(robot_state.orientation).transpose();
+        F.block<3, 3>(6, 0) = -robot_state.getR_GI() * skewSymmetric(acc);
+        F.block<3, 3>(6, 9) = -robot_state.getR_GI();
         F.block<3, 3>(12, 6) = Matrix3d::Identity();
 
+        Matrix<double, 21, 12> G = Matrix<double, 21, 12>::Zero();
         G.block<3, 3>(0, 0) = -Matrix3d::Identity();
         G.block<3, 3>(3, 3) = Matrix3d::Identity();
-        G.block<3, 3>(6, 6) = -quaternionToRotation(robot_state.orientation).transpose();
-        // G.block<3, 3>(6, 6) = -Matrix3d::Identity();
+        G.block<3, 3>(6, 6) = -robot_state.getR_GI();
         G.block<3, 3>(9, 9) = Matrix3d::Identity();
 
         // Approximate matrix exponential to the 3rd order,
@@ -707,7 +680,7 @@ namespace msckf_vio
         /// 见论文《Observability-constrained Vision-aided Inertial Navigation》中公式20~23
         Matrix3d R_kk_1 = quaternionToRotation(robot_state.orientation_null);
         Phi.block<3, 3>(0, 0) =
-            quaternionToRotation(robot_state.orientation) * R_kk_1.transpose();
+            robot_state.getR_GI().transpose() * R_kk_1.transpose();
 
         // 5.2 修改phi_31
         Vector3d u = R_kk_1 * RobotState::gravity;
@@ -753,7 +726,7 @@ namespace msckf_vio
         state_server.state_cov = state_cov_fixed;
 
         /// 9. 更新imu旋转，位置和速度的零空间，其实就是记录此次状态预估后的状态，用于下一次对Phi进行OC
-        robot_state.orientation_null = robot_state.orientation;
+        robot_state.orientation_null = rotationToQuaternion(robot_state.getR_GI().transpose());
         robot_state.position_null = robot_state.getp_GI();
         robot_state.velocity_null = robot_state.getv_GI();
 
@@ -779,7 +752,7 @@ namespace msckf_vio
         Omega.block<3, 1>(0, 3) = gyro;
         Omega.block<1, 3>(3, 0) = -gyro;
 
-        Vector4d &q = state_server.robot_state.orientation;
+        Vector4d q = rotationToQuaternion(state_server.robot_state.getR_GI().transpose());
         Vector3d v = state_server.robot_state.getv_GI();
         Vector3d p = state_server.robot_state.getp_GI();
 
@@ -833,6 +806,7 @@ namespace msckf_vio
         quaternionNormalize(q);
         v = v + dt / 6 * (k1_v_dot + 2 * k2_v_dot + 2 * k3_v_dot + k4_v_dot);
         p = p + dt / 6 * (k1_p_dot + 2 * k2_p_dot + 2 * k3_p_dot + k4_p_dot);
+        state_server.robot_state.setR_GI(quaternionToRotation(q).transpose());
         state_server.robot_state.setv_GI(v);
         state_server.robot_state.setp_GI(p);
 
@@ -852,8 +826,7 @@ namespace msckf_vio
         const Vector3d &t_c_i = state_server.robot_state.t_cam0_imu;
 
         // 1.2 取出imu旋转平移，按照外参，将这个时刻cam0的位姿算出来
-        Matrix3d R_w_i = quaternionToRotation(
-            state_server.robot_state.orientation);
+        Matrix3d R_w_i = state_server.robot_state.getR_GI().transpose();
         Matrix3d R_w_c = R_i_c * R_w_i;
         Vector3d t_c_w = state_server.robot_state.getp_GI() + R_w_i.transpose() * t_c_i;
 
@@ -1198,11 +1171,8 @@ namespace msckf_vio
         }
 
         // 3. 更新到imu状态量
-        const Vector4d dq_imu =
-            smallAngleQuaternion(delta_x_imu.head<3>());
-        // 相当于左乘dq_imu
-        state_server.robot_state.orientation = quaternionMultiplication(
-            dq_imu, state_server.robot_state.orientation);
+        const Matrix3d dR_imu = Sophus::SO3d::exp(delta_x_imu.head<3>()).matrix();
+        state_server.robot_state.setR_GI(state_server.robot_state.getR_GI() * dR_imu);
         state_server.robot_state.setbg(state_server.robot_state.getbg() + delta_x_imu.segment<3>(3));
         state_server.robot_state.setv_GI(state_server.robot_state.getv_GI() + delta_x_imu.segment<3>(6));
         state_server.robot_state.setba(state_server.robot_state.getba() + delta_x_imu.segment<3>(9));
@@ -1774,9 +1744,7 @@ namespace msckf_vio
         // 1. 计算body坐标，因为imu与body相对位姿是单位矩阵，所以就是imu的坐标
         const RobotState &robot_state = state_server.robot_state;
         Eigen::Isometry3d T_i_w = Eigen::Isometry3d::Identity();
-        T_i_w.linear() = quaternionToRotation(
-                             robot_state.orientation)
-                             .transpose();
+        T_i_w.linear() = robot_state.getR_GI();
         T_i_w.translation() = robot_state.getp_GI();
 
         Eigen::Isometry3d T_b_w = RobotState::T_imu_body * T_i_w *
