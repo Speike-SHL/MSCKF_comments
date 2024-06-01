@@ -21,7 +21,7 @@ namespace msckf_vio
 /**
  * @brief S-MSCKF中IMU状态相关
  */
-struct IMUState
+struct RobotState
 {
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     typedef long long int StateIDType;
@@ -69,7 +69,7 @@ struct IMUState
     /// IMU到机身坐标系的变换矩阵，安装误差，一般为单位矩阵
     static Eigen::Isometry3d T_imu_body;
 
-    IMUState() 
+    RobotState() 
         : id(0), time(0),
         orientation(Eigen::Vector4d(0, 0, 0, 1)),
         position(Eigen::Vector3d::Zero()),
@@ -80,7 +80,7 @@ struct IMUState
         position_null(Eigen::Vector3d::Zero()),
         velocity_null(Eigen::Vector3d::Zero()) {}
 
-    IMUState(const StateIDType &new_id)
+    RobotState(const StateIDType &new_id)
         : id(new_id), time(0),
         orientation(Eigen::Vector4d(0, 0, 0, 1)),
         position(Eigen::Vector3d::Zero()),
@@ -92,7 +92,7 @@ struct IMUState
         velocity_null(Eigen::Vector3d::Zero()) {}
 };
 
-typedef IMUState::StateIDType StateIDType;
+typedef RobotState::StateIDType StateIDType;
 
 } // namespace msckf_vio
 

@@ -76,7 +76,7 @@ private:
     struct StateServer
     {
         /// 状态量中IMU相关的状态
-        IMUState imu_state;
+        RobotState robot_state;
         /// 状态量中相机相关的状态，是一个map容器，key为相机帧id, 值为CAMState
         CamStateServer cam_states;
         /// 所有状态的误差协方差矩阵P

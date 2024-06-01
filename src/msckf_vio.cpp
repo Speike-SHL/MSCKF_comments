@@ -32,14 +32,14 @@ using namespace Eigen;
 
 namespace msckf_vio
 {
-    // Static member variables in IMUState class.
-    StateIDType IMUState::next_id = 0;
-    double IMUState::gyro_noise = 0.001;
-    double IMUState::acc_noise = 0.01;
-    double IMUState::gyro_bias_noise = 0.001;
-    double IMUState::acc_bias_noise = 0.01;
-    Vector3d IMUState::gravity = Vector3d(0, 0, -GRAVITY_ACCELERATION);
-    Isometry3d IMUState::T_imu_body = Isometry3d::Identity();
+    // Static member variables in RobotState class.
+    StateIDType RobotState::next_id = 0;
+    double RobotState::gyro_noise = 0.001;
+    double RobotState::acc_noise = 0.01;
+    double RobotState::gyro_bias_noise = 0.001;
+    double RobotState::acc_bias_noise = 0.01;
+    Vector3d RobotState::gravity = Vector3d(0, 0, -GRAVITY_ACCELERATION);
+    Isometry3d RobotState::T_imu_body = Isometry3d::Identity();
 
     // Static member variables in CAMState class.
     Isometry3d CAMState::T_cam0_cam1 = Isometry3d::Identity();
@@ -91,19 +91,19 @@ namespace msckf_vio
 
         // Noise related parameters
         // imu参数
-        nh.param<double>("noise/gyro", IMUState::gyro_noise, 0.001);
-        nh.param<double>("noise/acc", IMUState::acc_noise, 0.01);
-        nh.param<double>("noise/gyro_bias", IMUState::gyro_bias_noise, 0.001);
-        nh.param<double>("noise/acc_bias", IMUState::acc_bias_noise, 0.01);
+        nh.param<double>("noise/gyro", RobotState::gyro_noise, 0.001);
+        nh.param<double>("noise/acc", RobotState::acc_noise, 0.01);
+        nh.param<double>("noise/gyro_bias", RobotState::gyro_bias_noise, 0.001);
+        nh.param<double>("noise/acc_bias", RobotState::acc_bias_noise, 0.01);
         // 特征的噪声
         nh.param<double>("noise/feature", Feature::observation_noise, 0.01);
 
         // Use variance instead of standard deviation.
         // 方差
-        IMUState::gyro_noise *= IMUState::gyro_noise;
-        IMUState::acc_noise *= IMUState::acc_noise;
-        IMUState::gyro_bias_noise *= IMUState::gyro_bias_noise;
-        IMUState::acc_bias_noise *= IMUState::acc_bias_noise;
+        RobotState::gyro_noise *= RobotState::gyro_noise;
+        RobotState::acc_noise *= RobotState::acc_noise;
+        RobotState::gyro_bias_noise *= RobotState::gyro_bias_noise;
+        RobotState::acc_bias_noise *= RobotState::acc_bias_noise;
         Feature::observation_noise *= Feature::observation_noise;
 
         // Set the initial IMU state.
@@ -112,9 +112,9 @@ namespace msckf_vio
         // set by parameters.
         // TODO: is it reasonable to set the initial bias to 0?
         // 设置初始化速度为0，那必须一开始处于静止了，也符合msckf的静态初始化了
-        nh.param<double>("initial_state/velocity/x", state_server.imu_state.velocity(0), 0.0);
-        nh.param<double>("initial_state/velocity/y", state_server.imu_state.velocity(1), 0.0);
-        nh.param<double>("initial_state/velocity/z", state_server.imu_state.velocity(2), 0.0);
+        nh.param<double>("initial_state/velocity/x", state_server.robot_state.velocity(0), 0.0);
+        nh.param<double>("initial_state/velocity/y", state_server.robot_state.velocity(1), 0.0);
+        nh.param<double>("initial_state/velocity/z", state_server.robot_state.velocity(2), 0.0);
 
         // The initial covariance of orientation and position can be
         // set to 0. But for velocity, bias and extrinsic parameters,
@@ -155,13 +155,13 @@ namespace msckf_vio
         Isometry3d T_cam0_imu = T_imu_cam0.inverse();
 
         // 关于外参状态的初始值设置
-        state_server.imu_state.R_imu_cam0 = T_cam0_imu.linear().transpose();
-        state_server.imu_state.t_cam0_imu = T_cam0_imu.translation();
+        state_server.robot_state.R_imu_cam0 = T_cam0_imu.linear().transpose();
+        state_server.robot_state.t_cam0_imu = T_cam0_imu.translation();
 
         // 一些其他外参
         CAMState::T_cam0_cam1 =
             utils::getTransformEigen(nh, "cam1/T_cn_cnm1");
-        IMUState::T_imu_body =
+        RobotState::T_imu_body =
             utils::getTransformEigen(nh, "T_imu_body").inverse();
 
         // Maximum number of camera states to be stored
@@ -177,15 +177,15 @@ namespace msckf_vio
         ROS_INFO("Keyframe rotation threshold: %f", rotation_threshold);
         ROS_INFO("Keyframe translation threshold: %f", translation_threshold);
         ROS_INFO("Keyframe tracking rate threshold: %f", tracking_rate_threshold);
-        ROS_INFO("gyro noise: %.10f", IMUState::gyro_noise);
-        ROS_INFO("gyro bias noise: %.10f", IMUState::gyro_bias_noise);
-        ROS_INFO("acc noise: %.10f", IMUState::acc_noise);
-        ROS_INFO("acc bias noise: %.10f", IMUState::acc_bias_noise);
+        ROS_INFO("gyro noise: %.10f", RobotState::gyro_noise);
+        ROS_INFO("gyro bias noise: %.10f", RobotState::gyro_bias_noise);
+        ROS_INFO("acc noise: %.10f", RobotState::acc_noise);
+        ROS_INFO("acc bias noise: %.10f", RobotState::acc_bias_noise);
         ROS_INFO("observation noise: %.10f", Feature::observation_noise);
         ROS_INFO("initial velocity: %f, %f, %f",
-                 state_server.imu_state.velocity(0),
-                 state_server.imu_state.velocity(1),
-                 state_server.imu_state.velocity(2));
+                 state_server.robot_state.velocity(0),
+                 state_server.robot_state.velocity(1),
+                 state_server.robot_state.velocity(2));
         ROS_INFO("initial gyro bias cov: %f", gyro_bias_cov);
         ROS_INFO("initial acc bias cov: %f", acc_bias_cov);
         ROS_INFO("initial velocity cov: %f", velocity_cov);
@@ -244,13 +244,13 @@ namespace msckf_vio
         state_server.continuous_noise_cov =
             Matrix<double, 12, 12>::Zero();
         state_server.continuous_noise_cov.block<3, 3>(0, 0) =
-            Matrix3d::Identity() * IMUState::gyro_noise;
+            Matrix3d::Identity() * RobotState::gyro_noise;
         state_server.continuous_noise_cov.block<3, 3>(3, 3) =
-            Matrix3d::Identity() * IMUState::gyro_bias_noise;
+            Matrix3d::Identity() * RobotState::gyro_bias_noise;
         state_server.continuous_noise_cov.block<3, 3>(6, 6) =
-            Matrix3d::Identity() * IMUState::acc_noise;
+            Matrix3d::Identity() * RobotState::acc_noise;
         state_server.continuous_noise_cov.block<3, 3>(9, 9) =
-            Matrix3d::Identity() * IMUState::acc_bias_noise;
+            Matrix3d::Identity() * RobotState::acc_bias_noise;
 
         // 卡方检验表，计算自由度从1到99的卡方分布的95％置信水平的分位数
         // Initialize the chi squared test table with confidence level 0.95.
@@ -322,9 +322,9 @@ namespace msckf_vio
 
         // 2. 因为假设静止的，因此陀螺仪理论应该都是0，额外读数包括偏置+噪声，但是噪声属于高斯分布
         // 因此这一段相加噪声被认为互相抵消了，所以剩下的均值被认为是陀螺仪的初始偏置
-        state_server.imu_state.gyro_bias =
+        state_server.robot_state.gyro_bias =
             sum_angular_vel / imu_msg_buffer.size();
-        // IMUState::gravity =
+        // RobotState::gravity =
         //   -sum_linear_acc / imu_msg_buffer.size();
         //  This is the gravity in the IMU frame.
         // 3. 计算重力，忽略加速度计的偏置，剩下的就只有重力了，a_measure = R(a_truth - g) + ba + na
@@ -338,14 +338,14 @@ namespace msckf_vio
         // 重力的模长就是重力的大小
         double gravity_norm = gravity_imu.norm();
         // 重力本来的方向
-        IMUState::gravity = Vector3d(0.0, 0.0, -gravity_norm);
-        std::cout << "gravity: " << IMUState::gravity.transpose() << std::endl;
+        RobotState::gravity = Vector3d(0.0, 0.0, -gravity_norm);
+        std::cout << "gravity: " << RobotState::gravity.transpose() << std::endl;
 
         // 求出当前imu状态的重力方向与实际重力方向的旋转 R‘， 为什么加负号？因为测量值是R(-g)，而真实值是g
         Quaterniond q0_i_w = Quaterniond::FromTwoVectors(
-            gravity_imu, -IMUState::gravity);
+            gravity_imu, -RobotState::gravity);
         // 得出姿态
-        state_server.imu_state.orientation =
+        state_server.robot_state.orientation =
             rotationToQuaternion(q0_i_w.toRotationMatrix().transpose());
 
         return;
@@ -366,16 +366,16 @@ namespace msckf_vio
         imu_sub.shutdown();
 
         // Reset the IMU state.
-        IMUState &imu_state = state_server.imu_state;
-        imu_state.time = 0.0;
-        imu_state.orientation = Vector4d(0.0, 0.0, 0.0, 1.0);
-        imu_state.position = Vector3d::Zero();
-        imu_state.velocity = Vector3d::Zero();
-        imu_state.gyro_bias = Vector3d::Zero();
-        imu_state.acc_bias = Vector3d::Zero();
-        imu_state.orientation_null = Vector4d(0.0, 0.0, 0.0, 1.0);
-        imu_state.position_null = Vector3d::Zero();
-        imu_state.velocity_null = Vector3d::Zero();
+        RobotState &robot_state = state_server.robot_state;
+        robot_state.time = 0.0;
+        robot_state.orientation = Vector4d(0.0, 0.0, 0.0, 1.0);
+        robot_state.position = Vector3d::Zero();
+        robot_state.velocity = Vector3d::Zero();
+        robot_state.gyro_bias = Vector3d::Zero();
+        robot_state.acc_bias = Vector3d::Zero();
+        robot_state.orientation_null = Vector4d(0.0, 0.0, 0.0, 1.0);
+        robot_state.position_null = Vector3d::Zero();
+        robot_state.velocity_null = Vector3d::Zero();
 
         // Remove all existing camera states.
         state_server.cam_states.clear();
@@ -439,7 +439,7 @@ namespace msckf_vio
         if (is_first_img)
         {
             is_first_img = false;
-            state_server.imu_state.time = msg->header.stamp.toSec();
+            state_server.robot_state.time = msg->header.stamp.toSec();
         }
 
         // 调试使用
@@ -586,20 +586,20 @@ namespace msckf_vio
 
     /**
      * @brief imu积分，批量处理imu数据
-     * @param  time_bound 从state_server.imu_state.time上次处理到这个时间
+     * @param  time_bound 从state_server.robot_state.time上次处理到这个时间
      */
     void MsckfVio::batchImuProcessing(const double &time_bound)
     {
         int used_imu_msg_cntr = 0;
 
-        /// 1. 遍历imu_msg_buffer中的所有imu数据，找到state_server.imu_state.time到
+        /// 1. 遍历imu_msg_buffer中的所有imu数据，找到state_server.robot_state.time到
         /// 当前前端特征时间之间的imu数据，然后进行状态递推
         /// @see MsckfVio::processModel(const double &time, const Eigen::Vector3d &m_gyro, const Eigen::Vector3d &m_acc)
         for (const auto &imu_msg : imu_msg_buffer)
         {
             double imu_time = imu_msg.header.stamp.toSec();
-            // 小于，说明这个数据比较旧，因为state_server.imu_state.time代表已经处理过的imu数据的时间
-            if (imu_time < state_server.imu_state.time)
+            // 小于，说明这个数据比较旧，因为state_server.robot_state.time代表已经处理过的imu数据的时间
+            if (imu_time < state_server.robot_state.time)
             {
                 ++used_imu_msg_cntr;
                 continue;
@@ -618,8 +618,8 @@ namespace msckf_vio
             ++used_imu_msg_cntr;
         }
 
-        /// 2. 更新IMU状态的id  state_server.imu_state.id, 相机状态id也根据这个赋值
-        state_server.imu_state.id = IMUState::next_id++;
+        /// 2. 更新IMU状态的id  state_server.robot_state.id, 相机状态id也根据这个赋值
+        state_server.robot_state.id = RobotState::next_id++;
 
         /// 3. 从imu_msg_buffer中删除已经使用过的数据
         imu_msg_buffer.erase(
@@ -639,12 +639,12 @@ namespace msckf_vio
         const double &time, const Vector3d &m_gyro, const Vector3d &m_acc)
     {
         /// 1. 引用的方式取出imu状态
-        IMUState &imu_state = state_server.imu_state;
+        RobotState &robot_state = state_server.robot_state;
 
         /// 2. 角速度和加速度减去偏置，计算dt
-        Vector3d gyro = m_gyro - imu_state.gyro_bias;
-        Vector3d acc = m_acc - imu_state.acc_bias; // acc_bias 初始值是0
-        double dtime = time - imu_state.time;
+        Vector3d gyro = m_gyro - robot_state.gyro_bias;
+        Vector3d acc = m_acc - robot_state.acc_bias; // acc_bias 初始值是0
+        double dtime = time - robot_state.time;
 
         /// 3. 计算F阵和G阵，见笔记pdf中《IMU误差状态方程总结》
         // Compute discrete transition and noise covariance matrix
@@ -677,13 +677,13 @@ namespace msckf_vio
         F.block<3, 3>(0, 3) = -Matrix3d::Identity();
 
         F.block<3, 3>(6, 0) =
-            -quaternionToRotation(imu_state.orientation).transpose() * skewSymmetric(acc);
-        F.block<3, 3>(6, 9) = -quaternionToRotation(imu_state.orientation).transpose();
+            -quaternionToRotation(robot_state.orientation).transpose() * skewSymmetric(acc);
+        F.block<3, 3>(6, 9) = -quaternionToRotation(robot_state.orientation).transpose();
         F.block<3, 3>(12, 6) = Matrix3d::Identity();
 
         G.block<3, 3>(0, 0) = -Matrix3d::Identity();
         G.block<3, 3>(3, 3) = Matrix3d::Identity();
-        G.block<3, 3>(6, 6) = -quaternionToRotation(imu_state.orientation).transpose();
+        G.block<3, 3>(6, 6) = -quaternionToRotation(robot_state.orientation).transpose();
         // G.block<3, 3>(6, 6) = -Matrix3d::Identity();
         G.block<3, 3>(9, 9) = Matrix3d::Identity();
 
@@ -707,7 +707,7 @@ namespace msckf_vio
         /// 5. 可观性约束OC，通过修改Phi阵，保证零空间秩为4。
         /// 见论文《Observability-constrained Vision-aided Inertial Navigation》中公式20~23
         // 5.1 修改phi_11
-        // imu_state.orientation_null为上一个imu数据递推后保存的
+        // robot_state.orientation_null为上一个imu数据递推后保存的
         // 这块可能会有疑问，因为当上一个imu假如被观测更新了，
         // 导致当前的imu状态是由更新后的上一个imu状态递推而来，但是这里的值是没有更新的，这个有影响吗
         // 答案是没有的，因为我们更改了phi矩阵，保证了零空间
@@ -716,25 +716,25 @@ namespace msckf_vio
         // Ni-1 = phi_[i-2] * Ni-2
         // Ni = phi_[i-1] * Ni-1^
         // 如果像上面这样约束，那么中间的0空间就“崩了”
-        Matrix3d R_kk_1 = quaternionToRotation(imu_state.orientation_null);
+        Matrix3d R_kk_1 = quaternionToRotation(robot_state.orientation_null);
         Phi.block<3, 3>(0, 0) =
-            quaternionToRotation(imu_state.orientation) * R_kk_1.transpose();
+            quaternionToRotation(robot_state.orientation) * R_kk_1.transpose();
 
         // 5.2 修改phi_31
-        Vector3d u = R_kk_1 * IMUState::gravity;
+        Vector3d u = R_kk_1 * RobotState::gravity;
         RowVector3d s = (u.transpose() * u).inverse() * u.transpose();
         Matrix3d A1 = Phi.block<3, 3>(6, 0);
         Vector3d w1 =
-            skewSymmetric(imu_state.velocity_null - imu_state.velocity) * IMUState::gravity;
+            skewSymmetric(robot_state.velocity_null - robot_state.velocity) * RobotState::gravity;
         Phi.block<3, 3>(6, 0) = A1 - (A1 * u - w1) * s;
 
         // 5.3 修改phi_51
         Matrix3d A2 = Phi.block<3, 3>(12, 0);
         Vector3d w2 =
             skewSymmetric(
-                dtime * imu_state.velocity_null + imu_state.position_null -
-                imu_state.position) *
-            IMUState::gravity;
+                dtime * robot_state.velocity_null + robot_state.position_null -
+                robot_state.position) *
+            RobotState::gravity;
         Phi.block<3, 3>(12, 0) = A2 - (A2 * u - w2) * s;
 
         /// 6. 使用OC后的Phi阵计算过程噪声协方差矩阵Q, 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》
@@ -764,12 +764,12 @@ namespace msckf_vio
         state_server.state_cov = state_cov_fixed;
 
         /// 9. 更新imu旋转，位置和速度的零空间，其实就是记录此次状态预估后的状态，用于下一次对Phi进行OC
-        imu_state.orientation_null = imu_state.orientation;
-        imu_state.position_null = imu_state.position;
-        imu_state.velocity_null = imu_state.velocity;
+        robot_state.orientation_null = robot_state.orientation;
+        robot_state.position_null = robot_state.position;
+        robot_state.velocity_null = robot_state.velocity;
 
-        /// 10. 更新imu状态的时间state_server.imu_state.time
-        state_server.imu_state.time = time;
+        /// 10. 更新imu状态的时间state_server.robot_state.time
+        state_server.robot_state.time = time;
         return;
     }
 
@@ -793,9 +793,9 @@ namespace msckf_vio
         Omega.block<3, 1>(0, 3) = gyro;
         Omega.block<1, 3>(3, 0) = -gyro;
 
-        Vector4d &q = state_server.imu_state.orientation;
-        Vector3d &v = state_server.imu_state.velocity;
-        Vector3d &p = state_server.imu_state.position;
+        Vector4d &q = state_server.robot_state.orientation;
+        Vector3d &v = state_server.robot_state.velocity;
+        Vector3d &p = state_server.robot_state.position;
 
         // Some pre-calculation
         // dq_dt表示积分n到n+1
@@ -823,23 +823,23 @@ namespace msckf_vio
         Matrix3d dR_dt2_transpose = quaternionToRotation(dq_dt2).transpose();
 
         // k1 = f(tn, yn)
-        Vector3d k1_v_dot = quaternionToRotation(q).transpose() * acc + IMUState::gravity;
+        Vector3d k1_v_dot = quaternionToRotation(q).transpose() * acc + RobotState::gravity;
         Vector3d k1_p_dot = v;
 
         // k2 = f(tn+dt/2, yn+k1*dt/2)
         // 这里的4阶LK法用了匀加速度假设，即认为前一时刻的加速度和当前时刻相等
         Vector3d k1_v = v + k1_v_dot * dt / 2;
-        Vector3d k2_v_dot = dR_dt2_transpose * acc + IMUState::gravity;
+        Vector3d k2_v_dot = dR_dt2_transpose * acc + RobotState::gravity;
         Vector3d k2_p_dot = k1_v;
 
         // k3 = f(tn+dt/2, yn+k2*dt/2)
         Vector3d k2_v = v + k2_v_dot * dt / 2;
-        Vector3d k3_v_dot = dR_dt2_transpose * acc + IMUState::gravity;
+        Vector3d k3_v_dot = dR_dt2_transpose * acc + RobotState::gravity;
         Vector3d k3_p_dot = k2_v;
 
         // k4 = f(tn+dt, yn+k3*dt)
         Vector3d k3_v = v + k3_v_dot * dt;
-        Vector3d k4_v_dot = dR_dt_transpose * acc + IMUState::gravity;
+        Vector3d k4_v_dot = dR_dt_transpose * acc + RobotState::gravity;
         Vector3d k4_p_dot = k3_v;
 
         // yn+1 = yn + dt/6*(k1+2*k2+2*k3+k4)
@@ -860,22 +860,22 @@ namespace msckf_vio
         /// 1. 根据现在的IMU状态以及IMU和左目相机的外参，预估出当前相机的名义状态
         /// 见笔记pdf中《名义状态扩增》
         // 1.1 取出状态量中的外参，老规矩R_i_c 按照常理我们应该叫他 Rci imu到cam0的旋转
-        const Matrix3d &R_i_c = state_server.imu_state.R_imu_cam0;
-        const Vector3d &t_c_i = state_server.imu_state.t_cam0_imu;
+        const Matrix3d &R_i_c = state_server.robot_state.R_imu_cam0;
+        const Vector3d &t_c_i = state_server.robot_state.t_cam0_imu;
 
         // 1.2 取出imu旋转平移，按照外参，将这个时刻cam0的位姿算出来
         Matrix3d R_w_i = quaternionToRotation(
-            state_server.imu_state.orientation);
+            state_server.robot_state.orientation);
         Matrix3d R_w_c = R_i_c * R_w_i;
-        Vector3d t_c_w = state_server.imu_state.position +
+        Vector3d t_c_w = state_server.robot_state.position +
                          R_w_i.transpose() * t_c_i;
 
         /// 2. 注册新的相机状态到状态库state_server中,
         /// 包括id(使用此时的imu状态id作为该帧相机的id), 时间戳，位姿
         /// QUERY 以及用于OC的零空间(第一次相机帧估计的数据)
-        state_server.cam_states[state_server.imu_state.id] =
-            CAMState(state_server.imu_state.id);
-        CAMState &cam_state = state_server.cam_states[state_server.imu_state.id];
+        state_server.cam_states[state_server.robot_state.id] =
+            CAMState(state_server.robot_state.id);
+        CAMState &cam_state = state_server.cam_states[state_server.robot_state.id];
 
         cam_state.time = time;
         cam_state.R_G_Cam0 = R_w_c.transpose();
@@ -967,7 +967,7 @@ namespace msckf_vio
         const CameraMeasurementConstPtr &msg)
     {
         /// 1. 取出当前imu状态的id作为当前相机帧的id
-        StateIDType state_id = state_server.imu_state.id;
+        StateIDType state_id = state_server.robot_state.id;
 
         /// 2. 获取当前地图内特征点的数量
         int curr_feature_num = map_server.size();
@@ -1026,7 +1026,7 @@ namespace msckf_vio
             // Pass the features that are still being tracked.
             // 1. 这个点被当前状态观测到，说明这个点后面还有可能被跟踪
             // 跳过这些点
-            if (feature.observations.find(state_server.imu_state.id) !=
+            if (feature.observations.find(state_server.robot_state.id) !=
                 feature.observations.end())
                 continue;
 
@@ -1219,19 +1219,19 @@ namespace msckf_vio
         const Vector4d dq_imu =
             smallAngleQuaternion(delta_x_imu.head<3>());
         // 相当于左乘dq_imu
-        state_server.imu_state.orientation = quaternionMultiplication(
-            dq_imu, state_server.imu_state.orientation);
-        state_server.imu_state.gyro_bias += delta_x_imu.segment<3>(3);
-        state_server.imu_state.velocity += delta_x_imu.segment<3>(6);
-        state_server.imu_state.acc_bias += delta_x_imu.segment<3>(9);
-        state_server.imu_state.position += delta_x_imu.segment<3>(12);
+        state_server.robot_state.orientation = quaternionMultiplication(
+            dq_imu, state_server.robot_state.orientation);
+        state_server.robot_state.gyro_bias += delta_x_imu.segment<3>(3);
+        state_server.robot_state.velocity += delta_x_imu.segment<3>(6);
+        state_server.robot_state.acc_bias += delta_x_imu.segment<3>(9);
+        state_server.robot_state.position += delta_x_imu.segment<3>(12);
 
         // 外参
         const Vector4d dq_extrinsic =
             smallAngleQuaternion(delta_x_imu.segment<3>(15));
-        state_server.imu_state.R_imu_cam0 =
-            quaternionToRotation(dq_extrinsic) * state_server.imu_state.R_imu_cam0;
-        state_server.imu_state.t_cam0_imu += delta_x_imu.segment<3>(18);
+        state_server.robot_state.R_imu_cam0 =
+            quaternionToRotation(dq_extrinsic) * state_server.robot_state.R_imu_cam0;
+        state_server.robot_state.t_cam0_imu += delta_x_imu.segment<3>(18);
 
         // Update the camera states.
         // 更新相机姿态
@@ -1467,9 +1467,9 @@ namespace msckf_vio
         Matrix<double, 4, 6> A = H_x;
         Matrix<double, 6, 1> u = Matrix<double, 6, 1>::Zero();
         u.block<3, 1>(0, 0) =
-            quaternionToRotation(cam_state.orientation_null) * IMUState::gravity;
+            quaternionToRotation(cam_state.orientation_null) * RobotState::gravity;
         u.block<3, 1>(3, 0) =
-            skewSymmetric(p_w - cam_state.position_null) * IMUState::gravity;
+            skewSymmetric(p_w - cam_state.position_null) * RobotState::gravity;
         H_x = A - A * u * (u.transpose() * u).inverse() * u.transpose();
         H_f = -H_x.block<4, 3>(0, 3);
 
@@ -1790,17 +1790,17 @@ namespace msckf_vio
 
         // Convert the IMU frame to the body frame.
         // 1. 计算body坐标，因为imu与body相对位姿是单位矩阵，所以就是imu的坐标
-        const IMUState &imu_state = state_server.imu_state;
+        const RobotState &robot_state = state_server.robot_state;
         Eigen::Isometry3d T_i_w = Eigen::Isometry3d::Identity();
         T_i_w.linear() = quaternionToRotation(
-                             imu_state.orientation)
+                             robot_state.orientation)
                              .transpose();
-        T_i_w.translation() = imu_state.position;
+        T_i_w.translation() = robot_state.position;
 
-        Eigen::Isometry3d T_b_w = IMUState::T_imu_body * T_i_w *
-                                  IMUState::T_imu_body.inverse();
+        Eigen::Isometry3d T_b_w = RobotState::T_imu_body * T_i_w *
+                                  RobotState::T_imu_body.inverse();
         Eigen::Vector3d body_velocity =
-            IMUState::T_imu_body.linear() * imu_state.velocity;
+            RobotState::T_imu_body.linear() * robot_state.velocity;
 
         // Publish tf
         // 2. 发布tf，实时的位姿，没有轨迹，没有协方差
@@ -1833,8 +1833,8 @@ namespace msckf_vio
 
         // 转下坐标，但是这里都是单位矩阵
         Matrix<double, 6, 6> H_pose = Matrix<double, 6, 6>::Zero();
-        H_pose.block<3, 3>(0, 0) = IMUState::T_imu_body.linear();
-        H_pose.block<3, 3>(3, 3) = IMUState::T_imu_body.linear();
+        H_pose.block<3, 3>(0, 0) = RobotState::T_imu_body.linear();
+        H_pose.block<3, 3>(3, 3) = RobotState::T_imu_body.linear();
         Matrix<double, 6, 6> P_body_pose = H_pose *
                                            P_imu_pose * H_pose.transpose();
 
@@ -1846,7 +1846,7 @@ namespace msckf_vio
         // Construct the covariance for the velocity.
         // 速度协方差
         Matrix3d P_imu_vel = state_server.state_cov.block<3, 3>(6, 6);
-        Matrix3d H_vel = IMUState::T_imu_body.linear();
+        Matrix3d H_vel = RobotState::T_imu_body.linear();
         Matrix3d P_body_vel = H_vel * P_imu_vel * H_vel.transpose();
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 3; ++j)
@@ -1876,7 +1876,7 @@ namespace msckf_vio
             if (feature.is_initialized)
             {
                 Vector3d feature_position =
-                    IMUState::T_imu_body.linear() * feature.position;
+                    RobotState::T_imu_body.linear() * feature.position;
                 feature_msg_ptr->points.push_back(pcl::PointXYZ(
                     feature_position(0), feature_position(1), feature_position(2)));
             }
