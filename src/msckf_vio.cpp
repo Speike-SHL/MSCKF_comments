@@ -322,8 +322,7 @@ namespace msckf_vio
 
         // 2. 因为假设静止的，因此陀螺仪理论应该都是0，额外读数包括偏置+噪声，但是噪声属于高斯分布
         // 因此这一段相加噪声被认为互相抵消了，所以剩下的均值被认为是陀螺仪的初始偏置
-        state_server.robot_state.gyro_bias =
-            sum_angular_vel / imu_msg_buffer.size();
+        state_server.robot_state.setbg(sum_angular_vel / imu_msg_buffer.size());
         // RobotState::gravity =
         //   -sum_linear_acc / imu_msg_buffer.size();
         //  This is the gravity in the IMU frame.
@@ -371,8 +370,8 @@ namespace msckf_vio
         robot_state.orientation = Vector4d(0.0, 0.0, 0.0, 1.0);
         robot_state.position = Vector3d::Zero();
         robot_state.velocity = Vector3d::Zero();
-        robot_state.gyro_bias = Vector3d::Zero();
-        robot_state.acc_bias = Vector3d::Zero();
+        robot_state.setbg(Vector3d::Zero());
+        robot_state.setba(Vector3d::Zero());
         robot_state.orientation_null = Vector4d(0.0, 0.0, 0.0, 1.0);
         robot_state.position_null = Vector3d::Zero();
         robot_state.velocity_null = Vector3d::Zero();
@@ -642,8 +641,8 @@ namespace msckf_vio
         RobotState &robot_state = state_server.robot_state;
 
         /// 2. 角速度和加速度减去偏置，计算dt
-        Vector3d gyro = m_gyro - robot_state.gyro_bias;
-        Vector3d acc = m_acc - robot_state.acc_bias; // acc_bias 初始值是0
+        Vector3d gyro = m_gyro - robot_state.getbg();
+        Vector3d acc = m_acc - robot_state.getba(); // acc_bias 初始值是0
         double dtime = time - robot_state.time;
 
         /// 3. 计算F阵和G阵，见笔记pdf中《IMU误差状态方程总结》
@@ -1221,9 +1220,9 @@ namespace msckf_vio
         // 相当于左乘dq_imu
         state_server.robot_state.orientation = quaternionMultiplication(
             dq_imu, state_server.robot_state.orientation);
-        state_server.robot_state.gyro_bias += delta_x_imu.segment<3>(3);
+        state_server.robot_state.setbg(state_server.robot_state.getbg() + delta_x_imu.segment<3>(3));
         state_server.robot_state.velocity += delta_x_imu.segment<3>(6);
-        state_server.robot_state.acc_bias += delta_x_imu.segment<3>(9);
+        state_server.robot_state.setba(state_server.robot_state.getba() + delta_x_imu.segment<3>(9));
         state_server.robot_state.position += delta_x_imu.segment<3>(12);
 
         // 外参
