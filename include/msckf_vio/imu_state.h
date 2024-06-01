@@ -69,12 +69,6 @@ struct RobotState
     /// Rbw, Take a vector from the world frame to the IMU (body) frame.
     Eigen::Vector4d orientation;
 
-    /// twb, Position of the IMU (body) frame in the world frame.
-    Eigen::Vector3d position;
-
-    /// Vwb, Velocity of the IMU (body) frame in the world frame.
-    Eigen::Vector3d velocity;
-
     /// 左相机坐标系到IMU坐标系的旋转矩阵，外参
     Eigen::Matrix3d R_imu_cam0;
     /// 左相机坐标系到IMU坐标系的平移向量，外参
@@ -105,8 +99,6 @@ struct RobotState
         X_frak(Eigen::VectorXd::Zero(6)),
         X_td(0.0),
         orientation(Eigen::Vector4d(0, 0, 0, 1)),
-        position(Eigen::Vector3d::Zero()),
-        velocity(Eigen::Vector3d::Zero()),
         orientation_null(Eigen::Vector4d(0, 0, 0, 1)),
         position_null(Eigen::Vector3d::Zero()),
         velocity_null(Eigen::Vector3d::Zero()) 
@@ -124,8 +116,6 @@ struct RobotState
         X_frak(Eigen::VectorXd::Zero(6)),
         X_td(0.0),
         orientation(Eigen::Vector4d(0, 0, 0, 1)),
-        position(Eigen::Vector3d::Zero()),
-        velocity(Eigen::Vector3d::Zero()),
         orientation_null(Eigen::Vector4d(0, 0, 0, 1)),
         position_null(Eigen::Vector3d::Zero()),
         velocity_null(Eigen::Vector3d::Zero()) 

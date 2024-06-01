@@ -110,11 +110,12 @@ namespace msckf_vio
         // The intial orientation and position will be set to the origin
         // implicitly. But the initial velocity and bias can be
         // set by parameters.
-        // TODO: is it reasonable to set the initial bias to 0?
         // 设置初始化速度为0，那必须一开始处于静止了，也符合msckf的静态初始化了
-        nh.param<double>("initial_state/velocity/x", state_server.robot_state.velocity(0), 0.0);
-        nh.param<double>("initial_state/velocity/y", state_server.robot_state.velocity(1), 0.0);
-        nh.param<double>("initial_state/velocity/z", state_server.robot_state.velocity(2), 0.0);
+        Eigen::Vector3d initial_velocity;
+        nh.param<double>("initial_state/velocity/x", initial_velocity(0), 0.0);
+        nh.param<double>("initial_state/velocity/y", initial_velocity(1), 0.0);
+        nh.param<double>("initial_state/velocity/z", initial_velocity(2), 0.0);
+        state_server.robot_state.setv_GI(initial_velocity);
 
         // The initial covariance of orientation and position can be
         // set to 0. But for velocity, bias and extrinsic parameters,
@@ -183,9 +184,9 @@ namespace msckf_vio
         ROS_INFO("acc bias noise: %.10f", RobotState::acc_bias_noise);
         ROS_INFO("observation noise: %.10f", Feature::observation_noise);
         ROS_INFO("initial velocity: %f, %f, %f",
-                 state_server.robot_state.velocity(0),
-                 state_server.robot_state.velocity(1),
-                 state_server.robot_state.velocity(2));
+                 initial_velocity(0),
+                 initial_velocity(1),
+                 initial_velocity(2));
         ROS_INFO("initial gyro bias cov: %f", gyro_bias_cov);
         ROS_INFO("initial acc bias cov: %f", acc_bias_cov);
         ROS_INFO("initial velocity cov: %f", velocity_cov);
@@ -368,8 +369,8 @@ namespace msckf_vio
         RobotState &robot_state = state_server.robot_state;
         robot_state.time = 0.0;
         robot_state.orientation = Vector4d(0.0, 0.0, 0.0, 1.0);
-        robot_state.position = Vector3d::Zero();
-        robot_state.velocity = Vector3d::Zero();
+        robot_state.setp_GI(Vector3d::Zero());
+        robot_state.setv_GI(Vector3d::Zero());
         robot_state.setbg(Vector3d::Zero());
         robot_state.setba(Vector3d::Zero());
         robot_state.orientation_null = Vector4d(0.0, 0.0, 0.0, 1.0);
@@ -415,7 +416,6 @@ namespace msckf_vio
         imu_sub = nh.subscribe("imu", 100, &MsckfVio::imuCallback, this);
         feature_sub = nh.subscribe("features", 40, &MsckfVio::featureCallback, this);
 
-        // TODO: When can the reset fail?
         res.success = true;
         ROS_WARN("Resetting msckf vio completed...");
         return true;
@@ -705,16 +705,6 @@ namespace msckf_vio
 
         /// 5. 可观性约束OC，通过修改Phi阵，保证零空间秩为4。
         /// 见论文《Observability-constrained Vision-aided Inertial Navigation》中公式20~23
-        // 5.1 修改phi_11
-        // robot_state.orientation_null为上一个imu数据递推后保存的
-        // 这块可能会有疑问，因为当上一个imu假如被观测更新了，
-        // 导致当前的imu状态是由更新后的上一个imu状态递推而来，但是这里的值是没有更新的，这个有影响吗
-        // 答案是没有的，因为我们更改了phi矩阵，保证了零空间
-        // 并且这里必须这么处理，因为如果使用更新后的上一个imu状态构建上一时刻的零空间
-        // 就破坏了上上一个跟上一个imu状态之间的0空间
-        // Ni-1 = phi_[i-2] * Ni-2
-        // Ni = phi_[i-1] * Ni-1^
-        // 如果像上面这样约束，那么中间的0空间就“崩了”
         Matrix3d R_kk_1 = quaternionToRotation(robot_state.orientation_null);
         Phi.block<3, 3>(0, 0) =
             quaternionToRotation(robot_state.orientation) * R_kk_1.transpose();
@@ -724,7 +714,7 @@ namespace msckf_vio
         RowVector3d s = (u.transpose() * u).inverse() * u.transpose();
         Matrix3d A1 = Phi.block<3, 3>(6, 0);
         Vector3d w1 =
-            skewSymmetric(robot_state.velocity_null - robot_state.velocity) * RobotState::gravity;
+            skewSymmetric(robot_state.velocity_null - robot_state.getv_GI()) * RobotState::gravity;
         Phi.block<3, 3>(6, 0) = A1 - (A1 * u - w1) * s;
 
         // 5.3 修改phi_51
@@ -732,7 +722,7 @@ namespace msckf_vio
         Vector3d w2 =
             skewSymmetric(
                 dtime * robot_state.velocity_null + robot_state.position_null -
-                robot_state.position) *
+                robot_state.getp_GI()) *
             RobotState::gravity;
         Phi.block<3, 3>(12, 0) = A2 - (A2 * u - w2) * s;
 
@@ -764,8 +754,8 @@ namespace msckf_vio
 
         /// 9. 更新imu旋转，位置和速度的零空间，其实就是记录此次状态预估后的状态，用于下一次对Phi进行OC
         robot_state.orientation_null = robot_state.orientation;
-        robot_state.position_null = robot_state.position;
-        robot_state.velocity_null = robot_state.velocity;
+        robot_state.position_null = robot_state.getp_GI();
+        robot_state.velocity_null = robot_state.getv_GI();
 
         /// 10. 更新imu状态的时间state_server.robot_state.time
         state_server.robot_state.time = time;
@@ -782,9 +772,6 @@ namespace msckf_vio
         const double &dt, const Vector3d &gyro, const Vector3d &acc)
     {
 
-        // TODO: Will performing the forward integration using
-        //    the inverse of the quaternion give better accuracy?
-
         // 角速度，标量
         double gyro_norm = gyro.norm();
         Matrix4d Omega = Matrix4d::Zero();
@@ -793,8 +780,8 @@ namespace msckf_vio
         Omega.block<1, 3>(3, 0) = -gyro;
 
         Vector4d &q = state_server.robot_state.orientation;
-        Vector3d &v = state_server.robot_state.velocity;
-        Vector3d &p = state_server.robot_state.position;
+        Vector3d v = state_server.robot_state.getv_GI();
+        Vector3d p = state_server.robot_state.getp_GI();
 
         // Some pre-calculation
         // dq_dt表示积分n到n+1
@@ -846,6 +833,8 @@ namespace msckf_vio
         quaternionNormalize(q);
         v = v + dt / 6 * (k1_v_dot + 2 * k2_v_dot + 2 * k3_v_dot + k4_v_dot);
         p = p + dt / 6 * (k1_p_dot + 2 * k2_p_dot + 2 * k3_p_dot + k4_p_dot);
+        state_server.robot_state.setv_GI(v);
+        state_server.robot_state.setp_GI(p);
 
         return;
     }
@@ -866,8 +855,7 @@ namespace msckf_vio
         Matrix3d R_w_i = quaternionToRotation(
             state_server.robot_state.orientation);
         Matrix3d R_w_c = R_i_c * R_w_i;
-        Vector3d t_c_w = state_server.robot_state.position +
-                         R_w_i.transpose() * t_c_i;
+        Vector3d t_c_w = state_server.robot_state.getp_GI() + R_w_i.transpose() * t_c_i;
 
         /// 2. 注册新的相机状态到状态库state_server中,
         /// 包括id(使用此时的imu状态id作为该帧相机的id), 时间戳，位姿
@@ -1070,11 +1058,6 @@ namespace msckf_vio
             processed_feature_ids.push_back(feature.id);
         }
 
-        // cout << "invalid/processed feature #: " <<
-        //   invalid_feature_ids.size() << "/" <<
-        //   processed_feature_ids.size() << endl;
-        // cout << "jacobian row #: " << jacobian_row_size << endl;
-
         // Remove the features that do not have enough measurements.
         // 5. 删掉非法点
         for (const auto &feature_id : invalid_feature_ids)
@@ -1221,9 +1204,9 @@ namespace msckf_vio
         state_server.robot_state.orientation = quaternionMultiplication(
             dq_imu, state_server.robot_state.orientation);
         state_server.robot_state.setbg(state_server.robot_state.getbg() + delta_x_imu.segment<3>(3));
-        state_server.robot_state.velocity += delta_x_imu.segment<3>(6);
+        state_server.robot_state.setv_GI(state_server.robot_state.getv_GI() + delta_x_imu.segment<3>(6));
         state_server.robot_state.setba(state_server.robot_state.getba() + delta_x_imu.segment<3>(9));
-        state_server.robot_state.position += delta_x_imu.segment<3>(12);
+        state_server.robot_state.setp_GI(state_server.robot_state.getp_GI() + delta_x_imu.segment<3>(12));
 
         // 外参
         const Vector4d dq_extrinsic =
@@ -1794,12 +1777,11 @@ namespace msckf_vio
         T_i_w.linear() = quaternionToRotation(
                              robot_state.orientation)
                              .transpose();
-        T_i_w.translation() = robot_state.position;
+        T_i_w.translation() = robot_state.getp_GI();
 
         Eigen::Isometry3d T_b_w = RobotState::T_imu_body * T_i_w *
                                   RobotState::T_imu_body.inverse();
-        Eigen::Vector3d body_velocity =
-            RobotState::T_imu_body.linear() * robot_state.velocity;
+        Eigen::Vector3d body_velocity = RobotState::T_imu_body.linear() * robot_state.getv_GI();
 
         // Publish tf
         // 2. 发布tf，实时的位姿，没有轨迹，没有协方差
