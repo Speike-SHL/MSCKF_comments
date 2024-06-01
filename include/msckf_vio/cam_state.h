@@ -31,18 +31,9 @@ struct CAMState
     // Time when the state is recorded
     double time;
 
-    // Orientation
-    // Take a vector from the world frame to the camera frame.
-    Eigen::Vector4d orientation;
+    Eigen::Matrix3d R_G_Cam0;
+    Eigen::Vector3d p_G_Cam0;
 
-    // Position of the camera frame in the world frame.
-    Eigen::Vector3d position;
-
-    // These two variables should have the same physical
-    // interpretation with `orientation` and `position`.
-    // There two variables are used to modify the measurement
-    // Jacobian matrices to make the observability matrix
-    // have proper null space.
     // 使可观测性矩阵具有适当的零空间的旋转平移
     Eigen::Vector4d orientation_null;
     Eigen::Vector3d position_null;
@@ -53,8 +44,8 @@ struct CAMState
 
     CAMState() 
     : id(0), time(0),
-    orientation(Eigen::Vector4d(0, 0, 0, 1)),
-    position(Eigen::Vector3d::Zero()),
+    R_G_Cam0(Eigen::Matrix3d::Identity()), 
+    p_G_Cam0(Eigen::Vector3d::Zero()),
     orientation_null(Eigen::Vector4d(0, 0, 0, 1)),
     position_null(Eigen::Vector3d(0, 0, 0))
     {
@@ -63,8 +54,8 @@ struct CAMState
 
     CAMState(const StateIDType &new_id)
     : id(new_id), time(0),
-    orientation(Eigen::Vector4d(0, 0, 0, 1)),
-    position(Eigen::Vector3d::Zero()),
+    R_G_Cam0(Eigen::Matrix3d::Identity()), 
+    p_G_Cam0(Eigen::Vector3d::Zero()),
     orientation_null(Eigen::Vector4d(0, 0, 0, 1)),
     position_null(Eigen::Vector3d::Zero())
     {

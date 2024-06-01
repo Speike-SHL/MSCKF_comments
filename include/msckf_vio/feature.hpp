@@ -167,22 +167,14 @@ namespace msckf_vio
         const StateIDType &last_cam_id = (--observations.end())->first;
 
         // 2. 分别赋值位姿
-        // 左相机第一帧的Twc
-        Eigen::Isometry3d first_cam_pose;
-        // 左相机第一帧的Rcw -> Rwc
-        first_cam_pose.linear() =
-            quaternionToRotation(cam_states.find(first_cam_id)->second.orientation).transpose();
-        // 左相机第一帧的twc
-        first_cam_pose.translation() =
-            cam_states.find(first_cam_id)->second.position;
+        Eigen::Isometry3d first_cam_pose = Eigen::Isometry3d::Identity();
+        first_cam_pose.linear() = cam_states.find(first_cam_id)->second.R_G_Cam0;
+        first_cam_pose.translation() = cam_states.find(first_cam_id)->second.p_G_Cam0;
+
         // 左相机最后一帧的Twc
-        Eigen::Isometry3d last_cam_pose;
-        // 左相机最后一帧的Rcw -> Rwc
-        last_cam_pose.linear() =
-            quaternionToRotation(cam_states.find(last_cam_id)->second.orientation).transpose();
-        // 左相机最后一帧的twc
-        last_cam_pose.translation() =
-            cam_states.find(last_cam_id)->second.position;
+        Eigen::Isometry3d last_cam_pose = Eigen::Isometry3d::Identity();
+        last_cam_pose.linear() = cam_states.find(last_cam_id)->second.R_G_Cam0;
+        last_cam_pose.translation() = cam_states.find(last_cam_id)->second.p_G_Cam0;
 
         // Get the direction of the feature when it is first observed.
         // This direction is represented in the world frame.
@@ -246,10 +238,9 @@ namespace msckf_vio
             measurements.push_back(m.second.tail<2>());
 
             // 左右相机的 Twc
-            Eigen::Isometry3d cam0_pose;
-            cam0_pose.linear() =
-                quaternionToRotation(cam_state_iter->second.orientation).transpose(); // Rcw -> Rwc
-            cam0_pose.translation() = cam_state_iter->second.position;                // twc
+            Eigen::Isometry3d cam0_pose = Eigen::Isometry3d::Identity();
+            cam0_pose.linear() = cam_state_iter->second.R_G_Cam0;
+            cam0_pose.translation() = cam_state_iter->second.p_G_Cam0;
             Eigen::Isometry3d cam1_pose;
             cam1_pose = cam0_pose * CAMState::T_cam0_cam1.inverse();
 

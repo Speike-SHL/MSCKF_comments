@@ -23,6 +23,7 @@
       <!-- Calibration parameters -->
       <rosparam command="load" file="$(arg calibration_file)"/>
 
+      <param name="td_offset" value="0.014"/>  <!-- 手动偏移图像的时间，不能过大，<30ms -->
       <param name="publish_tf" value="true"/>
       <param name="frame_rate" value="20"/>
       <param name="fixed_frame_id" value="$(arg fixed_frame_id)"/>
@@ -43,6 +44,8 @@
       <param name="noise/gyro_bias" value="0.001"/>
       <param name="noise/acc_bias" value="0.01"/>
       <param name="noise/feature" value="0.035"/>
+      <param name="noise/td" value="0.0001"/>
+      <param name="noise/contact" value="0.05" />
 
       <param name="initial_state/velocity/x" value="0.0"/>
       <param name="initial_state/velocity/y" value="0.0"/>

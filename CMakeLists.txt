@@ -5,7 +5,8 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-add_compile_options(-std=c++14)
+set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -Wall -Wextra")
 
 # Modify cmake module path if new .cmake files are required
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake")
@@ -33,6 +34,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## System dependencies are found with CMake's conventions
 find_package(Boost REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(Sophus REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(SuiteSparse REQUIRED)
 

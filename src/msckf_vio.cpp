@@ -878,12 +878,12 @@ namespace msckf_vio
         CAMState &cam_state = state_server.cam_states[state_server.imu_state.id];
 
         cam_state.time = time;
-        cam_state.orientation = rotationToQuaternion(R_w_c);
-        cam_state.position = t_c_w;
+        cam_state.R_G_Cam0 = R_w_c.transpose();
+        cam_state.p_G_Cam0 = t_c_w;
 
         // 记录第一次被估计的数据，不能被改变，因为改变了就破坏了之前的0空间
-        cam_state.orientation_null = cam_state.orientation;
-        cam_state.position_null = cam_state.position;
+        cam_state.orientation_null = rotationToQuaternion(R_w_c);
+        cam_state.position_null = cam_state.p_G_Cam0;
 
         /// 3. 计算用于增广协方差矩阵P的雅可比矩阵J，见笔记pdf中《求雅可比矩阵 J_I》
         // 此时我们首先要知道相机位姿是 Rcw  twc
@@ -1239,10 +1239,9 @@ namespace msckf_vio
         for (int i = 0; i < state_server.cam_states.size(); ++i, ++cam_state_iter)
         {
             const VectorXd &delta_x_cam = delta_x.segment<6>(21 + i * 6);
-            const Vector4d dq_cam = smallAngleQuaternion(delta_x_cam.head<3>());
-            cam_state_iter->second.orientation = quaternionMultiplication(
-                dq_cam, cam_state_iter->second.orientation);
-            cam_state_iter->second.position += delta_x_cam.tail<3>();
+            const Matrix3d dR_cam = Sophus::SO3d::exp(delta_x_cam.head<3>()).matrix();
+            cam_state_iter->second.R_G_Cam0 = cam_state_iter->second.R_G_Cam0 * dR_cam;
+            cam_state_iter->second.p_G_Cam0 += delta_x_cam.tail<3>();
         }
 
         // Update state covariance.
@@ -1258,6 +1257,41 @@ namespace msckf_vio
                                    2.0;
         state_server.state_cov = state_cov_fixed;
 
+        // Eigen::Vector4d q(0.670, 0.122, 0.472, 0.560);     // JPL x y z w
+        // Eigen::Quaterniond q1(0.560, 0.670, 0.122, 0.472); // Harmilton w x y z
+        // cout << setprecision(10) << q1.coeffs().transpose() << endl; // 输出的是 x y z w
+        // cout << setprecision(10) << q1.normalized().toRotationMatrix() << endl;
+        // cout << setprecision(10) << quaternionToRotation(q) << endl;
+        // cout << "----------1. JPL转为旋转矩阵为R_LG, Harmilton转为旋转矩阵为R_GL, 相差一个转置-----------" << endl;
+        // Eigen::Matrix3d R = q1.normalized().toRotationMatrix();
+        // cout << setprecision(10) << Eigen::Quaterniond(R).normalized().coeffs().transpose() << endl;
+        // cout << setprecision(10) << rotationToQuaternion(R).transpose() << endl;
+        // cout << "----------2. 相同旋转矩阵转为JPL和Harmilton相差一个共轭-------------------------------" << endl;
+        // Eigen::Vector3d small_delta(0.1, 0.2, 0.3);
+        // Eigen::Vector4d dq = smallAngleQuaternion(small_delta);
+        // Eigen::Matrix3d dR = Sophus::SO3d::exp(small_delta).matrix();
+        // cout << setprecision(10) << dq.transpose() << endl;
+        // cout << setprecision(10) << Eigen::Quaterniond(dR).normalized().coeffs().transpose() << endl;
+        // cout << "----------3. 两种小旋转结果一样-----------------------------------------------------" << endl;
+        // cout << setprecision(10) << quaternionMultiplication(dq, q).transpose() << endl;
+        // cout << setprecision(10) << Eigen::Quaterniond(dR * R).normalized().coeffs().transpose() << endl;
+        // cout << setprecision(10) << Eigen::Quaterniond(R * dR).normalized().coeffs().transpose() << endl;
+        // cout << setprecision(10)
+        //      << (Eigen::Quaterniond(dq(3), dq(0), dq(1), dq(2)) * q1).normalized().coeffs().transpose() << endl;
+        // cout << setprecision(10)
+        //      << (q1 * Eigen::Quaterniond(dq(3), dq(0), dq(1), dq(2))).normalized().coeffs().transpose() << endl;
+        // cout << "----------4. JPL中左乘等于Harmiton中的右乘------------------------------------------" << endl;
+        // Eigen::Matrix3d R_GC = quaternionToRotation(q).transpose();
+        // Eigen::Vector4d q_CG = q;
+        // Eigen::Vector4d q_CG_new = quaternionMultiplication(dq, q);
+        // Eigen::Matrix3d R_GC_new = R_GC * dR;
+        // Eigen::Matrix3d R_GC_new2 = dR * R_GC;
+        // cout << setprecision(10) << q_CG_new.transpose() << endl;
+        // cout << setprecision(10) << rotationToQuaternion(R_GC_new.transpose()).transpose() << endl; // JPL形式的q_CG
+        // cout << setprecision(10) << Eigen::Quaterniond(R_GC_new).normalized().coeffs().transpose() << endl; // Har形式的q_GC
+        // cout << setprecision(10) << rotationToQuaternion(R_GC_new2.transpose()).transpose() << endl; // JPL形式的q_CG
+        // cout << setprecision(10) << Eigen::Quaterniond(R_GC_new2).normalized().coeffs().transpose() << endl; // Har形式的q_GC
+        // cout << "----------------------------------------------------" << endl;
         return;
     }
 
@@ -1366,8 +1400,8 @@ namespace msckf_vio
 
         // 2. 取出左目位姿，根据外参计算右目位姿
         // Cam0 pose.
-        Matrix3d R_w_c0 = quaternionToRotation(cam_state.orientation);
-        const Vector3d &t_c0_w = cam_state.position;
+        Matrix3d R_w_c0 = cam_state.R_G_Cam0.transpose();
+        const Vector3d &t_c0_w = cam_state.p_G_Cam0;
 
         // Cam1 pose.
         Matrix3d R_c0_c1 = CAMState::T_cam0_cam1.linear();
@@ -1624,20 +1658,16 @@ namespace msckf_vio
         auto first_cam_state_iter = state_server.cam_states.begin();
 
         // 2. 取出关键状态的位姿
-        const Vector3d key_position =
-            key_cam_state_iter->second.position;
-        const Matrix3d key_rotation = quaternionToRotation(
-            key_cam_state_iter->second.orientation);
+        const Vector3d key_position = key_cam_state_iter->second.p_G_Cam0;
+        const Matrix3d key_rotation = key_cam_state_iter->second.R_G_Cam0.transpose();
 
         // 3. 遍历两次，必然删掉两个状态，有可能是相对新的，有可能是最旧的
         // 但是永远删不到最新的
         for (int i = 0; i < 2; ++i)
         {
             // 从倒数第三个开始，取出位姿
-            const Vector3d position =
-                cam_state_iter->second.position;
-            const Matrix3d rotation = quaternionToRotation(
-                cam_state_iter->second.orientation);
+            const Vector3d position = cam_state_iter->second.p_G_Cam0;
+            const Matrix3d rotation = cam_state_iter->second.R_G_Cam0.transpose();
 
             // 计算相对于关键相机状态的平移与旋转
             double distance = (position - key_position).norm();

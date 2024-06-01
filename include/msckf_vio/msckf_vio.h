@@ -15,6 +15,8 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <boost/shared_ptr.hpp>
+#include "sophus/se3.hpp"
+#include <iomanip>
 
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
