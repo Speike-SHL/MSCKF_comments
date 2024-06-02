@@ -744,69 +744,37 @@ namespace msckf_vio
     void MsckfVio::predictNewState(
         const double &dt, const Vector3d &gyro, const Vector3d &acc)
     {
-
-        // 角速度，标量
-        double gyro_norm = gyro.norm();
-        Matrix4d Omega = Matrix4d::Zero();
-        Omega.block<3, 3>(0, 0) = -skewSymmetric(gyro);
-        Omega.block<3, 1>(0, 3) = gyro;
-        Omega.block<1, 3>(3, 0) = -gyro;
-
-        Vector4d q = rotationToQuaternion(state_server.robot_state.getR_GI().transpose());
+        Matrix3d R = state_server.robot_state.getR_GI();
         Vector3d v = state_server.robot_state.getv_GI();
         Vector3d p = state_server.robot_state.getp_GI();
 
-        // Some pre-calculation
-        // dq_dt表示积分n到n+1
-        // dq_dt2表示积分n到n+0.5 算龙格库塔用的
-        Vector4d dq_dt, dq_dt2;
-        if (gyro_norm > 1e-5)
-        {
-            dq_dt =
-                (cos(gyro_norm * dt * 0.5) * Matrix4d::Identity() +
-                 1 / gyro_norm * sin(gyro_norm * dt * 0.5) * Omega) *
-                q;
-            dq_dt2 =
-                (cos(gyro_norm * dt * 0.25) * Matrix4d::Identity() +
-                 1 / gyro_norm * sin(gyro_norm * dt * 0.25) * Omega) *
-                q;
-        }
-        else
-        {
-            // 当角增量很小时的近似
-            dq_dt = (Matrix4d::Identity() + 0.5 * dt * Omega) * cos(gyro_norm * dt * 0.5) * q;
-            dq_dt2 = (Matrix4d::Identity() + 0.25 * dt * Omega) * cos(gyro_norm * dt * 0.25) * q;
-        }
-        // Rwi
-        Matrix3d dR_dt_transpose = quaternionToRotation(dq_dt).transpose();
-        Matrix3d dR_dt2_transpose = quaternionToRotation(dq_dt2).transpose();
+        Matrix3d dR_dt = R * Sophus::SO3d::exp(gyro * dt).matrix();
+        Matrix3d dR_dt2 = R * Sophus::SO3d::exp(gyro * dt / 2).matrix();
 
         // k1 = f(tn, yn)
-        Vector3d k1_v_dot = quaternionToRotation(q).transpose() * acc + RobotState::gravity;
+        Vector3d k1_v_dot = R * acc + RobotState::gravity;
         Vector3d k1_p_dot = v;
 
         // k2 = f(tn+dt/2, yn+k1*dt/2)
         // 这里的4阶LK法用了匀加速度假设，即认为前一时刻的加速度和当前时刻相等
         Vector3d k1_v = v + k1_v_dot * dt / 2;
-        Vector3d k2_v_dot = dR_dt2_transpose * acc + RobotState::gravity;
+        Vector3d k2_v_dot = dR_dt2 * acc + RobotState::gravity;
         Vector3d k2_p_dot = k1_v;
 
         // k3 = f(tn+dt/2, yn+k2*dt/2)
         Vector3d k2_v = v + k2_v_dot * dt / 2;
-        Vector3d k3_v_dot = dR_dt2_transpose * acc + RobotState::gravity;
+        Vector3d k3_v_dot = dR_dt2 * acc + RobotState::gravity;
         Vector3d k3_p_dot = k2_v;
 
         // k4 = f(tn+dt, yn+k3*dt)
         Vector3d k3_v = v + k3_v_dot * dt;
-        Vector3d k4_v_dot = dR_dt_transpose * acc + RobotState::gravity;
+        Vector3d k4_v_dot = dR_dt * acc + RobotState::gravity;
         Vector3d k4_p_dot = k3_v;
 
         // yn+1 = yn + dt/6*(k1+2*k2+2*k3+k4)
-        q = dq_dt;
-        quaternionNormalize(q);
         v = v + dt / 6 * (k1_v_dot + 2 * k2_v_dot + 2 * k3_v_dot + k4_v_dot);
         p = p + dt / 6 * (k1_p_dot + 2 * k2_p_dot + 2 * k3_p_dot + k4_p_dot);
-        state_server.robot_state.setR_GI(quaternionToRotation(q).transpose());
+        state_server.robot_state.setR_GI(dR_dt);
         state_server.robot_state.setv_GI(v);
         state_server.robot_state.setp_GI(p);
 
