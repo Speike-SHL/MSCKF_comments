@@ -168,8 +168,8 @@ namespace msckf_vio
                  cam1_distortion_coeffs[0], cam1_distortion_coeffs[1],
                  cam1_distortion_coeffs[2], cam1_distortion_coeffs[3]);
 
-        cout << R_imu_cam0 << endl;
-        cout << t_imu_cam0.t() << endl;
+        ROS_INFO_STREAM("R_cam0_imu: " << R_cam0_imu);
+        ROS_INFO_STREAM("t_imu_cam0: " << t_cam0_imu.t());
 
         ROS_INFO("grid_row: %d",
                  processor_config.grid_row);

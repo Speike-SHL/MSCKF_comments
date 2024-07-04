@@ -146,11 +146,12 @@ private:
     void addFeatureObservations(const CameraMeasurementConstPtr &msg);
     // This function is used to compute the measurement Jacobian
     // for a single feature observed at a single camera frame.
-    void measurementJacobian(const StateIDType &cam_state_id,
-        const FeatureIDType &feature_id,
-        Eigen::Matrix<double, 4, 6> &H_x,
-        Eigen::Matrix<double, 4, 3> &H_f,
-        Eigen::Vector4d &r);
+    void measurementJacobian(const FeatureIDType &feature_id,
+                             const StateIDType &cam_state_id,
+                             Eigen::Matrix<double, 4, 6> &H_x,
+                             Eigen::Matrix<double, 4, 6> &H_c,
+                             Eigen::Matrix<double, 4, 3> &H_f,
+                             Eigen::Vector4d &r);
     // This function computes the Jacobian of all measurements viewed
     // in the given camera states of this feature.
     void featureJacobian(const FeatureIDType &feature_id, const std::vector<StateIDType> &cam_state_ids, Eigen::MatrixXd &H_x, Eigen::VectorXd &r);

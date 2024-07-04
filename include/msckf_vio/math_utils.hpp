@@ -300,6 +300,60 @@ Eigen::Matrix<T, 3, 1> Log_SO3(const Eigen::Matrix<T, 3, 3>& R) {
     return (std::abs(theta) < 0.001) ? (0.5 * K) : (0.5 * theta / std::sin(theta) * K);
 }
 
+inline Eigen::Matrix4d Exp_SE3(const Eigen::Vector3d &w,
+                               const Eigen::Vector3d &u)
+{
+    Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
+    Eigen::Matrix3d V = Eigen::Matrix3d::Identity();
+    double theta = w.norm();
+
+    if (!(theta < 1e-10))
+    {
+        Eigen::Matrix3d A = skewSymmetric(w);
+        Eigen::Matrix3d A2 = A * A;
+        double theta2 = theta * theta;
+        double stheta = sin(theta);
+        double ctheta = cos(theta);
+
+        R += stheta / theta * A + (1 - ctheta) / theta2 * A2;
+        V += (1 - ctheta) / theta2 * A + (theta - stheta) / (theta2 * theta) * A2;
+    }
+
+    Eigen::Matrix4d T = Eigen::Matrix4d::Identity();
+    T.block<3, 3>(0, 0) = R;
+    T.block<3, 1>(0, 3) = V * u;
+
+    return T;
+}
+
+inline Eigen::Matrix<double, 5, 5> Exp_SE3(const Eigen::Vector3d &w,
+                                           const Eigen::Vector3d &u,
+                                           const Eigen::Vector3d &y)
+{
+    Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
+    Eigen::Matrix3d V = Eigen::Matrix3d::Identity();
+    double theta = w.norm();
+
+    if (!(theta < 1e-10))
+    {
+        Eigen::Matrix3d A = skewSymmetric(w);
+        Eigen::Matrix3d A2 = A * A;
+        double theta2 = theta * theta;
+        double stheta = sin(theta);
+        double ctheta = cos(theta);
+
+        R += stheta / theta * A + (1 - ctheta) / theta2 * A2;
+        V += (1 - ctheta) / theta2 * A + (theta - stheta) / (theta2 * theta) * A2;
+    }
+
+    Eigen::Matrix<double, 5, 5> T = Eigen::Matrix<double, 5, 5>::Identity();
+    T.block<3, 3>(0, 0) = R;
+    T.block<3, 1>(0, 3) = V * u;
+    T.block<3, 1>(0, 4) = V * y;
+
+    return T;
+}
+
 } // end namespace msckf_vio
 
 #endif // MSCKF_VIO_MATH_UTILS_HPP

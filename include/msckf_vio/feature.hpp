@@ -124,8 +124,7 @@ namespace msckf_vio
          * @note Please refer to the Appendix of "A Multi-State Constraint Kalman
          *    Filter for Vision-aided Inertial Navigation" for how the 3d position of a feature is initialized.
          */
-        inline bool initializePosition(
-            const CamStateServer &cam_states);
+        inline bool initializePosition(const CamStateServer &cam_states, const RobotState &robot_state);
 
         /// 特征点唯一的ID,long long int
         FeatureIDType id;
@@ -218,8 +217,7 @@ namespace msckf_vio
             return false;
     }
 
-    bool Feature::initializePosition(
-        const CamStateServer &cam_states)
+    bool Feature::initializePosition(const CamStateServer &cam_states, const RobotState &robot_state)
     {
         // 存放每个观测以及每个对应相机的pos，注意这块是左右目独立存放，即一帧图像会有两个cam_poses和两个measurements
         std::vector<Eigen::Isometry3d, Eigen::aligned_allocator<Eigen::Isometry3d>> cam_poses(0);
@@ -243,6 +241,11 @@ namespace msckf_vio
             cam0_pose.translation() = cam_state_iter->second.p_G_Cam0;
             Eigen::Isometry3d cam1_pose;
             cam1_pose = cam0_pose * CAMState::T_cam0_cam1.inverse();
+            // TAG 1
+            // Eigen::Isometry3d T_cam1_cam0 = Eigen::Isometry3d::Identity();
+            // T_cam1_cam0.linear() = robot_state.R_cam1_cam0;
+            // T_cam1_cam0.translation() = robot_state.t_cam1_cam0;
+            // cam1_pose = cam0_pose * T_cam1_cam0;
 
             // 1.2 添加相机位姿
             cam_poses.push_back(cam0_pose);

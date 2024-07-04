@@ -67,9 +67,14 @@ struct RobotState
     const int dimP_i() const { return (X_i.cols() - 2) * 3 + 6 + 1; }
 
     /// 左相机坐标系到IMU坐标系的旋转矩阵，外参
-    Eigen::Matrix3d R_imu_cam0;
+    Eigen::Matrix3d R_cam0_imu;
+
     /// 左相机坐标系到IMU坐标系的平移向量，外参
     Eigen::Vector3d t_cam0_imu;
+
+    // cam1到cam0的外参
+    Eigen::Matrix3d R_cam1_cam0;
+    Eigen::Vector3d t_cam1_cam0;
 
     /// 用于可观性约束，可观性矩阵的零空间，实际为存储上次预测时的姿态
     Eigen::Vector4d orientation_null;

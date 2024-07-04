@@ -16,6 +16,7 @@ namespace msckf_vio
     {
         setlocale(LC_ALL, "");
         msckf_vio_ptr.reset(new MsckfVio(getPrivateNodeHandle()));
+        ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Warn);
         if (!msckf_vio_ptr->initialize())
         {
             ROS_ERROR("Cannot initialize MSCKF VIO...");

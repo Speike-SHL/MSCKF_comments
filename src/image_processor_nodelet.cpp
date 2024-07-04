@@ -16,6 +16,7 @@ namespace msckf_vio
     {
         setlocale(LC_ALL, "");
         img_processor_ptr.reset(new ImageProcessor(getPrivateNodeHandle()));
+        ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Warn);
         if (!img_processor_ptr->initialize())
         {
             ROS_ERROR("Cannot initialize Image Processor...");

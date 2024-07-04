@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <cmath>
 #include <iterator>
@@ -50,6 +51,8 @@ namespace msckf_vio
     Feature::OptimizationConfig Feature::optimization_config;
 
     map<int, double> MsckfVio::chi_squared_test_table;
+
+    std::string output_file_path = "";
 
     /**
      * @brief MsckfVio构造函数
@@ -131,24 +134,28 @@ namespace msckf_vio
         nh.param<double>("initial_covariance/extrinsic_rotation_cov", extrinsic_rotation_cov, 3.0462e-4);
         nh.param<double>("initial_covariance/extrinsic_translation_cov", extrinsic_translation_cov, 1e-4);
 
-        // 0~3 角度
-        // 3~6 陀螺仪偏置
-        // 6~9 速度
-        // 9~12 加速度计偏置
-        // 12~15 位移
-        // 15~18 外参旋转
-        // 18~21 外参平移
-        state_server.state_cov = MatrixXd::Zero(21, 21);
+        double stereo_extrinsic_rotation_cov, stereo_extrinsic_translation_cov;
+        nh.param<double>("initial_covariance/stereo_extrinsic_rotation_cov", stereo_extrinsic_rotation_cov, 3.0462e-4);
+        nh.param<double>("initial_covariance/stereo_extrinsic_translation_cov", stereo_extrinsic_translation_cov, 1e-4);
+
+        // 0~3 旋转 3~6 速度 6~9 位移 9~12 陀螺仪偏置 12~15 加速度计偏置
+        // 15~18 左目到IMU的旋转 18~21 左目到IMU的平移
+        // 21~24 右目到左目的旋转 24~27 右目到左目的平移
+        state_server.state_cov = MatrixXd::Zero(27, 27);
         for (int i = 3; i < 6; ++i)
-            state_server.state_cov(i, i) = gyro_bias_cov;
-        for (int i = 6; i < 9; ++i)
             state_server.state_cov(i, i) = velocity_cov;
         for (int i = 9; i < 12; ++i)
+            state_server.state_cov(i, i) = gyro_bias_cov;
+        for (int i = 12; i < 15; ++i)
             state_server.state_cov(i, i) = acc_bias_cov;
         for (int i = 15; i < 18; ++i)
             state_server.state_cov(i, i) = extrinsic_rotation_cov;
         for (int i = 18; i < 21; ++i)
             state_server.state_cov(i, i) = extrinsic_translation_cov;
+        for (int i = 21; i < 24; ++i)
+            state_server.state_cov(i, i) = stereo_extrinsic_rotation_cov;
+        for (int i = 24; i < 27; ++i)
+            state_server.state_cov(i, i) = stereo_extrinsic_translation_cov;
 
         // Transformation offsets between the frames involved.
         // 外参注意还是从左往右那么看
@@ -156,7 +163,7 @@ namespace msckf_vio
         Isometry3d T_cam0_imu = T_imu_cam0.inverse();
 
         // 关于外参状态的初始值设置
-        state_server.robot_state.R_imu_cam0 = T_cam0_imu.linear().transpose();
+        state_server.robot_state.R_cam0_imu = T_cam0_imu.linear();
         state_server.robot_state.t_cam0_imu = T_cam0_imu.translation();
 
         // 一些其他外参
@@ -165,8 +172,13 @@ namespace msckf_vio
         RobotState::T_imu_body =
             utils::getTransformEigen(nh, "T_imu_body").inverse();
 
+        state_server.robot_state.R_cam1_cam0 = CAMState::T_cam0_cam1.inverse().linear();
+        state_server.robot_state.t_cam1_cam0 = CAMState::T_cam0_cam1.inverse().translation();
+
         // Maximum number of camera states to be stored
         nh.param<int>("max_cam_state_size", max_cam_state_size, 30);
+
+        nh.param<string>("output_file_path", output_file_path, "");
 
         // 剩下的都是打印的东西了
         ROS_INFO("===========================================");
@@ -192,9 +204,10 @@ namespace msckf_vio
         ROS_INFO("initial velocity cov: %f", velocity_cov);
         ROS_INFO("initial extrinsic rotation cov: %f", extrinsic_rotation_cov);
         ROS_INFO("initial extrinsic translation cov: %f", extrinsic_translation_cov);
+        ROS_INFO("initial stereo extrinsic rotation cov: %f", stereo_extrinsic_rotation_cov);
+        ROS_INFO("initial stereo extrinsic translation cov: %f", stereo_extrinsic_translation_cov);
 
-        cout << T_imu_cam0.linear() << endl;
-        cout << T_imu_cam0.translation().transpose() << endl;
+        ROS_INFO_STREAM("T_imu_cam0:\n" << T_imu_cam0.matrix()); 
 
         ROS_INFO("max camera state #: %d", max_cam_state_size);
         ROS_INFO("===========================================");
@@ -331,7 +344,7 @@ namespace msckf_vio
         // 因为假设静止，a_truth = 0, 认为噪声抵消，同时ba为小量，因此a_measure = R(-g)
         Vector3d gravity_imu =
             sum_linear_acc / imu_msg_buffer.size();
-        std::cout << "gravity_imu: " << gravity_imu.transpose() << std::endl;
+        ROS_INFO_STREAM("gravity_imu: " << gravity_imu.transpose());
 
         // Initialize the initial orientation, so that the estimation
         // is consistent with the inertial frame.
@@ -339,7 +352,7 @@ namespace msckf_vio
         double gravity_norm = gravity_imu.norm();
         // 重力本来的方向
         RobotState::gravity = Vector3d(0.0, 0.0, -gravity_norm);
-        std::cout << "gravity: " << RobotState::gravity.transpose() << std::endl;
+        ROS_INFO_STREAM("gravity: " << RobotState::gravity.transpose());
 
         // 求出当前imu状态的重力方向与实际重力方向的旋转 R‘， 为什么加负号？因为测量值是R(-g)，而真实值是g
         Quaterniond q0_i_w = Quaterniond::FromTwoVectors(
@@ -389,17 +402,28 @@ namespace msckf_vio
         nh.param<double>("initial_covariance/extrinsic_rotation_cov", extrinsic_rotation_cov, 3.0462e-4);
         nh.param<double>("initial_covariance/extrinsic_translation_cov", extrinsic_translation_cov, 1e-4);
 
-        state_server.state_cov = MatrixXd::Zero(21, 21);
+        double stereo_extrinsic_rotation_cov, stereo_extrinsic_translation_cov;
+        nh.param<double>("initial_covariance/stereo_extrinsic_rotation_cov", stereo_extrinsic_rotation_cov, 3.0462e-4);
+        nh.param<double>("initial_covariance/stereo_extrinsic_translation_cov", stereo_extrinsic_translation_cov, 1e-4);
+
+        // 0~3 旋转 3~6 速度 6~9 位移 9~12 陀螺仪偏置 12~15 加速度计偏置
+        // 15~18 左目到IMU的旋转 18~21 左目到IMU的平移
+        // 21~24 右目到左目的旋转 24~27 右目到左目的平移
+        state_server.state_cov = MatrixXd::Zero(27, 27);
         for (int i = 3; i < 6; ++i)
-            state_server.state_cov(i, i) = gyro_bias_cov;
-        for (int i = 6; i < 9; ++i)
             state_server.state_cov(i, i) = velocity_cov;
         for (int i = 9; i < 12; ++i)
+            state_server.state_cov(i, i) = gyro_bias_cov;
+        for (int i = 12; i < 15; ++i)
             state_server.state_cov(i, i) = acc_bias_cov;
         for (int i = 15; i < 18; ++i)
             state_server.state_cov(i, i) = extrinsic_rotation_cov;
         for (int i = 18; i < 21; ++i)
             state_server.state_cov(i, i) = extrinsic_translation_cov;
+        for (int i = 21; i < 24; ++i)
+            state_server.state_cov(i, i) = stereo_extrinsic_rotation_cov;
+        for (int i = 24; i < 27; ++i)
+            state_server.state_cov(i, i) = stereo_extrinsic_translation_cov;
 
         // Clear all exsiting features in the map.
         map_server.clear();
@@ -499,9 +523,9 @@ namespace msckf_vio
             //     state_augmentation_time, state_augmentation_time/processing_time);
             // printf("Add observations time: %f/%f\n",
             //     add_observations_time, add_observations_time/processing_time);
-            printf("Remove lost features time: %f/%f\n",
-                   remove_lost_features_time, remove_lost_features_time / processing_time);
-            printf("Remove camera states time: %f/%f\n",
+            ROS_INFO("Remove lost features time: %f/%f\n",
+                     remove_lost_features_time, remove_lost_features_time / processing_time);
+            ROS_INFO("Remove camera states time: %f/%f\n",
                    prune_cam_states_time, prune_cam_states_time / processing_time);
             // printf("Publish time: %f/%f\n",
             //     publish_time, publish_time/processing_time);
@@ -644,91 +668,57 @@ namespace msckf_vio
         Vector3d acc = m_acc - robot_state.getba(); // acc_bias 初始值是0
         double dtime = time - robot_state.time;
 
-        /// 3. 计算F阵和G阵，见笔记pdf中《IMU误差状态方程总结》
-        // Compute discrete transition and noise covariance matrix
-        Matrix<double, 21, 21> F = Matrix<double, 21, 21>::Zero();
-        F.block<3, 3>(0, 0) = -skewSymmetric(gyro);
-        F.block<3, 3>(0, 3) = -Matrix3d::Identity();
-        F.block<3, 3>(6, 0) = -robot_state.getR_GI() * skewSymmetric(acc);
-        F.block<3, 3>(6, 9) = -robot_state.getR_GI();
-        F.block<3, 3>(12, 6) = Matrix3d::Identity();
+        Matrix3d R = robot_state.getR_GI();
+        Vector3d v = robot_state.getv_GI();
+        Vector3d p = robot_state.getp_GI();
 
-        Matrix<double, 21, 12> G = Matrix<double, 21, 12>::Zero();
-        G.block<3, 3>(0, 0) = -Matrix3d::Identity();
-        G.block<3, 3>(3, 3) = Matrix3d::Identity();
-        G.block<3, 3>(6, 6) = -robot_state.getR_GI();
-        G.block<3, 3>(9, 9) = Matrix3d::Identity();
+        Matrix<double, 27, 27> F = Matrix<double, 27, 27>::Zero();
+        Matrix<double, 27, 12> G = Matrix<double, 27, 12>::Zero();
 
-        // Approximate matrix exponential to the 3rd order,
-        // which can be considered to be accurate enough assuming
-        // dtime is within 0.01s.
-        Matrix<double, 21, 21> Fdt = F * dtime;
-        Matrix<double, 21, 21> Fdt_square = Fdt * Fdt;
-        Matrix<double, 21, 21> Fdt_cube = Fdt_square * Fdt;
+        F.block<3, 3>(0, 9) = -R;
+        F.block<3, 3>(3, 0) = skewSymmetric(RobotState::gravity);
+        F.block<3, 3>(3, 9) = -skewSymmetric(v) * R;
+        F.block<3, 3>(3, 12) = -R;
+        F.block<3, 3>(6, 3) = Matrix3d::Identity();
+        F.block<3, 3>(6, 9) = -skewSymmetric(p) * R;
 
-        /// 3. 计算转移矩阵Phi矩阵，使用三阶近似，当dt<0.01s时，这个近似是足够准确的
-        /// 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》
-        Matrix<double, 21, 21> Phi =
-            Matrix<double, 21, 21>::Identity() + Fdt +
-            0.5 * Fdt_square + (1.0 / 6.0) * Fdt_cube;
+        G.block<3, 3>(0, 0) = R;
+        G.block<3, 3>(3, 0) = skewSymmetric(v) * R;
+        G.block<3, 3>(3, 3) = R;
+        G.block<3, 3>(6, 0) = skewSymmetric(p) * R;
+        G.block<3, 3>(9, 6) = Matrix3d::Identity();
+        G.block<3, 3>(12, 9) = Matrix3d::Identity();
+
+        Matrix<double, 27, 27> Fdt = F * dtime;
+        Matrix<double, 27, 27> Fdt2 = Fdt * Fdt;
+        Matrix<double, 27, 27> Fdt3 = Fdt2 * Fdt;
+        Matrix<double, 27, 27> Phi = Matrix<double, 27, 27>::Identity() +
+                                     Fdt + (1.0 / 2.0) * Fdt2 + (1.0 / 6.0) * Fdt3;
 
         /// 4. 四阶龙格库塔积分预测名义状态，旋转，速度，位置
         /// @see MsckfVio::predictNewState(const double &dt, const Eigen::Vector3d &gyro, const Eigen::Vector3d &acc)
         predictNewState(dtime, gyro, acc);
 
-        /// 5. 可观性约束OC，通过修改Phi阵，保证零空间秩为4。
-        /// 见论文《Observability-constrained Vision-aided Inertial Navigation》中公式20~23
-        Matrix3d R_kk_1 = quaternionToRotation(robot_state.orientation_null);
-        Phi.block<3, 3>(0, 0) =
-            robot_state.getR_GI().transpose() * R_kk_1.transpose();
-
-        // 5.2 修改phi_31
-        Vector3d u = R_kk_1 * RobotState::gravity;
-        RowVector3d s = (u.transpose() * u).inverse() * u.transpose();
-        Matrix3d A1 = Phi.block<3, 3>(6, 0);
-        Vector3d w1 =
-            skewSymmetric(robot_state.velocity_null - robot_state.getv_GI()) * RobotState::gravity;
-        Phi.block<3, 3>(6, 0) = A1 - (A1 * u - w1) * s;
-
-        // 5.3 修改phi_51
-        Matrix3d A2 = Phi.block<3, 3>(12, 0);
-        Vector3d w2 =
-            skewSymmetric(
-                dtime * robot_state.velocity_null + robot_state.position_null -
-                robot_state.getp_GI()) *
-            RobotState::gravity;
-        Phi.block<3, 3>(12, 0) = A2 - (A2 * u - w2) * s;
-
         /// 6. 使用OC后的Phi阵计算过程噪声协方差矩阵Q, 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》
-        Matrix<double, 21, 21> Q =
+        Matrix<double, 27, 27> Q =
             Phi * G * state_server.continuous_noise_cov * G.transpose() * Phi.transpose() * dtime;
 
         /// 7. 预测系统误差状态协方差矩阵P，如果有相机状态量，那么也更新imu状态量与相机状态量交叉的部分
         /// 见笔记pdf中《预测系统状态协方差矩阵P》
-        state_server.state_cov.block<21, 21>(0, 0) =
-            Phi * state_server.state_cov.block<21, 21>(0, 0) * Phi.transpose() + Q;
+        state_server.state_cov.block<27, 27>(0, 0) =
+            Phi * state_server.state_cov.block<27, 27>(0, 0) * Phi.transpose() + Q;
         if (state_server.cam_states.size() > 0)
         {
-            // 起点是0 21  然后是21行 state_server.state_cov.cols() - 21 列的矩阵
-            // 也就是整个协方差矩阵的右上角，这部分说白了就是imu状态量与相机状态量的协方差，imu更新了，这部分也需要更新
-            state_server.state_cov.block(0, 21, 21, state_server.state_cov.cols() - 21) =
-                Phi * state_server.state_cov.block(0, 21, 21, state_server.state_cov.cols() - 21);
-
-            // 同理，这个是左下角
-            state_server.state_cov.block(21, 0, state_server.state_cov.rows() - 21, 21) =
-                state_server.state_cov.block(21, 0, state_server.state_cov.rows() - 21, 21) *
-                Phi.transpose();
+            state_server.state_cov.block(0, 27, 27, state_server.state_cov.cols() - 27) =
+                Phi * state_server.state_cov.block(0, 27, 27, state_server.state_cov.cols() - 27);
+            state_server.state_cov.block(27, 0, state_server.state_cov.rows() - 27, 27) =
+                state_server.state_cov.block(27, 0, state_server.state_cov.rows() - 27, 27) * Phi.transpose();
         }
 
         /// 8. 强制对称，因为协方差矩阵就是对称的
         MatrixXd state_cov_fixed =
-            (state_server.state_cov + state_server.state_cov.transpose()) / 2.0;
+            0.5 * (state_server.state_cov + state_server.state_cov.transpose());
         state_server.state_cov = state_cov_fixed;
-
-        /// 9. 更新imu旋转，位置和速度的零空间，其实就是记录此次状态预估后的状态，用于下一次对Phi进行OC
-        robot_state.orientation_null = rotationToQuaternion(robot_state.getR_GI().transpose());
-        robot_state.position_null = robot_state.getp_GI();
-        robot_state.velocity_null = robot_state.getv_GI();
 
         /// 10. 更新imu状态的时间state_server.robot_state.time
         state_server.robot_state.time = time;
@@ -778,6 +768,19 @@ namespace msckf_vio
         state_server.robot_state.setv_GI(v);
         state_server.robot_state.setp_GI(p);
 
+/*         Eigen::Matrix3d G0 = Gamma_SO3(gyro * dt, 0);
+        Eigen::Matrix3d G1 = Gamma_SO3(gyro * dt, 1);
+        Eigen::Matrix3d G2 = Gamma_SO3(gyro * dt, 2);
+        Eigen::Matrix3d _R = state_server.robot_state.getR_GI();
+        Eigen::Vector3d _v = state_server.robot_state.getv_GI();
+        Eigen::Vector3d _p = state_server.robot_state.getp_GI();
+        Eigen::Matrix3d R_pred = _R * G0;
+        Eigen::Vector3d v_pred = _v + (_R * G1 * acc + RobotState::gravity) * dt;
+        Eigen::Vector3d p_pred = _p + _v * dt + (_R * G2 * acc + 0.5 * RobotState::gravity) * dt * dt;
+        state_server.robot_state.setR_GI(R_pred);
+        state_server.robot_state.setv_GI(v_pred);
+        state_server.robot_state.setp_GI(p_pred); */
+
         return;
     }
 
@@ -787,16 +790,14 @@ namespace msckf_vio
      */
     void MsckfVio::stateAugmentation(const double &time)
     {
-        /// 1. 根据现在的IMU状态以及IMU和左目相机的外参，预估出当前相机的名义状态
-        /// 见笔记pdf中《名义状态扩增》
-        // 1.1 取出状态量中的外参，老规矩R_i_c 按照常理我们应该叫他 Rci imu到cam0的旋转
-        const Matrix3d &R_i_c = state_server.robot_state.R_imu_cam0;
-        const Vector3d &t_c_i = state_server.robot_state.t_cam0_imu;
+        const Matrix3d &R_c_i = state_server.robot_state.R_cam0_imu; // Ric
+        const Vector3d &p_c_i = state_server.robot_state.t_cam0_imu; // pic
 
         // 1.2 取出imu旋转平移，按照外参，将这个时刻cam0的位姿算出来
-        Matrix3d R_w_i = state_server.robot_state.getR_GI().transpose();
-        Matrix3d R_w_c = R_i_c * R_w_i;
-        Vector3d t_c_w = state_server.robot_state.getp_GI() + R_w_i.transpose() * t_c_i;
+        Matrix3d R_i_w = state_server.robot_state.getR_GI(); // Rwi
+        Vector3d p_i_w = state_server.robot_state.getp_GI(); // pwi
+        Matrix3d R_c_w = R_i_w * R_c_i;                      // Rwc = Rwi * Ric
+        Vector3d p_c_w = p_i_w + R_i_w * p_c_i;              // pwc = pwi + Rwi * pic
 
         /// 2. 注册新的相机状态到状态库state_server中,
         /// 包括id(使用此时的imu状态id作为该帧相机的id), 时间戳，位姿
@@ -806,47 +807,16 @@ namespace msckf_vio
         CAMState &cam_state = state_server.cam_states[state_server.robot_state.id];
 
         cam_state.time = time;
-        cam_state.R_G_Cam0 = R_w_c.transpose();
-        cam_state.p_G_Cam0 = t_c_w;
+        cam_state.R_G_Cam0 = R_c_w;
+        cam_state.p_G_Cam0 = p_c_w;
 
-        // 记录第一次被估计的数据，不能被改变，因为改变了就破坏了之前的0空间
-        cam_state.orientation_null = rotationToQuaternion(R_w_c);
-        cam_state.position_null = cam_state.p_G_Cam0;
-
-        /// 3. 计算用于增广协方差矩阵P的雅可比矩阵J，见笔记pdf中《求雅可比矩阵 J_I》
-        // 此时我们首先要知道相机位姿是 Rcw  twc
-        // Rcw = Rci * Riw   twc = twi + Rwi * tic
-        Matrix<double, 6, 21> J = Matrix<double, 6, 21>::Zero();
-        // Rcw对Riw的左扰动导数
-        J.block<3, 3>(0, 0) = R_i_c;
-        // Rcw对Rci的左扰动导数
-        J.block<3, 3>(0, 15) = Matrix3d::Identity();
-
-        // twc对Riw的左扰动导数
-        // twc = twi + Rwi * Exp(φ) * tic
-        //     = twi + Rwi * (I + φ^) * tic
-        //     = twi + Rwi * tic + Rwi * φ^ * tic
-        //     = twi + Rwi * tic - Rwi * tic^ * φ
-        // 这部分的偏导为 -Rwi * tic^     与论文一致
-        // TODO 试一下 -R_w_i.transpose() * skewSymmetric(t_c_i)
-        // 其实这里可以反过来推一下当给的扰动是
-        // twc = twi + Exp(-φ) * Rwi * tic
-        //     = twi + (I - φ^) * Rwi * tic
-        //     = twi + Rwi * tic - φ^ * Rwi * tic
-        //     = twi + Rwi * tic + (Rwi * tic)^ * φ
-        // 这样跟代码就一样了，但是上下定义的扰动方式就不同了
-        J.block<3, 3>(3, 0) = skewSymmetric(R_w_i.transpose() * t_c_i);
-        // 下面是代码里自带的，论文中给出的也是下面的结果
-        // J.block<3, 3>(3, 0) = -R_w_i.transpose()*skewSymmetric(t_c_i);
-        // J.block<3,3>(3,0) = R_w_i.transpose() * skewSymmetric(t_c_i);
-        // std::cout << "(Rwi * tic)^" << skewSymmetric(R_w_i.transpose() * t_c_i) << std::endl;
-        // std::cout << "-Rwi * tic^" << -R_w_i.transpose() * skewSymmetric(t_c_i) << std::endl;
-        // std::cout << "Rwi * tic^" << R_w_i.transpose() * skewSymmetric(t_c_i) << std::endl;
-
-        // twc对twi的左扰动导数
-        J.block<3, 3>(3, 12) = Matrix3d::Identity();
-        // twc对tic的左扰动导数
-        J.block<3, 3>(3, 18) = R_w_i.transpose();
+        // Update the covariance matrix of the state.
+        Matrix<double, 6, 27> J = Matrix<double, 6, 27>::Zero();
+        J.block<3, 3>(0, 0) = Matrix3d::Identity();
+        J.block<3, 3>(0, 15) = R_i_w;
+        J.block<3, 3>(3, 6) = Matrix3d::Identity();
+        J.block<3, 3>(3, 15) = skewSymmetric(p_i_w) * R_i_w;
+        J.block<3, 3>(3, 18) = R_i_w;
 
         /// 4. 增广误差协方差矩阵P，见笔记pdf中《误差协方差矩阵增广》
         // 简单地说就是原来的协方差是 21 + 6n 维的，现在新来了一个伙计，维度要扩了
@@ -858,14 +828,11 @@ namespace msckf_vio
         state_server.state_cov.conservativeResize(old_rows + 6, old_cols + 6);
 
         // imu的协方差矩阵
-        const Matrix<double, 21, 21> &P11 =
-            state_server.state_cov.block<21, 21>(0, 0);
+        const Matrix<double, 27, 27> &P11 = state_server.state_cov.block<27, 27>(0, 0);
 
         // imu相对于各个相机状态量的协方差矩阵（不包括最新的）
-        const MatrixXd &P12 =
-            state_server.state_cov.block(0, 21, 21, old_cols - 21);
+        const MatrixXd &P12 = state_server.state_cov.block(0, 27, 27, old_cols - 27);
 
-        // Fill in the augmented state covariance.
         // 4.2 计算协方差矩阵
         // 左下角
         state_server.state_cov.block(old_rows, 0, 6, old_cols) << J * P11, J * P12;
@@ -875,13 +842,11 @@ namespace msckf_vio
             state_server.state_cov.block(old_rows, 0, 6, old_cols).transpose();
 
         // 右下角，关于相机部分的J都是0所以省略了
-        state_server.state_cov.block<6, 6>(old_rows, old_cols) =
-            J * P11 * J.transpose();
+        state_server.state_cov.block<6, 6>(old_rows, old_cols) = J * P11 * J.transpose();
 
         /// 5. 进行强制对称
-        MatrixXd state_cov_fixed = (state_server.state_cov +
-                                    state_server.state_cov.transpose()) /
-                                   2.0;
+        MatrixXd state_cov_fixed = 
+            0.5 * (state_server.state_cov + state_server.state_cov.transpose());
         state_server.state_cov = state_cov_fixed;
 
         return;
@@ -982,7 +947,7 @@ namespace msckf_vio
                 else
                 {
                     // 3.3 尝试三角化，失败也不要了
-                    if (!feature.initializePosition(state_server.cam_states))
+                    if (!feature.initializePosition(state_server.cam_states, state_server.robot_state))
                     {
                         invalid_feature_ids.push_back(feature.id);
                         continue;
@@ -1010,7 +975,7 @@ namespace msckf_vio
 
         // 准备好误差相对于状态量的雅可比
         MatrixXd H_x = MatrixXd::Zero(jacobian_row_size,
-                                      21 + 6 * state_server.cam_states.size());
+                                      27 + 6 * state_server.cam_states.size());
         VectorXd r = VectorXd::Zero(jacobian_row_size);
         int stack_cntr = 0;
 
@@ -1068,7 +1033,6 @@ namespace msckf_vio
     void MsckfVio::measurementUpdate(
         const MatrixXd &H, const VectorXd &r)
     {
-
         if (H.rows() == 0 || r.rows() == 0)
             return;
 
@@ -1094,15 +1058,8 @@ namespace msckf_vio
             (spqr_helper.matrixQ().transpose() * H).evalTo(H_temp);
             (spqr_helper.matrixQ().transpose() * r).evalTo(r_temp);
 
-            H_thin = H_temp.topRows(21 + state_server.cam_states.size() * 6);
-            r_thin = r_temp.head(21 + state_server.cam_states.size() * 6);
-
-            // HouseholderQR<MatrixXd> qr_helper(H);
-            // MatrixXd Q = qr_helper.householderQ();
-            // MatrixXd Q1 = Q.leftCols(21+state_server.cam_states.size()*6);
-
-            // H_thin = Q1.transpose() * H;
-            // r_thin = Q1.transpose() * r;
+            H_thin = H_temp.topRows(27 + state_server.cam_states.size() * 6);
+            r_thin = r_temp.head(27 + state_server.cam_states.size() * 6);
         }
         else
         {
@@ -1116,7 +1073,6 @@ namespace msckf_vio
         MatrixXd S = H_thin * P * H_thin.transpose() +
                      Feature::observation_noise * MatrixXd::Identity(
                                                       H_thin.rows(), H_thin.rows());
-        // MatrixXd K_transpose = S.fullPivHouseholderQr().solve(H_thin*P);
         MatrixXd K_transpose = S.ldlt().solve(H_thin * P);
         MatrixXd K = K_transpose.transpose();
 
@@ -1124,47 +1080,43 @@ namespace msckf_vio
         VectorXd delta_x = K * r_thin;
 
         // Update the IMU state.
-        const VectorXd &delta_x_imu = delta_x.head<21>();
+        const VectorXd &delta_x_imu = delta_x.head<27>();
 
-        if ( // delta_x_imu.segment<3>(0).norm() > 0.15 ||
-             // delta_x_imu.segment<3>(3).norm() > 0.15 ||
-            delta_x_imu.segment<3>(6).norm() > 0.5 ||
-            // delta_x_imu.segment<3>(9).norm() > 0.5 ||
-            delta_x_imu.segment<3>(12).norm() > 1.0)
-        {
-            printf("delta velocity: %f\n", delta_x_imu.segment<3>(6).norm());
-            printf("delta position: %f\n", delta_x_imu.segment<3>(12).norm());
-            ROS_WARN("Update change is too large.");
-            // return;
-        }
+        const Matrix<double, 5, 5> dT_imu = Exp_SE3(delta_x_imu.head<3>(),
+                                                    delta_x_imu.segment<3>(3),
+                                                    delta_x_imu.segment<3>(6));
+        const Matrix3d dR_imu = dT_imu.block<3, 3>(0, 0);
+        state_server.robot_state.setR_GI(dR_imu * state_server.robot_state.getR_GI());
+        state_server.robot_state.setv_GI(dR_imu * state_server.robot_state.getv_GI() + dT_imu.block<3, 1>(0, 3));
+        state_server.robot_state.setp_GI(dR_imu * state_server.robot_state.getp_GI() + dT_imu.block<3, 1>(0, 4));
 
-        // 3. 更新到imu状态量
-        const Matrix3d dR_imu = Sophus::SO3d::exp(delta_x_imu.head<3>()).matrix();
-        state_server.robot_state.setR_GI(state_server.robot_state.getR_GI() * dR_imu);
-        state_server.robot_state.setbg(state_server.robot_state.getbg() + delta_x_imu.segment<3>(3));
-        state_server.robot_state.setv_GI(state_server.robot_state.getv_GI() + delta_x_imu.segment<3>(6));
-        state_server.robot_state.setba(state_server.robot_state.getba() + delta_x_imu.segment<3>(9));
-        state_server.robot_state.setp_GI(state_server.robot_state.getp_GI() + delta_x_imu.segment<3>(12));
+        state_server.robot_state.setbg(state_server.robot_state.getbg() + delta_x_imu.segment<3>(9));
+        state_server.robot_state.setba(state_server.robot_state.getba() + delta_x_imu.segment<3>(12));
 
-        // 外参
-        const Vector4d dq_extrinsic =
-            smallAngleQuaternion(delta_x_imu.segment<3>(15));
-        state_server.robot_state.R_imu_cam0 =
-            quaternionToRotation(dq_extrinsic) * state_server.robot_state.R_imu_cam0;
-        state_server.robot_state.t_cam0_imu += delta_x_imu.segment<3>(18);
+        const Matrix4d dT_ext = Exp_SE3(delta_x_imu.segment<3>(15),
+                                        delta_x_imu.segment<3>(18));
+        const Matrix3d dR_ext = dT_ext.block<3, 3>(0, 0);
+        state_server.robot_state.R_cam0_imu = dR_ext * state_server.robot_state.R_cam0_imu;
+        state_server.robot_state.t_cam0_imu = dR_ext * state_server.robot_state.t_cam0_imu + dT_ext.block<3, 1>(0, 3);
 
-        // Update the camera states.
+        const Matrix4d dT_stereo = Exp_SE3(delta_x_imu.segment<3>(21),
+                                           delta_x_imu.segment<3>(24));
+        const Matrix3d dR_stereo = dT_stereo.block<3, 3>(0, 0);
+        state_server.robot_state.R_cam1_cam0 = dR_stereo * state_server.robot_state.R_cam1_cam0;
+        state_server.robot_state.t_cam1_cam0 = dR_stereo * state_server.robot_state.t_cam1_cam0 + dT_stereo.block<3, 1>(0, 3);
+
         // 更新相机姿态
         auto cam_state_iter = state_server.cam_states.begin();
         for (int i = 0; i < state_server.cam_states.size(); ++i, ++cam_state_iter)
         {
-            const VectorXd &delta_x_cam = delta_x.segment<6>(21 + i * 6);
-            const Matrix3d dR_cam = Sophus::SO3d::exp(delta_x_cam.head<3>()).matrix();
-            cam_state_iter->second.R_G_Cam0 = cam_state_iter->second.R_G_Cam0 * dR_cam;
-            cam_state_iter->second.p_G_Cam0 += delta_x_cam.tail<3>();
+            const VectorXd &delta_x_cam = delta_x.segment<6>(27 + i * 6);
+            const Matrix4d dT_cam = Exp_SE3(delta_x_cam.head<3>(),
+                                            delta_x_cam.tail<3>());
+            const Matrix3d dR_cam = dT_cam.block<3, 3>(0, 0);
+            cam_state_iter->second.R_G_Cam0 = dR_cam * cam_state_iter->second.R_G_Cam0;
+            cam_state_iter->second.p_G_Cam0 = dR_cam * cam_state_iter->second.p_G_Cam0 + dT_cam.block<3, 1>(0, 3);
         }
 
-        // Update state covariance.
         // 4. 更新协方差
         MatrixXd I_KH = MatrixXd::Identity(K.rows(), H_thin.cols()) - K * H_thin;
         // state_server.state_cov = I_KH*state_server.state_cov*I_KH.transpose() +
@@ -1172,10 +1124,21 @@ namespace msckf_vio
         state_server.state_cov = I_KH * state_server.state_cov;
 
         // Fix the covariance to be symmetric
-        MatrixXd state_cov_fixed = (state_server.state_cov +
-                                    state_server.state_cov.transpose()) /
-                                   2.0;
+        MatrixXd state_cov_fixed = 
+            0.5 * (state_server.state_cov + state_server.state_cov.transpose());
         state_server.state_cov = state_cov_fixed;
+
+        // ofstream out("/home/speike/VSLAM/MSCKF_vio_bak_ws/state_cov.txt", ios::app);
+        // if(out.is_open())
+        // {
+        //     out << setprecision(1) << state_server.state_cov << endl << endl;
+        //     out.close();
+        // }
+
+        // cout << setprecision(15) << "T_cam0_cam1: \n" << CAMState::T_cam0_cam1.matrix() << endl;
+        // cout << setprecision(15) << "T_cam0_cam1.inverse: \n" << CAMState::T_cam0_cam1.inverse().matrix() << endl;
+        // cout << setprecision(15) << "R_cam1_cam0: \n" << state_server.robot_state.R_cam1_cam0 << endl;
+        // cout << setprecision(15) << "t_cam1_cam0: " << state_server.robot_state.t_cam1_cam0.transpose() << endl;
 
         // Eigen::Vector4d q(0.670, 0.122, 0.472, 0.560);     // JPL x y z w
         // Eigen::Quaterniond q1(0.560, 0.670, 0.122, 0.472); // Harmilton w x y z
@@ -1243,14 +1206,11 @@ namespace msckf_vio
             valid_cam_state_ids.push_back(cam_id);
         }
 
-        int jacobian_row_size = 0;
-        // 行数等于4*观测数量，一个观测在双目上都有，所以是2*2
-        // 此时还没有0空间投影
-        jacobian_row_size = 4 * valid_cam_state_ids.size();
+        int jacobian_row_size = 4 * valid_cam_state_ids.size();
 
         // 误差相对于状态量的雅可比，没有约束列数，因为列数一直是最新的
         MatrixXd H_xj = MatrixXd::Zero(jacobian_row_size,
-                                       21 + state_server.cam_states.size() * 6);
+                                       27 + state_server.cam_states.size() * 6);
         // 误差相对于三维点的雅可比
         MatrixXd H_fj = MatrixXd::Zero(jacobian_row_size, 3);
         // 误差
@@ -1260,12 +1220,12 @@ namespace msckf_vio
         // 2. 计算每一个观测（同一帧左右目这里被叫成一个观测）的雅可比与误差
         for (const auto &cam_id : valid_cam_state_ids)
         {
-
             Matrix<double, 4, 6> H_xi = Matrix<double, 4, 6>::Zero();
+            Matrix<double, 4, 6> H_ci = Matrix<double, 4, 6>::Zero();
             Matrix<double, 4, 3> H_fi = Matrix<double, 4, 3>::Zero();
             Vector4d r_i = Vector4d::Zero();
             // 2.1 计算一个左右目观测的雅可比
-            measurementJacobian(cam_id, feature.id, H_xi, H_fi, r_i);
+            measurementJacobian(feature.id, cam_id, H_xi, H_ci, H_fi, r_i);
 
             // 计算这个cam_id在整个矩阵的列数，因为要在大矩阵里面放
             auto cam_state_iter = state_server.cam_states.find(cam_id);
@@ -1273,7 +1233,8 @@ namespace msckf_vio
                 state_server.cam_states.begin(), cam_state_iter);
 
             // Stack the Jacobians.
-            H_xj.block<4, 6>(stack_cntr, 21 + 6 * cam_state_cntr) = H_xi;
+            H_xj.block<4, 6>(stack_cntr, 21) = H_xi;
+            H_xj.block<4, 6>(stack_cntr, 27 + 6 * cam_state_cntr) = H_ci;
             H_fj.block<4, 3>(stack_cntr, 0) = H_fi;
             r_j.segment<4>(stack_cntr) = r_i;
             stack_cntr += 4;
@@ -1307,94 +1268,71 @@ namespace msckf_vio
      * @param  H_f 误差相对于三维点的雅可比
      * @param  r 误差
      */
-    void MsckfVio::measurementJacobian(
-        const StateIDType &cam_state_id,
-        const FeatureIDType &feature_id,
-        Matrix<double, 4, 6> &H_x, Matrix<double, 4, 3> &H_f, Vector4d &r)
+    void MsckfVio::measurementJacobian(const FeatureIDType &feature_id,
+                                       const StateIDType &cam_state_id,
+                                       Matrix<double, 4, 6> &H_x,
+                                       Matrix<double, 4, 6> &H_c,
+                                       Matrix<double, 4, 3> &H_f,
+                                       Vector4d &r)
     {
-
-        // Prepare all the required data.
         // 1. 取出相机状态与特征
         const CAMState &cam_state = state_server.cam_states[cam_state_id];
         const Feature &feature = map_server[feature_id];
 
         // 2. 取出左目位姿，根据外参计算右目位姿
-        // Cam0 pose.
-        Matrix3d R_w_c0 = cam_state.R_G_Cam0.transpose();
-        const Vector3d &t_c0_w = cam_state.p_G_Cam0;
+        Matrix3d R_w_c0 = cam_state.R_G_Cam0.transpose(); // Rc0w
+        const Vector3d &p_c0_w = cam_state.p_G_Cam0;      // pwc0
 
         // Cam1 pose.
         Matrix3d R_c0_c1 = CAMState::T_cam0_cam1.linear();
-        Matrix3d R_w_c1 = CAMState::T_cam0_cam1.linear() * R_w_c0;
-        Vector3d t_c1_w = t_c0_w - R_w_c1.transpose() * CAMState::T_cam0_cam1.translation();
+        Vector3d p_c1_c0 = CAMState::T_cam0_cam1.inverse().translation();
+        // TAG 2
+        // Matrix3d R_c0_c1 = state_server.robot_state.R_cam1_cam0.transpose(); // Rc1c0
+        // Vector3d p_c1_c0 = state_server.robot_state.t_cam1_cam0;             // pc0c1
+        Matrix3d R_w_c1 = R_c0_c1 * R_w_c0;                                  // Rc1w = Rc1c0 * Rc0w
+        Vector3d p_c1_w = p_c0_w + R_w_c0.transpose() * p_c1_c0;             // pwc1 = pwc0 + Rwc0 * pc0c1
 
         // 3. 取出三维点坐标与归一化的坐标点，因为前端发来的是归一化坐标的
-        // 3d feature position in the world frame.
-        // And its observation with the stereo cameras.
         const Vector3d &p_w = feature.position;
         const Vector4d &z = feature.observations.find(cam_state_id)->second;
 
         // 4. 转到左右目相机坐标系下
-        // Convert the feature position from the world frame to
-        // the cam0 and cam1 frame.
-        Vector3d p_c0 = R_w_c0 * (p_w - t_c0_w);
-        Vector3d p_c1 = R_w_c1 * (p_w - t_c1_w);
-        // p_c1 = R_c0_c1 * R_w_c0 * (p_w - t_c0_w + R_w_c1.transpose() * t_cam0_cam1)
-        //      = R_c0_c1 * (p_c0 + R_w_c0 * R_w_c1.transpose() * t_cam0_cam1)
-        //      = R_c0_c1 * (p_c0 + R_c0_c1 * t_cam0_cam1)
+        Vector3d p_c0 = R_w_c0 * (p_w - p_c0_w);
+        Vector3d p_c1 = R_w_c1 * (p_w - p_c1_w);
 
         // Compute the Jacobians.
-        // 5. 计算雅可比
-        // 左相机归一化坐标点相对于左相机坐标系下的点的雅可比
-        // (x, y) = (X / Z, Y / Z)
         Matrix<double, 4, 3> dz_dpc0 = Matrix<double, 4, 3>::Zero();
         dz_dpc0(0, 0) = 1 / p_c0(2);
-        dz_dpc0(1, 1) = 1 / p_c0(2);
         dz_dpc0(0, 2) = -p_c0(0) / (p_c0(2) * p_c0(2));
+        dz_dpc0(1, 1) = 1 / p_c0(2);
         dz_dpc0(1, 2) = -p_c0(1) / (p_c0(2) * p_c0(2));
 
-        // 与上同理
         Matrix<double, 4, 3> dz_dpc1 = Matrix<double, 4, 3>::Zero();
         dz_dpc1(2, 0) = 1 / p_c1(2);
-        dz_dpc1(3, 1) = 1 / p_c1(2);
         dz_dpc1(2, 2) = -p_c1(0) / (p_c1(2) * p_c1(2));
+        dz_dpc1(3, 1) = 1 / p_c1(2);
         dz_dpc1(3, 2) = -p_c1(1) / (p_c1(2) * p_c1(2));
 
-        // 左相机坐标系下的三维点相对于左相机位姿的雅可比 先r后t
-        Matrix<double, 3, 6> dpc0_dxc = Matrix<double, 3, 6>::Zero();
-        dpc0_dxc.leftCols(3) = skewSymmetric(p_c0);
-        dpc0_dxc.rightCols(3) = -R_w_c0;
+        Matrix<double, 3, 6> dpc1_dx = Matrix<double, 3, 6>::Zero();
+        dpc1_dx.leftCols(3) = R_c0_c1 * skewSymmetric(p_c0 - p_c1_c0);
+        dpc1_dx.rightCols(3) = -R_c0_c1;
 
-        // 右相机坐标系下的三维点相对于左相机位姿的雅可比 先r后t
-        Matrix<double, 3, 6> dpc1_dxc = Matrix<double, 3, 6>::Zero();
-        dpc1_dxc.leftCols(3) = R_c0_c1 * skewSymmetric(p_c0);
-        dpc1_dxc.rightCols(3) = -R_w_c1;
+        Matrix<double, 3, 6> dpc0_dxc0 = Matrix<double, 3, 6>::Zero();
+        dpc0_dxc0.leftCols(3) = R_w_c0 * skewSymmetric(p_w - p_c0_w);
+        dpc0_dxc0.rightCols(3) = -R_w_c0;
 
-        // Vector3d p_c0 = R_w_c0 * (p_w - t_c0_w);
-        // Vector3d p_c1 = R_w_c1 * (p_w - t_c1_w);
-        // p_c0 对 p_w
-        Matrix3d dpc0_dpg = R_w_c0;
-        // p_c1 对 p_w
-        Matrix3d dpc1_dpg = R_w_c1;
+        Matrix<double, 3, 6> dpc1_dxc0 = Matrix<double, 3, 6>::Zero();
+        dpc1_dxc0 = R_c0_c1 * dpc0_dxc0;
 
-        // 两个雅可比
-        H_x = dz_dpc0 * dpc0_dxc + dz_dpc1 * dpc1_dxc;
-        H_f = dz_dpc0 * dpc0_dpg + dz_dpc1 * dpc1_dpg;
+        Matrix3d dpc0_dpw = R_w_c0;
+        Matrix3d dpc1_dpw = R_w_c1;
 
-        // Modifty the measurement Jacobian to ensure
-        // observability constrain.
-        // 6. OC
-        Matrix<double, 4, 6> A = H_x;
-        Matrix<double, 6, 1> u = Matrix<double, 6, 1>::Zero();
-        u.block<3, 1>(0, 0) =
-            quaternionToRotation(cam_state.orientation_null) * RobotState::gravity;
-        u.block<3, 1>(3, 0) =
-            skewSymmetric(p_w - cam_state.position_null) * RobotState::gravity;
-        H_x = A - A * u * (u.transpose() * u).inverse() * u.transpose();
-        H_f = -H_x.block<4, 3>(0, 3);
+        // Follow the chain rule.
+        H_x = dz_dpc1 * dpc1_dx;
+        H_c = dz_dpc0 * dpc0_dxc0 + dz_dpc1 * dpc1_dxc0;
+        H_f = dz_dpc0 * dpc0_dpw + dz_dpc1 * dpc1_dpw;
 
         // Compute the residual.
-        // 7. 计算归一化平面坐标误差
         r = z - Vector4d(p_c0(0) / p_c0(2), p_c0(1) / p_c0(2),
                          p_c1(0) / p_c1(2), p_c1(1) / p_c1(2));
 
@@ -1452,7 +1390,7 @@ namespace msckf_vio
                 }
                 else
                 {
-                    if (!feature.initializePosition(state_server.cam_states))
+                    if (!feature.initializePosition(state_server.cam_states, state_server.robot_state))
                     {
                         for (const auto &cam_id : involved_cam_state_ids)
                             feature.observations.erase(cam_id);
@@ -1471,7 +1409,7 @@ namespace msckf_vio
         // 3. 计算待删掉的这部分观测的雅可比与误差
         // 预设大小
         MatrixXd H_x = MatrixXd::Zero(jacobian_row_size,
-                                      21 + 6 * state_server.cam_states.size());
+                                      27 + 6 * state_server.cam_states.size());
         VectorXd r = VectorXd::Zero(jacobian_row_size);
         int stack_cntr = 0;
 
@@ -1522,7 +1460,7 @@ namespace msckf_vio
             // 找到相机状态在状态向量中的位置
             int cam_sequence = std::distance(
                 state_server.cam_states.begin(), state_server.cam_states.find(cam_id));
-            int cam_state_start = 21 + 6 * cam_sequence;
+            int cam_state_start = 27 + 6 * cam_sequence;
             int cam_state_end = cam_state_start + 6;
 
             // 直接删除状态误差协方差矩阵中对应的行列
@@ -1645,7 +1583,7 @@ namespace msckf_vio
 
     void MsckfVio::onlineReset()
     {
-
+        
         // Never perform online reset if position std threshold
         // is non-positive.
         if (position_std_threshold <= 0)
@@ -1654,9 +1592,9 @@ namespace msckf_vio
 
         // Check the uncertainty of positions to determine if
         // the system can be reset.
-        double position_x_std = std::sqrt(state_server.state_cov(12, 12));
-        double position_y_std = std::sqrt(state_server.state_cov(13, 13));
-        double position_z_std = std::sqrt(state_server.state_cov(14, 14));
+        double position_x_std = std::sqrt(state_server.state_cov(6, 6));
+        double position_y_std = std::sqrt(state_server.state_cov(7, 7));
+        double position_z_std = std::sqrt(state_server.state_cov(8, 8));
 
         if (position_x_std < position_std_threshold &&
             position_y_std < position_std_threshold &&
@@ -1667,6 +1605,8 @@ namespace msckf_vio
                  ++online_reset_counter);
         ROS_INFO("Stardard deviation in xyz: %f, %f, %f",
                  position_x_std, position_y_std, position_z_std);
+        if(online_reset_counter >= 5)
+            ROS_ERROR("结果严重发散，请终止程序");
 
         // Remove all existing camera states.
         state_server.cam_states.clear();
@@ -1689,17 +1629,30 @@ namespace msckf_vio
         nh.param<double>("initial_covariance/extrinsic_translation_cov",
                          extrinsic_translation_cov, 1e-4);
 
-        state_server.state_cov = MatrixXd::Zero(21, 21);
+        double stereo_extrinsic_rotation_cov, stereo_extrinsic_translation_cov;
+        nh.param<double>("initial_covariance/stereo_extrinsic_rotation_cov",
+                         stereo_extrinsic_rotation_cov, 3.0462e-4);
+        nh.param<double>("initial_covariance/stereo_extrinsic_translation_cov",
+                         stereo_extrinsic_translation_cov, 1e-4);        
+
+        // 0~3 旋转 3~6 速度 6~9 位移 9~12 陀螺仪偏置 12~15 加速度计偏置
+        // 15~18 左目到IMU的旋转 18~21 左目到IMU的平移
+        // 21~24 右目到左目的旋转 24~27 右目到左目的平移
+        state_server.state_cov = MatrixXd::Zero(27, 27);
         for (int i = 3; i < 6; ++i)
-            state_server.state_cov(i, i) = gyro_bias_cov;
-        for (int i = 6; i < 9; ++i)
             state_server.state_cov(i, i) = velocity_cov;
         for (int i = 9; i < 12; ++i)
+            state_server.state_cov(i, i) = gyro_bias_cov;
+        for (int i = 12; i < 15; ++i)
             state_server.state_cov(i, i) = acc_bias_cov;
         for (int i = 15; i < 18; ++i)
             state_server.state_cov(i, i) = extrinsic_rotation_cov;
         for (int i = 18; i < 21; ++i)
             state_server.state_cov(i, i) = extrinsic_translation_cov;
+        for (int i = 21; i < 24; ++i)
+            state_server.state_cov(i, i) = stereo_extrinsic_rotation_cov;
+        for (int i = 24; i < 27; ++i)
+            state_server.state_cov(i, i) = stereo_extrinsic_translation_cov;
 
         ROS_WARN("%lld online reset complete...", online_reset_counter);
         return;
@@ -1742,9 +1695,9 @@ namespace msckf_vio
         // Convert the covariance.
         // 协方差，取出旋转平移部分，以及它们之间的公共部分组成6自由度的协方差
         Matrix3d P_oo = state_server.state_cov.block<3, 3>(0, 0);
-        Matrix3d P_op = state_server.state_cov.block<3, 3>(0, 12);
-        Matrix3d P_po = state_server.state_cov.block<3, 3>(12, 0);
-        Matrix3d P_pp = state_server.state_cov.block<3, 3>(12, 12);
+        Matrix3d P_op = state_server.state_cov.block<3, 3>(0, 6);
+        Matrix3d P_po = state_server.state_cov.block<3, 3>(6, 0);
+        Matrix3d P_pp = state_server.state_cov.block<3, 3>(6, 6);
         Matrix<double, 6, 6> P_imu_pose = Matrix<double, 6, 6>::Zero();
         P_imu_pose << P_pp, P_po, P_op, P_oo;
 
@@ -1762,7 +1715,7 @@ namespace msckf_vio
 
         // Construct the covariance for the velocity.
         // 速度协方差
-        Matrix3d P_imu_vel = state_server.state_cov.block<3, 3>(6, 6);
+        Matrix3d P_imu_vel = state_server.state_cov.block<3, 3>(3, 3);
         Matrix3d H_vel = RobotState::T_imu_body.linear();
         Matrix3d P_body_vel = H_vel * P_imu_vel * H_vel.transpose();
         for (int i = 0; i < 3; ++i)
@@ -1781,6 +1734,14 @@ namespace msckf_vio
         vio_path_pub.publish(vio_path);
         vio_flag = true;
         vio_point = Eigen::Vector3d(pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
+
+        assert(output_file_path != "");
+        ofstream out(output_file_path, ios::app);
+        if(out.is_open())
+        {
+            out << setprecision(18) << odom_msg.header.stamp.toSec() << " " << setprecision(9) << pose.pose.position.x << " " << pose.pose.position.y << " " << pose.pose.position.z
+                << " " << pose.pose.orientation.x << " " << pose.pose.orientation.y << " " << pose.pose.orientation.z << " " << pose.pose.orientation.w << endl;
+        }
 
         // 4. 发布点云
         boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ>> feature_msg_ptr(
@@ -1858,9 +1819,10 @@ namespace msckf_vio
 
     void MsckfVio::alignThreadTask()
     {
-        while(true)
+        return;
+        while (true)
         {
-            if(vio_flag && ground_truth_flag)
+            if (vio_flag && ground_truth_flag)
             {
                 std::unique_lock<std::mutex> lock(mtx);
                 vio_flag = false;
@@ -1875,16 +1837,16 @@ namespace msckf_vio
             if (path_vio.size() > 1000)
             {
                 Eigen::MatrixXd P1, P2;
-                P1 = Eigen::MatrixXd::Ones(4, (int) path_vio.size());
-                P2 = Eigen::MatrixXd::Ones(4, (int) path_ground_truth.size());
-                for (int i = 0; i < (int) path_vio.size(); ++i)
+                P1 = Eigen::MatrixXd::Ones(4, (int)path_vio.size());
+                P2 = Eigen::MatrixXd::Ones(4, (int)path_ground_truth.size());
+                for (int i = 0; i < (int)path_vio.size(); ++i)
                 {
                     P1.block<3, 1>(0, i) = path_vio[i];
                     P2.block<3, 1>(0, i) = path_ground_truth[i];
                 }
                 T_WR = P1 * pinv_eigen_based(P2);
                 // 然后把所有的历史轨迹点都转换一下
-                for (int i = 0; i < (int) ground_truth_path.poses.size(); ++i)
+                for (int i = 0; i < (int)ground_truth_path.poses.size(); ++i)
                 {
                     Eigen::Vector4d point_ground_truth(ground_truth_path.poses[i].pose.position.x, ground_truth_path.poses[i].pose.position.y, ground_truth_path.poses[i].pose.position.z, 1);
                     Eigen::Vector4d point_ground_truth_w = T_WR * point_ground_truth;
