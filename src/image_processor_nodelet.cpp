@@ -16,7 +16,24 @@ namespace msckf_vio
     {
         setlocale(LC_ALL, "");
         img_processor_ptr.reset(new ImageProcessor(getPrivateNodeHandle()));
-        ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Warn);
+        auto nh = getPrivateNodeHandle();
+        std::string logger_level;
+        if(!nh.param<std::string>("logger_level", logger_level, "Info"))
+            ROS_WARN("ip Cannot find logger_level parameter, use default value: Info");
+        if(logger_level == "Debug")
+            ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug);
+        else if(logger_level == "Info")
+            ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
+        else if(logger_level == "Warn")
+            ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Warn);
+        else if(logger_level == "Error")
+            ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Error);
+        else if(logger_level == "Fatal")
+            ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Fatal);
+        else{
+            ROS_WARN("Unknown logger level: %s, use default value: Info", logger_level.c_str());
+            ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
+        }
         if (!img_processor_ptr->initialize())
         {
             ROS_ERROR("Cannot initialize Image Processor...");

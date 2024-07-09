@@ -52,7 +52,9 @@ namespace msckf_vio
 
     map<int, double> MsckfVio::chi_squared_test_table;
 
-    std::string output_file_path = "";
+    std::string output_file_path = "none";
+    bool use_gatingTest = true;
+    bool path_alignment = false;
 
     /**
      * @brief MsckfVio构造函数
@@ -73,8 +75,8 @@ namespace msckf_vio
     {
         // Frame id
         // 坐标系名字
-        nh.param<string>("fixed_frame_id", fixed_frame_id, "world");
-        nh.param<string>("child_frame_id", child_frame_id, "robot");
+        nh.param<std::string>("fixed_frame_id", fixed_frame_id, "world");
+        nh.param<std::string>("child_frame_id", child_frame_id, "robot");
 
         nh.param<bool>("publish_tf", publish_tf, true);
         nh.param<double>("frame_rate", frame_rate, 40.0);
@@ -94,12 +96,17 @@ namespace msckf_vio
 
         // Noise related parameters
         // imu参数
-        nh.param<double>("noise/gyro", RobotState::gyro_noise, 0.001);
-        nh.param<double>("noise/acc", RobotState::acc_noise, 0.01);
-        nh.param<double>("noise/gyro_bias", RobotState::gyro_bias_noise, 0.001);
-        nh.param<double>("noise/acc_bias", RobotState::acc_bias_noise, 0.01);
+        if (!nh.param<double>("noise/gyro", RobotState::gyro_noise, 0.001))
+            ROS_WARN("Failed to load noise/gyro param, use default 0.001");
+        if (!nh.param<double>("noise/acc", RobotState::acc_noise, 0.01))
+            ROS_WARN("Failed to load noise/acc param, use default 0.01");
+        if (!nh.param<double>("noise/gyro_bias", RobotState::gyro_bias_noise, 0.001))
+            ROS_WARN("Failed to load noise/gyro_bias param, use default 0.001");
+        if (!nh.param<double>("noise/acc_bias", RobotState::acc_bias_noise, 0.01))
+            ROS_WARN("Failed to load noise/acc_bias param, use default 0.01");
         // 特征的噪声
-        nh.param<double>("noise/feature", Feature::observation_noise, 0.01);
+        if (!nh.param<double>("noise/feature", Feature::observation_noise, 0.01))
+            ROS_WARN("Failed to load noise/feature param, use default 0.01");
 
         // Use variance instead of standard deviation.
         // 方差
@@ -126,17 +133,24 @@ namespace msckf_vio
         // 初始协方差的赋值（误差状态的协方差）
         // 为什么旋转平移就可以是0？因为在正式开始之前我们通过初始化找好了重力方向，确定了第一帧的位姿
         double gyro_bias_cov, acc_bias_cov, velocity_cov;
-        nh.param<double>("initial_covariance/velocity", velocity_cov, 0.25);
-        nh.param<double>("initial_covariance/gyro_bias", gyro_bias_cov, 1e-4);
-        nh.param<double>("initial_covariance/acc_bias", acc_bias_cov, 1e-2);
+        if (!nh.param<double>("initial_covariance/velocity", velocity_cov, 0.25))
+            ROS_WARN("Failed to load initial_covariance/velocity param, use default 0.25");
+        if (!nh.param<double>("initial_covariance/gyro_bias", gyro_bias_cov, 1e-4))
+            ROS_WARN("Failed to load initial_covariance/gyro_bias param, use default 1e-4");
+        if (!nh.param<double>("initial_covariance/acc_bias", acc_bias_cov, 1e-2))
+            ROS_WARN("Failed to load initial_covariance/acc_bias param, use default 1e-2");
 
         double extrinsic_rotation_cov, extrinsic_translation_cov;
-        nh.param<double>("initial_covariance/extrinsic_rotation_cov", extrinsic_rotation_cov, 3.0462e-4);
-        nh.param<double>("initial_covariance/extrinsic_translation_cov", extrinsic_translation_cov, 1e-4);
+        if (!nh.param<double>("initial_covariance/extrinsic_rotation_cov", extrinsic_rotation_cov, 3.0462e-4))
+            ROS_WARN("Failed to load initial_covariance/extrinsic_rotation_cov param, use default 3.0462e-4");
+        if (!nh.param<double>("initial_covariance/extrinsic_translation_cov", extrinsic_translation_cov, 1e-4))
+            ROS_WARN("Failed to load initial_covariance/extrinsic_translation_cov param, use default 1e-4");
 
         double stereo_extrinsic_rotation_cov, stereo_extrinsic_translation_cov;
-        nh.param<double>("initial_covariance/stereo_extrinsic_rotation_cov", stereo_extrinsic_rotation_cov, 3.0462e-4);
-        nh.param<double>("initial_covariance/stereo_extrinsic_translation_cov", stereo_extrinsic_translation_cov, 1e-4);
+        if (!nh.param<double>("initial_covariance/stereo_extrinsic_rotation_cov", stereo_extrinsic_rotation_cov, 3.0462e-4))
+            ROS_WARN("Failed to load initial_covariance/stereo_extrinsic_rotation_cov param, use default 3.0462e-4");
+        if (!nh.param<double>("initial_covariance/stereo_extrinsic_translation_cov", stereo_extrinsic_translation_cov, 1e-4))
+            ROS_WARN("Failed to load initial_covariance/stereo_extrinsic_translation_cov param, use default 1e-4");
 
         // 0~3 旋转 3~6 速度 6~9 位移 9~12 陀螺仪偏置 12~15 加速度计偏置
         // 15~18 左目到IMU的旋转 18~21 左目到IMU的平移
@@ -178,7 +192,11 @@ namespace msckf_vio
         // Maximum number of camera states to be stored
         nh.param<int>("max_cam_state_size", max_cam_state_size, 30);
 
-        nh.param<string>("output_file_path", output_file_path, "");
+        nh.param<std::string>("output_file_path", output_file_path, "none");
+        if (!nh.param<bool>("use_gatingTest", use_gatingTest, true))
+            ROS_WARN("Failed to load use_gatingTest param, use default true");
+        if (!nh.param<bool>("path_alignment", path_alignment, false))
+            ROS_WARN("Failed to load path_alignment param, use default false");
 
         // 剩下的都是打印的东西了
         ROS_INFO("===========================================");
@@ -207,7 +225,8 @@ namespace msckf_vio
         ROS_INFO("initial stereo extrinsic rotation cov: %f", stereo_extrinsic_rotation_cov);
         ROS_INFO("initial stereo extrinsic translation cov: %f", stereo_extrinsic_translation_cov);
 
-        ROS_INFO_STREAM("T_imu_cam0:\n" << T_imu_cam0.matrix()); 
+        ROS_INFO_STREAM("T_imu_cam0:\n"
+                        << T_imu_cam0.matrix());
 
         ROS_INFO("max camera state #: %d", max_cam_state_size);
         ROS_INFO("===========================================");
@@ -526,7 +545,7 @@ namespace msckf_vio
             ROS_INFO("Remove lost features time: %f/%f\n",
                      remove_lost_features_time, remove_lost_features_time / processing_time);
             ROS_INFO("Remove camera states time: %f/%f\n",
-                   prune_cam_states_time, prune_cam_states_time / processing_time);
+                     prune_cam_states_time, prune_cam_states_time / processing_time);
             // printf("Publish time: %f/%f\n",
             //     publish_time, publish_time/processing_time);
         }
@@ -768,18 +787,18 @@ namespace msckf_vio
         state_server.robot_state.setv_GI(v);
         state_server.robot_state.setp_GI(p);
 
-/*         Eigen::Matrix3d G0 = Gamma_SO3(gyro * dt, 0);
-        Eigen::Matrix3d G1 = Gamma_SO3(gyro * dt, 1);
-        Eigen::Matrix3d G2 = Gamma_SO3(gyro * dt, 2);
-        Eigen::Matrix3d _R = state_server.robot_state.getR_GI();
-        Eigen::Vector3d _v = state_server.robot_state.getv_GI();
-        Eigen::Vector3d _p = state_server.robot_state.getp_GI();
-        Eigen::Matrix3d R_pred = _R * G0;
-        Eigen::Vector3d v_pred = _v + (_R * G1 * acc + RobotState::gravity) * dt;
-        Eigen::Vector3d p_pred = _p + _v * dt + (_R * G2 * acc + 0.5 * RobotState::gravity) * dt * dt;
-        state_server.robot_state.setR_GI(R_pred);
-        state_server.robot_state.setv_GI(v_pred);
-        state_server.robot_state.setp_GI(p_pred); */
+        /*         Eigen::Matrix3d G0 = Gamma_SO3(gyro * dt, 0);
+                Eigen::Matrix3d G1 = Gamma_SO3(gyro * dt, 1);
+                Eigen::Matrix3d G2 = Gamma_SO3(gyro * dt, 2);
+                Eigen::Matrix3d _R = state_server.robot_state.getR_GI();
+                Eigen::Vector3d _v = state_server.robot_state.getv_GI();
+                Eigen::Vector3d _p = state_server.robot_state.getp_GI();
+                Eigen::Matrix3d R_pred = _R * G0;
+                Eigen::Vector3d v_pred = _v + (_R * G1 * acc + RobotState::gravity) * dt;
+                Eigen::Vector3d p_pred = _p + _v * dt + (_R * G2 * acc + 0.5 * RobotState::gravity) * dt * dt;
+                state_server.robot_state.setR_GI(R_pred);
+                state_server.robot_state.setv_GI(v_pred);
+                state_server.robot_state.setp_GI(p_pred); */
 
         return;
     }
@@ -845,7 +864,7 @@ namespace msckf_vio
         state_server.state_cov.block<6, 6>(old_rows, old_cols) = J * P11 * J.transpose();
 
         /// 5. 进行强制对称
-        MatrixXd state_cov_fixed = 
+        MatrixXd state_cov_fixed =
             0.5 * (state_server.state_cov + state_server.state_cov.transpose());
         state_server.state_cov = state_cov_fixed;
 
@@ -1124,7 +1143,7 @@ namespace msckf_vio
         state_server.state_cov = I_KH * state_server.state_cov;
 
         // Fix the covariance to be symmetric
-        MatrixXd state_cov_fixed = 
+        MatrixXd state_cov_fixed =
             0.5 * (state_server.state_cov + state_server.state_cov.transpose());
         state_server.state_cov = state_cov_fixed;
 
@@ -1289,8 +1308,8 @@ namespace msckf_vio
         // TAG 2
         // Matrix3d R_c0_c1 = state_server.robot_state.R_cam1_cam0.transpose(); // Rc1c0
         // Vector3d p_c1_c0 = state_server.robot_state.t_cam1_cam0;             // pc0c1
-        Matrix3d R_w_c1 = R_c0_c1 * R_w_c0;                                  // Rc1w = Rc1c0 * Rc0w
-        Vector3d p_c1_w = p_c0_w + R_w_c0.transpose() * p_c1_c0;             // pwc1 = pwc0 + Rwc0 * pc0c1
+        Matrix3d R_w_c1 = R_c0_c1 * R_w_c0;                      // Rc1w = Rc1c0 * Rc0w
+        Vector3d p_c1_w = p_c0_w + R_w_c0.transpose() * p_c1_c0; // pwc1 = pwc0 + Rwc0 * pc0c1
 
         // 3. 取出三维点坐标与归一化的坐标点，因为前端发来的是归一化坐标的
         const Vector3d &p_w = feature.position;
@@ -1558,6 +1577,8 @@ namespace msckf_vio
     bool MsckfVio::gatingTest(
         const MatrixXd &H, const VectorXd &r, const int &dof)
     {
+        if (use_gatingTest == false)
+            return true;
         // 输入的dof的值是所有相机观测，且没有去掉滑窗的
         // 而且按照维度这个卡方的维度也不对
         //
@@ -1583,7 +1604,7 @@ namespace msckf_vio
 
     void MsckfVio::onlineReset()
     {
-        
+
         // Never perform online reset if position std threshold
         // is non-positive.
         if (position_std_threshold <= 0)
@@ -1605,7 +1626,7 @@ namespace msckf_vio
                  ++online_reset_counter);
         ROS_INFO("Stardard deviation in xyz: %f, %f, %f",
                  position_x_std, position_y_std, position_z_std);
-        if(online_reset_counter >= 5)
+        if (online_reset_counter >= 5)
             ROS_ERROR("结果严重发散，请终止程序");
 
         // Remove all existing camera states.
@@ -1633,7 +1654,7 @@ namespace msckf_vio
         nh.param<double>("initial_covariance/stereo_extrinsic_rotation_cov",
                          stereo_extrinsic_rotation_cov, 3.0462e-4);
         nh.param<double>("initial_covariance/stereo_extrinsic_translation_cov",
-                         stereo_extrinsic_translation_cov, 1e-4);        
+                         stereo_extrinsic_translation_cov, 1e-4);
 
         // 0~3 旋转 3~6 速度 6~9 位移 9~12 陀螺仪偏置 12~15 加速度计偏置
         // 15~18 左目到IMU的旋转 18~21 左目到IMU的平移
@@ -1735,12 +1756,14 @@ namespace msckf_vio
         vio_flag = true;
         vio_point = Eigen::Vector3d(pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
 
-        assert(output_file_path != "");
-        ofstream out(output_file_path, ios::app);
-        if(out.is_open())
+        if (output_file_path != "none")
         {
-            out << setprecision(18) << odom_msg.header.stamp.toSec() << " " << setprecision(9) << pose.pose.position.x << " " << pose.pose.position.y << " " << pose.pose.position.z
-                << " " << pose.pose.orientation.x << " " << pose.pose.orientation.y << " " << pose.pose.orientation.z << " " << pose.pose.orientation.w << endl;
+            ofstream out(output_file_path, ios::app);
+            if (out.is_open())
+            {
+                out << setprecision(18) << odom_msg.header.stamp.toSec() << " " << setprecision(9) << pose.pose.position.x << " " << pose.pose.position.y << " " << pose.pose.position.z
+                    << " " << pose.pose.orientation.x << " " << pose.pose.orientation.y << " " << pose.pose.orientation.z << " " << pose.pose.orientation.w << endl;
+            }
         }
 
         // 4. 发布点云
@@ -1819,49 +1842,55 @@ namespace msckf_vio
 
     void MsckfVio::alignThreadTask()
     {
-        return;
         while (true)
         {
-            if (vio_flag && ground_truth_flag)
+            if (path_alignment)
             {
-                std::unique_lock<std::mutex> lock(mtx);
-                vio_flag = false;
-                ground_truth_flag = false;
-                path_vio.push_back(vio_point);
-                path_ground_truth.push_back(ground_truth_point);
-                vio_point = Eigen::Vector3d::Zero();
-                ground_truth_point = Eigen::Vector3d::Zero();
-                lock.unlock();
+                if (vio_flag && ground_truth_flag)
+                {
+                    std::unique_lock<std::mutex> lock(mtx);
+                    vio_flag = false;
+                    ground_truth_flag = false;
+                    path_vio.push_back(vio_point);
+                    path_ground_truth.push_back(ground_truth_point);
+                    vio_point = Eigen::Vector3d::Zero();
+                    ground_truth_point = Eigen::Vector3d::Zero();
+                    lock.unlock();
+                }
+                // 数据量足够后，计算转换矩阵
+                if (path_vio.size() > 1000)
+                {
+                    Eigen::MatrixXd P1, P2;
+                    P1 = Eigen::MatrixXd::Ones(4, (int)path_vio.size());
+                    P2 = Eigen::MatrixXd::Ones(4, (int)path_ground_truth.size());
+                    for (int i = 0; i < (int)path_vio.size(); ++i)
+                    {
+                        P1.block<3, 1>(0, i) = path_vio[i];
+                        P2.block<3, 1>(0, i) = path_ground_truth[i];
+                    }
+                    T_WR = P1 * pinv_eigen_based(P2);
+                    // 然后把所有的历史轨迹点都转换一下
+                    for (int i = 0; i < (int)ground_truth_path.poses.size(); ++i)
+                    {
+                        Eigen::Vector4d point_ground_truth(ground_truth_path.poses[i].pose.position.x, ground_truth_path.poses[i].pose.position.y, ground_truth_path.poses[i].pose.position.z, 1);
+                        Eigen::Vector4d point_ground_truth_w = T_WR * point_ground_truth;
+                        ground_truth_path.poses[i].pose.position.x = point_ground_truth_w(0);
+                        ground_truth_path.poses[i].pose.position.y = point_ground_truth_w(1);
+                        ground_truth_path.poses[i].pose.position.z = point_ground_truth_w(2);
+                    }
+                    ROS_INFO("================ align done =================");
+                    // 最后清空储存的轨迹点并结束线程
+                    path_vio.clear();
+                    path_ground_truth.clear();
+                    break;
+                }
+                // 延时一段时间
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
-            // 数据量足够后，计算转换矩阵
-            if (path_vio.size() > 1000)
+            else
             {
-                Eigen::MatrixXd P1, P2;
-                P1 = Eigen::MatrixXd::Ones(4, (int)path_vio.size());
-                P2 = Eigen::MatrixXd::Ones(4, (int)path_ground_truth.size());
-                for (int i = 0; i < (int)path_vio.size(); ++i)
-                {
-                    P1.block<3, 1>(0, i) = path_vio[i];
-                    P2.block<3, 1>(0, i) = path_ground_truth[i];
-                }
-                T_WR = P1 * pinv_eigen_based(P2);
-                // 然后把所有的历史轨迹点都转换一下
-                for (int i = 0; i < (int)ground_truth_path.poses.size(); ++i)
-                {
-                    Eigen::Vector4d point_ground_truth(ground_truth_path.poses[i].pose.position.x, ground_truth_path.poses[i].pose.position.y, ground_truth_path.poses[i].pose.position.z, 1);
-                    Eigen::Vector4d point_ground_truth_w = T_WR * point_ground_truth;
-                    ground_truth_path.poses[i].pose.position.x = point_ground_truth_w(0);
-                    ground_truth_path.poses[i].pose.position.y = point_ground_truth_w(1);
-                    ground_truth_path.poses[i].pose.position.z = point_ground_truth_w(2);
-                }
-                ROS_INFO("================ align done =================");
-                // 最后清空储存的轨迹点并结束线程
-                path_vio.clear();
-                path_ground_truth.clear();
-                break;
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
-            // 延时一段时间
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
     }
 } // namespace msckf_vio
