@@ -378,6 +378,8 @@ namespace msckf_vio
             gravity_imu, -RobotState::gravity);
         // 得出姿态
         state_server.robot_state.setR_GI(q0_i_w.toRotationMatrix());
+        ROS_INFO_STREAM("Init Rotation R_GI: \n"
+                        << q0_i_w.toRotationMatrix());
 
         return;
     }
