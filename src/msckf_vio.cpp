@@ -279,9 +279,9 @@ namespace msckf_vio
         state_server.continuous_noise_cov.block<3, 3>(0, 0) =
             Matrix3d::Identity() * RobotState::gyro_noise;
         state_server.continuous_noise_cov.block<3, 3>(3, 3) =
-            Matrix3d::Identity() * RobotState::gyro_bias_noise;
-        state_server.continuous_noise_cov.block<3, 3>(6, 6) =
             Matrix3d::Identity() * RobotState::acc_noise;
+        state_server.continuous_noise_cov.block<3, 3>(6, 6) =
+            Matrix3d::Identity() * RobotState::gyro_bias_noise;
         state_server.continuous_noise_cov.block<3, 3>(9, 9) =
             Matrix3d::Identity() * RobotState::acc_bias_noise;
 
