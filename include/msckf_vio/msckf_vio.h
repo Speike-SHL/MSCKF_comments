@@ -17,6 +17,8 @@
 #include <boost/shared_ptr.hpp>
 #include "sophus/se3.hpp"
 #include <iomanip>
+#include <iterator>
+#include "yaml-cpp/yaml.h"
 
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
@@ -32,8 +34,12 @@
 
 #include "imu_state.h"
 #include "cam_state.h"
+#include "leg_state.hpp"
 #include "feature.hpp"
 #include <msckf_vio/CameraMeasurement.h>
+#include "MPC_Dynamic/isTouchdown.h"
+#include "motor_control/qNow_dqNow_TNow.h"
+#include "RosToStm32/wheel_motor_fb.h"
 
 namespace msckf_vio
 {
@@ -79,10 +85,26 @@ private:
         RobotState robot_state;
         /// 状态量中相机相关的状态，是一个map容器，key为相机帧id, 值为CAMState
         CamStateServer cam_states;
+        /// 状态量中腿相关的状态
+        LegState leg_state;
         /// 所有状态的误差协方差矩阵P
         Eigen::MatrixXd state_cov;
         /// 噪声协方差矩阵
-        Eigen::Matrix<double, 12, 12> continuous_noise_cov;
+        Eigen::Matrix<double, 12, 12> continuous_noise_cov; /// DISCARD
+        /// IMU gyro noise cov
+        Eigen::Matrix3d Qg;
+        /// IMU acc noise cov
+        Eigen::Matrix3d Qa;
+        /// IMU gyro bias noise cov
+        Eigen::Matrix3d Qbg;
+        /// IMU acc bias noise cov
+        Eigen::Matrix3d Qba;
+        /// IMU contact noise cov
+        Eigen::Matrix3d Qc;
+        /// Encoder noise cov
+        Eigen::Matrix3d Qe;
+        /// kinematic additive noise cov
+        Eigen::Matrix3d Qkinematic_additive;
     };
 
     /*
@@ -182,6 +204,8 @@ private:
 
     /// 判断是否是第一帧图像，后端在接收到第一帧图像后才开始工作
     bool is_first_img;
+    /// 判断是否是第一帧腿的数据，后端腿部分在接收到第一帧数据后开始工作
+    bool is_first_leg;
 
     // The position uncertainty threshold is used to determine
     // when to reset the system online. Otherwise, the ever-
@@ -214,6 +238,23 @@ private:
     ros::Publisher ground_truth_odom_pub; // 用于显示真实姿态
     ros::Publisher vio_path_pub;  // VIO估计的轨迹
 
+    // leg Subscriber
+    ros::Subscriber isTouchdown_sub;
+    ros::Subscriber qNow_dqNow_TNow_sub;
+    ros::Subscriber wheelMotor_fb_sub;
+    std::vector<MPC_Dynamic::isTouchdown> isTouchdown_buffer;
+    std::vector<motor_control::qNow_dqNow_TNow> qNow_dqNow_TNow_buffer;
+    std::vector<RosToStm32::wheel_motor_fb> wheelMotor_fb_buffer;
+    void isTouchdownCallback(const MPC_Dynamic::isTouchdown::ConstPtr &isTouchdown);
+    void qNow_dqNow_TNowCallback(const motor_control::qNow_dqNow_TNow::ConstPtr &qNow_dqNow_TNow);
+    void wheelMotor_fbCallback(const RosToStm32::wheel_motor_fb::ConstPtr &wheelMotor_fb);
+
+    void InEKF_Propagate(const double &time, const Eigen::Vector3d &m_gyro, const Eigen::Vector3d &m_acc);
+    void InEKF_Correct(const Eigen::MatrixXd &Z, const Eigen::MatrixXd &H, const Eigen::MatrixXd &N);
+    Eigen::MatrixXd StateTransitionMatrix(const Eigen::Vector3d &w, const Eigen::Vector3d &a, double dt);
+    Eigen::MatrixXd DiscreteNoiseMatrix(const Eigen::MatrixXd &Phi, const double dt);
+    void RemoveRowAndColumn(Eigen::MatrixXd &M, int index, int remove_dim);
+
     nav_msgs::Path ground_truth_path;
     nav_msgs::Path vio_path;
     void leicaCallback(const geometry_msgs::PointStampedConstPtr &msg);
@@ -242,15 +283,7 @@ private:
     // only used to determine the timing threshold of
     // each iteration of the filter.
     double frame_rate;
-
-    // Debugging variables and functions
-    void mocapOdomCallback(const nav_msgs::OdometryConstPtr &msg);
-
-    ros::Subscriber mocap_odom_sub;
-    ros::Publisher mocap_odom_pub;
-    geometry_msgs::TransformStamped raw_mocap_odom_msg;
-    Eigen::Isometry3d mocap_initial_frame;
-};
+    };
 
 typedef MsckfVio::Ptr MsckfVioPtr;
 typedef MsckfVio::ConstPtr MsckfVioConstPtr;

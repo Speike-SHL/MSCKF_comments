@@ -1,12 +1,13 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.14)
 project(msckf_vio CXX)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_BUILD_TYPE "Release")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -O2 -Wall -Wextra")
 
 # Modify cmake module path if new .cmake files are required
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake")
@@ -37,6 +38,12 @@ find_package(Eigen3 REQUIRED)
 find_package(Sophus REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(SuiteSparse REQUIRED)
+# find_package(yaml-cpp REQUIRED)
+set(YAML_CPP_INCLUDE_DIR /usr/local/include/yaml-cpp)
+message("Yaml-cpp include dir: ${YAML_CPP_INCLUDE_DIR}")
+message("Eigen3 include dir: ${EIGEN3_INCLUDE_DIR}")
+message("OpenCV include dir: ${OpenCV_INCLUDE_DIRS}")
+message("SuiteSparse include dir: ${SUITESPARSE_INCLUDE_DIRS}")
 
 ##################
 ## ROS messages ##
@@ -71,6 +78,7 @@ catkin_package(
 ###########
 ## Build ##
 ###########
+link_directories(/usr/local/lib)
 
 include_directories(
   include
@@ -79,12 +87,14 @@ include_directories(
   ${Boost_INCLUDE_DIR}
   ${OpenCV_INCLUDE_DIRS}
   ${SUITESPARSE_INCLUDE_DIRS}
+  ${YAML_CPP_INCLUDE_DIR}
 )
 
 # Msckf Vio
 add_library(msckf_vio
   src/msckf_vio.cpp
   src/utils.cpp
+  src/modern_robotics.cpp
 )
 add_dependencies(msckf_vio
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
@@ -93,6 +103,7 @@ add_dependencies(msckf_vio
 target_link_libraries(msckf_vio
   ${catkin_LIBRARIES}
   ${SUITESPARSE_LIBRARIES}
+  yaml-cpp
 )
 
 # Msckf Vio nodelet
@@ -134,6 +145,9 @@ target_link_libraries(image_processor_nodelet
   image_processor
   ${catkin_LIBRARIES}
 )
+
+add_executable(testeigen src/testeigen.cpp src/modern_robotics.cpp)
+target_link_libraries(testeigen ${catkin_LIBRARIES})
 
 #############
 ## Install ##

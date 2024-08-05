@@ -12,6 +12,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+#include "leg_state.hpp"
 
 #define GRAVITY_ACCELERATION 9.81
 
@@ -23,6 +24,7 @@ namespace msckf_vio
  */
 struct RobotState
 {
+public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     typedef long long int StateIDType;
 
@@ -39,32 +41,38 @@ struct RobotState
     Eigen::VectorXd X_frak; /// 储存Bias
     double X_td;            /// 时间延迟
 
-    const Eigen::Matrix3d getR_GI() const { return X_i.block<3, 3>(0, 0); }
-    const Eigen::Vector3d getv_GI() const { return X_i.block<3, 1>(0, 3); }
-    const Eigen::Vector3d getp_GI() const { return X_i.block<3, 1>(0, 4); }
-    const Eigen::Vector3d getd_GI(int legid) const
+    Eigen::MatrixXd getX_i() const { return X_i; }
+    Eigen::Matrix3d getR_GI() const { return X_i.block<3, 3>(0, 0); }
+    Eigen::Vector3d getv_GI() const { return X_i.block<3, 1>(0, 3); }
+    Eigen::Vector3d getp_GI() const { return X_i.block<3, 1>(0, 4); }
+    Eigen::Vector3d getd_GI(int index) const
     {
         // 分配的腿id, 从0开始, 因为会动态增删, 所以不会把id绑定到某个腿上
-        assert(dimX_i() - 5 > legid);
-        return X_i.block<3, 1>(0, 5 + legid);
+        assert(index >= 5);
+        assert(dimX_i() - index > 0);
+        return X_i.block<3, 1>(0, index);
     }
-    const Eigen::Vector3d getbg() const { return X_frak.head(3); }
-    const Eigen::Vector3d getba() const { return X_frak.tail(3); }
+    Eigen::VectorXd getX_frak() const { return X_frak; }
+    Eigen::Vector3d getbg() const { return X_frak.head(3); }
+    Eigen::Vector3d getba() const { return X_frak.tail(3); }
 
+    void setX_i(const Eigen::MatrixXd &X_i_) { X_i = X_i_; }
     void setR_GI(const Eigen::Matrix3d &R_GI) { X_i.block<3, 3>(0, 0) = R_GI; }
     void setv_GI(const Eigen::Vector3d &v_GI) { X_i.block<3, 1>(0, 3) = v_GI; }
     void setp_GI(const Eigen::Vector3d &p_GI) { X_i.block<3, 1>(0, 4) = p_GI; }
-    void setd_GI(const Eigen::Vector3d &d_GI, int legid)
+    void setd_GI(const Eigen::Vector3d &d_GI, int index)
     {
-        assert(dimX_i() - 5 > legid);
-        X_i.block<3, 1>(0, 5 + legid) = d_GI;
+        assert(index >= 5);
+        assert(dimX_i() - 5 > 0);
+        X_i.block<3, 1>(0, index) = d_GI;
     }
+    void setX_frak(const Eigen::VectorXd &X_frak_) { X_frak = X_frak_; }
     void setbg(const Eigen::Vector3d &bg) { X_frak.head(3) = bg; }
     void setba(const Eigen::Vector3d &ba) { X_frak.tail(3) = ba; }
 
-    const int dimX_i() const { return X_i.cols(); }
-    const int dimX_frak() const { return X_frak.rows(); }
-    const int dimP_i() const { return (X_i.cols() - 2) * 3 + 6 + 1; }
+    int dimX_i() const { return X_i.cols(); }
+    int dimX_frak() const { return X_frak.rows(); }
+    int dimP_i() const { return (X_i.cols() - 2) * 3 + 6; }   // NOTE: 加td的话要+1
 
     /// 左相机坐标系到IMU坐标系的旋转矩阵，外参
     Eigen::Matrix3d R_cam0_imu;
@@ -76,33 +84,28 @@ struct RobotState
     Eigen::Matrix3d R_cam1_cam0;
     Eigen::Vector3d t_cam1_cam0;
 
-    /// 用于可观性约束，可观性矩阵的零空间，实际为存储上次预测时的姿态
-    Eigen::Vector4d orientation_null;
-    /// 用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的位置
-    Eigen::Vector3d position_null;
-    /// 用于可观性约束，可观性矩阵的零空间，实际为储存上次预测时的速度
-    Eigen::Vector3d velocity_null;
-
     static double gyro_noise;
     static double acc_noise;
     static double gyro_bias_noise;
     static double acc_bias_noise;
     static double td_noise;
     static double contact_noise;
+    static double encoder_noise;
+    static double kinematics_additive_noise;
 
     static Eigen::Vector3d gravity;
     
     /// IMU到机身坐标系的变换矩阵，安装误差，一般为单位矩阵
     static Eigen::Isometry3d T_imu_body;
 
+    /// 记录已经加入状态估计的腿的ID和在X_i中的索引
+    std::map<LegID, int>  estimated_contact_position;
+
     RobotState() 
         : id(0), time(0),
         X_i(Eigen::MatrixXd::Identity(5, 5)),
         X_frak(Eigen::VectorXd::Zero(6)),
-        X_td(0.0),
-        orientation_null(Eigen::Vector4d(0, 0, 0, 1)),
-        position_null(Eigen::Vector3d::Zero()),
-        velocity_null(Eigen::Vector3d::Zero()) 
+        X_td(0.0)
         {
             setR_GI(Eigen::Matrix3d::Identity());
             setv_GI(Eigen::Vector3d::Zero());
@@ -115,10 +118,7 @@ struct RobotState
         : id(new_id), time(0),
         X_i(Eigen::MatrixXd::Identity(5, 5)),
         X_frak(Eigen::VectorXd::Zero(6)),
-        X_td(0.0),
-        orientation_null(Eigen::Vector4d(0, 0, 0, 1)),
-        position_null(Eigen::Vector3d::Zero()),
-        velocity_null(Eigen::Vector3d::Zero()) 
+        X_td(0.0)
         {
             setR_GI(Eigen::Matrix3d::Identity());
             setv_GI(Eigen::Vector3d::Zero());

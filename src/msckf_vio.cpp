@@ -12,9 +12,10 @@
 #include <iterator>
 #include <algorithm>
 
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include <Eigen/SVD>
 #include <Eigen/QR>
-#include <Eigen/SparseCore>
 #include <Eigen/SPQRSupport>
 #include <boost/math/distributions/chi_squared.hpp>
 
@@ -35,10 +36,13 @@ namespace msckf_vio
 {
     // Static member variables in RobotState class.
     StateIDType RobotState::next_id = 0;
-    double RobotState::gyro_noise = 0.001;
-    double RobotState::acc_noise = 0.01;
+    double RobotState::gyro_noise = 0.005;
+    double RobotState::acc_noise = 0.05;
     double RobotState::gyro_bias_noise = 0.001;
     double RobotState::acc_bias_noise = 0.01;
+    double RobotState::encoder_noise = 0.0174533;
+    double RobotState::contact_noise = 0.1;
+    double RobotState::kinematics_additive_noise = 0.05;
     Vector3d RobotState::gravity = Vector3d(0, 0, -GRAVITY_ACCELERATION);
     Isometry3d RobotState::T_imu_body = Isometry3d::Identity();
 
@@ -52,9 +56,12 @@ namespace msckf_vio
 
     map<int, double> MsckfVio::chi_squared_test_table;
 
+    std::string msckf_vio_config_file = "none";
     std::string output_file_path = "none";
     bool use_gatingTest = true;
     bool path_alignment = false;
+    bool merge_visual = true;
+    bool merge_leg = false;
 
     /**
      * @brief MsckfVio构造函数
@@ -62,7 +69,7 @@ namespace msckf_vio
      * @param is_gravity_set False 设置未初始化重力
      * @param is_first_img True 设置是第一帧图像
      */
-    MsckfVio::MsckfVio(ros::NodeHandle &pnh) : is_gravity_set(false), is_first_img(true), nh(pnh)
+    MsckfVio::MsckfVio(ros::NodeHandle &pnh) : is_gravity_set(false), is_first_img(true), is_first_leg(true), nh(pnh)
     {
         align_thread = std::thread(&MsckfVio::alignThreadTask, this);
         return;
@@ -94,38 +101,79 @@ namespace msckf_vio
             "feature/config/translation_threshold",
             Feature::optimization_config.translation_threshold, 0.2);
 
-        // Noise related parameters
-        // imu参数
-        if (!nh.param<double>("noise/gyro", RobotState::gyro_noise, 0.001))
-            ROS_WARN("Failed to load noise/gyro param, use default 0.001");
-        if (!nh.param<double>("noise/acc", RobotState::acc_noise, 0.01))
-            ROS_WARN("Failed to load noise/acc param, use default 0.01");
-        if (!nh.param<double>("noise/gyro_bias", RobotState::gyro_bias_noise, 0.001))
-            ROS_WARN("Failed to load noise/gyro_bias param, use default 0.001");
-        if (!nh.param<double>("noise/acc_bias", RobotState::acc_bias_noise, 0.01))
-            ROS_WARN("Failed to load noise/acc_bias param, use default 0.01");
-        // 特征的噪声
-        if (!nh.param<double>("noise/feature", Feature::observation_noise, 0.01))
-            ROS_WARN("Failed to load noise/feature param, use default 0.01");
+        // 读取配置文件
+        nh.param<std::string>("msckf_vio_config_file", msckf_vio_config_file, "config/default.yaml");
+        ROS_INFO("Start loading parameters from %s", msckf_vio_config_file.c_str());
+        YAML::Node config;
+        try
+        {
+            config = YAML::LoadFile(msckf_vio_config_file);
+        }
+        catch (YAML::BadFile &e)
+        {
+            ROS_ERROR("Failed to open the config file: %s", msckf_vio_config_file.c_str());
+        }
+        if (config.IsNull())
+            ROS_ERROR("config file is empty");
 
-        // Use variance instead of standard deviation.
+        // 噪声参数
+        RobotState::gyro_noise = config["noises"]["IMU"]["gyroscope_std"]
+                                     ? config["noises"]["IMU"]["gyroscope_std"].as<double>()
+                                     : 0.005;
+        RobotState::acc_noise = config["noises"]["IMU"]["accelerometer_std"]
+                                    ? config["noises"]["IMU"]["accelerometer_std"].as<double>()
+                                    : 0.05;
+        RobotState::gyro_bias_noise = config["noises"]["IMU"]["gyroscope_bias_std"]
+                                          ? config["noises"]["IMU"]["gyroscope_bias_std"].as<double>()
+                                          : 0.001;
+        RobotState::acc_bias_noise = config["noises"]["IMU"]["accelerometer_bias_std"]
+                                         ? config["noises"]["IMU"]["accelerometer_bias_std"].as<double>()
+                                         : 0.01;
+        Feature::observation_noise = config["noises"]["Image"]["feature_std"]
+                                         ? config["noises"]["Image"]["feature_std"].as<double>()
+                                         : 0.035;
+        RobotState::encoder_noise = config["noises"]["Leg"]["encoder_std"]
+                                        ? config["noises"]["Leg"]["encoder_std"].as<double>()
+                                        : 0.0174533;
+        RobotState::contact_noise = config["noises"]["Leg"]["contact_std"]
+                                        ? config["noises"]["Leg"]["contact_std"].as<double>()
+                                        : 0.1;
+        RobotState::kinematics_additive_noise = config["noises"]["Leg"]["kinematics_additive_std"]
+                                                    ? config["noises"]["Leg"]["kinematics_additive_std"].as<double>()
+                                                    : 0.05;
+        ROS_INFO_STREAM("==================== noise param ====================");
+        ROS_INFO_STREAM("gyro_noise std: " << RobotState::gyro_noise);
+        ROS_INFO_STREAM("acc_noise std: " << RobotState::acc_noise);
+        ROS_INFO_STREAM("gyro_bias_noise std: " << RobotState::gyro_bias_noise);
+        ROS_INFO_STREAM("acc_bias_noise std: " << RobotState::acc_bias_noise);
+        ROS_INFO_STREAM("observation_noise std: " << Feature::observation_noise);
+        ROS_INFO_STREAM("encoder_noise std: " << RobotState::encoder_noise);
+        ROS_INFO_STREAM("contact_noise std: " << RobotState::contact_noise);
+        ROS_INFO_STREAM("kinematics_additive_noise std: " << RobotState::kinematics_additive_noise);
         // 方差
         RobotState::gyro_noise *= RobotState::gyro_noise;
         RobotState::acc_noise *= RobotState::acc_noise;
         RobotState::gyro_bias_noise *= RobotState::gyro_bias_noise;
         RobotState::acc_bias_noise *= RobotState::acc_bias_noise;
         Feature::observation_noise *= Feature::observation_noise;
+        RobotState::encoder_noise *= RobotState::encoder_noise;
+        RobotState::contact_noise *= RobotState::contact_noise;
+        RobotState::kinematics_additive_noise *= RobotState::kinematics_additive_noise;
 
-        // Set the initial IMU state.
-        // The intial orientation and position will be set to the origin
-        // implicitly. But the initial velocity and bias can be
-        // set by parameters.
-        // 设置初始化速度为0，那必须一开始处于静止了，也符合msckf的静态初始化了
-        Eigen::Vector3d initial_velocity;
-        nh.param<double>("initial_state/velocity/x", initial_velocity(0), 0.0);
-        nh.param<double>("initial_state/velocity/y", initial_velocity(1), 0.0);
-        nh.param<double>("initial_state/velocity/z", initial_velocity(2), 0.0);
+        // 读取初始状态
+        const std::vector<double> init_velocity = config["init"]["velocity"]
+                                                      ? config["init"]["velocity"].as<std::vector<double>>()
+                                                      : std::vector<double>{0.0, 0.0, 0.0};
+        Eigen::Vector3d initial_velocity(init_velocity.data());
         state_server.robot_state.setv_GI(initial_velocity);
+        const std::vector<double> init_position = config["init"]["position"]
+                                                      ? config["init"]["position"].as<std::vector<double>>()
+                                                      : std::vector<double>{0.0, 0.0, 0.0};
+        Eigen::Vector3d initial_position(init_position.data());
+        state_server.robot_state.setp_GI(initial_position);
+        ROS_INFO_STREAM("==================== init param ====================");
+        ROS_INFO_STREAM("initial velocity: " << initial_velocity.transpose());
+        ROS_INFO_STREAM("initial position: " << initial_position.transpose());
 
         // The initial covariance of orientation and position can be
         // set to 0. But for velocity, bias and extrinsic parameters,
@@ -192,11 +240,28 @@ namespace msckf_vio
         // Maximum number of camera states to be stored
         nh.param<int>("max_cam_state_size", max_cam_state_size, 30);
 
-        nh.param<std::string>("output_file_path", output_file_path, "none");
-        if (!nh.param<bool>("use_gatingTest", use_gatingTest, true))
-            ROS_WARN("Failed to load use_gatingTest param, use default true");
-        if (!nh.param<bool>("path_alignment", path_alignment, false))
-            ROS_WARN("Failed to load path_alignment param, use default false");
+        // 自己的一些设置
+        merge_visual = config["settings"]["merge_visual"]
+                           ? config["settings"]["merge_visual"].as<bool>()
+                           : true;
+        merge_leg = config["settings"]["merge_leg"]
+                        ? config["settings"]["merge_leg"].as<bool>()
+                        : false;
+        use_gatingTest = config["settings"]["use_gatingTest"]
+                             ? config["settings"]["use_gatingTest"].as<bool>()
+                             : true;
+        path_alignment = config["settings"]["path_alignment"]
+                             ? config["settings"]["path_alignment"].as<bool>()
+                             : false;
+        output_file_path = config["settings"]["output_file_path"]
+                               ? config["settings"]["output_file_path"].as<std::string>()
+                               : "none";
+        ROS_INFO_STREAM("==================== settings param ====================");
+        ROS_INFO_STREAM("merge_visual: " << merge_visual);
+        ROS_INFO_STREAM("merge_leg: " << merge_leg);
+        ROS_INFO_STREAM("use_gatingTest: " << use_gatingTest);
+        ROS_INFO_STREAM("path_alignment: " << path_alignment);
+        ROS_INFO_STREAM("output_file_path: " << output_file_path);
 
         // 剩下的都是打印的东西了
         ROS_INFO("===========================================");
@@ -208,15 +273,6 @@ namespace msckf_vio
         ROS_INFO("Keyframe rotation threshold: %f", rotation_threshold);
         ROS_INFO("Keyframe translation threshold: %f", translation_threshold);
         ROS_INFO("Keyframe tracking rate threshold: %f", tracking_rate_threshold);
-        ROS_INFO("gyro noise: %.10f", RobotState::gyro_noise);
-        ROS_INFO("gyro bias noise: %.10f", RobotState::gyro_bias_noise);
-        ROS_INFO("acc noise: %.10f", RobotState::acc_noise);
-        ROS_INFO("acc bias noise: %.10f", RobotState::acc_bias_noise);
-        ROS_INFO("observation noise: %.10f", Feature::observation_noise);
-        ROS_INFO("initial velocity: %f, %f, %f",
-                 initial_velocity(0),
-                 initial_velocity(1),
-                 initial_velocity(2));
         ROS_INFO("initial gyro bias cov: %f", gyro_bias_cov);
         ROS_INFO("initial acc bias cov: %f", acc_bias_cov);
         ROS_INFO("initial velocity cov: %f", velocity_cov);
@@ -248,11 +304,6 @@ namespace msckf_vio
         /// 5. 接收 "features", 前端特征点数据。 @see MsckfVio::featureCallback(const CameraMeasurementConstPtr &msg)
         feature_sub = nh.subscribe("features", 40, &MsckfVio::featureCallback, this);
 
-        /// 6. 接收 "mocap_odom"，真值数据，未用到
-        mocap_odom_sub = nh.subscribe("mocap_odom", 10, &MsckfVio::mocapOdomCallback, this);
-        /// 7. 发布 "gt_odom"，发布由mocap_odom 算出的真实位姿，未用到
-        mocap_odom_pub = nh.advertise<nav_msgs::Odometry>("gt_odom", 1);
-
         /// 8. 接收 "/leica/position"， 即Euroc MH-* 数据集中的3D真实位置
         leica_sub = nh.subscribe("/leica/position", 10, &MsckfVio::leicaCallback, this);
         /// 9. 接收 "/vicon/firefly_sbx/firefly_sbx"， 即Euroc VH-* 数据集中的6D真实位姿
@@ -263,6 +314,11 @@ namespace msckf_vio
         ground_truth_odom_pub = nh.advertise<nav_msgs::Odometry>("ground_truth_odom", 10);
         /// 12. 发布 "vio_path"，VIO估计的轨迹
         vio_path_pub = nh.advertise<nav_msgs::Path>("vio_path", 1);
+
+        // 腿相关
+        isTouchdown_sub = nh.subscribe("/isTouchdown", 100, &MsckfVio::isTouchdownCallback, this);
+        qNow_dqNow_TNow_sub = nh.subscribe("/qNow_dqNow_TNow", 100, &MsckfVio::qNow_dqNow_TNowCallback, this);
+        wheelMotor_fb_sub = nh.subscribe("/wheelMotor_fb", 100, &MsckfVio::wheelMotor_fbCallback, this);
         return true;
     }
 
@@ -273,7 +329,7 @@ namespace msckf_vio
             return false;
         ROS_INFO("Finish loading ROS parameters...");
 
-        /// 2. 设置imu观测的协方差
+        /// 2. 设置imu观测的协方差  // DISCARD
         state_server.continuous_noise_cov =
             Matrix<double, 12, 12>::Zero();
         state_server.continuous_noise_cov.block<3, 3>(0, 0) =
@@ -284,6 +340,15 @@ namespace msckf_vio
             Matrix3d::Identity() * RobotState::gyro_bias_noise;
         state_server.continuous_noise_cov.block<3, 3>(9, 9) =
             Matrix3d::Identity() * RobotState::acc_bias_noise;
+
+        /// 2. 设置各个噪声协方差
+        state_server.Qg = Matrix3d::Identity() * RobotState::gyro_noise;
+        state_server.Qa = Matrix3d::Identity() * RobotState::acc_noise;
+        state_server.Qbg = Matrix3d::Identity() * RobotState::gyro_bias_noise;
+        state_server.Qba = Matrix3d::Identity() * RobotState::acc_bias_noise;
+        state_server.Qc = Matrix3d::Identity() * RobotState::contact_noise;
+        state_server.Qe = Matrix3d::Identity() * RobotState::encoder_noise;
+        state_server.Qkinematic_additive = Matrix3d::Identity() * RobotState::kinematics_additive_noise;
 
         // 卡方检验表，计算自由度从1到99的卡方分布的95％置信水平的分位数
         // Initialize the chi squared test table with confidence level 0.95.
@@ -315,7 +380,8 @@ namespace msckf_vio
         // 1. 存放imu数据
         imu_msg_buffer.push_back(*msg);
 
-        // 2. 用200个imu数据做静止初始化，不够则不做
+        // 2. 用200个imu数据做静止初始化，不够则不做，初始化后数据并没删，
+        // 接收到第一帧图片后会进行了删除
         if (!is_gravity_set)
         {
             if (imu_msg_buffer.size() < 200)
@@ -337,6 +403,7 @@ namespace msckf_vio
      */
     void MsckfVio::initializeGravityAndBias()
     {
+        // TODO: 加上ba的静止初始化，drift中ImuPropagation::InitImuBias
         // Initialize gravity and gyro bias.
         // 1. 求角速度与加速度的和
         Vector3d sum_angular_vel = Vector3d::Zero();
@@ -406,9 +473,6 @@ namespace msckf_vio
         robot_state.setv_GI(Vector3d::Zero());
         robot_state.setbg(Vector3d::Zero());
         robot_state.setba(Vector3d::Zero());
-        robot_state.orientation_null = Vector4d(0.0, 0.0, 0.0, 1.0);
-        robot_state.position_null = Vector3d::Zero();
-        robot_state.velocity_null = Vector3d::Zero();
 
         // Remove all existing camera states.
         state_server.cam_states.clear();
@@ -455,6 +519,7 @@ namespace msckf_vio
         // Reset the starting flags.
         is_gravity_set = false;
         is_first_img = true;
+        is_first_leg = true;
 
         // Restart the subscribers.
         imu_sub = nh.subscribe("imu", 100, &MsckfVio::imuCallback, this);
@@ -471,10 +536,13 @@ namespace msckf_vio
      */
     void MsckfVio::featureCallback(const CameraMeasurementConstPtr &msg)
     {
+        Eigen::MatrixXd tmp = Eigen::MatrixXd::Random(8, 8);
+        state_server.robot_state.setX_i(tmp);
+        ROS_INFO_THROTTLE(1, "featureCallback");
         /// 1. 必须经过imu(重力)初始化才能继续进行
         if (!is_gravity_set)
         {
-            ROS_WARN_THROTTLE(1, "Wait for the IMU initialization!");
+            ROS_WARN_THROTTLE(1, "Feature Callback: Waiting for the IMU initialization!");
             return;
         }
 
@@ -556,78 +624,6 @@ namespace msckf_vio
     }
 
     /**
-     * @brief 没用，暂时不看
-     */
-    void MsckfVio::mocapOdomCallback(
-        const nav_msgs::OdometryConstPtr &msg)
-    {
-        static bool first_mocap_odom_msg = true;
-
-        // If this is the first mocap odometry messsage, set
-        // the initial frame.
-        if (first_mocap_odom_msg)
-        {
-            Quaterniond orientation;
-            Vector3d translation;
-            tf::pointMsgToEigen(
-                msg->pose.pose.position, translation);
-            tf::quaternionMsgToEigen(
-                msg->pose.pose.orientation, orientation);
-            // tf::vectorMsgToEigen(
-            //     msg->transform.translation, translation);
-            // tf::quaternionMsgToEigen(
-            //     msg->transform.rotation, orientation);
-            mocap_initial_frame.linear() = orientation.toRotationMatrix();
-            mocap_initial_frame.translation() = translation;
-            first_mocap_odom_msg = false;
-        }
-
-        // Transform the ground truth.
-        Quaterniond orientation;
-        Vector3d translation;
-        // tf::vectorMsgToEigen(
-        //     msg->transform.translation, translation);
-        // tf::quaternionMsgToEigen(
-        //     msg->transform.rotation, orientation);
-        tf::pointMsgToEigen(
-            msg->pose.pose.position, translation);
-        tf::quaternionMsgToEigen(
-            msg->pose.pose.orientation, orientation);
-
-        Eigen::Isometry3d T_b_v_gt;
-        T_b_v_gt.linear() = orientation.toRotationMatrix();
-        T_b_v_gt.translation() = translation;
-        Eigen::Isometry3d T_b_w_gt = mocap_initial_frame.inverse() * T_b_v_gt;
-
-        // Eigen::Vector3d body_velocity_gt;
-        // tf::vectorMsgToEigen(msg->twist.twist.linear, body_velocity_gt);
-        // body_velocity_gt = mocap_initial_frame.linear().transpose() *
-        //   body_velocity_gt;
-
-        // Ground truth tf.
-        if (publish_tf)
-        {
-            tf::Transform T_b_w_gt_tf;
-            tf::transformEigenToTF(T_b_w_gt, T_b_w_gt_tf);
-            tf_pub.sendTransform(tf::StampedTransform(
-                T_b_w_gt_tf, msg->header.stamp, fixed_frame_id, child_frame_id + "_mocap"));
-        }
-
-        // Ground truth odometry.
-        nav_msgs::Odometry mocap_odom_msg;
-        mocap_odom_msg.header.stamp = msg->header.stamp;
-        mocap_odom_msg.header.frame_id = fixed_frame_id;
-        mocap_odom_msg.child_frame_id = child_frame_id + "_mocap";
-
-        tf::poseEigenToMsg(T_b_w_gt, mocap_odom_msg.pose.pose);
-        // tf::vectorEigenToMsg(body_velocity_gt,
-        //     mocap_odom_msg.twist.twist.linear);
-
-        mocap_odom_pub.publish(mocap_odom_msg);
-        return;
-    }
-
-    /**
      * @brief imu积分，批量处理imu数据
      * @param  time_bound 从state_server.robot_state.time上次处理到这个时间
      */
@@ -692,48 +688,61 @@ namespace msckf_vio
         Matrix3d R = robot_state.getR_GI();
         Vector3d v = robot_state.getv_GI();
         Vector3d p = robot_state.getp_GI();
+        MatrixXd X_i = robot_state.getX_i();
+        int dimP_i = robot_state.dimP_i();
+        int dimX_i = robot_state.dimX_i();
+        int dimX_frak = robot_state.dimX_frak();
 
-        Matrix<double, 27, 27> F = Matrix<double, 27, 27>::Zero();
-        Matrix<double, 27, 12> G = Matrix<double, 27, 12>::Zero();
+        MatrixXd F = MatrixXd::Zero(dimP_i + 12, dimP_i + 12); // IMU+腿+bias  + 4个外参
+        MatrixXd G = MatrixXd::Zero(dimP_i + 12, dimP_i - 3);  // 减去 p 所在列 和 4个外参
 
-        F.block<3, 3>(0, 9) = -R;
         F.block<3, 3>(3, 0) = skewSymmetric(RobotState::gravity);
-        F.block<3, 3>(3, 9) = -skewSymmetric(v) * R;
-        F.block<3, 3>(3, 12) = -R;
         F.block<3, 3>(6, 3) = Matrix3d::Identity();
-        F.block<3, 3>(6, 9) = -skewSymmetric(p) * R;
+        F.block<3, 3>(0, dimP_i - dimX_frak) = -R;
+        F.block<3, 3>(3, dimP_i - dimX_frak + 3) = -R;
+        for (int i = 3; i < dimX_i; ++i)
+        {
+            F.block<3, 3>(3 * i - 6, dimP_i - dimX_frak) = -skewSymmetric(X_i.block<3, 1>(0, i)) * R;
+        }
 
-        G.block<3, 3>(0, 0) = R;
-        G.block<3, 3>(3, 0) = skewSymmetric(v) * R;
-        G.block<3, 3>(3, 3) = R;
-        G.block<3, 3>(6, 0) = skewSymmetric(p) * R;
-        G.block<3, 3>(9, 6) = Matrix3d::Identity();
-        G.block<3, 3>(12, 9) = Matrix3d::Identity();
+        MatrixXd Adj = Adjoint_SEK3(X_i);
+        G.block(0, 0, dimP_i - dimX_frak, 6) = Adj.block(0, 0, dimP_i - dimX_frak, 6);
+        G.block(0, 6, dimP_i - dimX_frak, dimP_i - dimX_frak - 9) = Adj.block(0, 9, dimP_i - dimX_frak, dimP_i - dimX_frak - 9);
+        G.block<3, 3>(dimP_i - dimX_frak, dimP_i - dimX_frak - 3) = Matrix3d::Identity();
+        G.block<3, 3>(dimP_i - dimX_frak + 3, dimP_i - dimX_frak) = Matrix3d::Identity();
 
-        Matrix<double, 27, 27> Fdt = F * dtime;
-        Matrix<double, 27, 27> Fdt2 = Fdt * Fdt;
-        Matrix<double, 27, 27> Fdt3 = Fdt2 * Fdt;
-        Matrix<double, 27, 27> Phi = Matrix<double, 27, 27>::Identity() +
-                                     Fdt + (1.0 / 2.0) * Fdt2 + (1.0 / 6.0) * Fdt3;
+        MatrixXd Fdt = F * dtime;
+        MatrixXd Fdt2 = Fdt * Fdt;
+        MatrixXd Fdt3 = Fdt2 * Fdt;
+        MatrixXd Phi = MatrixXd::Identity(dimP_i + 12, dimP_i + 12) +
+                       Fdt + (1.0 / 2.0) * Fdt2 + (1.0 / 6.0) * Fdt3;
 
         /// 4. 四阶龙格库塔积分预测名义状态，旋转，速度，位置
         /// @see MsckfVio::predictNewState(const double &dt, const Eigen::Vector3d &gyro, const Eigen::Vector3d &acc)
         predictNewState(dtime, gyro, acc);
 
         /// 6. 使用OC后的Phi阵计算过程噪声协方差矩阵Q, 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》
-        Matrix<double, 27, 27> Q =
-            Phi * G * state_server.continuous_noise_cov * G.transpose() * Phi.transpose() * dtime;
+        MatrixXd Cov = MatrixXd::Zero(dimP_i - 3, dimP_i - 3);
+        Cov.block<3, 3>(0, 0) = state_server.Qg;
+        Cov.block<3, 3>(3, 3) = state_server.Qa;
+        Cov.block<3, 3>(dimP_i - dimX_frak - 3, dimP_i - dimX_frak - 3) = state_server.Qbg;
+        Cov.block<3, 3>(dimP_i - dimX_frak, dimP_i - dimX_frak) = state_server.Qba;
+        // TODO: 乘FkR?
+        for (int i = 5; i < dimX_i; ++i)
+            Cov.block<3, 3>(3 * (i - 5) + 6, 3 * (i - 5) + 6) = state_server.Qc;
+        MatrixXd PhiG = Phi * G;
+        MatrixXd Q = PhiG * Cov * PhiG.transpose() * dtime;
 
         /// 7. 预测系统误差状态协方差矩阵P，如果有相机状态量，那么也更新imu状态量与相机状态量交叉的部分
         /// 见笔记pdf中《预测系统状态协方差矩阵P》
-        state_server.state_cov.block<27, 27>(0, 0) =
-            Phi * state_server.state_cov.block<27, 27>(0, 0) * Phi.transpose() + Q;
+        state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) =
+            Phi * state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) * Phi.transpose() + Q;
         if (state_server.cam_states.size() > 0)
         {
-            state_server.state_cov.block(0, 27, 27, state_server.state_cov.cols() - 27) =
-                Phi * state_server.state_cov.block(0, 27, 27, state_server.state_cov.cols() - 27);
-            state_server.state_cov.block(27, 0, state_server.state_cov.rows() - 27, 27) =
-                state_server.state_cov.block(27, 0, state_server.state_cov.rows() - 27, 27) * Phi.transpose();
+            state_server.state_cov.block(0, dimP_i + 12, dimP_i + 12, state_server.state_cov.cols() - dimP_i - 12) =
+                Phi * state_server.state_cov.block(0, dimP_i + 12, dimP_i + 12, state_server.state_cov.cols() - dimP_i - 12);
+            state_server.state_cov.block(dimP_i + 12, 0, state_server.state_cov.rows() - dimP_i - 12, dimP_i + 12) =
+                state_server.state_cov.block(dimP_i + 12, 0, state_server.state_cov.rows() - dimP_i - 12, dimP_i + 12) * Phi.transpose();
         }
 
         /// 8. 强制对称，因为协方差矩阵就是对称的
@@ -760,7 +769,7 @@ namespace msckf_vio
         Vector3d p = state_server.robot_state.getp_GI();
 
         Matrix3d dR_dt = R * Sophus::SO3d::exp(gyro * dt).matrix();
-        Matrix3d dR_dt2 = R * Sophus::SO3d::exp(gyro * dt / 2).matrix();
+        Matrix3d dR_dt2 = R * Sophus::SO3d::exp(gyro * dt / 2.0).matrix();
 
         // k1 = f(tn, yn)
         Vector3d k1_v_dot = R * acc + RobotState::gravity;
@@ -768,12 +777,12 @@ namespace msckf_vio
 
         // k2 = f(tn+dt/2, yn+k1*dt/2)
         // 这里的4阶LK法用了匀加速度假设，即认为前一时刻的加速度和当前时刻相等
-        Vector3d k1_v = v + k1_v_dot * dt / 2;
+        Vector3d k1_v = v + k1_v_dot * dt / 2.0;
         Vector3d k2_v_dot = dR_dt2 * acc + RobotState::gravity;
         Vector3d k2_p_dot = k1_v;
 
         // k3 = f(tn+dt/2, yn+k2*dt/2)
-        Vector3d k2_v = v + k2_v_dot * dt / 2;
+        Vector3d k2_v = v + k2_v_dot * dt / 2.0;
         Vector3d k3_v_dot = dR_dt2 * acc + RobotState::gravity;
         Vector3d k3_p_dot = k2_v;
 
@@ -783,25 +792,11 @@ namespace msckf_vio
         Vector3d k4_p_dot = k3_v;
 
         // yn+1 = yn + dt/6*(k1+2*k2+2*k3+k4)
-        v = v + dt / 6 * (k1_v_dot + 2 * k2_v_dot + 2 * k3_v_dot + k4_v_dot);
-        p = p + dt / 6 * (k1_p_dot + 2 * k2_p_dot + 2 * k3_p_dot + k4_p_dot);
+        v = v + dt / 6.0 * (k1_v_dot + 2.0 * k2_v_dot + 2.0 * k3_v_dot + k4_v_dot);
+        p = p + dt / 6.0 * (k1_p_dot + 2.0 * k2_p_dot + 2.0 * k3_p_dot + k4_p_dot);
         state_server.robot_state.setR_GI(dR_dt);
         state_server.robot_state.setv_GI(v);
         state_server.robot_state.setp_GI(p);
-
-        /*         Eigen::Matrix3d G0 = Gamma_SO3(gyro * dt, 0);
-                Eigen::Matrix3d G1 = Gamma_SO3(gyro * dt, 1);
-                Eigen::Matrix3d G2 = Gamma_SO3(gyro * dt, 2);
-                Eigen::Matrix3d _R = state_server.robot_state.getR_GI();
-                Eigen::Vector3d _v = state_server.robot_state.getv_GI();
-                Eigen::Vector3d _p = state_server.robot_state.getp_GI();
-                Eigen::Matrix3d R_pred = _R * G0;
-                Eigen::Vector3d v_pred = _v + (_R * G1 * acc + RobotState::gravity) * dt;
-                Eigen::Vector3d p_pred = _p + _v * dt + (_R * G2 * acc + 0.5 * RobotState::gravity) * dt * dt;
-                state_server.robot_state.setR_GI(R_pred);
-                state_server.robot_state.setv_GI(v_pred);
-                state_server.robot_state.setp_GI(p_pred); */
-
         return;
     }
 
@@ -831,13 +826,17 @@ namespace msckf_vio
         cam_state.R_G_Cam0 = R_c_w;
         cam_state.p_G_Cam0 = p_c_w;
 
+        // TODO 这里的求偏导总感觉不对，有可能就是这里导致了InEKF的不稳定
         // Update the covariance matrix of the state.
-        Matrix<double, 6, 27> J = Matrix<double, 6, 27>::Zero();
+        int dimP_i = state_server.robot_state.dimP_i();
+        int dimX_i = state_server.robot_state.dimX_i();
+        int dimX_frak = state_server.robot_state.dimX_frak();
+        MatrixXd J = MatrixXd::Zero(6, dimP_i + 12);
         J.block<3, 3>(0, 0) = Matrix3d::Identity();
-        J.block<3, 3>(0, 15) = R_i_w;
+        J.block<3, 3>(0, dimP_i) = R_i_w;
         J.block<3, 3>(3, 6) = Matrix3d::Identity();
-        J.block<3, 3>(3, 15) = skewSymmetric(p_i_w) * R_i_w;
-        J.block<3, 3>(3, 18) = R_i_w;
+        J.block<3, 3>(3, dimP_i) = skewSymmetric(p_i_w) * R_i_w;
+        J.block<3, 3>(3, dimP_i + 3) = R_i_w;
 
         /// 4. 增广误差协方差矩阵P，见笔记pdf中《误差协方差矩阵增广》
         // 简单地说就是原来的协方差是 21 + 6n 维的，现在新来了一个伙计，维度要扩了
@@ -849,10 +848,10 @@ namespace msckf_vio
         state_server.state_cov.conservativeResize(old_rows + 6, old_cols + 6);
 
         // imu的协方差矩阵
-        const Matrix<double, 27, 27> &P11 = state_server.state_cov.block<27, 27>(0, 0);
+        const MatrixXd &P11 = state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12);
 
         // imu相对于各个相机状态量的协方差矩阵（不包括最新的）
-        const MatrixXd &P12 = state_server.state_cov.block(0, 27, 27, old_cols - 27);
+        const MatrixXd &P12 = state_server.state_cov.block(0, dimP_i + 12, dimP_i + 12, old_cols - dimP_i - 12);
 
         // 4.2 计算协方差矩阵
         // 左下角
@@ -995,8 +994,9 @@ namespace msckf_vio
             return;
 
         // 准备好误差相对于状态量的雅可比
+        int dimP_i = state_server.robot_state.dimP_i();
         MatrixXd H_x = MatrixXd::Zero(jacobian_row_size,
-                                      27 + 6 * state_server.cam_states.size());
+                                      dimP_i + 12 + 6 * state_server.cam_states.size());
         VectorXd r = VectorXd::Zero(jacobian_row_size);
         int stack_cntr = 0;
 
@@ -1054,6 +1054,16 @@ namespace msckf_vio
     void MsckfVio::measurementUpdate(
         const MatrixXd &H, const VectorXd &r)
     {
+        if (!merge_visual)
+        {
+            ROS_DEBUG_THROTTLE(5.0, "unmerged visual");
+            return;
+        }
+
+        int dimP_i = state_server.robot_state.dimP_i();
+        int dimX_i = state_server.robot_state.dimX_i();
+        int dimX_frak = state_server.robot_state.dimX_frak();
+
         if (H.rows() == 0 || r.rows() == 0)
             return;
 
@@ -1079,8 +1089,8 @@ namespace msckf_vio
             (spqr_helper.matrixQ().transpose() * H).evalTo(H_temp);
             (spqr_helper.matrixQ().transpose() * r).evalTo(r_temp);
 
-            H_thin = H_temp.topRows(27 + state_server.cam_states.size() * 6);
-            r_thin = r_temp.head(27 + state_server.cam_states.size() * 6);
+            H_thin = H_temp.topRows(dimP_i + 12 + state_server.cam_states.size() * 6);
+            r_thin = r_temp.head(dimP_i + 12 + state_server.cam_states.size() * 6);
         }
         else
         {
@@ -1101,27 +1111,24 @@ namespace msckf_vio
         VectorXd delta_x = K * r_thin;
 
         // Update the IMU state.
-        const VectorXd &delta_x_imu = delta_x.head<27>();
+        const VectorXd &delta_x_imu = delta_x.head(dimP_i + 12);
 
-        const Matrix<double, 5, 5> dT_imu = Exp_SE3(delta_x_imu.head<3>(),
-                                                    delta_x_imu.segment<3>(3),
-                                                    delta_x_imu.segment<3>(6));
+        const MatrixXd dT_imu = Exp_SEK3(delta_x_imu.head(dimP_i - dimX_frak));
         const Matrix3d dR_imu = dT_imu.block<3, 3>(0, 0);
         state_server.robot_state.setR_GI(dR_imu * state_server.robot_state.getR_GI());
         state_server.robot_state.setv_GI(dR_imu * state_server.robot_state.getv_GI() + dT_imu.block<3, 1>(0, 3));
         state_server.robot_state.setp_GI(dR_imu * state_server.robot_state.getp_GI() + dT_imu.block<3, 1>(0, 4));
+        // TODO: 这里是否要更新腿？dT_imu中还有腿，可以打印一下看看增量是多少
 
-        state_server.robot_state.setbg(state_server.robot_state.getbg() + delta_x_imu.segment<3>(9));
-        state_server.robot_state.setba(state_server.robot_state.getba() + delta_x_imu.segment<3>(12));
+        state_server.robot_state.setbg(state_server.robot_state.getbg() + delta_x_imu.segment<3>(dimP_i - dimX_frak));
+        state_server.robot_state.setba(state_server.robot_state.getba() + delta_x_imu.segment<3>(dimP_i - dimX_frak + 3));
 
-        const Matrix4d dT_ext = Exp_SE3(delta_x_imu.segment<3>(15),
-                                        delta_x_imu.segment<3>(18));
+        const Matrix4d dT_ext = Exp_SEK3(delta_x_imu.segment<6>(dimP_i));
         const Matrix3d dR_ext = dT_ext.block<3, 3>(0, 0);
         state_server.robot_state.R_cam0_imu = dR_ext * state_server.robot_state.R_cam0_imu;
         state_server.robot_state.t_cam0_imu = dR_ext * state_server.robot_state.t_cam0_imu + dT_ext.block<3, 1>(0, 3);
 
-        const Matrix4d dT_stereo = Exp_SE3(delta_x_imu.segment<3>(21),
-                                           delta_x_imu.segment<3>(24));
+        const Matrix4d dT_stereo = Exp_SEK3(delta_x_imu.segment<6>(dimP_i + 6));
         const Matrix3d dR_stereo = dT_stereo.block<3, 3>(0, 0);
         state_server.robot_state.R_cam1_cam0 = dR_stereo * state_server.robot_state.R_cam1_cam0;
         state_server.robot_state.t_cam1_cam0 = dR_stereo * state_server.robot_state.t_cam1_cam0 + dT_stereo.block<3, 1>(0, 3);
@@ -1130,7 +1137,7 @@ namespace msckf_vio
         auto cam_state_iter = state_server.cam_states.begin();
         for (int i = 0; i < state_server.cam_states.size(); ++i, ++cam_state_iter)
         {
-            const VectorXd &delta_x_cam = delta_x.segment<6>(27 + i * 6);
+            const VectorXd &delta_x_cam = delta_x.segment<6>(dimP_i + 12 + i * 6);
             const Matrix4d dT_cam = Exp_SE3(delta_x_cam.head<3>(),
                                             delta_x_cam.tail<3>());
             const Matrix3d dR_cam = dT_cam.block<3, 3>(0, 0);
@@ -1230,8 +1237,9 @@ namespace msckf_vio
         int jacobian_row_size = 4 * valid_cam_state_ids.size();
 
         // 误差相对于状态量的雅可比，没有约束列数，因为列数一直是最新的
+        int dimP_i = state_server.robot_state.dimP_i();
         MatrixXd H_xj = MatrixXd::Zero(jacobian_row_size,
-                                       27 + state_server.cam_states.size() * 6);
+                                       dimP_i + 12 + state_server.cam_states.size() * 6);
         // 误差相对于三维点的雅可比
         MatrixXd H_fj = MatrixXd::Zero(jacobian_row_size, 3);
         // 误差
@@ -1254,8 +1262,8 @@ namespace msckf_vio
                 state_server.cam_states.begin(), cam_state_iter);
 
             // Stack the Jacobians.
-            H_xj.block<4, 6>(stack_cntr, 21) = H_xi;
-            H_xj.block<4, 6>(stack_cntr, 27 + 6 * cam_state_cntr) = H_ci;
+            H_xj.block<4, 6>(stack_cntr, dimP_i + 6) = H_xi;
+            H_xj.block<4, 6>(stack_cntr, dimP_i + 12 + 6 * cam_state_cntr) = H_ci;
             H_fj.block<4, 3>(stack_cntr, 0) = H_fi;
             r_j.segment<4>(stack_cntr) = r_i;
             stack_cntr += 4;
@@ -1305,13 +1313,13 @@ namespace msckf_vio
         const Vector3d &p_c0_w = cam_state.p_G_Cam0;      // pwc0
 
         // Cam1 pose.
-        Matrix3d R_c0_c1 = CAMState::T_cam0_cam1.linear();
-        Vector3d p_c1_c0 = CAMState::T_cam0_cam1.inverse().translation();
-        // TAG 2
-        // Matrix3d R_c0_c1 = state_server.robot_state.R_cam1_cam0.transpose(); // Rc1c0
-        // Vector3d p_c1_c0 = state_server.robot_state.t_cam1_cam0;             // pc0c1
-        Matrix3d R_w_c1 = R_c0_c1 * R_w_c0;                      // Rc1w = Rc1c0 * Rc0w
-        Vector3d p_c1_w = p_c0_w + R_w_c0.transpose() * p_c1_c0; // pwc1 = pwc0 + Rwc0 * pc0c1
+        // Matrix3d R_c0_c1 = CAMState::T_cam0_cam1.linear();
+        // Vector3d p_c1_c0 = CAMState::T_cam0_cam1.inverse().translation();
+        // TAG 2  这里可以设置是否使用双目外参更新
+        Matrix3d R_c0_c1 = state_server.robot_state.R_cam1_cam0.transpose(); // Rc1c0
+        Vector3d p_c1_c0 = state_server.robot_state.t_cam1_cam0;             // pc0c1
+        Matrix3d R_w_c1 = R_c0_c1 * R_w_c0;                                  // Rc1w = Rc1c0 * Rc0w
+        Vector3d p_c1_w = p_c0_w + R_w_c0.transpose() * p_c1_c0;             // pwc1 = pwc0 + Rwc0 * pc0c1
 
         // 3. 取出三维点坐标与归一化的坐标点，因为前端发来的是归一化坐标的
         const Vector3d &p_w = feature.position;
@@ -1429,8 +1437,9 @@ namespace msckf_vio
 
         // 3. 计算待删掉的这部分观测的雅可比与误差
         // 预设大小
+        int dimP_i = state_server.robot_state.dimP_i();
         MatrixXd H_x = MatrixXd::Zero(jacobian_row_size,
-                                      27 + 6 * state_server.cam_states.size());
+                                      dimP_i + 12 + 6 * state_server.cam_states.size());
         VectorXd r = VectorXd::Zero(jacobian_row_size);
         int stack_cntr = 0;
 
@@ -1481,7 +1490,7 @@ namespace msckf_vio
             // 找到相机状态在状态向量中的位置
             int cam_sequence = std::distance(
                 state_server.cam_states.begin(), state_server.cam_states.find(cam_id));
-            int cam_state_start = 27 + 6 * cam_sequence;
+            int cam_state_start = dimP_i + 12 + 6 * cam_sequence;
             int cam_state_end = cam_state_start + 6;
 
             // 直接删除状态误差协方差矩阵中对应的行列
@@ -1521,8 +1530,7 @@ namespace msckf_vio
      * @brief 找出该删的相机状态的id
      * @param  rm_cam_state_ids 要删除的相机状态id
      */
-    void MsckfVio::findRedundantCamStates(
-        vector<StateIDType> &rm_cam_state_ids)
+    void MsckfVio::findRedundantCamStates(vector<StateIDType> &rm_cam_state_ids)
     {
         // 1. 找到倒数第四个相机状态(次新的)，作为关键状态
         auto key_cam_state_iter = state_server.cam_states.end();
@@ -1895,4 +1903,513 @@ namespace msckf_vio
             }
         }
     }
+
+    void MsckfVio::isTouchdownCallback(const MPC_Dynamic::isTouchdown::ConstPtr &msg)
+    {
+        isTouchdown_buffer.push_back(*msg);
+    }
+
+    void MsckfVio::wheelMotor_fbCallback(const RosToStm32::wheel_motor_fb::ConstPtr &msg)
+    {
+        wheelMotor_fb_buffer.push_back(*msg);
+    }
+
+    void MsckfVio::qNow_dqNow_TNowCallback(const motor_control::qNow_dqNow_TNow::ConstPtr &msg)
+    {
+        ROS_INFO_THROTTLE(1, "qNow_dqNow_TNowCallback");
+        qNow_dqNow_TNow_buffer.push_back(*msg);
+
+        /// 1. 等待IMU初始化
+        if (!is_gravity_set)
+        {
+            ROS_WARN_THROTTLE(1, "Leg Callback: Waiting for IMU initialization!");
+            return;
+        }
+
+        /// 2. 接收到第一帧腿时，记录时间，开始工作
+        if (is_first_leg)
+        {
+            is_first_leg = false;
+            state_server.robot_state.time = msg->header.stamp.toSec();
+            state_server.leg_state.time = msg->header.stamp.toSec();
+        }
+
+        /// 3. IMU递推
+        int used_imu_msg_cntr = 0;
+        Vector3d m_gyro, m_acc;
+        for (const auto &imu_msg : imu_msg_buffer)
+        {
+            double imu_time = imu_msg.header.stamp.toSec();
+            if (imu_time < state_server.robot_state.time)
+            {
+                ++used_imu_msg_cntr;
+                continue;
+            }
+            if (imu_time > msg->header.stamp.toSec())
+                break;
+
+            tf::vectorMsgToEigen(imu_msg.angular_velocity, m_gyro);
+            tf::vectorMsgToEigen(imu_msg.linear_acceleration, m_acc);
+            InEKF_Propagate(imu_time, m_gyro, m_acc);
+            ++used_imu_msg_cntr;
+        }
+        // 再继续外推到腿更新的时间
+        // QUERY 需不需要
+        // InEKF_Propagate(msg->header.stamp.toSec(), m_gyro, m_acc);
+        imu_msg_buffer.erase(imu_msg_buffer.begin(), imu_msg_buffer.begin() + used_imu_msg_cntr);
+
+        /// 4. 开始进行腿运动学的更新
+        // return;
+        if (merge_leg == true)
+        {
+            ROS_INFO_THROTTLE(1, "merge_leg");
+            Eigen::VectorXd Z, Y, b;
+            Eigen::MatrixXd H, N, PI;
+
+            vector<pair<LegID, int>> remove_contacts; // 要删除的腿列表 <腿id, 腿在X中的索引>
+            vector<LegID> new_contacts;               // 要添加的腿列表
+
+            // 分别在isTouchdown_buffer和wheelMotor_fb_buffer中取出上次更新后到此刻的数据
+            vector<MPC_Dynamic::isTouchdown> isTouchdown_buffer_tmp;
+            int used_isTouchdown_cntr = 0;
+            for (auto it = isTouchdown_buffer.begin(); it != isTouchdown_buffer.end(); ++it)
+            {
+                if (it->header.stamp.toSec() > msg->header.stamp.toSec())
+                    break;
+                used_isTouchdown_cntr++;
+            }
+            if (used_isTouchdown_cntr > 0)
+            {
+                isTouchdown_buffer_tmp.assign(isTouchdown_buffer.begin(), isTouchdown_buffer.begin() + used_isTouchdown_cntr);
+                isTouchdown_buffer.erase(isTouchdown_buffer.begin(), isTouchdown_buffer.begin() + used_isTouchdown_cntr);
+            }
+            vector<RosToStm32::wheel_motor_fb> wheelMotor_fb_buffer_tmp;
+            int used_wheelMotor_fb_cntr = 0;
+            for (auto it = wheelMotor_fb_buffer.begin(); it != wheelMotor_fb_buffer.end(); ++it)
+            {
+                if (it->header.stamp.toSec() > msg->header.stamp.toSec())
+                    break;
+                used_wheelMotor_fb_cntr++;
+            }
+            if (used_wheelMotor_fb_cntr > 0)
+            {
+                wheelMotor_fb_buffer_tmp.assign(wheelMotor_fb_buffer.begin(), wheelMotor_fb_buffer.begin() + used_wheelMotor_fb_cntr);
+                wheelMotor_fb_buffer.erase(wheelMotor_fb_buffer.begin(), wheelMotor_fb_buffer.begin() + used_wheelMotor_fb_cntr);
+            }
+            // 将最后一个轮子的转向角度更新到leg_states中
+            if (!wheelMotor_fb_buffer_tmp.empty())
+            {
+                state_server.leg_state.legs[FrontLeft].wheel_angle = -wheelMotor_fb_buffer_tmp.back().wheel_motor_fb[0] * DEG2RAD;
+                state_server.leg_state.legs[RearLeft].wheel_angle = -wheelMotor_fb_buffer_tmp.back().wheel_motor_fb[2] * DEG2RAD;
+                state_server.leg_state.legs[RearRight].wheel_angle = -wheelMotor_fb_buffer_tmp.back().wheel_motor_fb[4] * DEG2RAD;
+                state_server.leg_state.legs[FrontRight].wheel_angle = -wheelMotor_fb_buffer_tmp.back().wheel_motor_fb[6] * DEG2RAD;
+            }
+            // 将四条腿大小腿角度更新到leg_states中
+            state_server.leg_state.legs[FrontLeft].thigh_angle = msg->qNow[0];
+            state_server.leg_state.legs[FrontLeft].knee_angle = msg->qNow[1];
+            state_server.leg_state.legs[RearLeft].thigh_angle = msg->qNow[2];
+            state_server.leg_state.legs[RearLeft].knee_angle = msg->qNow[3];
+            state_server.leg_state.legs[RearRight].thigh_angle = msg->qNow[4];
+            state_server.leg_state.legs[RearRight].knee_angle = msg->qNow[5];
+            state_server.leg_state.legs[FrontRight].thigh_angle = msg->qNow[6];
+            state_server.leg_state.legs[FrontRight].knee_angle = msg->qNow[7];
+            // 计算运动学与雅可比
+            state_server.leg_state.calc_FKAndJacobian();
+            // 开始针对每个腿进行处理
+            for (int id = 0; id < 4; ++id)
+            {
+                LegID leg_id = static_cast<LegID>(id);
+                // 腿能否从状态量中找到
+                auto it_estimated = state_server.robot_state.estimated_contact_position.find(leg_id);
+                bool found = it_estimated != state_server.robot_state.estimated_contact_position.end();
+                // 当前触地状态的处理
+                bool true_contact = true; // 真: 全1, 真实的触地; false: 有0, 假的触地
+                for (auto &isTouchdown : isTouchdown_buffer_tmp)
+                {
+                    state_server.leg_state.legs[leg_id].contact = isTouchdown.isTouchdown[leg_id];
+                    true_contact = true_contact && isTouchdown.isTouchdown[leg_id];
+                }
+                bool has_contact = state_server.leg_state.legs[leg_id].contact; // 最后的触地状态
+                // 计算该腿的协方差，用于构造N矩阵
+                Eigen::Vector3d pose = state_server.leg_state.legs[leg_id].T.block<3, 1>(0, 3);
+                Eigen::Matrix3d J = state_server.leg_state.legs[leg_id].J.block<3, 3>(0, 0);
+                Eigen::Matrix3d cov = J * state_server.Qe * J.transpose() + state_server.Qkinematic_additive;
+                state_server.leg_state.legs[leg_id].Cov = cov;
+
+                // 开始进行四种情况的判断
+                if (found && !true_contact) // 1. 在状态量中, 假的触地
+                {
+                    remove_contacts.push_back(*it_estimated);
+                }
+                else if (!found && has_contact) // 2. 不在状态量中, 最后状态为触地
+                {
+                    new_contacts.push_back(leg_id);
+                }
+                else if (found && true_contact) // 3. 在状态量中, 真的触地
+                {
+                    int dimX_i = state_server.robot_state.dimX_i();
+                    int dimX_frak = state_server.robot_state.dimX_frak();
+                    int dimP_i = state_server.robot_state.dimP_i();
+                    int startIndex;
+
+                    // 使用轮速数据对状态量中的该腿进行位置预估, 这里肯定是触地的，不用考虑isTouchdown_buffer
+                    for (int i = 0; i < wheelMotor_fb_buffer_tmp.size() - 1; ++i)
+                    {
+                        double dt = wheelMotor_fb_buffer_tmp[i].header.stamp.toSec() - state_server.leg_state.time;
+                        if (dt < 0)
+                            ROS_ERROR("轮速预估时间戳错误");
+                        state_server.leg_state.legs[leg_id].wheel_angleVelocity = wheelMotor_fb_buffer_tmp[i].wheel_motor_fb[2 * leg_id + 1] * DEG2RAD;
+                        Eigen::Vector3d v_b = state_server.leg_state.getVelocityInBodyFrame(leg_id);
+                        Eigen::Vector3d v_w = state_server.robot_state.getR_GI() * v_b;
+                        v_w[2] = 0;
+                        v_w = v_w / v_w.norm() * v_b.norm();
+                        int index = it_estimated->second;
+                        Eigen::Vector3d d_GI = state_server.robot_state.getd_GI(index);
+                        d_GI += v_w * dt;
+                        state_server.robot_state.setd_GI(d_GI, index);
+                        state_server.leg_state.time = wheelMotor_fb_buffer_tmp[i].header.stamp.toSec();
+                    }
+                    if (!wheelMotor_fb_buffer_tmp.empty())
+                        state_server.leg_state.legs[leg_id].wheel_angleVelocity = wheelMotor_fb_buffer_tmp.back().wheel_motor_fb[2 * leg_id + 1] * DEG2RAD;
+                    double dt = msg->header.stamp.toSec() - state_server.leg_state.time;
+                    if (dt < 0)
+                        ROS_ERROR("轮速预估时间戳错误");
+                    Eigen::Vector3d v_b = state_server.leg_state.getVelocityInBodyFrame(leg_id);
+                    Eigen::Vector3d v_w = state_server.robot_state.getR_GI() * v_b;
+                    v_w[2] = 0;
+                    v_w = v_w / v_w.norm() * v_b.norm();
+                    int index = it_estimated->second;
+                    Eigen::Vector3d d_GI = state_server.robot_state.getd_GI(index);
+                    d_GI += v_w * dt;
+                    state_server.robot_state.setd_GI(d_GI, index);
+                    state_server.leg_state.time = msg->header.stamp.toSec();
+
+                    // 开始构造几大矩阵
+                    // QUERY 腿更新时带不带上相机外参，现在先带上
+                    // H阵
+                    startIndex = H.rows();
+                    H.conservativeResize(startIndex + 3, dimP_i + 12);
+                    H.block(startIndex, 0, 3, dimP_i + 12) = MatrixXd::Zero(3, dimP_i + 12);
+                    H.block<3, 3>(startIndex, 6) = -Matrix3d::Identity();                                   // p项
+                    H.block<3, 3>(startIndex, 3 * it_estimated->second - dimX_frak) = Matrix3d::Identity(); // d项
+
+                    // N阵
+                    startIndex = N.rows();
+                    N.conservativeResize(startIndex + 3, startIndex + 3);
+                    N.block(startIndex, 0, 3, startIndex) = MatrixXd::Zero(3, startIndex); // 左下角置0
+                    N.block(0, startIndex, startIndex, 3) = MatrixXd::Zero(startIndex, 3); // 右上角置0
+                    N.block(startIndex, startIndex, 3, 3) = state_server.robot_state.getR_GI() * cov * state_server.robot_state.getR_GI().transpose();
+
+                    // Z阵
+                    startIndex = Z.rows();
+                    Z.conservativeResize(startIndex + 3, Eigen::NoChange);
+                    Eigen::Matrix3d R = state_server.robot_state.getR_GI();
+                    Eigen::Vector3d p = state_server.robot_state.getp_GI();
+                    Eigen::Vector3d d = state_server.robot_state.getd_GI(it_estimated->second);
+                    Z.segment(startIndex, 3) = R * pose - (d - p);
+                }
+                else // 不在状态量中，且为假触地，跳过
+                {
+                    continue;
+                }
+            }
+            // 使用构造的观测数据进行更新
+            if (Z.rows() > 0)
+            {
+                InEKF_Correct(Z, H, N);
+            }
+            // 从状态量中移除不再触地的腿
+            if (remove_contacts.size() > 0)
+            {
+                Eigen::MatrixXd X_i = state_server.robot_state.getX_i();
+                Eigen::MatrixXd P = state_server.state_cov; // TODO: 优化为引用
+                for (vector<pair<LegID, int>>::iterator it = remove_contacts.begin(); it != remove_contacts.end(); ++it)
+                {
+                    state_server.robot_state.estimated_contact_position.erase(it->first);
+                    RemoveRowAndColumn(X_i, it->second, 1);
+                    int startIndex = 3 + 3 * (it->second - 3);
+                    RemoveRowAndColumn(P, startIndex, 3);
+                    for (map<LegID, int>::iterator it2 = state_server.robot_state.estimated_contact_position.begin();
+                         it2 != state_server.robot_state.estimated_contact_position.end(); ++it2)
+                    {
+                        if (it2->second > it->second)
+                            it2->second -= 1;
+                    }
+                    for (vector<pair<LegID, int>>::iterator it2 = it; it2 != remove_contacts.end(); ++it2)
+                    {
+                        if (it2->second > it->second)
+                            it2->second -= 1;
+                    }
+                }
+                // TODO: 是否需要放在循环中
+                state_server.robot_state.setX_i(X_i);
+                state_server.state_cov = P;
+            }
+            // 向状态中增加新触地的腿
+            if (new_contacts.size() > 0)
+            {
+                Eigen::MatrixXd X_i_aug = state_server.robot_state.getX_i();
+                // TODO: 更改为引用
+                Eigen::MatrixXd P_aug = state_server.state_cov;
+                Eigen::Vector3d p_GI = state_server.robot_state.getp_GI();
+                Eigen::Matrix3d R_GI = state_server.robot_state.getR_GI();
+                int dimX_frak = state_server.robot_state.dimX_frak();
+/*                 for (auto &new_contact : new_contacts)
+                {
+                    Eigen::Vector3d pose = state_server.leg_state.legs[new_contact].T.block<3, 1>(0, 3);
+                    int startIndex = X_i_aug.rows();
+                    X_i_aug.conservativeResize(startIndex + 1, startIndex + 1);                         // 将X大小扩充1
+                    X_i_aug.block(startIndex, 0, 1, startIndex) = Eigen::MatrixXd::Zero(1, startIndex); // 新增下三角部分置0
+                    X_i_aug.block(0, startIndex, startIndex, 1) = Eigen::MatrixXd::Zero(startIndex, 1); // 新增上三角部分置0
+                    X_i_aug(startIndex, startIndex) = 1;                                                // 新增对角线部分置1
+                    X_i_aug.block(0, startIndex, 3, 1) = p_GI + R_GI * pose;
+
+                    // TODO 如果不想让腿的更新影响到相机，是不是可以把其协方差置0？
+                    int dimP_aug = P_aug.rows();
+                    int dimP_i = state_server.robot_state.dimP_i();
+                    Eigen::SparseMatrix<double> F_sparse(dimP_aug + 3, dimP_aug);
+                    std::vector<Eigen::Triplet<double>> tripletList;
+                    tripletList.reserve(dimP_aug + 3);
+                    for (int i = 0; i < dimP_i - dimX_frak; ++i) // for old X
+                    {
+                        tripletList.push_back(Eigen::Triplet<double>(i, i, 1.0));
+                    }
+                    for (int i = dimP_i - dimX_frak + 3; i < dimP_aug + 3; ++i) // for theta~Camera
+                    {
+                        tripletList.push_back(Eigen::Triplet<double>(i, i - 3, 1.0));
+                    }
+                    for (int i = dimP_i - dimX_frak; i < dimP_i - dimX_frak + 3; ++i) // for new leg
+                    {
+                        tripletList.push_back(Eigen::Triplet<double>(i, 6 + (i - (dimP_i - dimX_frak)), 1.0));
+                    }
+                    F_sparse.setFromTriplets(tripletList.begin(), tripletList.end());
+
+                    Eigen::SparseMatrix<double> G_sparse(F_sparse.rows(), 3);
+                    tripletList.clear();
+                    tripletList.reserve(9);
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        for (int j = 0; j < 3; ++j)
+                        {
+                            // 因为计算cov时候加过雅可比了，所以这里不用再加雅可比
+                            tripletList.push_back(Eigen::Triplet<double>(dimP_i - dimX_frak + i, j, R_GI(i, j)));
+                        }
+                    }
+                    G_sparse.setFromTriplets(tripletList.begin(), tripletList.end());
+                    Eigen::MatrixXd P_aug_new = (F_sparse * P_aug * F_sparse.transpose() + G_sparse * state_server.leg_state.legs[new_contact].Cov * G_sparse.transpose()).eval();
+
+                    cout << "X_i_aug: \n"<< X_i_aug << endl << endl;
+                    state_server.robot_state.setX_i(X_i_aug);
+                    state_server.state_cov = P_aug_new;
+                    // state_server.robot_state.estimated_contact_position.insert(pair<LegID, int>(new_contact, startIndex));
+                } */
+            }
+        }
+        return;
+    }
+
+    void MsckfVio::InEKF_Propagate(const double &time, const Eigen::Vector3d &m_gyro, const Eigen::Vector3d &m_acc)
+    {
+        RobotState &robot_state = state_server.robot_state;
+        Vector3d gyro = m_gyro - robot_state.getbg();
+        Vector3d acc = m_acc - robot_state.getba();
+        double dt = time - robot_state.time;
+
+        Matrix3d R = robot_state.getR_GI();
+        Vector3d v = robot_state.getv_GI();
+        Vector3d p = robot_state.getp_GI();
+        int dimP_i = state_server.robot_state.dimP_i();
+
+        //  ------------ Propagate Covariance --------------- //
+        Eigen::MatrixXd Phi = this->StateTransitionMatrix(gyro, acc, dt);
+        Eigen::MatrixXd Qd = this->DiscreteNoiseMatrix(Phi, dt);
+        state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) =
+            Phi * state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) * Phi.transpose() + Qd;
+        if (state_server.cam_states.size() > 0)
+        {
+            state_server.state_cov.block(0, dimP_i + 12, dimP_i + 12, state_server.state_cov.cols() - dimP_i - 12) =
+                Phi * state_server.state_cov.block(0, dimP_i + 12, dimP_i + 12, state_server.state_cov.cols() - dimP_i - 12);
+            state_server.state_cov.block(dimP_i + 12, 0, state_server.state_cov.rows() - dimP_i - 12, dimP_i + 12) =
+                state_server.state_cov.block(dimP_i + 12, 0, state_server.state_cov.rows() - dimP_i - 12, dimP_i + 12) * Phi.transpose();
+        }
+        MatrixXd state_cov_fixed =
+            0.5 * (state_server.state_cov + state_server.state_cov.transpose());
+        state_server.state_cov = state_cov_fixed;
+
+        //  ------------ Propagate Mean --------------- //
+        Eigen::Matrix3d G0 = Gamma_SO3(gyro * dt, 0);
+        Eigen::Matrix3d G1 = Gamma_SO3(gyro * dt, 1);
+        Eigen::Matrix3d G2 = Gamma_SO3(gyro * dt, 2);
+        Eigen::Matrix3d R_pred = R * G0;
+        Eigen::Vector3d v_pred = v + (R * G1 * acc + RobotState::gravity) * dt;
+        Eigen::Vector3d p_pred = p + v * dt + (R * G2 * acc + 0.5 * RobotState::gravity) * dt * dt;
+        robot_state.setR_GI(R_pred);
+        robot_state.setv_GI(v_pred);
+        robot_state.setp_GI(p_pred);
+
+        // 更新IMU状态的时间
+        state_server.robot_state.time = time;
+    }
+
+    Eigen::MatrixXd MsckfVio::StateTransitionMatrix(const Eigen::Vector3d &w, const Eigen::Vector3d &a, double dt)
+    {
+        Eigen::Vector3d phi = w * dt;
+        Eigen::Matrix3d G0 = Gamma_SO3(phi, 0);
+        Eigen::Matrix3d G1 = Gamma_SO3(phi, 1);
+        Eigen::Matrix3d G2 = Gamma_SO3(phi, 2);
+        Eigen::Matrix3d G0t = G0.transpose();
+        Eigen::Matrix3d G1t = G1.transpose();
+        Eigen::Matrix3d G2t = G2.transpose();
+        Eigen::Matrix3d G3t = Gamma_SO3(-phi, 3);
+
+        int dimX_i = state_server.robot_state.dimX_i();
+        int dimX_frak = state_server.robot_state.dimX_frak();
+        int dimP_i = state_server.robot_state.dimP_i();
+        // 同样考虑了4个相机参数相关变量
+        Eigen::MatrixXd Phi = Eigen::MatrixXd::Identity(dimP_i + 12, dimP_i + 12);
+
+        Eigen::Matrix3d ax = skewSymmetric(a);
+        Eigen::Matrix3d wx = skewSymmetric(w);
+        Eigen::Matrix3d wx2 = wx * wx;
+        double dt2 = dt * dt;
+        double dt3 = dt2 * dt;
+        double theta = w.norm();
+        double theta2 = theta * theta;
+        double theta3 = theta2 * theta;
+        double theta4 = theta3 * theta;
+        double theta5 = theta4 * theta;
+        double theta6 = theta5 * theta;
+        double theta7 = theta6 * theta;
+        double thetadt = theta * dt;
+        double thetadt2 = thetadt * thetadt;
+        double thetadt3 = thetadt2 * thetadt;
+        double sinthetadt = sin(thetadt);
+        double costhetadt = cos(thetadt);
+        double sin2thetadt = sin(2 * thetadt);
+        double cos2thetadt = cos(2 * thetadt);
+        double thetadtcosthetadt = thetadt * costhetadt;
+        double thetadtsinthetadt = thetadt * sinthetadt;
+
+        // Contact-aided 论文附录公式55 & 56
+        Eigen::Matrix3d Phi25L =
+            G0t * (ax * G2t * dt2 + ((sinthetadt - thetadtcosthetadt) / (theta3)) * (wx * ax) -
+                   ((cos2thetadt - 4 * costhetadt + 3) / (4 * theta4)) * (wx * ax * wx) +
+                   ((4 * sinthetadt + sin2thetadt - 4 * thetadtcosthetadt - 2 * thetadt) / (4 * theta5)) * (wx * ax * wx2) +
+                   ((thetadt2 - 2 * thetadtsinthetadt - 2 * costhetadt + 2) / (2 * theta4)) * (wx2 * ax) -
+                   ((6 * thetadt - 8 * sinthetadt + sin2thetadt) / (4 * theta5)) * (wx2 * ax * wx) +
+                   ((2 * thetadt2 - 4 * thetadtsinthetadt - cos2thetadt + 1) / (4 * theta6)) * (wx2 * ax * wx2));
+
+        // Contact-aided 论文附录公式55 & 57
+        Eigen::Matrix3d Phi35L =
+            G0t *
+            (ax * G3t * dt3 - ((thetadtsinthetadt + 2 * costhetadt - 2) / (theta4)) * (wx * ax) -
+             ((6 * thetadt - 8 * sinthetadt + sin2thetadt) / (8 * theta5)) * (wx * ax * wx) -
+             ((2 * thetadt2 + 8 * thetadtsinthetadt + 16 * costhetadt + cos2thetadt - 17) / (8 * theta6)) *
+                 (wx * ax * wx2) +
+             ((thetadt3 + 6 * thetadt - 12 * sinthetadt + 6 * thetadtcosthetadt) / (6 * theta5)) * (wx2 * ax) -
+             ((6 * thetadt2 + 16 * costhetadt - cos2thetadt - 15) / (8 * theta6)) * (wx2 * ax * wx) +
+             ((4 * thetadt3 + 6 * thetadt - 24 * sinthetadt - 3 * sin2thetadt + 24 * thetadtcosthetadt) / (24 * theta7)) *
+                 (wx2 * ax * wx2));
+
+        const double tol = 1e-6;
+        if (theta < tol)
+        {
+            Phi25L = (1 / 2) * ax * dt2;
+            Phi35L = (1 / 6) * ax * dt3;
+        }
+
+        // 求解World Centric右不变，即Contact-aided论文附录公式58
+        Eigen::Matrix3d gx = skewSymmetric(RobotState::gravity);
+        Eigen::Matrix3d R = state_server.robot_state.getR_GI();
+        Eigen::Vector3d v = state_server.robot_state.getv_GI();
+        Eigen::Vector3d p = state_server.robot_state.getp_GI();
+        Eigen::Matrix3d RG0 = R * G0;
+        Eigen::Matrix3d RG1dt = R * G1 * dt;
+        Eigen::Matrix3d RG2dt2 = R * G2 * dt2;
+        Phi.block<3, 3>(3, 0) = gx * dt;                          // Phi_21
+        Phi.block<3, 3>(6, 0) = 0.5 * gx * dt2;                   // Phi_31
+        Phi.block<3, 3>(6, 3) = Eigen::Matrix3d::Identity() * dt; // Phi_32
+        Phi.block<3, 3>(0, dimP_i - dimX_frak) = -RG1dt;          // Phi_15
+        Phi.block<3, 3>(3, dimP_i - dimX_frak) =
+            -skewSymmetric(v + RG1dt * a + RobotState::gravity * dt) * RG1dt + RG0 * Phi25L; // Phi_25
+        Phi.block<3, 3>(6, dimP_i - dimX_frak) =
+            -skewSymmetric(p + v * dt + RG2dt2 * a + 0.5 * RobotState::gravity * dt2) * RG1dt + RG0 * Phi35L; // Phi_35
+        for (int i = 5; i < dimX_i; ++i)
+        {
+            Phi.block<3, 3>((i - 2) * 3, dimP_i - dimX_frak) =
+                -skewSymmetric(state_server.robot_state.getd_GI(i - 5)) * RG1dt; // Phi_(3+i)5
+        }
+        Phi.block<3, 3>(3, dimP_i - dimX_frak + 3) = -RG1dt;  // Phi_26
+        Phi.block<3, 3>(6, dimP_i - dimX_frak + 3) = -RG2dt2; // Phi_36
+        return Phi;
+    }
+
+    Eigen::MatrixXd MsckfVio::DiscreteNoiseMatrix(const Eigen::MatrixXd &Phi, const double dt)
+    {
+        int dimX_i = state_server.robot_state.dimX_i();
+        int dimX_frak = state_server.robot_state.dimX_frak();
+        int dimP_i = state_server.robot_state.dimP_i();
+
+        Eigen::MatrixXd B = Eigen::MatrixXd::Zero(dimP_i + 12, dimP_i + 12);
+        B.block(0, 0, dimP_i - dimX_frak, dimP_i - dimX_frak) = Adjoint_SEK3(state_server.robot_state.getX_i());
+        B.block<3, 3>(dimP_i - dimX_frak, dimP_i - dimX_frak) = Matrix3d::Identity();
+        B.block<3, 3>(dimP_i - dimX_frak + 3, dimP_i - dimX_frak + 3) = Matrix3d::Identity();
+
+        Eigen::MatrixXd Cov = Eigen::MatrixXd::Zero(dimP_i + 12, dimP_i + 12);
+        Cov.block<3, 3>(0, 0) = state_server.Qg;                                            // Qg
+        Cov.block<3, 3>(3, 3) = state_server.Qa;                                            // Qa
+        Cov.block<3, 3>(dimP_i - dimX_frak, dimP_i - dimX_frak) = state_server.Qbg;         // Qbg
+        Cov.block<3, 3>(dimP_i - dimX_frak + 3, dimP_i - dimX_frak + 3) = state_server.Qba; // Qba
+        // Qc
+        for (auto it = state_server.robot_state.estimated_contact_position.begin();
+             it != state_server.robot_state.estimated_contact_position.end(); ++it)
+        {
+            // TODO? 没有乘FkR, 或者保持为0？
+            Cov.block<3, 3>(3 + 3 * (it->second - 3), 3 + 3 * (it->second - 3)) = state_server.Qc;
+        }
+
+        Eigen::MatrixXd PhiB = Phi * B;
+        Eigen::MatrixXd Qd = PhiB * Cov * PhiB.transpose() * dt;
+        return Qd;
+    }
+
+    void MsckfVio::InEKF_Correct(const Eigen::MatrixXd &Z, const Eigen::MatrixXd &H, const Eigen::MatrixXd &N)
+    {
+        int dimP_i = state_server.robot_state.dimP_i();
+        int dimX_frak = state_server.robot_state.dimX_frak();
+        const Eigen::MatrixXd &P = state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12);
+        Eigen::MatrixXd PHT = P * H.transpose();
+        Eigen::MatrixXd S = H * PHT + N;
+        Eigen::MatrixXd K = PHT * S.inverse();
+
+        Eigen::VectorXd delta = K * Z;
+        const Eigen::VectorXd &delta_X_i = delta.head(dimP_i - dimX_frak);
+        const Eigen::VectorXd &delta_X_frak = delta.segment(dimP_i - dimX_frak, dimX_frak);
+        // TODO: 测试两个外参有没有更新量
+        const Eigen::VectorXd &delta_X_ext = delta.segment(dimP_i, 6);
+        const Eigen::VectorXd &delta_X_stereo = delta.tail(6);
+        Eigen::MatrixXd dX_i = Exp_SEK3(delta_X_i);
+        Eigen::VectorXd dX_frak = delta_X_frak;
+        Eigen::Matrix4d dT_ext = Exp_SEK3(delta_X_ext);
+        Eigen::Matrix4d dT_stereo = Exp_SEK3(delta_X_stereo);
+        state_server.robot_state.setX_i(dX_i * state_server.robot_state.getX_i());
+        // NOTE: 这里drift中把yaw的bias设置为0了, 测试一下
+        state_server.robot_state.setX_frak(dX_frak + state_server.robot_state.getX_frak());
+        // NOTE: 这里就不更新外参了，感觉不会准
+
+        // 更新协方差   // TODO 不更新左上角和右下角和相机关联的部分可以吗
+        Eigen::MatrixXd IKH = MatrixXd::Identity(dimP_i + 12, dimP_i + 12) - K * H;
+        Eigen::MatrixXd P_new = IKH * P * IKH.transpose() + K * N * K.transpose();
+        // NOTE: drift中这里还修改了yaw对应的协方差矩阵，不更新yaw
+        state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) = P_new;
+    }
+
+    void MsckfVio::RemoveRowAndColumn(Eigen::MatrixXd &M, int index, int remove_dim)
+    {
+        unsigned int dimX = M.cols();
+        M.block(index, 0, dimX - index - remove_dim, dimX) = M.bottomRows(dimX - index - remove_dim).eval();
+        M.block(0, index, dimX, dimX - index - remove_dim) = M.rightCols(dimX - index - remove_dim).eval();
+        M.conservativeResize(dimX - remove_dim, dimX - remove_dim);
+    }
+
 } // namespace msckf_vio
