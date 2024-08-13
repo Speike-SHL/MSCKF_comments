@@ -24,7 +24,7 @@ namespace msckf_vio
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-        LegState() : time(0.0)
+        LegState()
         {
             legs.push_back(SingleLeg(LegID::FrontLeft));
             legs.push_back(SingleLeg(LegID::RearLeft));
@@ -32,11 +32,10 @@ namespace msckf_vio
             legs.push_back(SingleLeg(LegID::FrontRight));
         }
 
-        double time;
-
         struct SingleLeg
         {
             LegID id;
+            double time;
             double thigh_angle;            // 大腿角度 rad
             double knee_angle;             // 膝盖角度 rad
             double wheel_angle;            // 轮子角度 rad
@@ -46,9 +45,9 @@ namespace msckf_vio
             Eigen::Matrix4d T;             // 足端到机身的变换矩阵
             Eigen::Matrix<double, 6, 3> J; // 足端到机身的雅可比矩阵
             Eigen::Matrix3d Cov;           // 腿的协方差
-            SingleLeg(LegID id = LegID::unnamed) : id(id), thigh_angle(0.0), knee_angle(0.0),
+            SingleLeg(LegID id = LegID::unnamed) : id(id), time(0.0), thigh_angle(0.0), knee_angle(0.0),
                                                    wheel_angle(0.0), wheel_angleVelocity(0.0),
-                                                   wheel_radius(0.05), contact(true),
+                                                   wheel_radius(0.05), contact(false),
                                                    T(Eigen::Matrix4d::Identity()),
                                                    J(Eigen::Matrix<double, 6, 3>::Zero()),
                                                    Cov(Eigen::Matrix3d::Zero()){}

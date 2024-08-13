@@ -36,10 +36,11 @@
 #include "cam_state.h"
 #include "leg_state.hpp"
 #include "feature.hpp"
+#include "../tic_toc.h"
 #include <msckf_vio/CameraMeasurement.h>
-#include "MPC_Dynamic/isTouchdown.h"
-#include "motor_control/qNow_dqNow_TNow.h"
-#include "RosToStm32/wheel_motor_fb.h"
+#include "dog_msg/isTouchdown.h"
+#include "dog_msg/qNow_dqNow_TNow.h"
+#include "dog_msg/wheel_motor_fb.h"
 
 namespace msckf_vio
 {
@@ -242,12 +243,12 @@ private:
     ros::Subscriber isTouchdown_sub;
     ros::Subscriber qNow_dqNow_TNow_sub;
     ros::Subscriber wheelMotor_fb_sub;
-    std::vector<MPC_Dynamic::isTouchdown> isTouchdown_buffer;
-    std::vector<motor_control::qNow_dqNow_TNow> qNow_dqNow_TNow_buffer;
-    std::vector<RosToStm32::wheel_motor_fb> wheelMotor_fb_buffer;
-    void isTouchdownCallback(const MPC_Dynamic::isTouchdown::ConstPtr &isTouchdown);
-    void qNow_dqNow_TNowCallback(const motor_control::qNow_dqNow_TNow::ConstPtr &qNow_dqNow_TNow);
-    void wheelMotor_fbCallback(const RosToStm32::wheel_motor_fb::ConstPtr &wheelMotor_fb);
+    std::vector<dog_msg::isTouchdown> isTouchdown_buffer;
+    std::vector<dog_msg::qNow_dqNow_TNow> qNow_dqNow_TNow_buffer;
+    std::vector<dog_msg::wheel_motor_fb> wheelMotor_fb_buffer;
+    void isTouchdownCallback(const dog_msg::isTouchdown::ConstPtr &isTouchdown);
+    void qNow_dqNow_TNowCallback(const dog_msg::qNow_dqNow_TNow::ConstPtr &qNow_dqNow_TNow);
+    void wheelMotor_fbCallback(const dog_msg::wheel_motor_fb::ConstPtr &wheelMotor_fb);
 
     void InEKF_Propagate(const double &time, const Eigen::Vector3d &m_gyro, const Eigen::Vector3d &m_acc);
     void InEKF_Correct(const Eigen::MatrixXd &Z, const Eigen::MatrixXd &H, const Eigen::MatrixXd &N);

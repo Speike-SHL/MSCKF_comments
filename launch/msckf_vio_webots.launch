@@ -54,6 +54,4 @@
     </node>
   </group>
 
-  <node pkg="rosbag" type="play" name="player" args="--clock -d 10 -r 4 /home/li/shl/MSCKF_vio_leg_ws/wheelleg_garden.bag" />
-
 </launch>

@@ -1,20 +1,22 @@
 # 后端的设置
 settings:
-  merge_visual: false                        # 是否使用视觉信息
-  merge_leg: true                          # 是否使用腿部信息
+  merge_visual: false                       # 是否使用视觉信息
+  merge_leg: true                           # 是否使用腿部信息
   use_gatingTest: true                      # 是否使用卡方检验
   path_alignment: false                     # 是否进行轨迹对齐(EuRoC中真实值和估计值轨迹不在同一起点)
   output_file_path: "none"                  # 估计轨迹输出路径(如果不需要输出则设置为"none")
+  logger_level: "Debug"                     # 日志级别("Debug", "Info", "Warning", "Error", "Fatal")
+
 
 # 噪声参数
 noises:
   IMU:
-    gyroscope_std: 0.005                  # 陀螺仪的标准差
-    accelerometer_std: 0.05               # 加速度计的标准差
-    gyroscope_bias_std: 0.001             # 陀螺仪偏差的标准差
-    accelerometer_bias_std: 0.01          # 加速度计偏差的标准差
+    gyroscope_std: 0.005                    # 陀螺仪的标准差
+    accelerometer_std: 0.05                 # 加速度计的标准差
+    gyroscope_bias_std: 0.001               # 陀螺仪偏差的标准差
+    accelerometer_bias_std: 0.01            # 加速度计偏差的标准差
   Image:
-    feature_std: 0.035                    # 特征点的标准差
+    feature_std: 0.035                      # 特征点的标准差
   Leg:
     # kinematics_cov = J * encoder_cov_ * J.transpose() + kinematics_prior_cov_
     encoder_std: 0.0174533                  # 关节编码器读数的标准差, 0.0174533 rad = 1 deg 
@@ -26,3 +28,6 @@ init:
   velocity: [0.0, 0.0, 0.0]                 # 初始速度
   position: [0.0, 0.0, 0.1481]              # 初始位置
 
+# 硬件参数
+dog_param:
+  wheel_radius: 0.05                        # 轮子半径 //TODO 实际中狗要标定
