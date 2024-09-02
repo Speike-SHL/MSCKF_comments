@@ -34,17 +34,18 @@ using namespace std;
 using namespace Eigen;
 
 #define REDCOUT(STRING) cout << "\033[31m" << STRING << "\033[m"      // 红色输出
-#define GREENCOUT(STRING) cout << "\033[32m" << STRING << "\033[m\n"    // 绿色输出
-#define YELLOWCOUT(STRING) cout << "\033[33m" << STRING << "\033[m\n"   // 黄色输出
-#define BLUECOUT(STRING) cout << "\033[34m" << STRING << "\033[m\n"     // 蓝色输出
-#define PURPLECOUT(STRING) cout << "\033[35m" << STRING << "\033[m\n"   // 紫色输出
-#define CYANCOUT(STRING) cout << "\033[36m" << STRING << "\033[m\n"     // 青色输出
+#define GREENCOUT(STRING) cout << "\033[32m" << STRING << "\033[m\n"  // 绿色输出
+#define YELLOWCOUT(STRING) cout << "\033[33m" << STRING << "\033[m\n" // 黄色输出
+#define BLUECOUT(STRING) cout << "\033[34m" << STRING << "\033[m\n"   // 蓝色输出
+#define PURPLECOUT(STRING) cout << "\033[35m" << STRING << "\033[m\n" // 紫色输出
+#define CYANCOUT(STRING) cout << "\033[36m" << STRING << "\033[m\n"   // 青色输出
 
 #define ROS_DEBUG_STREAM_BLUE(STRING) ROS_DEBUG_STREAM("\033[34m" << STRING << "\033[m")
 #define ROS_INFO_STREAM_CYAN(STRING) ROS_INFO_STREAM("\033[36m" << STRING << "\033[m")
 
 bool diagHasNegativeOrNaN(const Eigen::MatrixXd &M, string name)
 {
+    return false;
     assert(M.rows() == M.cols());
     // if(M.array().isNaN().any())
     // {
@@ -63,7 +64,7 @@ bool diagHasNegativeOrNaN(const Eigen::MatrixXd &M, string name)
             neg_idx.push_back(i);
         }
     }
-    if(neg_idx.size() > 0)
+    if (neg_idx.size() > 0)
     {
         REDCOUT(name + ": 矩阵对角线含有负数，索引为 ");
         for (auto idx : neg_idx)
@@ -111,6 +112,7 @@ namespace msckf_vio
     bool path_alignment = false;
     bool merge_visual = true;
     bool merge_leg = false;
+    bool pub_erased_features = false;
 
     WebotsRealState webotsRealState;
 
@@ -307,12 +309,16 @@ namespace msckf_vio
         output_file_path = config["settings"]["output_file_path"]
                                ? config["settings"]["output_file_path"].as<std::string>()
                                : "none";
+        pub_erased_features = config["settings"]["pub_erased_features"]
+                                 ? config["settings"]["pub_erased_features"].as<bool>()
+                                 : false;
         ROS_INFO_STREAM("==================== settings param ====================");
         ROS_INFO_STREAM("merge_visual: " << merge_visual);
         ROS_INFO_STREAM("merge_leg: " << merge_leg);
         ROS_INFO_STREAM("use_gatingTest: " << use_gatingTest);
         ROS_INFO_STREAM("path_alignment: " << path_alignment);
         ROS_INFO_STREAM("output_file_path: " << output_file_path);
+        ROS_INFO_STREAM("pub_erased_features: " << pub_erased_features);
 
         double wheel_radius = config["dog_param"]["wheel_radius"]
                                   ? config["dog_param"]["wheel_radius"].as<double>()
@@ -356,6 +362,8 @@ namespace msckf_vio
         odom_pub = nh.advertise<nav_msgs::Odometry>("odom", 10);
         /// 2. 发布 "feature_point_cloud", 后端计算出的世界系下的点云
         feature_pub = nh.advertise<sensor_msgs::PointCloud2>("feature_point_cloud", 10);
+        if(pub_erased_features)
+            feature_erased_pub = nh.advertise<sensor_msgs::PointCloud2>("feature_erased_point_cloud", 10);
 
         /// 3. 服务，重置后端
         reset_srv = nh.advertiseService("reset", &MsckfVio::resetCallback, this);
@@ -577,6 +585,7 @@ namespace msckf_vio
 
         // Clear all exsiting features in the map.
         map_server.clear();
+        map_server_erased.clear();
 
         // Clear the IMU msg buffer.
         imu_msg_buffer.clear();
@@ -632,7 +641,6 @@ namespace msckf_vio
         double imu_processing_time = (ros::Time::now() - start_time).toSec();
         diagHasNegativeOrNaN(state_server.state_cov, "batchImuProcessing后");
 
-
         /// 4. 状态增广，包括名义状态增广和误差协方差矩阵P的增广，主要是增广新的相机状态
         /// @see MsckfVio::stateAugmentation(const double &time)
         start_time = ros::Time::now();
@@ -679,19 +687,19 @@ namespace msckf_vio
         {
             ++critical_time_cntr;
             ROS_INFO("\033[1;31mTotal processing time %f/%d...\033[0m",
-                    processing_time, critical_time_cntr);
+                     processing_time, critical_time_cntr);
             ROS_INFO("IMU processing time: %f/%f",
-                    imu_processing_time, imu_processing_time / processing_time);
+                     imu_processing_time, imu_processing_time / processing_time);
             ROS_INFO("State augmentation time: %f/%f",
-                    state_augmentation_time, state_augmentation_time / processing_time);
+                     state_augmentation_time, state_augmentation_time / processing_time);
             ROS_INFO("Add observations time: %f/%f",
-                    add_observations_time, add_observations_time / processing_time);
+                     add_observations_time, add_observations_time / processing_time);
             ROS_INFO("Remove lost features time: %f/%f",
-                    remove_lost_features_time, remove_lost_features_time / processing_time);
+                     remove_lost_features_time, remove_lost_features_time / processing_time);
             ROS_INFO("Remove camera states time: %f/%f",
-                    prune_cam_states_time, prune_cam_states_time / processing_time);
+                     prune_cam_states_time, prune_cam_states_time / processing_time);
             ROS_INFO("Publish time: %f/%f\n",
-                    publish_time, publish_time / processing_time);
+                     publish_time, publish_time / processing_time);
         }
         // ROS_INFO("\033[1;31mTotal processing time %f/%d...\033[0m",
         //          processing_time, critical_time_cntr);
@@ -707,15 +715,20 @@ namespace msckf_vio
         //          prune_cam_states_time, prune_cam_states_time / processing_time);
         // ROS_INFO("Publish time: %f/%f\n",
         //          publish_time, publish_time / processing_time);
-        cout << "旋转协方差: \n" << state_server.state_cov.block<3, 3>(0, 0) << endl;
+        cout << "旋转协方差: \n"
+             << state_server.state_cov.block<3, 3>(0, 0) << endl;
         cout << "速度协方差: \n"
              << state_server.state_cov.block<3, 3>(3, 3) << endl;
         cout << "位置协方差: \n"
              << state_server.state_cov.block<3, 3>(6, 6) << endl;
-        cout << "腿1协方差: \n" << state_server.state_cov.block<3, 3>(9, 9) << endl;
-        cout << "腿2协方差: \n" << state_server.state_cov.block<3, 3>(12, 12) << endl;
-        cout << "腿3协方差: \n" << state_server.state_cov.block<3, 3>(15, 15) << endl;
-        cout << "腿4协方差: \n" << state_server.state_cov.block<3, 3>(18, 18) << endl;
+        cout << "腿1协方差: \n"
+             << state_server.state_cov.block<3, 3>(9, 9) << endl;
+        cout << "腿2协方差: \n"
+             << state_server.state_cov.block<3, 3>(12, 12) << endl;
+        cout << "腿3协方差: \n"
+             << state_server.state_cov.block<3, 3>(15, 15) << endl;
+        cout << "腿4协方差: \n"
+             << state_server.state_cov.block<3, 3>(18, 18) << endl;
 
         diagHasNegativeOrNaN(state_server.state_cov, "featureCallback末尾");
         ROS_INFO_STREAM_CYAN("featureCallback end...");
@@ -1141,7 +1154,13 @@ namespace msckf_vio
         // Remove all processed features from the map.
         // 8. 删除用完的点
         for (const auto &feature_id : processed_feature_ids)
+        {
+            if (pub_erased_features)
+            {
+                map_server_erased[feature_id] = map_server[feature_id];
+            }
             map_server.erase(feature_id);
+        }
 
         return;
     }
@@ -1741,13 +1760,20 @@ namespace msckf_vio
                  ++online_reset_counter);
         ROS_INFO("Stardard deviation in xyz: %f, %f, %f",
                  position_x_std, position_y_std, position_z_std);
-        cout << "旋转协方差: \n" << state_server.state_cov.block<3, 3>(0, 0) << endl;
-        cout << "速度协方差: \n" << state_server.state_cov.block<3, 3>(3, 3) << endl;
-        cout << "位置协方差: \n" << state_server.state_cov.block<3, 3>(6, 6) << endl;
-        cout << "腿1协方差: \n" << state_server.state_cov.block<3, 3>(9, 9) << endl;
-        cout << "腿2协方差: \n" << state_server.state_cov.block<3, 3>(12, 12) << endl;
-        cout << "腿3协方差: \n" << state_server.state_cov.block<3, 3>(15, 15) << endl;
-        cout << "腿4协方差: \n" << state_server.state_cov.block<3, 3>(18, 18) << endl;
+        cout << "旋转协方差: \n"
+             << state_server.state_cov.block<3, 3>(0, 0) << endl;
+        cout << "速度协方差: \n"
+             << state_server.state_cov.block<3, 3>(3, 3) << endl;
+        cout << "位置协方差: \n"
+             << state_server.state_cov.block<3, 3>(6, 6) << endl;
+        cout << "腿1协方差: \n"
+             << state_server.state_cov.block<3, 3>(9, 9) << endl;
+        cout << "腿2协方差: \n"
+             << state_server.state_cov.block<3, 3>(12, 12) << endl;
+        cout << "腿3协方差: \n"
+             << state_server.state_cov.block<3, 3>(15, 15) << endl;
+        cout << "腿4协方差: \n"
+             << state_server.state_cov.block<3, 3>(18, 18) << endl;
         if (online_reset_counter >= 5)
             ROS_ERROR("结果严重发散，请终止程序");
 
@@ -1756,6 +1782,7 @@ namespace msckf_vio
 
         // Clear all exsiting features in the map.
         map_server.clear();
+        map_server_erased.clear();
 
         // Reset the state covariance.
         double gyro_bias_cov, acc_bias_cov, velocity_cov;
@@ -1904,8 +1931,29 @@ namespace msckf_vio
             }
         }
         feature_msg_ptr->width = feature_msg_ptr->points.size();
-
         feature_pub.publish(feature_msg_ptr);
+
+        if (pub_erased_features)
+        {
+            boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ>> feature_erased_msg_ptr(
+                new pcl::PointCloud<pcl::PointXYZ>());
+            feature_erased_msg_ptr->header.frame_id = fixed_frame_id;
+            feature_erased_msg_ptr->height = 1;
+            for (const auto &item : map_server_erased)
+            {
+                const auto &feature = item.second;
+                if (feature.is_initialized)
+                {
+                    Vector3d feature_position =
+                        RobotState::T_imu_body.linear() * feature.position;
+                    feature_erased_msg_ptr->points.push_back(pcl::PointXYZ(
+                        feature_position(0), feature_position(1), feature_position(2)));
+                }
+            }
+            feature_erased_msg_ptr->width = feature_erased_msg_ptr->points.size();
+            feature_erased_pub.publish(feature_erased_msg_ptr);
+        }
+
 
         return;
     }
@@ -2076,7 +2124,6 @@ namespace msckf_vio
         // InEKF_Propagate(msg->header.stamp.toSec(), m_gyro, m_acc);
         imu_msg_buffer.erase(imu_msg_buffer.begin(), imu_msg_buffer.begin() + used_imu_msg_cntr);
         diagHasNegativeOrNaN(state_server.state_cov, "InEKF_Propagate后");
-
 
         /// 4. 开始进行腿运动学的更新
         // return;

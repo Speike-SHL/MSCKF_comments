@@ -197,6 +197,7 @@ private:
 
     /// 包含所有的特征点的map容器，key为特征点id，值为Feature类,
     MapServer map_server;
+    MapServer map_server_erased;
 
     /// 储存进入的IMU的消息，有时间同步的作用
     std::vector<sensor_msgs::Imu> imu_msg_buffer;
@@ -232,6 +233,7 @@ private:
     ros::Subscriber feature_sub;
     ros::Publisher odom_pub;
     ros::Publisher feature_pub;
+    ros::Publisher feature_erased_pub;
     tf::TransformBroadcaster tf_pub;
     ros::ServiceServer reset_srv;
     ros::Subscriber leica_sub;  // Euroc MH-* 数据集中的3D真实位置

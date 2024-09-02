@@ -6,6 +6,7 @@ settings:
   path_alignment: true                      # 是否进行轨迹对齐(EuRoC中真实值和估计值轨迹不在同一起点)
   output_file_path: "none"                  # 估计轨迹输出路径(如果不需要输出则设置为"none")
   logger_level: "Debug"                     # 日志级别("Debug", "Info", "Warning", "Error", "Fatal")
+  pub_erased_features: true                # 是否发布被擦除的特征点（发布的话特征点会更丰富，但是会增加计算量）
 
 # 噪声参数
 noises:
