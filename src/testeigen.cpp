@@ -3,22 +3,27 @@
 #include <Eigen/Dense>
 #include <iomanip>
 #include <chrono>
-#include "msckf_vio/imu_state.h"
-#include "msckf_vio/modern_robotics.h"
 
 using namespace std;
 
 int main()
 {
-     msckf_vio::RobotState robotstate;
-     auto X_i = robotstate.getX_i();
-     cout << X_i << endl << endl;
+     Eigen::Matrix<double, 9, 9> tmp = Eigen::Matrix<double, 9, 9>::Identity();
+     cout << tmp << endl << endl;
+     Eigen::MatrixXd tmp2 = Eigen::MatrixXd::Random(8, 8);
+     cout << tmp2 << endl << endl;
+     tmp.topLeftCorner(tmp2.rows(), tmp2.cols()) = tmp2;
+     cout << tmp << endl << endl;
 
-     X_i = Eigen::MatrixXd::Random(X_i.rows() - 2, X_i.cols() - 2);
-     cout << X_i << endl << endl;
-     robotstate.setX_i(X_i);
+     cout << endl;
 
-     X_i = Eigen::MatrixXd::Random(X_i.rows() + 5, X_i.cols() + 5);
-     cout << X_i << endl << endl;
-     robotstate.setX_i(X_i);
+     cout << tmp.array().isNaN().any() << endl;
+     cout << tmp.diagonal().transpose() << endl;
+
+     // Eigen::MatrixXd tmp = Eigen::MatrixXd::Random(8, 8);
+     // state_server.robot_state.setX_i(tmp);
+
+     // int dimX_i = state_server.robot_state.dimX_i();
+     // state_server.robot_state.X_i.conservativeResize(30, 30);
+     // state_server.robot_state.X_i.conservativeResize(dimX_i, dimX_i);
 }

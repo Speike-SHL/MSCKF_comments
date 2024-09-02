@@ -1,6 +1,6 @@
 # 后端的设置
 settings:
-  merge_visual: false                       # 是否使用视觉信息
+  merge_visual: true                        # 是否使用视觉信息
   merge_leg: true                           # 是否使用腿部信息
   use_gatingTest: true                      # 是否使用卡方检验
   path_alignment: false                     # 是否进行轨迹对齐(EuRoC中真实值和估计值轨迹不在同一起点)

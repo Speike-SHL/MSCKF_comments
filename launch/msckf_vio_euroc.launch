@@ -25,7 +25,7 @@
 
       <param name="msckf_vio_config_file" value="$(find msckf_vio)/config/msckf-vio-euroc.yaml"/>
 
-      <param name="td_offset" value="0.014"/>  <!-- 手动偏移图像的时间，不能过大，<30ms -->
+      <param name="td_offset" value="0.0"/>  <!-- 手动偏移图像的时间，不能过大，<30ms -->
       <param name="publish_tf" value="true"/>
       <param name="frame_rate" value="20"/>
       <param name="fixed_frame_id" value="$(arg fixed_frame_id)"/>
@@ -49,7 +49,6 @@
       <param name="initial_covariance/stereo_extrinsic_rotation_cov" value="3.0462e-4"/>
       <param name="initial_covariance/stereo_extrinsic_translation_cov" value="2.5e-5"/>
 
-      <param name="logger_level" value="Info"/>
       <remap from="~imu" to="/imu0"/>
       <remap from="~features" to="image_processor/features"/>
 

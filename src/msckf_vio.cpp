@@ -28,9 +28,58 @@
 #include <msckf_vio/msckf_vio.h>
 #include <msckf_vio/math_utils.hpp>
 #include <msckf_vio/utils.h>
+#include "msckf_vio/webots.hpp"
 
 using namespace std;
 using namespace Eigen;
+
+#define REDCOUT(STRING) cout << "\033[31m" << STRING << "\033[m"      // 红色输出
+#define GREENCOUT(STRING) cout << "\033[32m" << STRING << "\033[m\n"    // 绿色输出
+#define YELLOWCOUT(STRING) cout << "\033[33m" << STRING << "\033[m\n"   // 黄色输出
+#define BLUECOUT(STRING) cout << "\033[34m" << STRING << "\033[m\n"     // 蓝色输出
+#define PURPLECOUT(STRING) cout << "\033[35m" << STRING << "\033[m\n"   // 紫色输出
+#define CYANCOUT(STRING) cout << "\033[36m" << STRING << "\033[m\n"     // 青色输出
+
+#define ROS_DEBUG_STREAM_BLUE(STRING) ROS_DEBUG_STREAM("\033[34m" << STRING << "\033[m")
+#define ROS_INFO_STREAM_CYAN(STRING) ROS_INFO_STREAM("\033[36m" << STRING << "\033[m")
+
+bool diagHasNegativeOrNaN(const Eigen::MatrixXd &M, string name)
+{
+    assert(M.rows() == M.cols());
+    // if(M.array().isNaN().any())
+    // {
+    //     ROS_ERROR_STREAM(name + ": 矩阵含有NaN");
+    // }
+    // else
+    // {
+    //     ROS_INFO_STREAM(name + ": 矩阵不含NaN");
+    // }
+    name = name + " 总维度为 " + to_string(M.rows()) + "x" + to_string(M.cols());
+    vector<int> neg_idx;
+    for (int i = 0; i < M.rows(); ++i)
+    {
+        if (M(i, i) < 0)
+        {
+            neg_idx.push_back(i);
+        }
+    }
+    if(neg_idx.size() > 0)
+    {
+        REDCOUT(name + ": 矩阵对角线含有负数，索引为 ");
+        for (auto idx : neg_idx)
+            REDCOUT(idx << " ");
+        cout << endl;
+        cout << setprecision(2) << name + ": 矩阵对角 R|v|p       \t" << M.topLeftCorner(9, 9).diagonal().transpose() << endl;
+        cout << setprecision(2) << name + ": 矩阵对角 d1|d2|d3|d4 \t" << M.block<12, 12>(9, 9).diagonal().transpose() << endl;
+        cout << setprecision(2) << name + ": 矩阵对角 bg|ba       \t" << M.block<6, 6>(21, 21).diagonal().transpose() << endl;
+        return true;
+    }
+    ROS_INFO_STREAM(name + ": 矩阵对角线不含负数");
+    cout << setprecision(2) << name + ": 矩阵对角 R|v|p       \t" << M.topLeftCorner(9, 9).diagonal().transpose() << endl;
+    cout << setprecision(2) << name + ": 矩阵对角 d1|d2|d3|d4 \t" << M.block<12, 12>(9, 9).diagonal().transpose() << endl;
+    cout << setprecision(2) << name + ": 矩阵对角 bg|ba       \t" << M.block<6, 6>(21, 21).diagonal().transpose() << endl;
+    return false;
+}
 
 namespace msckf_vio
 {
@@ -62,6 +111,8 @@ namespace msckf_vio
     bool path_alignment = false;
     bool merge_visual = true;
     bool merge_leg = false;
+
+    WebotsRealState webotsRealState;
 
     /**
      * @brief MsckfVio构造函数
@@ -266,7 +317,7 @@ namespace msckf_vio
         double wheel_radius = config["dog_param"]["wheel_radius"]
                                   ? config["dog_param"]["wheel_radius"].as<double>()
                                   : 0.05;
-        for(auto& leg : state_server.leg_state.legs)
+        for (auto &leg : state_server.leg_state.legs)
         {
             leg.wheel_radius = wheel_radius;
         }
@@ -329,6 +380,7 @@ namespace msckf_vio
         isTouchdown_sub = nh.subscribe("/isTouchdown", 100, &MsckfVio::isTouchdownCallback, this);
         qNow_dqNow_TNow_sub = nh.subscribe("/qNow_dqNow_TNow", 100, &MsckfVio::qNow_dqNow_TNowCallback, this);
         wheelMotor_fb_sub = nh.subscribe("/wheelMotor_fb", 100, &MsckfVio::wheelMotor_fbCallback, this);
+        WheellegState_sub = nh.subscribe("/wheelleg_state_pub", 100, &MsckfVio::WheellegStateCallback, this);
         return true;
     }
 
@@ -470,7 +522,6 @@ namespace msckf_vio
         std_srvs::Trigger::Request &req,
         std_srvs::Trigger::Response &res)
     {
-
         ROS_WARN("Start resetting msckf vio...");
         // Temporarily shutdown the subscribers to prevent the
         // state from updating.
@@ -552,7 +603,7 @@ namespace msckf_vio
     {
         int seq = msg->header.seq;
         double cur_time = msg->header.stamp.toSec();
-        ROS_DEBUG_STREAM("featureCallback header: seq: " << seq << " time: " << cur_time);
+        ROS_INFO_STREAM_CYAN("featureCallback header: seq: " << seq << " time: " << cur_time);
         /// 1. 必须经过imu(重力)初始化才能继续进行
         if (!is_gravity_set)
         {
@@ -565,9 +616,11 @@ namespace msckf_vio
         {
             is_first_img = false;
             state_server.robot_state.time = msg->header.stamp.toSec();
+            ROS_DEBUG("featureCallback: 初始化完成，第一帧图像...");
         }
 
         // 调试使用
+        diagHasNegativeOrNaN(state_server.state_cov, "featureCallback开头");
         static double max_processing_time = 0.0;
         static int critical_time_cntr = 0;
         double processing_start_time = ros::Time::now().toSec();
@@ -576,36 +629,43 @@ namespace msckf_vio
         /// @see MsckfVio::batchImuProcessing(const double &time_bound)
         ros::Time start_time = ros::Time::now();
         batchImuProcessing(msg->header.stamp.toSec());
-        // double imu_processing_time = (ros::Time::now() - start_time).toSec();
+        double imu_processing_time = (ros::Time::now() - start_time).toSec();
+        diagHasNegativeOrNaN(state_server.state_cov, "batchImuProcessing后");
+
 
         /// 4. 状态增广，包括名义状态增广和误差协方差矩阵P的增广，主要是增广新的相机状态
         /// @see MsckfVio::stateAugmentation(const double &time)
-        // start_time = ros::Time::now();
+        start_time = ros::Time::now();
         stateAugmentation(msg->header.stamp.toSec());
         double state_augmentation_time = (ros::Time::now() - start_time).toSec();
+        diagHasNegativeOrNaN(state_server.state_cov, "stateAugmentation后");
 
         /// 5. 向map_server中添加新的特征，和旧特征在新相机帧上的观测
         start_time = ros::Time::now();
         addFeatureObservations(msg);
         double add_observations_time = (ros::Time::now() - start_time).toSec();
+        diagHasNegativeOrNaN(state_server.state_cov, "addFeatureObservations后");
 
         // Perform measurement update if necessary.
         // 5. 使用不再跟踪上的点来更新
         start_time = ros::Time::now();
         removeLostFeatures();
         double remove_lost_features_time = (ros::Time::now() - start_time).toSec();
+        diagHasNegativeOrNaN(state_server.state_cov, "removeLostFeatures后");
 
         // 6. 当cam状态数达到最大值时，挑出若干cam状态待删除
         // 并基于能被2帧以上这些cam观测到的feature进行MSCKF测量更新
         start_time = ros::Time::now();
         pruneCamStateBuffer();
         double prune_cam_states_time = (ros::Time::now() - start_time).toSec();
+        diagHasNegativeOrNaN(state_server.state_cov, "pruneCamStateBuffer后");
 
         // Publish the odometry.
         // 7. 发布位姿
         start_time = ros::Time::now();
         publish(msg->header.stamp);
         double publish_time = (ros::Time::now() - start_time).toSec();
+        diagHasNegativeOrNaN(state_server.state_cov, "publish后");
 
         // Reset the system if necessary.
         // 8. 根据IMU状态位置协方差判断是否重置整个系统
@@ -619,20 +679,46 @@ namespace msckf_vio
         {
             ++critical_time_cntr;
             ROS_INFO("\033[1;31mTotal processing time %f/%d...\033[0m",
-                     processing_time, critical_time_cntr);
-            // printf("IMU processing time: %f/%f\n",
-            //     imu_processing_time, imu_processing_time/processing_time);
-            // printf("State augmentation time: %f/%f\n",
-            //     state_augmentation_time, state_augmentation_time/processing_time);
-            // printf("Add observations time: %f/%f\n",
-            //     add_observations_time, add_observations_time/processing_time);
-            ROS_INFO("Remove lost features time: %f/%f\n",
-                     remove_lost_features_time, remove_lost_features_time / processing_time);
-            ROS_INFO("Remove camera states time: %f/%f\n",
-                     prune_cam_states_time, prune_cam_states_time / processing_time);
-            // printf("Publish time: %f/%f\n",
-            //     publish_time, publish_time/processing_time);
+                    processing_time, critical_time_cntr);
+            ROS_INFO("IMU processing time: %f/%f",
+                    imu_processing_time, imu_processing_time / processing_time);
+            ROS_INFO("State augmentation time: %f/%f",
+                    state_augmentation_time, state_augmentation_time / processing_time);
+            ROS_INFO("Add observations time: %f/%f",
+                    add_observations_time, add_observations_time / processing_time);
+            ROS_INFO("Remove lost features time: %f/%f",
+                    remove_lost_features_time, remove_lost_features_time / processing_time);
+            ROS_INFO("Remove camera states time: %f/%f",
+                    prune_cam_states_time, prune_cam_states_time / processing_time);
+            ROS_INFO("Publish time: %f/%f\n",
+                    publish_time, publish_time / processing_time);
         }
+        // ROS_INFO("\033[1;31mTotal processing time %f/%d...\033[0m",
+        //          processing_time, critical_time_cntr);
+        // ROS_INFO("IMU processing time: %f/%f",
+        //          imu_processing_time, imu_processing_time / processing_time);
+        // ROS_INFO("State augmentation time: %f/%f",
+        //          state_augmentation_time, state_augmentation_time / processing_time);
+        // ROS_INFO("Add observations time: %f/%f",
+        //          add_observations_time, add_observations_time / processing_time);
+        // ROS_INFO("Remove lost features time: %f/%f",
+        //          remove_lost_features_time, remove_lost_features_time / processing_time);
+        // ROS_INFO("Remove camera states time: %f/%f",
+        //          prune_cam_states_time, prune_cam_states_time / processing_time);
+        // ROS_INFO("Publish time: %f/%f\n",
+        //          publish_time, publish_time / processing_time);
+        cout << "旋转协方差: \n" << state_server.state_cov.block<3, 3>(0, 0) << endl;
+        cout << "速度协方差: \n"
+             << state_server.state_cov.block<3, 3>(3, 3) << endl;
+        cout << "位置协方差: \n"
+             << state_server.state_cov.block<3, 3>(6, 6) << endl;
+        cout << "腿1协方差: \n" << state_server.state_cov.block<3, 3>(9, 9) << endl;
+        cout << "腿2协方差: \n" << state_server.state_cov.block<3, 3>(12, 12) << endl;
+        cout << "腿3协方差: \n" << state_server.state_cov.block<3, 3>(15, 15) << endl;
+        cout << "腿4协方差: \n" << state_server.state_cov.block<3, 3>(18, 18) << endl;
+
+        diagHasNegativeOrNaN(state_server.state_cov, "featureCallback末尾");
+        ROS_INFO_STREAM_CYAN("featureCallback end...");
         return;
     }
 
@@ -1011,6 +1097,7 @@ namespace msckf_vio
                                       dimP_i + 12 + 6 * state_server.cam_states.size());
         VectorXd r = VectorXd::Zero(jacobian_row_size);
         int stack_cntr = 0;
+        BLUECOUT("dimP_i: " << dimP_i << " state_server.cam_states.size(): " << state_server.cam_states.size());
 
         // Process the features which lose track.
         // 6. 处理特征点
@@ -1047,7 +1134,8 @@ namespace msckf_vio
         r.conservativeResize(stack_cntr);
 
         // Perform the measurement update step.
-        // 7. 使用误差及雅可比更新状态
+        // 7. 使用误差及雅可比更新状态processing_time
+
         measurementUpdate(H_x, r);
 
         // Remove all processed features from the map.
@@ -1071,6 +1159,7 @@ namespace msckf_vio
             ROS_DEBUG_THROTTLE(10.0, "unmerged visual");
             return;
         }
+        ROS_DEBUG_STREAM_BLUE("measurementUpdate In");
 
         int dimP_i = state_server.robot_state.dimP_i();
         int dimX_i = state_server.robot_state.dimX_i();
@@ -1220,6 +1309,7 @@ namespace msckf_vio
         // cout << setprecision(10) << rotationToQuaternion(R_GC_new2.transpose()).transpose() << endl; // JPL形式的q_CG
         // cout << setprecision(10) << Eigen::Quaterniond(R_GC_new2).normalized().coeffs().transpose() << endl; // Har形式的q_GC
         // cout << "----------------------------------------------------" << endl;
+        ROS_DEBUG_STREAM_BLUE("measurementUpdate Out");
         return;
     }
 
@@ -1635,6 +1725,9 @@ namespace msckf_vio
 
         // Check the uncertainty of positions to determine if
         // the system can be reset.
+        // double position_x_std = std::sqrt(std::abs(state_server.state_cov(6, 6)));
+        // double position_y_std = std::sqrt(std::abs(state_server.state_cov(7, 7)));
+        // double position_z_std = std::sqrt(std::abs(state_server.state_cov(8, 8)));
         double position_x_std = std::sqrt(state_server.state_cov(6, 6));
         double position_y_std = std::sqrt(state_server.state_cov(7, 7));
         double position_z_std = std::sqrt(state_server.state_cov(8, 8));
@@ -1648,6 +1741,13 @@ namespace msckf_vio
                  ++online_reset_counter);
         ROS_INFO("Stardard deviation in xyz: %f, %f, %f",
                  position_x_std, position_y_std, position_z_std);
+        cout << "旋转协方差: \n" << state_server.state_cov.block<3, 3>(0, 0) << endl;
+        cout << "速度协方差: \n" << state_server.state_cov.block<3, 3>(3, 3) << endl;
+        cout << "位置协方差: \n" << state_server.state_cov.block<3, 3>(6, 6) << endl;
+        cout << "腿1协方差: \n" << state_server.state_cov.block<3, 3>(9, 9) << endl;
+        cout << "腿2协方差: \n" << state_server.state_cov.block<3, 3>(12, 12) << endl;
+        cout << "腿3协方差: \n" << state_server.state_cov.block<3, 3>(15, 15) << endl;
+        cout << "腿4协方差: \n" << state_server.state_cov.block<3, 3>(18, 18) << endl;
         if (online_reset_counter >= 5)
             ROS_ERROR("结果严重发散，请终止程序");
 
@@ -1703,7 +1803,6 @@ namespace msckf_vio
 
     void MsckfVio::publish(const ros::Time &time)
     {
-
         // Convert the IMU frame to the body frame.
         // 1. 计算body坐标，因为imu与body相对位姿是单位矩阵，所以就是imu的坐标
         const RobotState &robot_state = state_server.robot_state;
@@ -1918,16 +2017,21 @@ namespace msckf_vio
 
     void MsckfVio::isTouchdownCallback(const dog_msg::isTouchdown::ConstPtr &msg)
     {
+        ROS_DEBUG("isTouchdownCallback In");
         isTouchdown_buffer.push_back(*msg);
+        ROS_DEBUG("isTouchdownCallback Out");
     }
 
     void MsckfVio::wheelMotor_fbCallback(const dog_msg::wheel_motor_fb::ConstPtr &msg)
     {
+        ROS_DEBUG("wheelMotor_fbCallback In");
         wheelMotor_fb_buffer.push_back(*msg);
+        ROS_DEBUG("wheelMotor_fbCallback Out");
     }
 
     void MsckfVio::qNow_dqNow_TNowCallback(const dog_msg::qNow_dqNow_TNow::ConstPtr &msg)
     {
+        ROS_DEBUG_STREAM_BLUE("qNow_dqNow_TNowCallback In");
         int seq = msg->header.seq;
         double cur_time = msg->header.stamp.toSec();
         ROS_DEBUG_STREAM("qNow_dqNow_TNowCallback header: seq: " << seq << " time: " << cur_time);
@@ -1971,6 +2075,8 @@ namespace msckf_vio
         // QUERY 需不需要
         // InEKF_Propagate(msg->header.stamp.toSec(), m_gyro, m_acc);
         imu_msg_buffer.erase(imu_msg_buffer.begin(), imu_msg_buffer.begin() + used_imu_msg_cntr);
+        diagHasNegativeOrNaN(state_server.state_cov, "InEKF_Propagate后");
+
 
         /// 4. 开始进行腿运动学的更新
         // return;
@@ -2125,6 +2231,46 @@ namespace msckf_vio
                     state_server.robot_state.setd_GI(d_GI, index);
                     state_server.leg_state.legs[leg_id].time = msg->header.stamp.toSec();
 
+                    // if (id == 0)
+                    // {
+                    //     BLUECOUT("FL leg");
+                    //     BLUECOUT("  v_b: " << v_b.transpose());
+                    //     BLUECOUT("r v_b: " << webotsRealState.FLlun_velocity_in_body.transpose());
+                    //     BLUECOUT("  v_w: " << v_w.transpose());
+                    //     BLUECOUT("r v_w: " << (webotsRealState.R_NWU2NUE * webotsRealState.FLlun_velocity_in_world).transpose());
+                    //     BLUECOUT("  R_GI:\n" << state_server.robot_state.getR_GI());
+                    //     BLUECOUT("r R_GI:\n" << webotsRealState.R_NWU2NUE * webotsRealState.body_rotation_in_world);
+                    //     cout << endl;
+                    // }
+                    // else if(id == 1)
+                    // {
+                    //     BLUECOUT("RL leg");
+                    //     BLUECOUT("  v_b: " << v_b.transpose());
+                    //     BLUECOUT("r v_b: " << webotsRealState.RLlun_velocity_in_body.transpose());
+                    //     BLUECOUT("  v_w: " << v_w.transpose());
+                    //     BLUECOUT("r v_w: " << (webotsRealState.R_NWU2NUE * webotsRealState.RLlun_velocity_in_world).transpose());
+                    //     cout << endl;
+                    // }
+                    // else if(id == 2)
+                    // {
+                    //     BLUECOUT("RR leg");
+                    //     BLUECOUT("  v_b: " << v_b.transpose());
+                    //     BLUECOUT("r v_b: " << webotsRealState.RRlun_velocity_in_body.transpose());
+                    //     BLUECOUT("  v_w: " << v_w.transpose());
+                    //     BLUECOUT("r v_w: " << (webotsRealState.R_NWU2NUE * webotsRealState.RRlun_velocity_in_world).transpose());
+                    //     cout << endl;
+                    // }
+                    // else if(id == 3)
+                    // {
+                    //     BLUECOUT("FR leg");
+                    //     BLUECOUT("  v_b: " << v_b.transpose());
+                    //     BLUECOUT("r v_b: " << webotsRealState.FRlun_velocity_in_body.transpose());
+                    //     BLUECOUT("  v_w: " << v_w.transpose());
+                    //     BLUECOUT("r v_w: " << (webotsRealState.R_NWU2NUE * webotsRealState.FRlun_velocity_in_world).transpose());
+                    //     cout << endl;
+                    //     cout << endl;
+                    // }
+
                     // 开始构造几大矩阵
                     // QUERY 腿更新时带不带上相机外参，现在先带上
                     // H阵
@@ -2133,8 +2279,7 @@ namespace msckf_vio
                     H.block(startIndex, 0, 3, dimP_i + 12) = MatrixXd::Zero(3, dimP_i + 12);
                     H.block<3, 3>(startIndex, 6) = -Matrix3d::Identity();                                   // p项
                     H.block<3, 3>(startIndex, 3 * it_estimated->second - dimX_frak) = Matrix3d::Identity(); // d项
-                    ROS_DEBUG_STREAM("H: \n"
-                                     << H << endl);
+                    // ROS_DEBUG_STREAM("H: \n" << H << endl);
 
                     // N阵
                     startIndex = N.rows();
@@ -2143,8 +2288,7 @@ namespace msckf_vio
                     N.block(0, startIndex, startIndex, 3) = MatrixXd::Zero(startIndex, 3); // 右上角置0
                     Eigen::Matrix3d R = state_server.robot_state.getR_GI();
                     N.block(startIndex, startIndex, 3, 3) = R * cov * R.transpose();
-                    ROS_DEBUG_STREAM("N: \n"
-                                     << N << endl);
+                    // ROS_DEBUG_STREAM("N: \n" << N << endl);
 
                     // Z阵
                     startIndex = Z.rows();
@@ -2152,8 +2296,7 @@ namespace msckf_vio
                     Eigen::Vector3d p = state_server.robot_state.getp_GI();
                     Eigen::Vector3d d = state_server.robot_state.getd_GI(it_estimated->second);
                     Z.segment(startIndex, 3) = R * pose - (d - p);
-                    ROS_DEBUG_STREAM("Z: \n"
-                                     << Z << endl);
+                    // ROS_DEBUG_STREAM("Z: \n" << Z << endl);
                 }
                 else // 不在状态量中，且为假触地，跳过
                 {
@@ -2163,7 +2306,9 @@ namespace msckf_vio
             // 使用构造的观测数据进行更新
             if (Z.rows() > 0)
             {
+                diagHasNegativeOrNaN(state_server.state_cov, "InEKF_Correct前");
                 InEKF_Correct(Z, H, N);
+                diagHasNegativeOrNaN(state_server.state_cov, "InEKF_Correct后");
             }
             // 从状态量中移除不再触地的腿
             if (remove_contacts.size() > 0)
@@ -2192,8 +2337,7 @@ namespace msckf_vio
                     state_server.robot_state.X_i_valid_size -= 1;
                     state_server.robot_state.setX_i(X_rem);
                     state_server.state_cov = P_rem;
-                    ROS_DEBUG_STREAM("X_i :\n"
-                                     << state_server.robot_state.getX_i() << endl);
+                    // ROS_DEBUG_STREAM("X_i :\n" << state_server.robot_state.getX_i() << endl);
                     ROS_DEBUG_STREAM("P size: " << P_rem.rows() << " " << P_rem.cols() << endl);
                     for (auto &tmp : state_server.robot_state.estimated_contact_position)
                     {
@@ -2261,11 +2405,14 @@ namespace msckf_vio
                 }
             }
         }
+        diagHasNegativeOrNaN(state_server.state_cov, "qNow_dqNow_TNowCallback后");
+        ROS_DEBUG_STREAM_BLUE("qNow_dqNow_TNowCallback Out");
         return;
     }
 
     void MsckfVio::InEKF_Propagate(const double &time, const Eigen::Vector3d &m_gyro, const Eigen::Vector3d &m_acc)
     {
+        ROS_DEBUG("InEKF_Propagate In");
         RobotState &robot_state = state_server.robot_state;
         Vector3d gyro = m_gyro - robot_state.getbg();
         Vector3d acc = m_acc - robot_state.getba();
@@ -2306,10 +2453,12 @@ namespace msckf_vio
 
         // 更新IMU状态的时间
         state_server.robot_state.time = time;
+        ROS_DEBUG("InEKF_Propagate Out");
     }
 
     Eigen::MatrixXd MsckfVio::StateTransitionMatrix(const Eigen::Vector3d &w, const Eigen::Vector3d &a, double dt)
     {
+        ROS_DEBUG("StateTransitionMatrix In");
         Eigen::Vector3d phi = w * dt;
         Eigen::Matrix3d G0 = Gamma_SO3(phi, 0);
         Eigen::Matrix3d G1 = Gamma_SO3(phi, 1);
@@ -2398,11 +2547,13 @@ namespace msckf_vio
         }
         Phi.block<3, 3>(3, dimP_i - dimX_frak + 3) = -RG1dt;  // Phi_26
         Phi.block<3, 3>(6, dimP_i - dimX_frak + 3) = -RG2dt2; // Phi_36
+        ROS_DEBUG("StateTransitionMatrix Out");
         return Phi;
     }
 
     Eigen::MatrixXd MsckfVio::DiscreteNoiseMatrix(const Eigen::MatrixXd &Phi, const double dt)
     {
+        ROS_DEBUG("DiscreteNoiseMatrix In");
         int dimX_i = state_server.robot_state.dimX_i();
         int dimX_frak = state_server.robot_state.dimX_frak();
         int dimP_i = state_server.robot_state.dimP_i();
@@ -2428,11 +2579,13 @@ namespace msckf_vio
 
         Eigen::MatrixXd PhiB = Phi * B;
         Eigen::MatrixXd Qd = PhiB * Cov * PhiB.transpose() * dt;
+        ROS_DEBUG("DiscreteNoiseMatrix Out");
         return Qd;
     }
 
     void MsckfVio::InEKF_Correct(const Eigen::MatrixXd &Z, const Eigen::MatrixXd &H, const Eigen::MatrixXd &N)
     {
+        ROS_DEBUG("InEKF_Correct In");
         int dimP_i = state_server.robot_state.dimP_i();
         int dimX_frak = state_server.robot_state.dimX_frak();
         const Eigen::MatrixXd &P = state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12);
@@ -2469,14 +2622,96 @@ namespace msckf_vio
         ROS_DEBUG_STREAM("P_new size: " << P_new.rows() << " " << P_new.cols());
         // NOTE: drift中这里还修改了yaw对应的协方差矩阵，不更新yaw
         state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) = P_new;
+
+        ROS_DEBUG_STREAM("X_i \n " << state_server.robot_state.getX_i() << endl);
+
+        ROS_DEBUG("InEKF_Correct Out");
     }
 
     void MsckfVio::RemoveRowAndColumn(Eigen::MatrixXd &M, int index, int remove_dim)
     {
+        ROS_DEBUG("RemoveRowAndColumn In");
         unsigned int dimX = M.cols();
         M.block(index, 0, dimX - index - remove_dim, dimX) = M.bottomRows(dimX - index - remove_dim).eval();
         M.block(0, index, dimX, dimX - index - remove_dim) = M.rightCols(dimX - index - remove_dim).eval();
         M.conservativeResize(dimX - remove_dim, dimX - remove_dim);
+        ROS_DEBUG("RemoveRowAndColumn Out");
+    }
+
+    void MsckfVio::WheellegStateCallback(const dog_msg::WheellegState::ConstPtr &msg)
+    {
+        ROS_DEBUG("WheellegStateCallback In");
+        webotsRealState.time = msg->time.data;
+        tf::vectorMsgToEigen(msg->body_acc_in_IMU, webotsRealState.body_acc_in_IMU);
+        tf::vectorMsgToEigen(msg->body_gyro_in_IMU, webotsRealState.body_gyro_in_IMU);
+        webotsRealState.body_rotation_in_world << msg->body_rotation_in_world[0].data, msg->body_rotation_in_world[1].data, msg->body_rotation_in_world[2].data,
+            msg->body_rotation_in_world[3].data, msg->body_rotation_in_world[4].data, msg->body_rotation_in_world[5].data,
+            msg->body_rotation_in_world[6].data, msg->body_rotation_in_world[7].data, msg->body_rotation_in_world[8].data;
+        tf::vectorMsgToEigen(msg->body_position_in_world, webotsRealState.body_position_in_world);
+        tf::vectorMsgToEigen(msg->body_velocity_in_world, webotsRealState.body_velocity_in_world);
+        tf::vectorMsgToEigen(msg->FLlun_position_in_world, webotsRealState.FLlun_position_in_world);
+        tf::vectorMsgToEigen(msg->RLlun_position_in_world, webotsRealState.RLlun_position_in_world);
+        tf::vectorMsgToEigen(msg->RRlun_position_in_world, webotsRealState.RRlun_position_in_world);
+        tf::vectorMsgToEigen(msg->FRlun_position_in_world, webotsRealState.FRlun_position_in_world);
+        tf::vectorMsgToEigen(msg->FLlun_velocity_in_world, webotsRealState.FLlun_velocity_in_world);
+        tf::vectorMsgToEigen(msg->RLlun_velocity_in_world, webotsRealState.RLlun_velocity_in_world);
+        tf::vectorMsgToEigen(msg->RRlun_velocity_in_world, webotsRealState.RRlun_velocity_in_world);
+        tf::vectorMsgToEigen(msg->FRlun_velocity_in_world, webotsRealState.FRlun_velocity_in_world);
+        tf::vectorMsgToEigen(msg->FLlun_velocity_in_body, webotsRealState.FLlun_velocity_in_body);
+        tf::vectorMsgToEigen(msg->RLlun_velocity_in_body, webotsRealState.RLlun_velocity_in_body);
+        tf::vectorMsgToEigen(msg->RRlun_velocity_in_body, webotsRealState.RRlun_velocity_in_body);
+        tf::vectorMsgToEigen(msg->FRlun_velocity_in_body, webotsRealState.FRlun_velocity_in_body);
+        webotsRealState.FLlun_Transform_to_body << msg->FLlun_Transform_to_body[0].data, msg->FLlun_Transform_to_body[1].data, msg->FLlun_Transform_to_body[2].data,
+            msg->FLlun_Transform_to_body[3].data, msg->FLlun_Transform_to_body[4].data, msg->FLlun_Transform_to_body[5].data,
+            msg->FLlun_Transform_to_body[6].data, msg->FLlun_Transform_to_body[7].data, msg->FLlun_Transform_to_body[8].data,
+            msg->FLlun_Transform_to_body[9].data, msg->FLlun_Transform_to_body[10].data, msg->FLlun_Transform_to_body[11].data,
+            msg->FLlun_Transform_to_body[12].data, msg->FLlun_Transform_to_body[13].data, msg->FLlun_Transform_to_body[14].data,
+            msg->FLlun_Transform_to_body[15].data;
+        webotsRealState.RLlun_Transform_to_body << msg->RLlun_Transform_to_body[0].data, msg->RLlun_Transform_to_body[1].data, msg->RLlun_Transform_to_body[2].data,
+            msg->RLlun_Transform_to_body[3].data, msg->RLlun_Transform_to_body[4].data, msg->RLlun_Transform_to_body[5].data,
+            msg->RLlun_Transform_to_body[6].data, msg->RLlun_Transform_to_body[7].data, msg->RLlun_Transform_to_body[8].data,
+            msg->RLlun_Transform_to_body[9].data, msg->RLlun_Transform_to_body[10].data, msg->RLlun_Transform_to_body[11].data,
+            msg->RLlun_Transform_to_body[12].data, msg->RLlun_Transform_to_body[13].data, msg->RLlun_Transform_to_body[14].data,
+            msg->RLlun_Transform_to_body[15].data;
+        webotsRealState.RRlun_Transform_to_body << msg->RRlun_Transform_to_body[0].data, msg->RRlun_Transform_to_body[1].data, msg->RRlun_Transform_to_body[2].data,
+            msg->RRlun_Transform_to_body[3].data, msg->RRlun_Transform_to_body[4].data, msg->RRlun_Transform_to_body[5].data,
+            msg->RRlun_Transform_to_body[6].data, msg->RRlun_Transform_to_body[7].data, msg->RRlun_Transform_to_body[8].data,
+            msg->RRlun_Transform_to_body[9].data, msg->RRlun_Transform_to_body[10].data, msg->RRlun_Transform_to_body[11].data,
+            msg->RRlun_Transform_to_body[12].data, msg->RRlun_Transform_to_body[13].data, msg->RRlun_Transform_to_body[14].data,
+            msg->RRlun_Transform_to_body[15].data;
+        webotsRealState.FRlun_Transform_to_body << msg->FRlun_Transform_to_body[0].data, msg->FRlun_Transform_to_body[1].data, msg->FRlun_Transform_to_body[2].data,
+            msg->FRlun_Transform_to_body[3].data, msg->FRlun_Transform_to_body[4].data, msg->FRlun_Transform_to_body[5].data,
+            msg->FRlun_Transform_to_body[6].data, msg->FRlun_Transform_to_body[7].data, msg->FRlun_Transform_to_body[8].data,
+            msg->FRlun_Transform_to_body[9].data, msg->FRlun_Transform_to_body[10].data, msg->FRlun_Transform_to_body[11].data,
+            msg->FRlun_Transform_to_body[12].data, msg->FRlun_Transform_to_body[13].data, msg->FRlun_Transform_to_body[14].data,
+            msg->FRlun_Transform_to_body[15].data;
+        webotsRealState.FLlun_DHJacobian_to_body << msg->FLlun_DHJacobian_to_body[0].data, msg->FLlun_DHJacobian_to_body[1].data, msg->FLlun_DHJacobian_to_body[2].data,
+            msg->FLlun_DHJacobian_to_body[3].data, msg->FLlun_DHJacobian_to_body[4].data, msg->FLlun_DHJacobian_to_body[5].data,
+            msg->FLlun_DHJacobian_to_body[6].data, msg->FLlun_DHJacobian_to_body[7].data, msg->FLlun_DHJacobian_to_body[8].data,
+            msg->FLlun_DHJacobian_to_body[9].data, msg->FLlun_DHJacobian_to_body[10].data, msg->FLlun_DHJacobian_to_body[11].data,
+            msg->FLlun_DHJacobian_to_body[12].data, msg->FLlun_DHJacobian_to_body[13].data, msg->FLlun_DHJacobian_to_body[14].data,
+            msg->FLlun_DHJacobian_to_body[15].data, msg->FLlun_DHJacobian_to_body[16].data, msg->FLlun_DHJacobian_to_body[17].data;
+        webotsRealState.RLlun_DHJacobian_to_body << msg->RLlun_DHJacobian_to_body[0].data, msg->RLlun_DHJacobian_to_body[1].data, msg->RLlun_DHJacobian_to_body[2].data,
+            msg->RLlun_DHJacobian_to_body[3].data, msg->RLlun_DHJacobian_to_body[4].data, msg->RLlun_DHJacobian_to_body[5].data,
+            msg->RLlun_DHJacobian_to_body[6].data, msg->RLlun_DHJacobian_to_body[7].data, msg->RLlun_DHJacobian_to_body[8].data,
+            msg->RLlun_DHJacobian_to_body[9].data, msg->RLlun_DHJacobian_to_body[10].data, msg->RLlun_DHJacobian_to_body[11].data,
+            msg->RLlun_DHJacobian_to_body[12].data, msg->RLlun_DHJacobian_to_body[13].data, msg->RLlun_DHJacobian_to_body[14].data,
+            msg->RLlun_DHJacobian_to_body[15].data, msg->RLlun_DHJacobian_to_body[16].data, msg->RLlun_DHJacobian_to_body[17].data;
+        webotsRealState.RRlun_DHJacobian_to_body << msg->RRlun_DHJacobian_to_body[0].data, msg->RRlun_DHJacobian_to_body[1].data, msg->RRlun_DHJacobian_to_body[2].data,
+            msg->RRlun_DHJacobian_to_body[3].data, msg->RRlun_DHJacobian_to_body[4].data, msg->RRlun_DHJacobian_to_body[5].data,
+            msg->RRlun_DHJacobian_to_body[6].data, msg->RRlun_DHJacobian_to_body[7].data, msg->RRlun_DHJacobian_to_body[8].data,
+            msg->RRlun_DHJacobian_to_body[9].data, msg->RRlun_DHJacobian_to_body[10].data, msg->RRlun_DHJacobian_to_body[11].data,
+            msg->RRlun_DHJacobian_to_body[12].data, msg->RRlun_DHJacobian_to_body[13].data, msg->RRlun_DHJacobian_to_body[14].data,
+            msg->RRlun_DHJacobian_to_body[15].data, msg->RRlun_DHJacobian_to_body[16].data, msg->RRlun_DHJacobian_to_body[17].data;
+        webotsRealState.FRlun_DHJacobian_to_body << msg->FRlun_DHJacobian_to_body[0].data, msg->FRlun_DHJacobian_to_body[1].data, msg->FRlun_DHJacobian_to_body[2].data,
+            msg->FRlun_DHJacobian_to_body[3].data, msg->FRlun_DHJacobian_to_body[4].data, msg->FRlun_DHJacobian_to_body[5].data,
+            msg->FRlun_DHJacobian_to_body[6].data, msg->FRlun_DHJacobian_to_body[7].data, msg->FRlun_DHJacobian_to_body[8].data,
+            msg->FRlun_DHJacobian_to_body[9].data, msg->FRlun_DHJacobian_to_body[10].data, msg->FRlun_DHJacobian_to_body[11].data,
+            msg->FRlun_DHJacobian_to_body[12].data, msg->FRlun_DHJacobian_to_body[13].data, msg->FRlun_DHJacobian_to_body[14].data,
+            msg->FRlun_DHJacobian_to_body[15].data, msg->FRlun_DHJacobian_to_body[16].data, msg->FRlun_DHJacobian_to_body[17].data;
+        webotsRealState.Fourlun_contact = Eigen::Matrix<bool, 4, 1>(msg->Fourlun_contact[0].data, msg->Fourlun_contact[1].data,
+                                                                    msg->Fourlun_contact[2].data, msg->Fourlun_contact[3].data);
+        ROS_DEBUG("WheellegStateCallback Out");
     }
 
 } // namespace msckf_vio

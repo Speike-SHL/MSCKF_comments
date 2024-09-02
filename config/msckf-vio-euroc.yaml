@@ -5,24 +5,21 @@ settings:
   use_gatingTest: true                      # 是否使用卡方检验
   path_alignment: true                      # 是否进行轨迹对齐(EuRoC中真实值和估计值轨迹不在同一起点)
   output_file_path: "none"                  # 估计轨迹输出路径(如果不需要输出则设置为"none")
+  logger_level: "Debug"                     # 日志级别("Debug", "Info", "Warning", "Error", "Fatal")
 
 # 噪声参数
 noises:
   IMU:
-    gyroscope_std: 0.005                  # 陀螺仪的标准差
-    accelerometer_std: 0.05               # 加速度计的标准差
-    gyroscope_bias_std: 0.001             # 陀螺仪偏差的标准差
-    accelerometer_bias_std: 0.01          # 加速度计偏差的标准差
+    gyroscope_std: 0.005                    # 陀螺仪的标准差
+    accelerometer_std: 0.05                 # 加速度计的标准差
+    gyroscope_bias_std: 0.001               # 陀螺仪偏差的标准差
+    accelerometer_bias_std: 0.01            # 加速度计偏差的标准差
   Image:
-    feature_std: 0.035                    # 特征点的标准差
-  Leg:
-    # kinematics_cov = J * encoder_cov_ * J.transpose() + kinematics_prior_cov_
-    encoder_std: 0.0174533                  # 关节编码器读数的标准差, 0.0174533 rad = 1 deg 
-    contact_std: 0.1                        # 接触点的标准差
-    kinematics_additive_std: 0.05           # 向正向运动学额外增加 5 cm std
+    feature_std: 0.035                      # 特征点的标准差
+
 
 # 初始值
 init:
   velocity: [0.0, 0.0, 0.0]                 # 初始速度
-  position: [0.0, 0.0, 0.0]              # 初始位置
+  position: [0.0, 0.0, 0.0]                 # 初始位置
 

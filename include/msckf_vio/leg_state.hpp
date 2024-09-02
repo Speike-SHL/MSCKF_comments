@@ -127,7 +127,7 @@ namespace msckf_vio
         double theta3 = atan(tan(this->legs[id].wheel_angle) * w[2]);
         Eigen::Vector3d velocity_in_body_frame;
         velocity_in_body_frame[0] = wheel_velocity * cos(theta3);
-        velocity_in_body_frame[1] = wheel_velocity * sin(theta3);
+        velocity_in_body_frame[1] = -wheel_velocity * sin(theta3);
         velocity_in_body_frame[2] = 0.0;
         return velocity_in_body_frame;
     }
