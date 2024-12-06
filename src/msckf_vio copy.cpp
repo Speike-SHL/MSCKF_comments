@@ -1,12 +1,10 @@
-// TODO 先把视觉全禁止了, 只更新腿, 然后调到能够和InEKF原来代码那个测试用例一样的效果(要写一个腿的发布函数)
-// TODO 然后再把视觉加回来, 而且腿在更新时候涉及到视觉的不是是不是完全不去做更新
-// 可能不是像这样单独更新，可能要一起更新，所以去看看基于优化的，或者找找有没有其他融合腿的，或者说看融合视觉IMU雷达用滤波是怎么做的
 /*
  * COPYRIGHT AND PERMISSION NOTICE
  * Penn Software MSCKF_VIO
  * Copyright (C) 2017 The Trustees of the University of Pennsylvania
  * All rights reserved.
  */
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -20,9 +18,6 @@
 #include <Eigen/QR>
 #include <Eigen/SPQRSupport>
 #include <boost/math/distributions/chi_squared.hpp>
-#include <boost/stacktrace.hpp>
-#include <boost/current_function.hpp>
-#include <stdexcept>
 
 #include <eigen_conversions/eigen_msg.h>
 #include <tf_conversions/tf_eigen.h>
@@ -38,9 +33,7 @@
 using namespace std;
 using namespace Eigen;
 
-#define REDCOLOR(STRING) "\033[1;31m" << STRING << "\033[0m"
-#define REDCOUT(STRING) cout << "\033[31m" << STRING << "\033[m" // 红色输出
-#define GREENCOLOR(STRING) "\033[1;32m" << STRING << "\033[0m"
+#define REDCOUT(STRING) cout << "\033[31m" << STRING << "\033[m"      // 红色输出
 #define GREENCOUT(STRING) cout << "\033[32m" << STRING << "\033[m\n"  // 绿色输出
 #define YELLOWCOUT(STRING) cout << "\033[33m" << STRING << "\033[m\n" // 黄色输出
 #define BLUECOUT(STRING) cout << "\033[34m" << STRING << "\033[m\n"   // 蓝色输出
@@ -51,7 +44,7 @@ using namespace Eigen;
 #define ROS_INFO_STREAM_CYAN(STRING) ROS_INFO_STREAM("\033[36m" << STRING << "\033[m")
 #define ROS_INFO_STREAM_PURPLE(STRING) ROS_INFO_STREAM("\033[35m" << STRING << "\033[m")
 
-bool diagHasNegativeOrNaN(const Eigen::MatrixXd &M, std::string name)
+bool diagHasNegativeOrNaN(const Eigen::MatrixXd &M, string name)
 {
     return false;
     assert(M.rows() == M.cols());
@@ -88,51 +81,6 @@ bool diagHasNegativeOrNaN(const Eigen::MatrixXd &M, std::string name)
     cout << setprecision(2) << name + ": 矩阵对角 d1|d2|d3|d4 \t" << M.block<12, 12>(9, 9).diagonal().transpose() << endl;
     cout << setprecision(2) << name + ": 矩阵对角 bg|ba       \t" << M.block<6, 6>(21, 21).diagonal().transpose() << endl;
     return false;
-}
-
-void checkSize(const Eigen::MatrixXd &A, const Eigen::MatrixXd &B, const char *functionName, const char *file, int line)
-{
-    if (A.cols() != B.rows())
-    {
-        std::cerr << "Matrix dimension mismatch in function " << REDCOLOR(functionName) << "\n";
-        std::cerr << "File: " << REDCOLOR(file) << ", Line: " << REDCOLOR(line) << ", ";
-        std::cerr << "A * B : " << REDCOLOR(A.cols() << "x" << A.rows() << " * " << B.cols() << "x" << B.rows()) << "\n";
-        std::cerr << "Stack trace:\n"
-                  << boost::stacktrace::stacktrace() << "\n";
-        throw std::invalid_argument("Matrix dimension mismatch for multiplication.");
-    }
-}
-
-void checkBlockIndex(const Eigen::MatrixXd &A, int startRow, int startCol, int blockRows, int blockCols, const char *functionName, const char *file, int line)
-{
-    if (startRow + blockRows > A.rows() || startCol + blockCols > A.cols())
-    {
-        std::cerr << "Block index out of bounds in function " << REDCOLOR(functionName) << "\n";
-        std::cerr << "File: " << REDCOLOR(file) << ", Line: " << REDCOLOR(line) << ", ";
-        std::cerr << "A size : " << REDCOLOR(A.rows() << "x" << A.cols() << " Index: " << startRow << ", " << startCol << ", " << blockRows << ", " << blockCols) << "\n";
-        std::cerr
-            << "Stack trace:\n"
-            << boost::stacktrace::stacktrace() << "\n";
-        throw std::out_of_range("Block index out of matrix bounds.");
-    }
-}
-
-void msckf_vio::MsckfVio::checkStateCov() const
-{
-    cout << "X_i size: " << GREENCOLOR(state_server.robot_state.dimX_i() << "x" << state_server.robot_state.dimX_i()) << "\t";
-    cout << "P_i size: " << GREENCOLOR(state_server.robot_state.dimP_i() << "x" << state_server.robot_state.dimP_i()) << "\t";
-    cout << "state_cov size: " << GREENCOLOR(state_server.state_cov.rows() << "x" << state_server.state_cov.cols()) << "\t";
-    cout << "cam_state num: " << GREENCOLOR(state_server.cam_states.size()) << "\n";
-    if (state_server.state_cov.rows() == (state_server.robot_state.dimP_i() + 12 + state_server.cam_states.size() * 6))
-    {
-        cout << "state_cov size is correct! " << GREENCOLOR(state_server.state_cov.rows() << "(state_cov) = " << state_server.robot_state.dimP_i() << "(imu_state) + 12(外参) + " << state_server.cam_states.size() << " x 6 (cam_state)")
-             << endl;
-    }
-    else
-    {
-        cout << "state_cov size is wrong! " << REDCOLOR(state_server.state_cov.rows() << "(state_cov) != " << state_server.robot_state.dimP_i() << "(imu_state) + 12(外参) + " << state_server.cam_states.size() << " x 6 (cam_state)")
-             << endl;
-    }
 }
 
 namespace msckf_vio
@@ -309,7 +257,7 @@ namespace msckf_vio
         // 0~3 旋转 3~6 速度 6~9 位移 9~12 陀螺仪偏置 12~15 加速度计偏置
         // 15~18 左目到IMU的旋转 18~21 左目到IMU的平移
         // 21~24 右目到左目的旋转 24~27 右目到左目的平移
-        state_server.state_cov = MatrixXd::Zero(27, 27); // INFO state_cov 初始化 27 x 27
+        state_server.state_cov = MatrixXd::Zero(27, 27);
         for (int i = 3; i < 6; ++i)
             state_server.state_cov(i, i) = velocity_cov;
         for (int i = 9; i < 12; ++i)
@@ -324,7 +272,6 @@ namespace msckf_vio
             state_server.state_cov(i, i) = stereo_extrinsic_rotation_cov;
         for (int i = 24; i < 27; ++i)
             state_server.state_cov(i, i) = stereo_extrinsic_translation_cov;
-        checkStateCov();
 
         // Transformation offsets between the frames involved.
         // 外参注意还是从左往右那么看
@@ -664,8 +611,6 @@ namespace msckf_vio
      */
     void MsckfVio::featureCallback(const CameraMeasurementConstPtr &msg)
     {
-        // publish(msg->header.stamp);
-        // return;
         int seq = msg->header.seq;
         double cur_time = msg->header.stamp.toSec();
         ROS_INFO_STREAM_CYAN("featureCallback header: seq: " << seq << " time: " << cur_time);
@@ -848,7 +793,6 @@ namespace msckf_vio
         RobotState &robot_state = state_server.robot_state;
 
         /// 2. 角速度和加速度减去偏置，计算dt
-        cout << "processModel check : m_gyro = [" << m_gyro.transpose() << "], bg = [" << robot_state.getbg().transpose() << "]\n";
         Vector3d gyro = m_gyro - robot_state.getbg();
         Vector3d acc = m_acc - robot_state.getba(); // acc_bias 初始值是0
         double dtime = time - robot_state.time;
@@ -864,30 +808,19 @@ namespace msckf_vio
         MatrixXd F = MatrixXd::Zero(dimP_i + 12, dimP_i + 12); // IMU+腿+bias  + 4个外参
         MatrixXd G = MatrixXd::Zero(dimP_i + 12, dimP_i - 3);  // 减去 p 所在列 和 4个外参
 
-        checkBlockIndex(F, 3, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         F.block<3, 3>(3, 0) = skewSymmetric(RobotState::gravity);
-        checkBlockIndex(F, 6, 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         F.block<3, 3>(6, 3) = Matrix3d::Identity();
-        checkBlockIndex(F, 0, dimP_i - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         F.block<3, 3>(0, dimP_i - dimX_frak) = -R;
-        checkBlockIndex(F, 3, dimP_i - dimX_frak + 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         F.block<3, 3>(3, dimP_i - dimX_frak + 3) = -R;
         for (int i = 3; i < dimX_i; ++i)
         {
-            checkBlockIndex(F, 3 * i - 6, dimP_i - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             F.block<3, 3>(3 * i - 6, dimP_i - dimX_frak) = -skewSymmetric(X_i.block<3, 1>(0, i)) * R;
         }
 
         MatrixXd Adj = Adjoint_SEK3(X_i);
-        checkBlockIndex(G, 0, 0, dimP_i - dimX_frak, 6, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-        checkBlockIndex(Adj, 0, 0, dimP_i - dimX_frak, 6, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         G.block(0, 0, dimP_i - dimX_frak, 6) = Adj.block(0, 0, dimP_i - dimX_frak, 6);
-        checkBlockIndex(G, 0, 6, dimP_i - dimX_frak, dimP_i - dimX_frak - 9, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-        checkBlockIndex(Adj, 0, 9, dimP_i - dimX_frak, dimP_i - dimX_frak - 9, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         G.block(0, 6, dimP_i - dimX_frak, dimP_i - dimX_frak - 9) = Adj.block(0, 9, dimP_i - dimX_frak, dimP_i - dimX_frak - 9);
-        checkBlockIndex(G, dimP_i - dimX_frak, dimP_i - dimX_frak - 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         G.block<3, 3>(dimP_i - dimX_frak, dimP_i - dimX_frak - 3) = Matrix3d::Identity();
-        checkBlockIndex(G, dimP_i - dimX_frak + 3, dimP_i - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         G.block<3, 3>(dimP_i - dimX_frak + 3, dimP_i - dimX_frak) = Matrix3d::Identity();
 
         MatrixXd Fdt = F * dtime;
@@ -902,34 +835,24 @@ namespace msckf_vio
 
         /// 6. 使用OC后的Phi阵计算过程噪声协方差矩阵Q, 见笔记pdf中《误差状态转移矩阵和过程噪声协方差矩阵》
         MatrixXd Cov = MatrixXd::Zero(dimP_i - 3, dimP_i - 3);
-        checkBlockIndex(Cov, 0, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Cov.block<3, 3>(0, 0) = state_server.Qg;
-        checkBlockIndex(Cov, 3, 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Cov.block<3, 3>(3, 3) = state_server.Qa;
-        checkBlockIndex(Cov, dimP_i - dimX_frak - 3, dimP_i - dimX_frak - 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Cov.block<3, 3>(dimP_i - dimX_frak - 3, dimP_i - dimX_frak - 3) = state_server.Qbg;
-        checkBlockIndex(Cov, dimP_i - dimX_frak, dimP_i - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Cov.block<3, 3>(dimP_i - dimX_frak, dimP_i - dimX_frak) = state_server.Qba;
         // TODO: 乘FkR?
         for (int i = 5; i < dimX_i; ++i)
-        {
-            checkBlockIndex(Cov, 3 * (i - 5) + 6, 3 * (i - 5) + 6, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             Cov.block<3, 3>(3 * (i - 5) + 6, 3 * (i - 5) + 6) = state_server.Qc;
-        }
         MatrixXd PhiG = Phi * G;
         MatrixXd Q = PhiG * Cov * PhiG.transpose() * dtime;
 
         /// 7. 预测系统误差状态协方差矩阵P，如果有相机状态量，那么也更新imu状态量与相机状态量交叉的部分
         /// 见笔记pdf中《预测系统状态协方差矩阵P》
-        checkBlockIndex(state_server.state_cov, 0, 0, dimP_i + 12, dimP_i + 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) =
             Phi * state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) * Phi.transpose() + Q;
         if (state_server.cam_states.size() > 0)
         {
-            checkBlockIndex(state_server.state_cov, 0, dimP_i + 12, dimP_i + 12, state_server.state_cov.cols() - dimP_i - 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             state_server.state_cov.block(0, dimP_i + 12, dimP_i + 12, state_server.state_cov.cols() - dimP_i - 12) =
                 Phi * state_server.state_cov.block(0, dimP_i + 12, dimP_i + 12, state_server.state_cov.cols() - dimP_i - 12);
-            checkBlockIndex(state_server.state_cov, dimP_i + 12, 0, state_server.state_cov.rows() - dimP_i - 12, dimP_i + 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             state_server.state_cov.block(dimP_i + 12, 0, state_server.state_cov.rows() - dimP_i - 12, dimP_i + 12) =
                 state_server.state_cov.block(dimP_i + 12, 0, state_server.state_cov.rows() - dimP_i - 12, dimP_i + 12) * Phi.transpose();
         }
@@ -957,7 +880,6 @@ namespace msckf_vio
         Vector3d v = state_server.robot_state.getv_GI();
         Vector3d p = state_server.robot_state.getp_GI();
 
-        cout << "Sophus check: gyro = [" << gyro.transpose() << "], dt = " << dt << endl;
         Matrix3d dR_dt = R * Sophus::SO3d::exp(gyro * dt).matrix();
         Matrix3d dR_dt2 = R * Sophus::SO3d::exp(gyro * dt / 2.0).matrix();
 
@@ -1022,15 +944,10 @@ namespace msckf_vio
         int dimX_i = state_server.robot_state.dimX_i();
         int dimX_frak = state_server.robot_state.dimX_frak();
         MatrixXd J = MatrixXd::Zero(6, dimP_i + 12);
-        checkBlockIndex(J, 0, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         J.block<3, 3>(0, 0) = Matrix3d::Identity();
-        checkBlockIndex(J, 0, dimP_i, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         J.block<3, 3>(0, dimP_i) = R_i_w;
-        checkBlockIndex(J, 3, 6, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         J.block<3, 3>(3, 6) = Matrix3d::Identity();
-        checkBlockIndex(J, 3, dimP_i, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         J.block<3, 3>(3, dimP_i) = skewSymmetric(p_i_w) * R_i_w;
-        checkBlockIndex(J, 3, dimP_i + 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         J.block<3, 3>(3, dimP_i + 3) = R_i_w;
 
         /// 4. 增广误差协方差矩阵P，见笔记pdf中《误差协方差矩阵增广》
@@ -1040,37 +957,29 @@ namespace msckf_vio
         // Resize the state covariance matrix.
         size_t old_rows = state_server.state_cov.rows();
         size_t old_cols = state_server.state_cov.cols();
-        state_server.state_cov.conservativeResize(old_rows + 6, old_cols + 6); // INFO state_cov 扩增相机状态
+        state_server.state_cov.conservativeResize(old_rows + 6, old_cols + 6);
 
         // imu的协方差矩阵
-        checkBlockIndex(state_server.state_cov, 0, 0, dimP_i + 12, dimP_i + 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const MatrixXd &P11 = state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12);
 
         // imu相对于各个相机状态量的协方差矩阵（不包括最新的）
-        checkBlockIndex(state_server.state_cov, 0, dimP_i + 12, dimP_i + 12, old_cols - dimP_i - 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const MatrixXd &P12 = state_server.state_cov.block(0, dimP_i + 12, dimP_i + 12, old_cols - dimP_i - 12);
 
         // 4.2 计算协方差矩阵
         // 左下角
-        checkBlockIndex(state_server.state_cov, old_rows, 0, 6, old_cols, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         state_server.state_cov.block(old_rows, 0, 6, old_cols) << J * P11, J * P12;
 
         // 右上角
-        checkBlockIndex(state_server.state_cov, 0, old_cols, old_rows, 6, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-        checkBlockIndex(state_server.state_cov, old_rows, 0, 6, old_cols, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         state_server.state_cov.block(0, old_cols, old_rows, 6) =
             state_server.state_cov.block(old_rows, 0, 6, old_cols).transpose();
 
         // 右下角，关于相机部分的J都是0所以省略了
-        checkBlockIndex(state_server.state_cov, old_rows, old_cols, 6, 6, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         state_server.state_cov.block<6, 6>(old_rows, old_cols) = J * P11 * J.transpose();
 
         /// 5. 进行强制对称
         MatrixXd state_cov_fixed =
             0.5 * (state_server.state_cov + state_server.state_cov.transpose());
         state_server.state_cov = state_cov_fixed;
-
-        checkStateCov();
 
         return;
     }
@@ -1222,9 +1131,7 @@ namespace msckf_vio
             // 6.2 卡方检验，剔除错误点，并不是所有点都用
             if (gatingTest(H_xj, r_j, cam_state_ids.size() - 1))
             {
-                checkBlockIndex(H_x, stack_cntr, 0, H_xj.rows(), H_xj.cols(), BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                 H_x.block(stack_cntr, 0, H_xj.rows(), H_xj.cols()) = H_xj;
-                checkBlockIndex(r, stack_cntr, 0, r_j.rows(), 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                 r.segment(stack_cntr, r_j.rows()) = r_j;
                 stack_cntr += H_xj.rows();
             }
@@ -1303,9 +1210,7 @@ namespace msckf_vio
             (spqr_helper.matrixQ().transpose() * H).evalTo(H_temp);
             (spqr_helper.matrixQ().transpose() * r).evalTo(r_temp);
 
-            checkBlockIndex(H_temp, 0, 0, dimP_i + 12 + state_server.cam_states.size() * 6, H_temp.cols(), BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             H_thin = H_temp.topRows(dimP_i + 12 + state_server.cam_states.size() * 6);
-            checkBlockIndex(r_temp, 0, 0, dimP_i + 12 + state_server.cam_states.size() * 6, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             r_thin = r_temp.head(dimP_i + 12 + state_server.cam_states.size() * 6);
         }
         else
@@ -1327,60 +1232,42 @@ namespace msckf_vio
         VectorXd delta_x = K * r_thin;
 
         // Update the IMU state.
-        checkBlockIndex(delta_x, 0, 0, dimP_i + 12, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const VectorXd &delta_x_imu = delta_x.head(dimP_i + 12);
 
-        checkBlockIndex(delta_x_imu, 0, 0, dimP_i - dimX_frak, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const MatrixXd dT_imu = Exp_SEK3(delta_x_imu.head(dimP_i - dimX_frak));
-        checkBlockIndex(dT_imu, 0, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const Matrix3d dR_imu = dT_imu.block<3, 3>(0, 0);
         Eigen::Matrix3d R_GI_pred = dR_imu * state_server.robot_state.getR_GI();
-        checkBlockIndex(dT_imu, 0, 3, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Eigen::Vector3d v_GI_pred = dR_imu * state_server.robot_state.getv_GI() + dT_imu.block<3, 1>(0, 3);
-        checkBlockIndex(dT_imu, 0, 4, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Eigen::Vector3d p_GI_pred = dR_imu * state_server.robot_state.getp_GI() + dT_imu.block<3, 1>(0, 4);
         state_server.robot_state.setR_GI(R_GI_pred);
         state_server.robot_state.setv_GI(v_GI_pred);
         state_server.robot_state.setp_GI(p_GI_pred);
         // TODO: 这里是否要更新腿？dT_imu中还有腿，可以打印一下看看增量是多少
 
-        checkBlockIndex(delta_x_imu, dimP_i - dimX_frak, 0, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Eigen::Vector3d bg_pred = state_server.robot_state.getbg() + delta_x_imu.segment<3>(dimP_i - dimX_frak);
-        checkBlockIndex(delta_x_imu, dimP_i - dimX_frak + 3, 0, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Eigen::Vector3d ba_pred = state_server.robot_state.getba() + delta_x_imu.segment<3>(dimP_i - dimX_frak + 3);
         state_server.robot_state.setbg(bg_pred);
         state_server.robot_state.setba(ba_pred);
 
-        checkBlockIndex(delta_x_imu, dimP_i, 0, 6, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const Matrix4d dT_ext = Exp_SEK3(delta_x_imu.segment<6>(dimP_i));
-        checkBlockIndex(dT_ext, 0, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const Matrix3d dR_ext = dT_ext.block<3, 3>(0, 0);
         state_server.robot_state.R_cam0_imu = dR_ext * state_server.robot_state.R_cam0_imu;
-        checkBlockIndex(dT_ext, 0, 3, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         state_server.robot_state.t_cam0_imu = dR_ext * state_server.robot_state.t_cam0_imu + dT_ext.block<3, 1>(0, 3);
 
-        checkBlockIndex(delta_x_imu, dimP_i + 6, 0, 6, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const Matrix4d dT_stereo = Exp_SEK3(delta_x_imu.segment<6>(dimP_i + 6));
-        checkBlockIndex(dT_stereo, 0, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const Matrix3d dR_stereo = dT_stereo.block<3, 3>(0, 0);
         state_server.robot_state.R_cam1_cam0 = dR_stereo * state_server.robot_state.R_cam1_cam0;
-        checkBlockIndex(dT_stereo, 0, 3, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         state_server.robot_state.t_cam1_cam0 = dR_stereo * state_server.robot_state.t_cam1_cam0 + dT_stereo.block<3, 1>(0, 3);
 
         // 更新相机姿态
         auto cam_state_iter = state_server.cam_states.begin();
         for (int i = 0; i < state_server.cam_states.size(); ++i, ++cam_state_iter)
         {
-            checkBlockIndex(delta_x, dimP_i + 12 + i * 6, 0, 6, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             const VectorXd &delta_x_cam = delta_x.segment<6>(dimP_i + 12 + i * 6);
-            checkBlockIndex(delta_x_cam, 0, 0, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-            checkBlockIndex(delta_x_cam, delta_x_cam.rows() - 3, 0, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             const Matrix4d dT_cam = Exp_SE3(delta_x_cam.head<3>(),
                                             delta_x_cam.tail<3>());
-            checkBlockIndex(dT_cam, 0, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             const Matrix3d dR_cam = dT_cam.block<3, 3>(0, 0);
             cam_state_iter->second.R_G_Cam0 = dR_cam * cam_state_iter->second.R_G_Cam0;
-            checkBlockIndex(dT_cam, 0, 3, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             cam_state_iter->second.p_G_Cam0 = dR_cam * cam_state_iter->second.p_G_Cam0 + dT_cam.block<3, 1>(0, 3);
         }
 
@@ -1502,13 +1389,9 @@ namespace msckf_vio
                 state_server.cam_states.begin(), cam_state_iter);
 
             // Stack the Jacobians.
-            checkBlockIndex(H_xj, stack_cntr, dimP_i + 6, 4, 6, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             H_xj.block<4, 6>(stack_cntr, dimP_i + 6) = H_xi;
-            checkBlockIndex(H_xj, stack_cntr, dimP_i + 12 + 6 * cam_state_cntr, 4, 6, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             H_xj.block<4, 6>(stack_cntr, dimP_i + 12 + 6 * cam_state_cntr) = H_ci;
-            checkBlockIndex(H_fj, stack_cntr, 0, 4, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             H_fj.block<4, 3>(stack_cntr, 0) = H_fi;
-            checkBlockIndex(r_j, stack_cntr, 0, 4, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             r_j.segment<4>(stack_cntr) = r_i;
             stack_cntr += 4;
         }
@@ -1711,9 +1594,7 @@ namespace msckf_vio
 
             if (gatingTest(H_xj, r_j, involved_cam_state_ids.size()))
             {
-                checkBlockIndex(H_x, stack_cntr, 0, H_xj.rows(), H_xj.cols(), BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                 H_x.block(stack_cntr, 0, H_xj.rows(), H_xj.cols()) = H_xj;
-                checkBlockIndex(r, stack_cntr, 0, r_j.rows(), 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                 r.segment(stack_cntr, r_j.rows()) = r_j;
                 stack_cntr += H_xj.rows();
             }
@@ -1742,10 +1623,6 @@ namespace msckf_vio
             // 直接删除状态误差协方差矩阵中对应的行列
             if (cam_state_end < state_server.state_cov.rows())
             {
-                checkBlockIndex(state_server.state_cov, cam_state_start, 0, state_server.state_cov.rows() - cam_state_end,
-                                state_server.state_cov.cols(), BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-                checkBlockIndex(state_server.state_cov, cam_state_end, 0, state_server.state_cov.rows() - cam_state_end,
-                                state_server.state_cov.cols(), BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                 state_server.state_cov.block(cam_state_start, 0,
                                              state_server.state_cov.rows() - cam_state_end,
                                              state_server.state_cov.cols()) =
@@ -1753,10 +1630,6 @@ namespace msckf_vio
                                                  state_server.state_cov.rows() - cam_state_end,
                                                  state_server.state_cov.cols());
 
-                checkBlockIndex(state_server.state_cov, 0, cam_state_start, state_server.state_cov.rows(),
-                                state_server.state_cov.cols() - cam_state_end, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-                checkBlockIndex(state_server.state_cov, 0, cam_state_end, state_server.state_cov.rows(),
-                                state_server.state_cov.cols() - cam_state_end, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                 state_server.state_cov.block(0, cam_state_start,
                                              state_server.state_cov.rows(),
                                              state_server.state_cov.cols() - cam_state_end) =
@@ -1765,7 +1638,7 @@ namespace msckf_vio
                                                  state_server.state_cov.cols() - cam_state_end);
 
                 state_server.state_cov.conservativeResize(
-                    state_server.state_cov.rows() - 6, state_server.state_cov.cols() - 6); // INFO state_cov 删除相机状态
+                    state_server.state_cov.rows() - 6, state_server.state_cov.cols() - 6);
             }
             else
             {
@@ -1775,7 +1648,6 @@ namespace msckf_vio
 
             // 在相机状态中删除帧
             state_server.cam_states.erase(cam_id);
-            checkStateCov();
         }
 
         return;
@@ -1864,7 +1736,7 @@ namespace msckf_vio
 
     void MsckfVio::onlineReset()
     {
-        // TODO 重置函数也要重置腿，不然会由于索引不匹配导致报错
+
         // Never perform online reset if position std threshold
         // is non-positive.
         if (position_std_threshold <= 0)
@@ -1953,13 +1825,6 @@ namespace msckf_vio
         for (int i = 24; i < 27; ++i)
             state_server.state_cov(i, i) = stereo_extrinsic_translation_cov;
 
-        // 关于腿部分的重置
-        Eigen::MatrixXd X_i_tmp = state_server.robot_state.getX_i();
-        X_i_tmp.conservativeResize(5, 5);
-        state_server.robot_state.X_i_valid_size = 5;
-        state_server.robot_state.setX_i(X_i_tmp);
-        state_server.robot_state.estimated_contact_position.clear();
-
         ROS_WARN("%lld online reset complete...", online_reset_counter);
         return;
     }
@@ -1999,22 +1864,16 @@ namespace msckf_vio
 
         // Convert the covariance.
         // 协方差，取出旋转平移部分，以及它们之间的公共部分组成6自由度的协方差
-        checkBlockIndex(state_server.state_cov, 0, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Matrix3d P_oo = state_server.state_cov.block<3, 3>(0, 0);
-        checkBlockIndex(state_server.state_cov, 0, 6, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Matrix3d P_op = state_server.state_cov.block<3, 3>(0, 6);
-        checkBlockIndex(state_server.state_cov, 6, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Matrix3d P_po = state_server.state_cov.block<3, 3>(6, 0);
-        checkBlockIndex(state_server.state_cov, 6, 6, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Matrix3d P_pp = state_server.state_cov.block<3, 3>(6, 6);
         Matrix<double, 6, 6> P_imu_pose = Matrix<double, 6, 6>::Zero();
         P_imu_pose << P_pp, P_po, P_op, P_oo;
 
         // 转下坐标，但是这里都是单位矩阵
         Matrix<double, 6, 6> H_pose = Matrix<double, 6, 6>::Zero();
-        checkBlockIndex(H_pose, 0, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         H_pose.block<3, 3>(0, 0) = RobotState::T_imu_body.linear();
-        checkBlockIndex(H_pose, 3, 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         H_pose.block<3, 3>(3, 3) = RobotState::T_imu_body.linear();
         Matrix<double, 6, 6> P_body_pose = H_pose *
                                            P_imu_pose * H_pose.transpose();
@@ -2026,7 +1885,6 @@ namespace msckf_vio
 
         // Construct the covariance for the velocity.
         // 速度协方差
-        checkBlockIndex(state_server.state_cov, 3, 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Matrix3d P_imu_vel = state_server.state_cov.block<3, 3>(3, 3);
         Matrix3d H_vel = RobotState::T_imu_body.linear();
         Matrix3d P_body_vel = H_vel * P_imu_vel * H_vel.transpose();
@@ -2176,9 +2034,7 @@ namespace msckf_vio
                     P2 = Eigen::MatrixXd::Ones(4, (int)path_ground_truth.size());
                     for (int i = 0; i < (int)path_vio.size(); ++i)
                     {
-                        checkBlockIndex(P1, 0, i, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                         P1.block<3, 1>(0, i) = path_vio[i];
-                        checkBlockIndex(P2, 0, i, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                         P2.block<3, 1>(0, i) = path_ground_truth[i];
                     }
                     T_WR = P1 * pinv_eigen_based(P2);
@@ -2387,9 +2243,7 @@ namespace msckf_vio
                 }
                 bool has_contact = state_server.leg_state.legs[leg_id].contact; // 最后的触地状态
                 // 计算该腿的协方差，用于构造N矩阵
-                checkBlockIndex(state_server.leg_state.legs[leg_id].T, 0, 3, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                 Eigen::Vector3d pose = state_server.leg_state.legs[leg_id].T.block<3, 1>(0, 3);
-                checkBlockIndex(state_server.leg_state.legs[leg_id].J, 0, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                 Eigen::Matrix3d J = state_server.leg_state.legs[leg_id].J.block<3, 3>(0, 0);
                 Eigen::Matrix3d cov = J * state_server.Qe * J.transpose() + state_server.Qkinematic_additive;
                 state_server.leg_state.legs[leg_id].Cov = cov;
@@ -2543,23 +2397,17 @@ namespace msckf_vio
                     // H阵
                     startIndex = H.rows();
                     H.conservativeResize(startIndex + 3, dimP_i + 12);
-                    checkBlockIndex(H, startIndex, 0, 3, dimP_i + 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                     H.block(startIndex, 0, 3, dimP_i + 12) = MatrixXd::Zero(3, dimP_i + 12);
-                    checkBlockIndex(H, startIndex, 6, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-                    H.block<3, 3>(startIndex, 6) = -Matrix3d::Identity(); // p项
-                    checkBlockIndex(H, startIndex, 3 * it_estimated->second - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
+                    H.block<3, 3>(startIndex, 6) = -Matrix3d::Identity();                                   // p项
                     H.block<3, 3>(startIndex, 3 * it_estimated->second - dimX_frak) = Matrix3d::Identity(); // d项
                     // ROS_DEBUG_STREAM("H: \n" << H << endl);
 
                     // N阵
                     startIndex = N.rows();
                     N.conservativeResize(startIndex + 3, startIndex + 3);
-                    checkBlockIndex(N, startIndex, 0, 3, startIndex, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                     N.block(startIndex, 0, 3, startIndex) = MatrixXd::Zero(3, startIndex); // 左下角置0
-                    checkBlockIndex(N, 0, startIndex, startIndex, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                     N.block(0, startIndex, startIndex, 3) = MatrixXd::Zero(startIndex, 3); // 右上角置0
                     Eigen::Matrix3d R = state_server.robot_state.getR_GI();
-                    checkBlockIndex(N, startIndex, startIndex, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                     N.block(startIndex, startIndex, 3, 3) = R * cov * R.transpose();
                     // ROS_DEBUG_STREAM("N: \n" << N << endl);
 
@@ -2568,7 +2416,6 @@ namespace msckf_vio
                     Z.conservativeResize(startIndex + 3, Eigen::NoChange);
                     Eigen::Vector3d p = state_server.robot_state.getp_GI();
                     Eigen::Vector3d d = state_server.robot_state.getd_GI(it_estimated->second);
-                    checkBlockIndex(Z, startIndex, 0, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                     Z.segment(startIndex, 3) = R * pose - (d - p);
                     // ROS_DEBUG_STREAM("Z: \n" << Z << endl);
                 }
@@ -2610,14 +2457,13 @@ namespace msckf_vio
                     // TODO: 是否需要放在循环中
                     state_server.robot_state.X_i_valid_size -= 1;
                     state_server.robot_state.setX_i(X_rem);
-                    state_server.state_cov = P_rem; // INFO state_cov 删除腿状态
+                    state_server.state_cov = P_rem;
                     // ROS_DEBUG_STREAM("X_i :\n" << state_server.robot_state.getX_i() << endl);
                     ROS_DEBUG_STREAM("P size: " << P_rem.rows() << " " << P_rem.cols() << endl);
                     for (auto &tmp : state_server.robot_state.estimated_contact_position)
                     {
                         ROS_DEBUG_STREAM(tmp.first << "->" << tmp.second << " ");
                     }
-                    checkStateCov();
                 }
             }
             // 向状态中增加新触地的腿
@@ -2631,11 +2477,9 @@ namespace msckf_vio
                 int dimX_frak = state_server.robot_state.dimX_frak();
                 for (LegID new_contact : new_contacts)
                 {
-                    checkBlockIndex(state_server.leg_state.legs[new_contact].T, 0, 3, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
                     Eigen::Vector3d pose = state_server.leg_state.legs[new_contact].T.block<3, 1>(0, 3);
                     int startIndex = X_i_aug.rows();
-                    X_i_aug.conservativeResizeLike(Eigen::MatrixXd::Identity(startIndex + 1, startIndex + 1)); // 将X大小扩充1, 新增对角线部分置1
-                    checkBlockIndex(X_i_aug, 0, startIndex, 3, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
+                    X_i_aug.conservativeResizeLike(Eigen::MatrixXd::Identity(startIndex + 1, startIndex + 1)); // 将X大小扩充1                                              // 新增对角线部分置1
                     X_i_aug.block(0, startIndex, 3, 1) = p_GI + R_GI * pose;
 
                     // TODO 如果不想让腿的更新影响到相机，是不是可以把其协方差置0？
@@ -2676,11 +2520,9 @@ namespace msckf_vio
                     state_server.robot_state.setX_i(X_i_aug);
                     ROS_DEBUG_STREAM("X_i \n " << state_server.robot_state.getX_i() << endl);
                     ROS_DEBUG_STREAM("P_aug size " << P_aug.rows() << " " << P_aug.cols() << endl);
-                    state_server.state_cov = P_aug; // INFO state_cov 扩充腿状态
+                    state_server.state_cov = P_aug;
                     state_server.robot_state.estimated_contact_position.insert(pair<LegID, int>(new_contact, startIndex));
                     state_server.leg_state.legs[new_contact].time = msg->header.stamp.toSec();
-
-                    checkStateCov();
                 }
             }
         }
@@ -2705,16 +2547,13 @@ namespace msckf_vio
         //  ------------ Propagate Covariance --------------- //
         Eigen::MatrixXd Phi = this->StateTransitionMatrix(gyro, acc, dt);
         Eigen::MatrixXd Qd = this->DiscreteNoiseMatrix(Phi, dt);
-        // BUG 程序运行不下去的元凶 state_server.state_cov size 27x27, 索引39 x 39
-        checkBlockIndex(state_server.state_cov, 0, 0, dimP_i + 12, dimP_i + 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
+        // BUG ?
         state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) =
             (Phi * state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) * Phi.transpose() + Qd).eval();
         if (state_server.cam_states.size() > 0)
         {
-            checkBlockIndex(state_server.state_cov, 0, dimP_i + 12, dimP_i + 12, state_server.state_cov.cols() - dimP_i - 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             state_server.state_cov.block(0, dimP_i + 12, dimP_i + 12, state_server.state_cov.cols() - dimP_i - 12) =
                 (Phi * state_server.state_cov.block(0, dimP_i + 12, dimP_i + 12, state_server.state_cov.cols() - dimP_i - 12)).eval();
-            checkBlockIndex(state_server.state_cov, dimP_i + 12, 0, state_server.state_cov.rows() - dimP_i - 12, dimP_i + 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             state_server.state_cov.block(dimP_i + 12, 0, state_server.state_cov.rows() - dimP_i - 12, dimP_i + 12) =
                 (state_server.state_cov.block(dimP_i + 12, 0, state_server.state_cov.rows() - dimP_i - 12, dimP_i + 12) * Phi.transpose()).eval();
         }
@@ -2814,29 +2653,20 @@ namespace msckf_vio
         Eigen::Matrix3d RG0 = R * G0;
         Eigen::Matrix3d RG1dt = R * G1 * dt;
         Eigen::Matrix3d RG2dt2 = R * G2 * dt2;
-        checkBlockIndex(Phi, 3, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-        Phi.block<3, 3>(3, 0) = gx * dt; // Phi_21
-        checkBlockIndex(Phi, 6, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-        Phi.block<3, 3>(6, 0) = 0.5 * gx * dt2; // Phi_31
-        checkBlockIndex(Phi, 6, 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
+        Phi.block<3, 3>(3, 0) = gx * dt;                          // Phi_21
+        Phi.block<3, 3>(6, 0) = 0.5 * gx * dt2;                   // Phi_31
         Phi.block<3, 3>(6, 3) = Eigen::Matrix3d::Identity() * dt; // Phi_32
-        checkBlockIndex(Phi, 0, dimP_i - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-        Phi.block<3, 3>(0, dimP_i - dimX_frak) = -RG1dt; // Phi_15
-        checkBlockIndex(Phi, 3, dimP_i - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
+        Phi.block<3, 3>(0, dimP_i - dimX_frak) = -RG1dt;          // Phi_15
         Phi.block<3, 3>(3, dimP_i - dimX_frak) =
             -skewSymmetric(v + RG1dt * a + RobotState::gravity * dt) * RG1dt + RG0 * Phi25L; // Phi_25
-        checkBlockIndex(Phi, 6, dimP_i - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         Phi.block<3, 3>(6, dimP_i - dimX_frak) =
             -skewSymmetric(p + v * dt + RG2dt2 * a + 0.5 * RobotState::gravity * dt2) * RG1dt + RG0 * Phi35L; // Phi_35
         for (int i = 5; i < dimX_i; ++i)
         {
-            checkBlockIndex(Phi, (i - 2) * 3, dimP_i - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             Phi.block<3, 3>((i - 2) * 3, dimP_i - dimX_frak) =
                 -skewSymmetric(state_server.robot_state.getd_GI(i)) * RG1dt; // Phi_(3+i)5
         }
-        checkBlockIndex(Phi, 3, dimP_i - dimX_frak + 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-        Phi.block<3, 3>(3, dimP_i - dimX_frak + 3) = -RG1dt; // Phi_26
-        checkBlockIndex(Phi, 6, dimP_i - dimX_frak + 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
+        Phi.block<3, 3>(3, dimP_i - dimX_frak + 3) = -RG1dt;  // Phi_26
         Phi.block<3, 3>(6, dimP_i - dimX_frak + 3) = -RG2dt2; // Phi_36
         ROS_DEBUG("StateTransitionMatrix Out");
         return Phi;
@@ -2851,28 +2681,20 @@ namespace msckf_vio
 
         Eigen::MatrixXd X_i = state_server.robot_state.getX_i();
         Eigen::MatrixXd B = Eigen::MatrixXd::Zero(dimP_i + 12, dimP_i + 12);
-        checkBlockIndex(B, 0, 0, dimP_i - dimX_frak, dimP_i - dimX_frak, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         B.block(0, 0, dimP_i - dimX_frak, dimP_i - dimX_frak) = Adjoint_SEK3(X_i);
-        checkBlockIndex(B, dimP_i - dimX_frak, dimP_i - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         B.block<3, 3>(dimP_i - dimX_frak, dimP_i - dimX_frak) = Matrix3d::Identity();
-        checkBlockIndex(B, dimP_i - dimX_frak + 3, dimP_i - dimX_frak + 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         B.block<3, 3>(dimP_i - dimX_frak + 3, dimP_i - dimX_frak + 3) = Matrix3d::Identity();
 
         Eigen::MatrixXd Cov = Eigen::MatrixXd::Zero(dimP_i + 12, dimP_i + 12);
-        checkBlockIndex(Cov, 0, 0, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-        Cov.block<3, 3>(0, 0) = state_server.Qg; // Qg
-        checkBlockIndex(Cov, 3, 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-        Cov.block<3, 3>(3, 3) = state_server.Qa; // Qa
-        checkBlockIndex(Cov, dimP_i - dimX_frak, dimP_i - dimX_frak, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-        Cov.block<3, 3>(dimP_i - dimX_frak, dimP_i - dimX_frak) = state_server.Qbg; // Qbg
-        checkBlockIndex(Cov, dimP_i - dimX_frak + 3, dimP_i - dimX_frak + 3, 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
+        Cov.block<3, 3>(0, 0) = state_server.Qg;                                            // Qg
+        Cov.block<3, 3>(3, 3) = state_server.Qa;                                            // Qa
+        Cov.block<3, 3>(dimP_i - dimX_frak, dimP_i - dimX_frak) = state_server.Qbg;         // Qbg
         Cov.block<3, 3>(dimP_i - dimX_frak + 3, dimP_i - dimX_frak + 3) = state_server.Qba; // Qba
         // Qc
         for (auto it = state_server.robot_state.estimated_contact_position.begin();
              it != state_server.robot_state.estimated_contact_position.end(); ++it)
         {
             // TODO? 没有乘FkR, 或者保持为0？
-            checkBlockIndex(Cov, 3 + 3 * (it->second - 3), 3 + 3 * (it->second - 3), 3, 3, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
             Cov.block<3, 3>(3 + 3 * (it->second - 3), 3 + 3 * (it->second - 3)) = state_server.Qc;
         }
 
@@ -2887,7 +2709,6 @@ namespace msckf_vio
         ROS_DEBUG("InEKF_Correct In");
         int dimP_i = state_server.robot_state.dimP_i();
         int dimX_frak = state_server.robot_state.dimX_frak();
-        checkBlockIndex(state_server.state_cov, 0, 0, dimP_i + 12, dimP_i + 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const Eigen::MatrixXd &P = state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12);
         ROS_DEBUG_STREAM("state_cov size: " << state_server.state_cov.rows() << " " << state_server.state_cov.cols());
         ROS_DEBUG_STREAM("P size: " << P.rows() << " " << P.cols());
@@ -2899,14 +2720,10 @@ namespace msckf_vio
         ROS_DEBUG_STREAM("K size: " << K.rows() << " " << K.cols());
 
         Eigen::VectorXd delta = K * Z;
-        checkBlockIndex(delta, 0, 0, dimP_i - dimX_frak, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const Eigen::VectorXd &delta_X_i = delta.head(dimP_i - dimX_frak);
-        checkBlockIndex(delta, dimP_i - dimX_frak, 0, dimX_frak, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const Eigen::VectorXd &delta_X_frak = delta.segment(dimP_i - dimX_frak, dimX_frak);
         // TODO: 测试两个外参有没有更新量
-        checkBlockIndex(delta, dimP_i, 0, 6, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const Eigen::VectorXd &delta_X_ext = delta.segment(dimP_i, 6);
-        checkBlockIndex(delta, delta.rows() - 6, 0, 6, 1, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         const Eigen::VectorXd &delta_X_stereo = delta.tail(6);
         Eigen::MatrixXd dX_i = Exp_SEK3(delta_X_i);
         Eigen::VectorXd dX_frak = delta_X_frak;
@@ -2925,7 +2742,6 @@ namespace msckf_vio
         Eigen::MatrixXd P_new = IKH * P * IKH.transpose() + K * N * K.transpose();
         ROS_DEBUG_STREAM("P_new size: " << P_new.rows() << " " << P_new.cols());
         // NOTE: drift中这里还修改了yaw对应的协方差矩阵，不更新yaw
-        checkBlockIndex(state_server.state_cov, 0, 0, dimP_i + 12, dimP_i + 12, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         state_server.state_cov.block(0, 0, dimP_i + 12, dimP_i + 12) = P_new;
 
         ROS_DEBUG_STREAM("X_i \n " << state_server.robot_state.getX_i() << endl);
@@ -2937,9 +2753,7 @@ namespace msckf_vio
     {
         ROS_DEBUG("RemoveRowAndColumn In");
         unsigned int dimX = M.cols();
-        checkBlockIndex(M, index, 0, dimX - index - remove_dim, dimX, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         M.block(index, 0, dimX - index - remove_dim, dimX) = M.bottomRows(dimX - index - remove_dim).eval();
-        checkBlockIndex(M, 0, index, dimX, dimX - index - remove_dim, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
         M.block(0, index, dimX, dimX - index - remove_dim) = M.rightCols(dimX - index - remove_dim).eval();
         M.conservativeResize(dimX - remove_dim, dimX - remove_dim);
         ROS_DEBUG("RemoveRowAndColumn Out");

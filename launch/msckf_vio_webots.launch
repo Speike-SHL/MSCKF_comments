@@ -54,4 +54,6 @@
     </node>
   </group>
 
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find msckf_vio)/rviz/rviz_webots_config.rviz" output="screen" />
+
 </launch>
