@@ -848,7 +848,7 @@ namespace msckf_vio
         RobotState &robot_state = state_server.robot_state;
 
         /// 2. 角速度和加速度减去偏置，计算dt
-        cout << "processModel check : m_gyro = [" << m_gyro.transpose() << "], bg = [" << robot_state.getbg().transpose() << "]\n";
+        ROS_INFO_STREAM_THROTTLE(2, "processModel check : m_gyro = [" << m_gyro.transpose() << "], bg = [" << robot_state.getbg().transpose() << "]\n");
         Vector3d gyro = m_gyro - robot_state.getbg();
         Vector3d acc = m_acc - robot_state.getba(); // acc_bias 初始值是0
         double dtime = time - robot_state.time;
@@ -957,7 +957,7 @@ namespace msckf_vio
         Vector3d v = state_server.robot_state.getv_GI();
         Vector3d p = state_server.robot_state.getp_GI();
 
-        cout << "Sophus check: gyro = [" << gyro.transpose() << "], dt = " << dt << endl;
+        ROS_INFO_STREAM_THROTTLE(2, "Sophus check: gyro = [" << gyro.transpose() << "], dt = " << dt << endl);
         Matrix3d dR_dt = R * Sophus::SO3d::exp(gyro * dt).matrix();
         Matrix3d dR_dt2 = R * Sophus::SO3d::exp(gyro * dt / 2.0).matrix();
 
@@ -2233,6 +2233,7 @@ namespace msckf_vio
 
     void MsckfVio::qNow_dqNow_TNowCallback(const dog_msg::qNow_dqNow_TNow::ConstPtr &msg)
     {
+        return;
         ROS_DEBUG_STREAM_BLUE("qNow_dqNow_TNowCallback In");
         int seq = msg->header.seq;
         double cur_time = msg->header.stamp.toSec();
